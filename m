@@ -1,66 +1,64 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: const char * vs char[]
-Date: Tue, 23 Mar 2004 18:04:46 +0100
+Date: Tue, 23 Mar 2004 12:19:38 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040323170446.GB11933@lug-owl.de>
-References: <20040323151902.000048da.cialdi@firenze.net> <000f01c410e6$6d7197e0$0c81640a@aca.org.ar>
+Message-ID: <16480.11098.887957.24972@cerise.nosuchdomain.co.uk>
+References: <20040323130118.00005637.cialdi@firenze.net>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="wq9mPyueHGvFACwf"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <000f01c410e6$6d7197e0$0c81640a@aca.org.ar>
+In-Reply-To: <20040323130118.00005637.cialdi@firenze.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: 'linux-c-programming' <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Massimiliano Cialdi <cialdi@firenze.net>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
---wq9mPyueHGvFACwf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Massimiliano Cialdi wrote:
 
-On Tue, 2004-03-23 11:52:12 -0300, Mariano Moreyra <moremari@aca.org.ar>
-wrote in message <000f01c410e6$6d7197e0$0c81640a@aca.org.ar>:
-> No... "char*" and "char []" are synonyms.
+> #include <stdio.h>
+> const char *str = "pippo";
+> int main(void)
+> {
+>   void stampa(char s[]);
+>   stampa(str);
+>   return 0;
+> }
+> void stampa(char s[])
+> {
+>  printf("%s\n", s);
+> }
+> 
+> and gcc gives me a warning:
+> pippo.c:9: warning: passing arg 1 of `stampa' discards qualifiers from
+> pointer target type
+> 
+> 
+> what are the differences between char[] and const char *?
 
-There's a subtle difference:
+1. char[] is an array while char* is a pointer. There is actually a
+difference, although it doesn't matter here: arrays are always passed
+by reference, so a declaration of the form:
 
-char *hello_ptr =3D "A really loooong hello world";
-char write_string[] =3D "this is some long garbage";
+	void stampa(char s[])
 
-void main(void) {
-	/* legal */
-	sprintf (write_string, "%s", "stuff");
+is silently converted to:
 
-	/* illegal - may be in a read-only segment */
-	sprintf (hello_ptr, "%s", "Don't do that");
-}
+	void stampa(char *s)
 
-So if you're preparing some space for say building up some packet (to be
-sent out to hardware), use "char xx[]", but if you only want to have a
-read-only string (to printf() it to the user), you can use "char *xx".
+by the compiler.
 
-MfG, JBG
+2. The variable is declared as "const char *", i.e. a pointer to
+constant (unmodifiable) characters, but is being passed to a function
+which expects a pointer to (modifiable) characters.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
+If stampa() doesn't modify the text, declare it as:
 
---wq9mPyueHGvFACwf
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+	void stampa(const char *s)
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
+If it does modify the text, then your program will segfault, because
+string literals are normally stored in non-writable memory (regardless
+of whether you include "const" in the variable's declaration).
 
-iD8DBQFAYG4tHb1edYOZ4bsRAlXsAJ96OhRCjyIdxLuZrK5vcOV2Wgi0RgCeMqKU
-heLtmmwOs8Akey1Id9XDTYw=
-=rMeX
------END PGP SIGNATURE-----
-
---wq9mPyueHGvFACwf--
+-- 
+Glynn Clements <glynn.clements@virgin.net>
