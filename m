@@ -1,36 +1,25 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: Re: gcc: Floating point exception
-Date: Sun, 20 Feb 2005 22:13:38 +0100 (CET)
-Message-ID: <Pine.LNX.4.21.0502202211280.2139-100000@hestia>
-References: <20050220210522.GR17589@lug-owl.de>
-Reply-To: linux-c-programming@vger.kernel.org
+From: kaushal <kaushal@rocsys.com>
+Subject: clear the screen
+Date: Mon, 21 Feb 2005 12:38:09 +0530
+Message-ID: <1108969688.5088.12.camel@localhost.localdomain>
+Reply-To: kaushal@rocsys.com
 Mime-Version: 1.0
-In-Reply-To: <20050220210522.GR17589@lug-owl.de>
+Content-Transfer-Encoding: 7bit
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c <linux-c-programming@vger.kernel.org>
 
-On Sun, 20 Feb 2005, Jan-Benedict Glaw wrote:
+hello all,
+	Sorry for a very basic question.I would like to know how to clear the
+screen from within a c program without using system("clear") or any of
+the ncurses functions.Can we do this using printf?My program is in raw
+mode so is there any feature available by which I can use the termios
+structure for clearing the screen if it is not possible with printf.Long
+ago when I used work in the dos platform I used conio.h and clrscr()
+rourine.I guess I have to write that clrscr() routine's code itself.Im
+working on a linux machine now.
 
-> On Sun, 2005-02-20 21:58:54 +0100, J. <mailing-lists@xs4all.nl>
-> wrote in message <Pine.LNX.4.21.0502202150070.2008-100000@hestia>:
-> >  int red = 0; 
-> >  int green = 128; 
-> >  int blue = 0;
-> > 
-> >  printf("%d %d %d\n", (100 / (256 / red)), 
-> >    (100 / (256 / green)), (100 / (256 / blue)));
-> 
-> With red = blue = 0, you're having two divisions by zero. That won't
-> fly...
-> 
-> MfG, JBG
-
-Aiii.. of course !!
-
-Thnkx....
-
-J.
+Thanks in advance.
+-kaushal.
 
