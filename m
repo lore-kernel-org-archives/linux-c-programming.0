@@ -1,130 +1,69 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: c++ compiling problem. undefined reference to main
-Date: Tue, 6 Apr 2004 17:13:52 -0400
+From: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
+Subject: Re: Can i use dev_queue_xmit
+Date: Wed, 7 Apr 2004 16:44:59 +0530 (IST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <33120BB62E0A7643AE75E2B03CA0EDA08E3A0B@mail7.monmouth.army.mil>
+Message-ID: <Pine.LNX.4.44.0404071643130.9950-100000@csews110.cse.iitk.ac.in>
+References: <Pine.LNX.4.44.0404070954110.12893-100000@csews106.cse.iitk.ac.in>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.44.0404070954110.12893-100000@csews106.cse.iitk.ac.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: Armen Kaleshian <akaleshian@kriation.com>
+Cc: linux-c-programming@vger.kernel.org
 
+ 
+ 
+ Anyway we have written a module,
+   If you know any idea about our problem,(dropping packets due to 
+ NET_XMIT_DROP return value of dev_queue_xmit()) can u help us.Atleast 
+ suggest a source where we can get answer for my problem.
+   We want to know the situation(or)Reason when NET_XMIT_DROP will be 
+returned.
+ 
+ Thanks,
+ K.AnanthaKiran
+ 
+> On Tue, 6 Apr 2004, Armen Kaleshian wrote:
+> 
+> > Date: Tue, 6 Apr 2004 12:55:29 -0400
+> > From: Armen Kaleshian <akaleshian@kriation.com>
+> > To: K.Anantha Kiran <ananth@cse.iitk.ac.in>
+> > Cc: linux-c-programming@vger.kernel.org
+> > Subject: Re: Can i use dev_queue_xmit
+> > 
+> > Why don't you look at the source for iptables? Or use iptables instead of writing the kernel module from scratch?
+> > 
+> > Good luck!
+> > 
+> > On Tue, Apr 06, 2004 at 07:50:50PM +0530, K.Anantha Kiran wrote:
+> > : 
+> > :  We are supposed to build a kernel module which takes packets in the
+> > :  internet through one interface and forward them to another interface of
+> > :  my choice based on the IP,Port feilds in the packet.
+> > : 
+> > : Our module is working fine for less rate(200Mbps) of traffic.If speed is 
+> > : increasing(>200Mbps), for some packets "dev_queue_xmit()" is returning NET_XMIT_DROP due to which packets are being dropped.
+> > : 
+> > :  Can u suggest any solution. Can u give the reason for that return value
+> > :  only for high traffic.Is there any speed restiction to dev_queue_xmit() 
+> > : We are using Gigbyte traffic ethrtnet cards.
+> > : 
+> > : Thanks in advance,
+> > : K.AnanthaKiran
+> > : 
+> > : 
+> > : 
+> > : -
+> > : To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> > : the body of a message to majordomo@vger.kernel.org
+> > : More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > 
+> 
+> 
 
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of srg
-Sent: Tuesday, April 06, 2004 4:44 PM
-To: linux-c-programming@vger.kernel.org
-Subject: c++ compiling problem. undefined reference to main
-
-
-Hello:
-
-We have a problem compiling c++ code.
-At the bottom of this message you can see the compiler error.
-
-Here are the details:
-
-[snip....]
-
-># cat hello.cpp
->#include <iostream>
-
->using namespace std;
-
->int main(int argc,char** argv)
->{
->   cout << "hello" << endl;
->}
-># g++ -o hello hello.cpp
-># ./hello
->hello
-
->At this point all is OK, now comes the problem:
-
-as it should be, you have coded, compiled and linked
-a simple executable.
-
-># cat cj_enteros.hpp
-
->#ifndef _CJ_ENTEROS_HPP_
->#define _CJ_ENTEROS_HPP_
-
->#include <iostream>
-
-[snip....]
-
-
-># g++ -o cj_enteros cj_enteros.cpp
->/usr/lib/gcc-lib/i486-linux/3.3.3/../../../crt1.o(.text+0x18): In 
->function `_start':
->../sysdeps/i386/elf/start.S:98: undefined reference to `main'
->collect2: ld returned 1 exit status
-
-again, all is as it should be.  Remember that all executables must define
-an entry point -- i.e. int main(int, char**).  When the program is linked
-it is arranged that the C startup code calls this function and you program
-begins executing.  There is no entry point defined in cj_enteros.cpp and 
-thus you get the error.  A hint to this is to notice where the error was
-generated (in this case it was from the linker/loader - ld).  Try this:
-
-1) execute this command:
-   g++ -c cj_enteros.cpp -o cj_enteros.o
-
-   this will produce an object file (cj_enteros.o) but not attempt to link
-   the file.
-
-2) now create a new cpp file `test_enteros.cpp', in the same directory that 
-   contains the cj_enteros.[cpp|h] files, that contains the following:
-
-   #include <iostream>
-
-   using namespace std;
-
-   int main(int argc,char** argv)
-   {
-      cj_enteros     cls;
-   }
-
-   and try to compile it using the following command:
-
-   g++ test_enteros.cpp -o test_enteros
-
-   this command should fail, furthermore if you look at the errors you will
-   see that it is failing in the compilation phase.  Basically this is
-telling
-   you that the compiler does not know what cj_enteros is.  Now to the test 
-   file add the following line:
-
-   #include "enteros.h"
-
-   immediately after the inclusion of iostream, and try to compile it again
-   using this command:
-
-   g++ test_enteros.cpp -o test_enteros
-
-   this command will also fail (you should compare the differences between
-the
-   two outputs).  This command will now fail in the linker with an
-unresolved
-   reference (as I recall the error).  What has happened, is that the
-#include 
-   file has provided enough information to the C++ compiler to be able to
-perform 
-   type checking on the class however no implementation of the class and its
-
-   functions have been provided.
-
-   Finally, try the following series of command:
-
-   g++ -c cj_enteros.cpp -o cj_enteros.o
-   g++ test_enteros.coo cj_enteros.o -o test_enteros
-
-   Now, these two commands should execute correctly producting the
-executable.
-
-Hope this helps,
-
-George
