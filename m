@@ -1,39 +1,61 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: about posix threads.
-Date: Tue, 20 May 2003 17:12:38 +0100
+From: Martin Buchan <M.J.Buchan@gre.ac.uk>
+Subject: Re: segfault with strdup
+Date: Wed, 21 May 2003 10:50:20 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16074.21494.249431.469578@cerise.nosuchdomain.co.uk>
-References: <3EC9C22B.9090100@hq.ntsp.nec.co.jp>
+Message-ID: <20030521095020.GF674@gre.ac.uk>
+References: <20030520112034.GZ674@gre.ac.uk> <16074.22695.413401.35248@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3EC9C22B.9090100@hq.ntsp.nec.co.jp>
+Content-Disposition: inline
+In-Reply-To: <16074.22695.413401.35248@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+Cc: Glynn Clements <glynn.clements@virgin.net>
 
-
-Lejanson C. Go wrote:
-
-> i made a pthread program and i am quite puzzled why my program
-> spawns 4 threads.. when i view it in linux console.
+On Tue, May 20, 2003 at 05:32:39PM +0100, Glynn Clements wrote:
 > 
-> i used 'ps -ax | grep myprog' command to get the processes for
-> my application and to my surprise it spawns 4 threads.. when i
-> only expected 3.. one for main, one for event, and one for recvdata.
+> There is a problem in parseTermXpm:
 > 
-> spawnXXXXXX functions create new threads..
+> 144	gchar *xpmdir;
+> 145	xpmdir = strdup(XPMDIR);
+> 	...
+> 154	termPtr[0].termxpm = strcat(xpmdir, termPtr[0].termxpm);
 > 
-> i really need ur help. can anyone tell me why this occur?
+> The buffer which is being allocated isn't guaranteed to be any larger
+> than XPMDIR itself (in practice it may be slightly larger due to
+> padding, but you can't rely on it), so the strcat() call is corrupting
+> the heap.
+> 
+> Once you corrupt the heap, all bets are off; usually what happens is
+> that a later call to a heap-management function (malloc, calloc, free
+> etc) will segfault.
+> 
+> You are also doing exactly the same thing with HELPDIR.
+> 
+> The most obvious solution is:
+> 
+> 	gchar *xpmdir;
+> 	xpmdir = malloc(strlen(XPMDIR) + strlen(termPtr[0].termxpm) + 1);
+> 	strcpy(xpmdir, XPMDIR);
+> 	...
+> 	termPtr[0].termxpm = strcat(xpmdir, termPtr[0].termxpm);
 
-If you use "ps axf", you will note that the additional thread is the
-parent of all threads other than the main thread. This is just
-something that the pthread library does; it doesn't indicate a bug in
-your program.
+This highlights my fundamental misunderstanding of memory management
+in C :-( (I come from lightweight langs like perl where i dont need
+to worry about this stuff)
 
-I don't recall the precise reasons why the pthread library does this,
-but it's related to limitations in the kernel's support for threads.
+However, this has given me a better grasp of where i am going wrong
+and now i realise that i was very lucky to get the prog to work at
+all in the first place as I am doing this kind of thing all over the
+place.
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+I tried as you suggested and it cured that problem but has given
+birth to more problems of the same ilk i think. Now i know where i
+am going wrong though so hopefully i can fix them. (Although i
+havent yet :-)
+
+Thanks again
+
+Martin
