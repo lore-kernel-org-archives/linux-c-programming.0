@@ -1,49 +1,65 @@
-From: "Singh, Umesh K (MED)" <Umesh.Singh@geind.ge.com>
-Subject: RE: stack trace
-Date: Fri, 22 Aug 2003 09:24:41 +0530
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: Re: Question about checksums
+Date: Fri, 22 Aug 2003 20:18:57 +0000 (GMT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <DD9E117A8BE9F34FA4130376EC9C1F6A05ED111F@BANMLVEM01.e2k.ad.ge.com>
+Message-ID: <Pine.LNX.4.44.0308222010400.17321-100000@praktifix.dwd.de>
+References: <5.2.1.1.0.20030821100717.032dfb30@no.incoming.mail>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
+In-Reply-To: <5.2.1.1.0.20030821100717.032dfb30@no.incoming.mail>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Jeff Woods <kazrak+kernel@cesmail.net>
+Cc: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>, linux-c-programming@vger.kernel.org
 
-thanks all of you, i think i got fair amount of homework. will try all
-the suggestions and come back to you guys very soon if i have some
-doubt. what i was looking is the trace equivalent to gdb or dbx output.
-yeah, i am compiling with debug info and without optimization. i think
-assert(3) or abort(2) is also a nice idea which will be useful in lot of
-cases but in my case i won't prefer to terminate my program in most of
-the cases.
+On Thu, 21 Aug 2003, Jeff Woods wrote:
 
-thanks,
--umesh
+> At +0000 04:36 PM 8/21/2003, Holger Kiehl wrote:
+> >On Thu, 21 Aug 2003, Luciano Miguel Ferreira Rocha wrote:
+> >>On Thu, Aug 21, 2003 at 12:48:05PM +0000, Holger Kiehl wrote:
+> [snip]
+> >>>I think md5sum could do the job but, think it is a bit of an overkill to 
+> >>>generate a 128 Bit checksum for such small input data. Also storing such 
+> >>>huge numbers is a bit of a pain. Would a 32 or 64 Bit checksum 
+> >>>sufficient, or would I be running into problems when these are to short?
+> >>
+> >>CRC-32 is normally sufficient. It's designed for data corruption on 
+> >>transmission, though, but it should be OK as long as you don't expect 
+> >>people to try and break your code with equal checksums.
+> >
+> >I am not trying to make anything more secure. Will a CRC-32 be sufficient 
+> >to always generate a different sum if a single bit changes within the 
+> >maximum 5120 Bytes?
+> 
+> In general, X bits of storage can take on 2^X distinct values.  So CRC-32 
+> can take a maximum of  approximately four billion possible values.  That's 
+> a number with three commas in US notation; I suppose that's twelve periods 
+> or spaces on your side of the pond.  A 128 bit value can store 
+> approximately 64 trillion trillion trillion distinct values. That's a 
+> number with *twelve* commas.  And a 5120 byte file has 40960 bits so it can 
+> have roughly 1*10^4096 distinct values.  There will always be the 
+> possibility for duplicate values when you take a checksum on arbitrary data 
+> longer then the checksum length.
+> 
+> You have to make a tradeoff of how much risk you're willing to accept for a 
+> duplicate based on how that would affect you.  A 32 bit checksum has a 
+> *minimum* of one in 4 billion chance of two files sharing the same 
+> checksum.  For most non-security applications, that's ample.  The same 
+> possibility exists with 128 bit md5 checksums (or any other hash) but the 
+> larger the checksum the less often you'll get duplicate checksums for 
+> different data (assuming comparable quality hash algorithms).
+> 
+> One way to make such use of checksums fail-safe is to use the checksum as 
+> proof that files are different but not as proof they are the same.  When 
+> the checksum matches you don't really know the files are the same unless 
+> their contents are actually the same and once every four billion times you 
+> probably can afford to go check if it's really critical to know for certain.
+> 
+Thanks for the very good explanation! I will try one of the CRC-32 checksums.
+I am always checking for double entries in any case so I will discover it
+when there is one checksum for two or more jobs.
 
------Original Message-----
-From: Fekete Gabor [mailto:feketga@delfin.unideb.hu]
-Sent: Thursday, August 21, 2003 11:42 AM
-To: linux-c-programming
-Subject: Re: stack trace
+Thanks,
+Holger
 
-
-
-
-On Thu, 21 Aug 2003, Singh, Umesh K (MED) wrote:
-
-> is it possible to get the stack trace without attaching the process to
-debugger. For Ex. can i write a func let's say "print_stack_trace()" and
-call it anywhere in my program to print the stack trace at that point of
-time.
-
-read this:
-http://www.linuxjournal.com/article.php?sid=6391
-it might help.
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
