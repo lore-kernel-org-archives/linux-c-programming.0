@@ -1,59 +1,79 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: clear the screen
-Date: Mon, 21 Feb 2005 22:15:16 +0800
-Message-ID: <4219ECF4.2000602@hq.ntsp.nec.co.jp>
-References: <BE3F516B.2C95%dsessions@ionosphere.net>
+From: HIToC <hitoc_mail@yahoo.it>
+Subject: Host IP address
+Date: Tue, 22 Feb 2005 17:53:46 +0100
+Message-ID: <200502221751.44585.hitoc_mail@yahoo.it>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-In-Reply-To: <BE3F516B.2C95%dsessions@ionosphere.net>
+Content-Transfer-Encoding: 8BIT
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Darren Sessions <dsessions@ionosphere.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-=)
-u misunderstood the original post/question by kaushal
+Hello all!
+Sometimes is useful to know the IP address of the machine we are working on,
+for example when we connect a SMTP server and do the EHLO <domain> command.
+I have written a short C++ program that first prints the host name and the
+host IP address, then if arguments from command line are passed prints
+the IP address of each domain name.
 
-Darren Sessions wrote:
+/*		IPadress.cpp
+		Author:	HIToC
+*/
 
->system("clear");
->
->On 2/21/05 5:12 AM, "YYW" <wu_jian@263.net> wrote:
->
->  
->
->>On Mon, 21 Feb 2005 15:26:51 +0530
->>"Vinodkumar Nair" <vinodkumar.nair@patni.com> wrote:
->>
->>    
->>
->>>>>printf("\e[0m\e[2J\e[1;1H");
->>>>>          
->>>>>
->>>How does this printf work to clear the screen?
->>>      
->>>
->>It's ascii control character. 2J means clear the screen and
->>1;1H set the cursor position.
->>
->>    
->>
->>>-
->>>To unsubscribe from this list: send the line "unsubscribe
->>>linux-c-programming" in
->>>the body of a message to majordomo@vger.kernel.org
->>>More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>>      
->>>
->
->
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
+#include <iostream.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <string>
+#include <stdio.h>
 
+int main(int argc, char* argv[])
+{
+	hostent	*hh;
+	string	IP, my_name;
+	char*	host_name = new char[64];
+
+	gethostname(host_name, 64);
+	my_name = host_name;
+
+	cout <<"Host name:\t\t" <<my_name <<'\n';
+
+	hh = gethostbyname(host_name);
+	IP = inet_ntoa(*((struct in_addr *)hh->h_addr));
+	cout <<"My IP address:\t\t" <<IP <<"\n\n";
+
+	for(int i = 1; i<argc; i++) {
+		hh = gethostbyname(argv[i]);
+		if(hh == NULL) {
+			cerr <<"Error with \"" <<argv[i] <<"\" !\n";
+			continue;
+		}
+		IP = inet_ntoa(*((struct in_addr *)hh->h_addr));
+		cout <<"IP address of " <<argv[i] <<" :\t" <<IP <<'\n';
+	}
+
+	return 0;
+}
+
+If called without any parameter, the output is always:
+Host name:		linux
+My IP address:	127.0.0.2
+
+If like argument I pass localhost, thw output is:
+Host name:		linux
+My IP address:	127.0.0.2
+IP address of localhost:	127.0.0.1
+
+
+My intent is to know my real IP address!
+Can anybody help me?
+Thaks for any suggestion.
+
+-- 
+With regards,
+
+
+					HIToC
+					hitoc_mail@yahoo.it
