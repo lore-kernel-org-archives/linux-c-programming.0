@@ -1,14 +1,25 @@
-From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Subject: error in system call
-Date: Fri, 14 Jun 2002 10:36:57 +0530 (IST)
+From: "Singh, Umesh K (MED)" <Umesh.Singh@geind.ge.com>
+Subject: RE: error in system call
+Date: Fri, 14 Jun 2002 10:37:41 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.33.0206141026520.19927-100000@soochak.ncst.ernet.in>
+Message-ID: <1C82B8CC4567D51197A600508B62C130065BD0DB@ban04xbindge.geind.ge.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Cc: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+
+simply depends upon the requirement.
+-us
+
+-----Original Message-----
+From: Mohammed Khalid Ansari [mailto:khalid@ncst.ernet.in]
+Sent: Friday, June 14, 2002 10:37 AM
+To: linux c programming mailing list
+Subject: error in system call
+
 
 
 Hi,
@@ -48,10 +59,27 @@ regards...
 Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
 Assistant Manager II                          (off) : 0091-022-2024641
 National Centre for Software Technology   Fax       : 0091-022-2049573 
-8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in 	
+8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in
+
 Mumbai 400021.
 
 Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
 
 **************************************************************************
+
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+"THIS E-MAIL MESSAGE ALONG WITH ANY ATTACHMENTS IS INTENDED ONLY FOR THE
+ADDRESSEE and may contain confidential and privileged information.
+If the reader of this message is not the intended recipient,
+you are notified that any dissemination, distribution or copy of this 
+communication is strictly Prohibited. 
+If you have received this message by error, please notify us 
+immediately, return the original mail to the sender and delete the 
+message from your system."
 
