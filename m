@@ -1,109 +1,132 @@
-From: p.boehm@d-trust.net
-Subject: Antwort: Re: -EFAULT during freeing a pointer to a structure
-Date: Fri, 8 Oct 2004 11:03:55 +0200
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: Antwort: Re: -EFAULT during freeing a pointer to a structure
+Date: Fri, 8 Oct 2004 13:31:01 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <OFFFC2B2B9.78606041-ONC1256F27.002EEFD1@bln.d-trust.de>
+Message-ID: <20041008113101.GK5033@lug-owl.de>
+References: <OFFFC2B2B9.78606041-ONC1256F27.002EEFD1@bln.d-trust.de>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="XLpnloaskCRyB6mV"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <OFFFC2B2B9.78606041-ONC1256F27.002EEFD1@bln.d-trust.de>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Suciu Flavius <suciuflavius@tiscali.de>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-Hi,
-while allocating memory I didn't have an -EFAULT. So it couldn't be an vector limit
-problem. It's while freeing! (see 'NOTE:' for special cases)
+--XLpnloaskCRyB6mV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My problem-decription from mail at Sep 05:
+On Fri, 2004-10-08 11:03:55 +0200, p.boehm@d-trust.net <p.boehm@d-trust.net>
+wrote in message <OFFFC2B2B9.78606041-ONC1256F27.002EEFD1@bln.d-trust.de>:
+> (it's written from mind, hope there are no spelling mistakes)
 
->If I allocate memory for entry-structure with malloc() I get an -EFAULT
->    a) if I try to free the first allocated structure
->    b) if I try to free the entry-structure
->
->example output:
->
->[0] allocated.
->[1] allocated.
->...
->[7] allocated.
->[7] freed.
->[6] freed.
->...
->[1] freed.
->Segmentation Fault
+There's one, but not that bad...
 
->If I use otherwise '&'-operator to get the address of structure I don't get
->this error. This error is normally produced if I try to access a invalid
->memory-area or address. But here I try to free a cleanly allocated area!
->Why it is so?
+> # --------------------------------------------------------- #
+>=20
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+>=20
+> #define MAXNUM 7
+>=20
+> struct xy {
+>      int x;
+>      char *y;
+> };
+>=20
+> struct abc {
+>      struct xy *next[MAXNUM];
 
-I've solved that by taking an even value for MAXNUM. But I doesn't understand
-why the error could happened.
+So here you're creating an array of pointers to "struct xy". This array
+has got MAXNUM elements, this is currently 7. Note that the correct
+array subscripts are from 0 to 6!
 
-NOTE: There are two errors:
-     1) using &-operator for ptr there is no seg.fault
-          #define MAXNUM 7
-          struct abc ptt, *ptr;
-          ptr=&ptt;
-          [-] free(ptr);
-     2) using multiple of 4 in MAXNUM there is no seg.fault
-          #define MAXNUM 8
-          struct abc *ptr;
-          ptr=malloc(sizeof(struct abc));
+> };
+>=20
+> void init_abc(struct abc *pt, int index) {
+>      pt->next[index]=3Dmalloc(sizeof(struct xy));
+>      memset(pt->next[index],0,sizeof(struct xy));
+> }
+>=20
+> void free_abc(struct abc *pt, int index) {
+>      free(pt->next[index]);
+>      pt->next[index]=3DNULL;
+> }
+>=20
+> int main(int argc, char *argv[]) {
+>      struct abc *ptr;
+>      int index=3D-1;
+>=20
+>      ptr=3Dmalloc(sizeof(struct abc));
+>      memset(ptr, 0, sizeof((struct abc));
 
-Take this short example:
-(it's written from mind, hope there are no spelling mistakes)
-# --------------------------------------------------------- #
+Here's a '(' too much, that's the typo.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+>=20
+>      while(index++<MAXNUM) {
+>           init_abc(ptr,index);
+>           printf("ptr->next[index] =3D %p\n", ptr->next[index]);
+>      }
 
-#define MAXNUM 7
+=2E..and now, think about this loop. Think hard. Got the point? It's
+executed for index=3D0 to index=3D7! That's one too much! I suggest you
+better write it like
 
-struct xy {
-     int x;
-     char *y;
-};
+	for (index =3D 0; index < MAXNUM; index++) {
+		init_abc (ptr, index);
+		printf ("ptr->next[%d] =3D %p\n", index, ptr->next[index]);
+	}
 
-struct abc {
-     struct xy *next[MAXNUM];
-};
+>      while(index-->0) {
+>           free_abc(ptr,index);
+>           printf("ptr->next[index] =3D %p\n", ptr->next[index]);
+>      }
 
-void init_abc(struct abc *pt, int index) {
-     pt->next[index]=malloc(sizeof(struct xy));
-     memset(pt->next[index],0,sizeof(struct xy));
-}
 
-void free_abc(struct abc *pt, int index) {
-     free(pt->next[index]);
-     pt->next[index]=NULL;
-}
+And I'd write this as
 
-int main(int argc, char *argv[]) {
-     struct abc *ptr;
-     int index=-1;
+	for (index =3D MAXNUM - 1; index >=3D 0; index--) {
+		free_abc (ptr, index);
+		printf ("ptr->next[%d] =3D %p\n", index, ptr->next[index]);
+	}
 
-     ptr=malloc(sizeof(struct abc));
-     memset(ptr, 0, sizeof((struct abc));
+Additionally, I've also made it print out it's index it's actually
+working on. If you had done that on the first hand, you'd for sure seen
+your error in no time:-)
 
-     while(index++<MAXNUM) {
-          init_abc(ptr,index);
-          printf("ptr->next[index] = %p\n", ptr->next[index]);
-     }
-     while(index-->0) {
-          free_abc(ptr,index);
-          printf("ptr->next[index] = %p\n", ptr->next[index]);
-     }
+>      free(ptr);
+>      return 0;
+> }
+>=20
+> # ---------------------------------------------------------------------- #
 
-     free(ptr);
-     return 0;
-}
+MfG, JBG
 
-# ---------------------------------------------------------------------- #
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
 
-Thanks in advance.
-pb
+--XLpnloaskCRyB6mV
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQFBZnp1Hb1edYOZ4bsRAo5ZAJ4j2syrVwS8uT63GbHj66YSxfbV6QCgk/oZ
+h9Y9du0rm0EMPls11SN+k50=
+=juua
+-----END PGP SIGNATURE-----
+
+--XLpnloaskCRyB6mV--
