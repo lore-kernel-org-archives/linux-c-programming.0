@@ -1,59 +1,31 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: file deletion
-Date: Fri, 31 Dec 2004 18:55:48 +0100
-Message-ID: <20041231175548.GE2460@lug-owl.de>
-References: <20041230130432.4f93abe2@tethys.montpellier.4js.com> <000b01c4eff2$623ff7e0$8a7e4ed5@j0s6l8>
+From: Benjamin Jeeves <benjamin@benjamin76.plus.com>
+Subject: md5sum or libraries
+Date: Sun, 2 Jan 2005 18:22:55 +0000
+Message-ID: <200501021822.55287.benjamin@benjamin76.plus.com>
+Reply-To: benjamin@benjamin76.plus.com
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="8sxJaLVqap9C0Cus"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <000b01c4eff2$623ff7e0$8a7e4ed5@j0s6l8>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Hi all
 
---8sxJaLVqap9C0Cus
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm new to C programming and was hoping to write a program that would scan a 
+number of folders and if any files in them it would do a md5sum on them. I 
+can not seen to find any thing on a libraries or a function that would do the 
+md5sum of the file.
 
-On Sat, 2005-01-01 11:09:37 -0000, Andy <andy_webb@onetel.com>
-wrote in message <000b01c4eff2$623ff7e0$8a7e4ed5@j0s6l8>:
-> Gents,
-> thanks for this, this script seems to do the trick.
-> Actually what I meant by "duplicate" but didn't clarify
-> was identical name and file size, dates do not matter.
-> What does md5sum {} do?
+e.g. in php there is a function call md5_file().
 
-The "find" command will substitute "{}" inside an "-exec ... ;"
-expression with the filename it currently checks. So this is only a
-md5sum call with a given filename.
+This there something like that in C?
 
-MfG, JBG
+I have written the code to scan the folders but can not find anything on 
+md5sum or md5_file for C?
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+Thank you
 
---8sxJaLVqap9C0Cus
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFB1ZKkHb1edYOZ4bsRAsZ1AJ0eBTd9T8NN/BiE0MPgJpA586hjMACfSiFJ
-jASTPrn7IGXf/e5Pnimg2vA=
-=/we2
------END PGP SIGNATURE-----
-
---8sxJaLVqap9C0Cus--
+Benjamin Jeeves
