@@ -1,29 +1,30 @@
-From: Fekete Gabor <feketga@delfin.unideb.hu>
-Subject: Re: reading back characters from terminal
-Date: Thu, 14 Aug 2003 11:38:11 +0200 (DFT)
+From: QingHua Wang <qhwang@ieeta.pt>
+Subject: program killed
+Date: Thu, 14 Aug 2003 11:07:47 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.A41.4.20.0308141136360.38050-100000@delfin.unideb.hu>
-References: <16186.51656.538526.570457@cerise.nosuchdomain.co.uk>
+Message-ID: <200308141107.47697.qhwang@ieeta.pt>
+References: <Pine.A41.4.20.0308132043580.88086-100000@delfin.unideb.hu>
+Reply-To: qhwang@ieeta.pt
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <16186.51656.538526.570457@cerise.nosuchdomain.co.uk>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.A41.4.20.0308132043580.88086-100000@delfin.unideb.hu>
+Content-Disposition: inline
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Hi there,
 
+Can anyone give me some hints about why my program is killed by system? I am 
+now debugging a program but after it runs for a while, I got a message saying 
+"Program terminated with signal SIGKILL, Killed". What's the causes? 
+Memory? I am the only user since I disconnected the computer (64 MB RAM) to 
+the network.  Last night I also run my program on my laptop (256 MB RAM), it 
+worked well when I used a part of data set (image). With the whole data the 
+program also got killed. I checked the syslog and found "VM: kill the program 
+XXX". I used MALLOC_CHECK_ but there is no memory abuse. Any suggestion?
 
-On Thu, 14 Aug 2003, Glynn Clements wrote:
+Many thanks in advance.
 
-> 
-> Fekete Gabor wrote:
-> 
-> > is there a way to read back characters from the terminal (e.g. xterm).
-> 
-> No. There isn't even any guarantee that the characters are actually
-> stored anywhere. Certainly, hardcopy terminals don't store the text,
-
-sad.
-anyway, thanks for the info!
-
+QingHua
