@@ -1,93 +1,41 @@
 From: "J." <mailing-lists@xs4all.nl>
-Subject: Re: getopt() library function options
-Date: Sat, 5 Mar 2005 13:18:26 +0100 (CET)
-Message-ID: <Pine.LNX.4.21.0503051244020.903-100000@hestia>
-References: <d9def9db05030501573360eeab@mail.gmail.com>
+Subject: Re: should I use, getcwd() or *environ ?
+Date: Sat, 5 Mar 2005 13:55:04 +0100 (CET)
+Message-ID: <Pine.LNX.4.21.0503051351250.1153-100000@hestia>
+References: <6a00c8d505030503121038ff83@mail.gmail.com>
 Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
-In-Reply-To: <d9def9db05030501573360eeab@mail.gmail.com>
+In-Reply-To: <6a00c8d505030503121038ff83@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-On Sat, 5 Mar 2005, Rechberger Markus wrote:
+On Sat, 5 Mar 2005, Steve Graegert wrote:
 
-> Hey,
-
-Hey.. ;-)
- 
-> regarding atoi:
+> On Fri, 4 Mar 2005 22:23:17 +0100 (CET), J. <mailing-lists@xs4all.nl> wrote:
+> > Friday, March 04 22:18:42
+> > 
+> > Hello,
+> > 
+> > I have to remember the working directory and save it in my program so that
+> > I can return to it later..
+> > 
+> > Which one is better/safer and why ? The environment var's or the
+> > getcwd() function fam... ?
 > 
-> #include <stdio.h>
-
-#include <stdlib.h>
-
-> int main(){
->         printf("value: %d\n",atoi("nosegv123"));
->         return(0);
-> }
-> output:
-> value: 0
+> I usually take the following approach:
+..... 
+> Hope this helps.
 > 
-> this doesn't segfault
+> -- 
+> Kind Regards
+>     \Steve
 
-Yes, - atoi in stdlib.h is actually strtol...
+Saturday, March 05
 
-But, the answer was about using atoi in combination with 
-getopt(), maybe it was my lack of explanation sorry...
-Anyway, atoi(optarg) while there is no optarg will segfault...
-Then, you will always want to check for digits, since atoi 
-can't determine the difference inbetween the argument `0' 
-or "nosegv123" . atoi returns the same value for both, thus `0' .
+Okidoki, thnkx for the answers & examples, all...
 
-If your program checks something INT times and atoi returns `0'
-even on errorlike user input, the program will check `0' times..
-
-#include <stdio.h>
-#include <stdlib.h>
-
-int main(int argc, char *argv[]){
- char *str1 = "nosegv123";
- char *str2 = "0.012";
- char *str3 = "0";
- char *str4 = "-1";
-
- printf("str: %s - value: %d\n",str1, atoi(str1));
- printf("str: %s - value: %d\n",str2, atoi(str2));
- printf("str: %s - value: %d\n",str3, atoi(str3));
- printf("str: %s - value: %d\n",argv[1], atoi(argv[1]));
- printf("str: %s - value: %d\n",str4, atoi(str4));
- return(0);
-}
-
-> ctype only takes one variable as argument _not_ a string, he would
-> have to check every element of the array with isdigit.
-
-Yep.. But *pointers are quite cheap these days I hear.. ;-)
-
-Thnkx..  J.
-
-> > int isthisanint(char *str) {
-> >  regex_t re;
-> >  int retval = -1;
-> > 
-> >  setlocale(LC_ALL, "");
-> >  if(regcomp(&re, "^([0-9]*)$", REG_EXTENDED) != 0) {
-> >   fprintf(stderr, "%s: Error - Unable to compile regex", PACKAGE);
-> >   return -1;
-> >  }
-> > 
-> >  if(regexec(&re, str, 0, NULL, 0) != 0)
-> >   retval = -1;
-> >  else
-> >   retval = atoi(str);
-> > 
-> >  /* or.. Like listed in the manual page */
-> >  /*  strtol(nptr, (char **)NULL, 10); */
-> > 
-> >  regfree(&re);
-> >  return retval;
-> > }
+J.
 
