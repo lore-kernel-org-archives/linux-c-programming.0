@@ -1,56 +1,34 @@
-From: Christoph Bussenius <busseniu@cip.physik.uni-muenchen.de>
-Subject: Re: Initializer element is not constant
-Date: Sat, 22 Jan 2005 22:12:06 +0100
-Message-ID: <20050122211206.GC12029@opaque>
-References: <20050120232132.GE1279@drmemory.local> <41F06AC1.2000605@hq.ntsp.nec.co.jp> <41F06AD8.7080206@hq.ntsp.nec.co.jp> <20050121162726.GA977@drmemory.local> <41F13FF7.4020802@hq.ntsp.nec.co.jp> <20050121185454.GB977@drmemory.local> <41F15CEA.2070806@hq.ntsp.nec.co.jp> <20050121213157.GC977@drmemory.local>
+From: Krishna Mohan <gkmohan@rocsys.com>
+Subject: pointer initialization of string constant
+Date: 23 Jan 2005 11:56:11 +0530
+Message-ID: <1106461572.1122.1.camel@KrishnaMohan>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20050121213157.GC977@drmemory.local>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: LinuxC <linux-c-programming@vger.kernel.org>
 
-Hi Scott,
+Dear All, 
+Plz see the following code. It gives segmentation fault. ofcourse, it's
+right as char *ptr = "abc" sets pointer to the address of the "abc" 
+string (which may be stored in read-only memory and thus unchangeable).
+My doubt : when i run gdb and execute p ptr either after or before
+printf, pbc has been displayed. I'm getting segmentation fault only at
+the end, it seems, because when i run ./a.out  "pbc is not displayed"
+but prompted segmentation fault error. why is it so? How does
+segmentation fault raises, though pointer-pointing contents has been
+changed & even displayed using gdb. Will U plz explain in detail
+(internals).
 
-On Fri, Jan 21, 2005 at 02:31:57PM -0700, Scott wrote:
->  recip_data[0].var = namectrl;
+main()
+{
+        char *ptr = "abc";
+        ptr[0] = 'p';
+        printf("%s\n",ptr);
+}
 
-namectrl is NULL, so why would you want to do this?  This is just like
-writing
+Thanx in advance. 
+Krishna Mohan
 
-recip_data[0] = NULL;
-
-I am not quite sure what you intend to do, but I guess that you want
-namectrl to change when you change recip_data[0].  To accomplish this,
-you could make recip_data[0] a pointer to a pointer:
-
-char *namectrl = NULL;
-char *name1 = NULL;
-char *name2 = NULL;
-
-typedef struct {
-        char **var;      /* destination for storage of the data */
-        size_t len;     /* max len of the data */
-        char *(*xlat)();        /* translation routine */
-} DATUM;                                                                                        
-
-DATUM recip_data[] = {
-{  &namectrl, NAMECTRL_LEN, make_upper },
-{  &name1, NAME1_LEN, make_upper },
-{  &name2, NAME2_LEN, make_upper },
-[...]
-
-Now you can change namectrl by saying
-*recip_data[0].var = "test string";
-
-Hope this helps,
-Christoph
-
--- 
-``There's no dark side of the moon, really
-Matter of fact, it's all dark''
-
---Pink Floyd
