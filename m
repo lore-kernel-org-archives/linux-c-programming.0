@@ -1,19 +1,22 @@
 From: "John T. Williams" <jowillia@vt.edu>
-Subject: Memory Overright problem. (sorry if this is a repeat )
-Date: Wed, 02 Jun 2004 00:07:24 -0400
+Subject: Nevermind, I'm stupid:  Memory Overright problem.
+Date: Wed, 02 Jun 2004 00:18:26 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1086149244.22758.17.camel@localhost>
+Message-ID: <1086149906.23026.2.camel@localhost>
 Reply-To: jtwilliams@vt.edu
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-2XkWwwxAX81qgEz3nJ71"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
+Anyone who wondering, for some reason (probably blind habit) I was using the 
+sizeof() function in my malloc call, when I shouldn't have been, consiquently i was
+makeing a bunch of arrays 4 bytes long
 
---=-2XkWwwxAX81qgEz3nJ71
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+>>shakes head, hits self on forhead
+
 
 While trying to write a function to parse a http url, I ran accross a
 strange problem, which is that when I malloc some memory, suddenly some
@@ -181,50 +184,4 @@ main(int argC, char** argV, char** envp)
 }
 
 
-
---=-2XkWwwxAX81qgEz3nJ71
-Content-Disposition: attachment; filename=connect.zip
-Content-Type: application/zip; name=connect.zip
-Content-Transfer-Encoding: base64
-
-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
-
---=-2XkWwwxAX81qgEz3nJ71--
 
