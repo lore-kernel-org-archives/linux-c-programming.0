@@ -1,67 +1,50 @@
-From: "Paul Gimpelj" <pgimpelj@sympatico.ca>
-Subject: Re: compression heuristic algorithm
-Date: Fri, 25 Jun 2004 22:44:12 -0400
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
+Subject: "static const" attribute in C++ (How to ?)
+Date: Mon, 28 Jun 2004 18:42:07 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <004901c45b27$7808c7b0$c901010a@zoom>
-References: <004001c45af4$9b7da7c0$c901010a@zoom> <40DCA9F4.1090009@comcast.net>
+Message-ID: <40E090AF.6090300@ig.com.br>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: John Richard Moser <nigelenki@comcast.net>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Thanks John.
+Sorry for this rookie question, but I'm not a experienced C++ programmer 
+(I m a old C-ANSI programmer, not in C++)
 
-You are saying for more complex streams there is more than one solution,
-If I understand you. I will do some research into the prng wheel.
+How can us create a kind of "static const" attribute into a class ? I 
+need to use it like as:
+char myArray[MYCLASS::DEFSIZE];
+Where "DEFSIZE" whould be a "static const" member (or another type) of 
+MYCLASS.
 
+What do I already tried ? Follow:
+class MYCLASS {
+    public:
+       static const int DEFSIZE;
+};
+const int DEFSIZE = 100;
 
-I'm interested in this.
-Theory states it is possible. And presently for simple shift registers the
-seeds can be reversed from the past history sequence, which allows
-predicting 100% of the future generated  sequence values.
+But, when the file "MYCLASS.h" is included more than one file ".cpp", 
+the linker says that the member "MYCLASS::DEFZISE" "was already defined 
+in 'filename'". And don't have occurrences of compiler errors, only on 
+linking.
 
-Then there is the idea of close enough, which may not be adequate for
-program executables but may be fine for audio video.
-What would it be worth, I wonder, if a dvd could be compressed by 80 to 90%?
+Thanks,
 
-Thanks again,
+Luciano
 
+-------------------------------------------
+FOLLOW SOME COMPILER FULL ERROR MESSAGE (MSVC++ 6.0):
+HMMessageProcessor_Canal.obj : error LNK2005: "public: static unsigned 
+int const MMDadosCarteira::_OFFSET_CARTEIRA2B" 
+(?_OFFSET_CARTEIRA2B@MMDadosCarteira@@2IB) already defined in HMApp.obj
 
------ Original Message -----
-From: "John Richard Moser" <nigelenki@comcast.net>
-To: "Paul Gimpelj" <pgimpelj@sympatico.ca>;
-<linux-c-programming@vger.kernel.org>
-Sent: Friday, June 25, 2004 6:40 PM
-Subject: Re: compression heuristic algorithm
+HMMessageProcessor_Canal.obj : error LNK2005: "public: static unsigned 
+int const MUDadosRecarga::_OFFSET_CARTEIRA2B" 
+(?_OFFSET_CARTEIRA2B@MUDadosRecarga@@2IB) already defined in HMApp.obj
 
-
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
->
->
-> Try using a PRNG "wheel" algorithm with each "wheel" generating X values
-> each with N possible branch possibilities to alter position p to another
-> calculated position on the wheel, with value Z to select which wheel to
-> use; and use a bitlanguage to specify the changes and steps.
->
-> This actually works; the problem is that it works for finite numbers X,
-> N, and p; and infinite number Z.  There comes a point when Z must be
-> made of coumpounding values that substitute for Z such that V(A,Z1,Z2)
-> == V(A,Z).
->
-> Also, even though you can do it, there's no known algorithm to reverse a
-> stream of numbers into a set of parameters; for every input stream of
-> every length there is one or more output streams to define it, and so
-> there's no way to correlate input stream directly to one output stream.
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v1.2.4 (GNU/Linux)
-> Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
->
-> iD8DBQFA3KnzhDd4aOud5P8RAmZVAJ45w7tFgP8iLn/tMDlMZBlhSeo9uACeIGvE
-> mevAv0usOk1OIc6ZLvTBGqI=
-> =jPHA
-> -----END PGP SIGNATURE-----
+PS: I didn't code "static unsigned int const". In my source code I coded 
+"static const unsigned" only. I don't know why MSVC "translated" my code.
 
