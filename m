@@ -1,58 +1,56 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: usage of WIN_SMART
-Date: Thu, 25 Nov 2004 07:08:32 +0000
-Message-ID: <16805.34033.574.53616@cerise.gclements.plus.com>
-References: <1101293397.3787.34.camel@myLinux>
-	<20041124121036.GQ2067@lug-owl.de>
-	<1101356823.3795.9.camel@myLinux>
+From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
+Subject: filesystem in the kernel
+Date: Thu, 25 Nov 2004 12:04:31 +0530
+Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E6@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_8DCB_01C4D2E6.EC3083D0"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1101356823.3795.9.camel@myLinux>
+content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Cc: Jan-Benedict Glaw <jbglaw@lug-owl.de>, Linux C Programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
+This is a multi-part message in MIME format.
 
-Jagadeesh Bhaskar P wrote:
+------=_NextPart_000_8DCB_01C4D2E6.EC3083D0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-> I meant how to use WIN_SMART in the code? Not its uses or advantages!!
-> 
-> Can someone help me with that??
+hi,
+    when a filesystem is registered with the kernel eg.
+register_filesystem(&ext2_fs_type);
+  where is the structure ext2_fs_type declared ?
 
-Look at the source code of an existing program which uses it, such as
-those to which Jan-Benedict referred.
+Thanks with Regards
+Srinivas Bakki
 
-Also, within a few clicks of the linux-ide.org URL, I found:
+------=_NextPart_000_8DCB_01C4D2E6.EC3083D0
+Content-Type: text/plain;
+	name="disclaimer.txt"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="disclaimer.txt"
 
-	http://www.linux-ide.org/smart/smartmontools-5.0/
+-------------------------------------------------------------------------=
+----------------------------------------------------
+Disclaimer
+-------------------------------------------------------------------------=
+----------------------------------------------------
 
-which says:
+"This message(including attachment if any)is confidential and may be =
+privileged.Before opening attachments please check them
+for viruses and defects.MindTree Consulting Private Limited =
+(MindTree)will not be responsible for any viruses or defects or
+any forwarded attachments emanating either from within MindTree or =
+outside.If you have received this message by mistake please notify the =
+sender by return  e-mail and delete this message from your system. Any =
+unauthorized use or dissemination of this message in whole or in part is =
+strictly prohibited.  Please note that e-mails are susceptible to change =
+and MindTree shall not be liable for any improper, untimely or =
+incomplete transmission."
 
-  == REFERENCES ==
-  If you need help in understanding the output of smartctl, a good place
-  to start is to read Section 8.41 of the AT Attachment with Packet
-  Interface-5 (ATA/ATAPI-5) specification.  This documents the
-  S.M.A.R.T. functionality which the smartmontools utilities provide
-  access to.  You can find Revision 1 of this document at:
-  http://www.t13.org/project/d1321r1c.pdf
-  
-  Future versions of the specifications (ATA/ATAPI-6 and ATA/ATAPI-7)
-  can be obtained from:
-  http://www.t13.org/#FTP_site
-  Later revisions (2, 3) of the ATA/ATAPI-5 specification are also
-  available there.
-  
-  The functioning of S.M.A.R.T. is also described by the SFF-8035i
-  revision 2 specification.  This is a publication of the Small Form
-  Factors Committee, and can be obtained from SFF Committee, 14426 Black
-  Walnut Ct., Saratoga, CA 95070, USA.  
-  SFF FaxAccess: (408) 741-1600
-  Ph: (408) 867-6630
-  Fax: (408) 867-2115
-  E-Mail: 250-1752@mcimail.com.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+-------------------------------------------------------------------------=
+----------------------------------------------------
+------=_NextPart_000_8DCB_01C4D2E6.EC3083D0--
