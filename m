@@ -1,49 +1,40 @@
-From: Eric Bambach <eric@cisu.net>
-Subject: Re: FIFO question
-Date: Sun, 9 Jan 2005 00:34:01 -0600
-Message-ID: <200501090034.01597.eric@cisu.net>
-References: <200501060627.28270.eric@cisu.net>
-Reply-To: eric@cisu.net
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: if somebody can tell why this warnign is there?/
+Date: Mon, 10 Jan 2005 12:40:28 +0000 (GMT)
+Message-ID: <20050110124028.40060.qmail@web52904.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200501060627.28270.eric@cisu.net>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux prg <linux-c-programming@vger.kernel.org>
 
-=46ixed it.
+[ankit@rinku ankit]$ g++ test.cpp
+In file included from
+/usr/include/c++/3.2.2/backward/iostream.h:31,
+                 from test.cpp:1:
+/usr/include/c++/3.2.2/backward/backward_warning.h:32:2:
+warning: #warning This
+file includes at least one deprecated or antiquated
+header. Please consider usin
+g one of the 32 headers found in section 17.4.1.2 of
+the C++ standard. Examples
+include substituting the <X> header for the <X.h>
+header for C++ includes, or <s
+stream> instead of the deprecated header
+<strstream.h>. To disable this warning
+use -Wno-deprecated.
+[ankit@rinku ankit]$ cat test.cpp
+#include<iostream.h>
+int main()
+{
+        printf("It is working\n");
+return 0;
+}
+[ankit@rinku ankit]$     
 
-On Thursday 06 January 2005 06:27 am, Eric Bambach wrote:
-> Hello,
->
->  This is the first time I am using named pipes. I have a process with=
- this
-> C++ code that creates a named pipe and loops on writing the character=
- "2"
-> to it.
- ---snip---
-
-----------------------------------------
---EB
-
-> All is fine except that I can reliably "oops" it simply by trying to =
-read
-> from /proc/apm (e.g. cat /proc/apm).
-> oops output and ksymoops-2.3.4 output is attached.
-> Is there anything else I can contribute?
-
-The latitude and longtitude of the bios writers current position, and
-a ballistic missile.
-
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0--Alan Cox LKML-December 08,2000=20
-
-----------------------------------------
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
