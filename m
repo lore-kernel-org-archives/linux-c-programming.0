@@ -1,135 +1,48 @@
-From: "Alphex K." <alphex@crew.org.ru>
-Subject: Some troubles with linked list/tree
-Date: Thu, 29 Apr 2004 19:39:34 +0400
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: Some troubles with linked list/tree
+Date: Fri, 30 Apr 2004 05:25:52 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040429193934.18faf8e1.alphex@crew.org.ru>
+Message-ID: <16529.54608.968086.404599@cerise.nosuchdomain.co.uk>
+References: <20040429193934.18faf8e1.alphex@crew.org.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20040429193934.18faf8e1.alphex@crew.org.ru>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+To: "Alphex K." <alphex@crew.org.ru>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi guys!
-I'm have a one question
-so I'm have a two linked lists
-typedef struct                                                                  
-{                                                                               
-   int id;                                                                      
-   int sf_id;                                                                   
-   char *from_date;                                                             
-   char *to_date;                                                               
-   struct SfList *next;                                                         
-} SfList;
 
-typedef struct                                                                  
-{                                                                               
-   int id;                                                                      
-   char *name;                                                                  
-   char *author;                                                                
-   char *note;                                                                  
-   int cl_id;                                                                   
-   SfList * list;                                                               
-   struct OapAdvAction *next;                                                   
-} OapAdvAction;
+Alphex K. wrote:
 
-so and functions to operate with there
-SfList * AddSfEntry(SfList * list,int sf_id,char *from_date,char *to_date)           
-{                                                                                    
-   int id=0;                                                                         
-   SfList * lp=list;                                                                 
-   if(list!=NULL)                                                                    
-     {                                                                               
-        id=1;                                                                        
-        while(list->next!=NULL)                                                      
-          {                                                                          
-             list=list->next;                                                        
-             id++;                                                                   
-          }                                                                          
-        list->next=(struct SfList  *) malloc(sizeof(SfList));                        
-        list=list->next;                                                             
-        list->next=NULL;                                                             
-        list->id=id;                                                                 
-        list->sf_id=sf_id;                                                           
-        list->from_date=from_date;                                                   
-        list->to_date=to_date;                                                       
-        return lp;                                                                   
-     }                                                                               
-   else                                                                              
-     {                                                                               
-        list=(struct SfList  *) malloc(sizeof(SfList));                              
-        list->next=NULL;                                                             
-        list->id=id;                                                                 
-        list->sf_id=sf_id;                                                           
-        list->from_date=from_date;                                                   
-        list->to_date=to_date;                                                       
-        return list;                                                                 
-     }                                                                               
-   // end ;-)                                                                        
-}
+> so I'm have a two linked lists
 
-and for OapAdvAction structure
-OapAdvAction * AddAdvAction(OapAdvAction * action,char *name,char *author,           
-                            char *note,int cl_id,SfList * list)                      
-{                                                                                    
-   OapAdvAction * lp=action;                                                         
-   int id=0;                                                                         
-   if(action!=NULL)                                                                  
-     {                                                                               
-        id=1;                                                                        
-        while(action->next!=NULL)                                                    
-          {                                                                          
-             action=action->next;                                                    
-             id++;                                                                   
-          }                                                                          
-        action->next=(struct OapAdvAction  *) malloc(sizeof(OapAdvAction)+sizeof(SfL$
-        action=action->next;                                                         
-        action->next=NULL;                                                           
-        action->id=id;                                                               
-        action->name=name;                                                           
-        action->author=author;                                                       
-        action->note=note;                                                           
-        action->cl_id=cl_id;                                                         
-        // adding list                                                               
-        /*while(list!=NULL)                                                          
-          {                                                                          
-             action->list=AddSfEntry(action->list,list->sf_id,list->from_date,       
-                                     list->to_date);                                 
-             list=list->next;                                                        
-          }*/                                                                        
-        action->list=(struct SfList  *) malloc(sizeof(list));                        
-        action->list=list;                                                           
-        return lp;                                                                   
-     }                                                                               
-   else                                                                              
-     {                                                                               
-        action=(struct OapAdvAction  *) malloc(sizeof(OapAdvAction)+sizeof(SfList)); 
-        action->next=NULL;                                                           
-        action->id=id;                                                               
-        action->name=name;                                                           
-        action->author=author;                                                       
-        action->note=note;                                                           
-        action->cl_id=cl_id;                                                         
-        // adding list                                                               
-        /*while(list!=NULL)                                                          
-          {                                                                          
-             action->list=AddSfEntry(action->list,list->sf_id,list->from_date,       
-                                     list->to_date);                                 
-             list=list->next;                                                        
-          }*/                                                                        
-        action->list=(struct SfList  *) malloc(sizeof(list));                        
-        action->list=list;                                                           
-        return action;
-}
-}
+> so and functions to operate with there
 
-what the right way to add SfList to OapAdvAction ?
-I try some methods but it doesn't work?
+>         while(list->next!=NULL)
+>           {
+>              list=list->next;
+>              id++;
+>           }
+>         list->next=(struct SfList  *) malloc(sizeof(SfList));
+>         list=list->next;
 
-Thanx
+Note: it's simpler, and more efficient, to add new members to the
+start of the list.
 
----===---
-Alphex Kaanoken
-Senior developer of Crew IT research labs
-web: http://crew.org.ru
-mailto:Alphex@Crew.Org.RU
+> and for OapAdvAction structure
+
+> what the right way to add SfList to OapAdvAction ?
+
+	action->list = list;
+
+Or do you want to add a copy of the list?
+
+> I try some methods but it doesn't work?
+
+You are trying to add to action->list, but action->list starts out
+uninitialised (i.e. containing garbage).
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
