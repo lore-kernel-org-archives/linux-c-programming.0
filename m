@@ -1,34 +1,42 @@
-From: Elias Athanasopoulos <eathan@otenet.gr>
+From: jnf <xjnfx@doityourself.com>
 Subject: Re: sock-ops->connect()
-Date: Sun, 6 Oct 2002 17:36:36 +0300
+Date: Mon, 7 Oct 2002 03:51:45 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20021006173636.C3197@neutrino.particles.org>
-References: <20021006101521.B253E11E0B@sitemail.everyone.net>
+Message-ID: <20021007105145.4061E3C3C@sitemail.everyone.net>
+Reply-To: xjnfx@doityourself.com
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20021006101521.B253E11E0B@sitemail.everyone.net>; from xjnfx@doityourself.com on Sun, Oct 06, 2002 at 03:15:21AM -0700
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: jnf <xjnfx@doityourself.com>
+To: Elias Athanasopoulos <eathan@otenet.gr>, jnf <xjnfx@doityourself.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On Sun, Oct 06, 2002 at 03:15:21AM -0700, jnf wrote:
-> struct socket *sock;
-> struct sockaddr_in adr;
-> int err,port;
-> 
-> // ...
-> 
-> port = 5260;
-> 
-> err = sock_create(AF_INET,SOCK_STREAM,IPPROTO_TCP,&sock);
 
-I'm not very familiar with kernel internals, but I think you don't
-seem to allocate space for the sock structure.
+>I'm not very familiar with kernel internals, but I think you don't
+>seem to allocate space for the sock structure.
+>
+ 
+its still failing even if i allocated space via (sock_alloc())
+when i look through the source for sys_socket (/usr/src/linux/net/socket.c)
+i see 
 
-Elias
+...
+// sock_create ...
+retval = sock_map_fd(sock);
 
--- 
-http://gnewtellium.sourceforge.net			MP3 is not a crime.	
+when i look through the source for sock_map_fd, it basically 'creates the file structure and maps it to fd space of the current process.'
+
+which considering in the connect call i see sock->file->f_flags, which seems to make sense that i would want to use this i suppose, but  i also got the impression that this was something done in a translation of sorts from user space to kernel land, but im already in kernel land, so im not really sure, and then not being able to find instances of it anywhere in my header files tells me maybe i dont? 
+
+But I am a tee bit confused and any help would be appreciated 
+
+again thanks
+jnf
+
+_____________________________________________________________
+Sign up for FREE email from DoItYourself.com at http://doityourself.com
+
+_____________________________________________________________
+Select your own custom email address for FREE! Get you@yourchoice.com w/No Ads, 6MB, POP & more! http://www.everyone.net/selectmail?campaign=tag
