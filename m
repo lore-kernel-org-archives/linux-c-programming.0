@@ -1,61 +1,27 @@
-From: Adrian Popescu <adixpope@rdsnet.ro>
-Subject: printf format for Float number
-Date: Wed, 29 Sep 2004 17:01:16 +0300
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: timer->result
+Date: Wed, 29 Sep 2004 10:02:38 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200409291701.16821.adixpope@rdsnet.ro>
+Message-ID: <E3E30069B061524E90BCEE4417E3066113853B@monm207.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: 'Ankit Jain' <ankitjain1580@yahoo.com>, "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Cc: linux prg <linux-c-programming@vger.kernel.org>
 
+> Ankit wrote:
+> 
+> /* this program must be linked with librt */
 
-Can anyone explain this please ???
-(what am I getting wrong and how can I avoid this ?)
+> if u can tell me the compiler and linker options for
+> this program..could not ru nthis program
 
-I get a roughly output aproximation of a float number
-using printf: (f=123.1  to  123.099998)
+I am using gcc (version 3.3.3) on a RedHat Fedora 2 box.
+I was able to compile the program (assuming that its name 
+is time.c) as:
 
-If I use the format:
-%f  i get 123.099998
-%g i get 123.1
+gcc time.c -o time_test -lrt
 
-The printf "FORMAT" says:
-%f double-precision floating-point
-%g double-precision floating-point, using %f or %e
-
-I read that "float" is promoted to "double" by printf for Format "%f"
-If I use "double" instead of "float" it works fine.
-
-gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5)
-
-/*----------source---------------*/
-#include <stdio.h>
-
-int main() {
-
-float  f=123.1;
-double d=123.1;
-
-printf ("%f\n", f);
-printf ("%g\n", f);
-printf ("%f\n", d);
-printf ("%f\n", 123.1);
-
-}
-/*--------------------------------*/
-
-<OUTPUT>
-123.099998      <---- ?!?!?!
-123.1
-123.100000
-123.100000
-
-Thanx
-___
-Adrian Popescu
-
-
-
+George
