@@ -1,45 +1,56 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: printf format type, precision...
-Date: Sat, 3 Jul 2004 00:32:27 +0200 (CEST)
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: "static const" attribute in C++ (How to ?)
+Date: Fri, 2 Jul 2004 23:32:19 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0407030018090.1619-100000@hestia>
-Reply-To: linux-c-programming@vger.kernel.org
+Message-ID: <16613.57971.207623.58581@cerise.nosuchdomain.co.uk>
+References: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: =?iso-8859-1?q?Dinesh=20Ahuja?= <mdlinux7@yahoo.co.in>
+Cc: lucianolnx@ig.com.br, linux-c-programming@vger.kernel.org
 
-Saturday, July 03 00:18:09
 
-Hello,
+Dinesh Ahuja wrote:
 
-I am trying to convert an IP address to it's eq. in base10
-[homework]. However the outcome from the formula listed below isn't giving
-me the right results.  Is this because I'm using the wrong precision type
-for the `result' variable ? If that's the case what other precision type
-should I use instead ? Right now I can't see the format tree's trhu the
-precision forrest anmore .. ehum.
+> There is a concept of constant folding in C++.
+> Whenever you declare any data member of class as a
+> constant, the compiler should allocate the memory for
+> it in the object layout and compiler should know the
+> size of the variable in advance. Suppose, if I have a
+> class like below :
+> 
+> class MyClass {
+>    const int size;
+>    int arrSize[size];
+> };
+> This will not compile because compiler can not do the
+> constant folding in above case as memory needs to be
+> allocated for the constant data member size.
 
-#include <stdio.h>
+However, the title explicitly says:
 
-int main(void) {
- int var1 = 192; 
- int var2 = 168;
- int var3 = 1;
- int var4 = 10;
- long int result = 0;
+	STATIC const attribute in C++ (How to ?)
 
- result = var1 * (256 ^ 3) + var2 * (256 ^ 2) * var3 * 256 + var4; 
- printf("%ld\n", value);
+[Emphasis mine.]
 
- return 0;
-}
+There is a difference.
 
-Your comments and suggestions will be greatly appreciated..
+> The above problem can be resolved by using enums.
+> class MyClass {
+>    enum {size = 100};
+>    int arrSize[size];
+> };
 
-Thnks..!
+It can also be resolved using an initialised static const member:
 
-J.
+class MyClass {
+   static const int size = 100;
+   int arrSize[size];
+};
 
+-- 
+Glynn Clements <glynn.clements@virgin.net>
