@@ -1,65 +1,33 @@
-From: Bubulac Tatiana <bubulac@unidec.ro>
-Subject: Re: SIGTERM
-Date: Wed, 22 May 2002 09:20:00 +0300
+From: "James Stevenson" <mistral@stev.org>
+Subject: Re: mcrypt ?
+Date: Wed, 22 May 2002 13:35:56 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CEB3890.2EEC90FE@unidec.ro>
-References: <3CEA269D.CF8569AE@unidec.ro> <15594.22731.28513.237490@cerise.nosuchdomain.co.uk>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <003901c2018d$388b6070$0cfea8c0@ezdsp.com>
+References: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com> <15594.22897.778388.25242@cerise.nosuchdomain.co.uk>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-To: Glynn Clements <glynn.clements@virgin.net>
-Cc: linux-c-programming@vger.kernel.org
-
-That's right.
-
-In the parent process I have the  line no 6 where it blocks.
-
-...
-1     signal (SIGTERM, die);
-2     signal (SIGALRM, dummy);
-...
-3    for (min = 0; min < 15 && not_done; min++)
-4    {
-5         alarm ((unsigned int) 60); /* wait for 1 minute */
-6         pid = wait (&status);    /* Wait for a process to end */
-7         alarm ((unsigned int) 0); /* Reset alarm */
-....
-8    }
-
-The problem is that the child process did not catch the signal. I put a
-printf in the child signal handler
-function.
-If I give the "kill child_pid" also nothing happens. Of course if I give
-"kill -9 child_pid" the child is killed
-and the parent will display "Normal termination".
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
 
-Glynn Clements wrote:
-
-> Bubulac Tatiana wrote:
+> > is there such a function in a linux c libary
+> > for the md5 crypt the same as crypt() but
+> > for the more modern shadow passwords
+> >
+> > if so.
+> > which libary ?
 >
-> >     I want to terminate a parent process that attach several shared
-> > memory segments
-> > with kill(pid, SIGTERM) but it fails to terminate.
-> >     Even if I give the command from command line it fails to terminate.
-> >     If I give kill -9 pid it terminates but the shred memory segments
-> > remains.
-> >     Why I cannot terminate it with  SIGTERM signal?
->
-> Presumably the receiver has either blocked, ignored or caught SIGTERM.
->
-> >     "....
-> >     status = kill ((pid_t)pid, SIGTERM);
-> >      printf("status = %d\n", status);
-> >     ...."
-> > The status is 0. The pid is correct.
->
-> That only tells you that the signal was sent. It doesn't tell you what
-> the receiving process did as a result; the receiving process may not
-> have even received the signal by the time that kill() returns.
->
-> --
-> Glynn Clements <glynn.clements@virgin.net>
+> The "crypt" add-on for glibc 2.x supports MD5 password hashes, as well
+> as DES. The details are in the "libc" Info file (search for "crypt").
+
+unfortunatly i think my info file is out of date. though i do have glibc 2.x
+i dont suppose you have an exmaple of how it is used to generate md5
+password
+hashes instead of des or any idea of how to get it to work like that.
+
+thanks
+    James
+
 
