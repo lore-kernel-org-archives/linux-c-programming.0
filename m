@@ -1,156 +1,66 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: named structure members
-Date: Fri, 12 Sep 2003 10:52:54 -0300
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: tcpdump equivalent for the serial port
+Date: Fri, 12 Sep 2003 16:05:42 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000701c37935$2ab5f020$0b04a8c0@aca.org.ar>
-References: <20030912134709.GA5893@3d-computers.co.uk>
-Reply-To: <mariano_moreyra@aca.org.ar>
+Message-ID: <20030912140542.GP14376@lug-owl.de>
+References: <3F61CC14.20607@abcpages.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="dAgelbNY+bLbwwMh"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030912134709.GA5893@3d-computers.co.uk>
+Content-Disposition: inline
+In-Reply-To: <3F61CC14.20607@abcpages.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: 'Matthew Harrison' <matth@3d-computers.co.uk>
-Cc: linux-c-programming@vger.kernel.org
-
-It seems like there is no attached version :)
+To: linux-c-programming@vger.kernel.org
 
 
------Mensaje original-----
-De: Matthew Harrison [mailto:matth@3d-computers.co.uk]
-Enviado el: Viernes, 12 de Septiembre de 2003 10:47
-Para: Mariano Moreyra
-CC: linux-c-programming@vger.kernel.org
-Asunto: Re: named structure members
+--dAgelbNY+bLbwwMh
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, 2003-09-12 15:37:24 +0200, Nicolae Mihalache <mache@abcpages.com>
+wrote in message <3F61CC14.20607@abcpages.com>:
+> Hello!
+>=20
+> I'm interested if somebody has any ideea how to write a program that=20
+> is able to sniff the data passing through a serial port the same way=20
+> tcpdump is able to show the data passing through the ethernet cable,=20
+> i.e. without disturbing the application that sends/receives the data.
+> I've seen few programs that basically work as tunnels opening a=20
+> pseudo-console where the application connects and writing on the other=20
+> side to the serial device. This approach is not very useful because I=20
+> want to be able to start/stop my sniffer without interupting the=20
+> communication and also the application can control different settings=20
+> of the serial port which probably will not be forwarded by the tunnel.
 
-well it's all changed a bit now. i have been learning how to use gdb
-and as a result have managed to replace the strcpy's and other bit that
-cause segfaults. The app now runs cleanly but i am running into trouble
-with my config-file-reading function. it was not my function, i copied
-it off the web so i might just write myself a quick one.
+Your approach won't work, but I can hint you to another. If you don't
+need the *wire states*, but only the data your application receives (or
+transmits), then this is easy. Simply use strace or a preload lib to
+intercept open, close, read and write.
 
-attached is a version that should not segfault and only stops working
-because the configfile isn't read properly.
+That way, you don't monitor the serial port itself, but the application
+using it. For me, that has always been enough:-)
 
-what part if the configure script did you have trouble with.
+MfG, JBG
 
-thanks
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
 
-On Fri, Sep 12, 2003 at 10:22:40AM -0300, Mariano Moreyra wrote:
-> Hi Matthew,
-> First of all, I couldn't install the Inventory. I don't know why the
-> configure script throws me an error.
-> But looking at the sources:
->  - Like I said yesterday, if you define db_host as a "char *db_host "
-> instead of
->    "char db_host[NN]" you have to alloc some memory to that string be=
-fore
-> the strcpy
->
-> But you told me that you had it defined like "char db_host[NN]" and
-already
-> had that segfault...am I right??
->
-> -----Mensaje original-----
-> De: linux-c-programming-owner@vger.kernel.org
-> [mailto:linux-c-programming-owner@vger.kernel.org]En nombre de Matthe=
-w
-> Harrison
-> Enviado el: Jueves, 11 de Septiembre de 2003 14:13
-> Para: linux-c-programming@vger.kernel.org
-> Asunto: Re: named structure members
->
->
-> i am going thru all these suggestions at a slow rate, but it's time
-> to finish work now so I won't be able to reply from home.
->
-> please don't think i'm ignoring you, i am very grateful.
->
-> On Thu, Sep 11, 2003 at 06:52:13PM +0200, Jan-Benedict Glaw wrote:
-> > On Thu, 2003-09-11 16:50:05 +0100, Glynn Clements
-> <glynn.clements@virgin.net>
-> > wrote in message <16224.39341.204427.234601@cerise.nosuchdomain.co.=
-uk>:
-> > > Matthew Harrison wrote:
-> > > > here is the struct that i want my config to go into:
-> > > There are a number of ways which you could improve upon this, but
-> > > there isn't anything along the lines of:
-> > >
-> > > 	config.<something involving "keyword"> =3D value;
-> > >
-> > > Structure fields have to be specified explicitly; you can't "inde=
-x" a
-> > > structure in the manner of an associative array.
-> > >
-> > > One possible solution is:
-> > >
-> > > enum cfg_option {
-> > > 	cfg_db_host,
-> > > 	cfg_db_name,
-> > > 	cfg_db_pass,
-> > > 	cfg_db_user,
-> > > 	CFG_COUNT
-> > > };
-> > [...]
-> > Another approach is to use a union (containing any possible things,=
- in
-> > your case only char pointers) inside a struct (which also contains =
-a
-> > char name[] and an int type). Build up an array with these structs,=
- one
-> > for each config option.
-> >
-> > Then have a function which gets on option name as well as an option
-> > value which searches throuch all ->name's of your array and assigns=
- the
-> > (properly converted) value to the proper union type.
-> >
-> > To access these options, use multiple access functions (ie.
-> >
-> > int get_int(char *option)
-> >
-> > ) which also searches through the array and returns the int part of=
- the
-> > union.
-> >
-> > MfG, JBG
-> >
-> > --
-> >    Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-> >    "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Ge=
-gen
-> Krieg
-> >     fuer einen Freien Staat voll Freier B=FCrger" | im Internet! | =
-  im
-> Irak!
-> >       ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM =
-|
-TCPA));
->
->
->
-> --
-> Mat Harrison
-> Technical Developer
-> 3d Computer Systems Ltd.
-> matth@3d-computers.co.uk
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+--dAgelbNY+bLbwwMh
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
---
-Mat Harrison
-Technical Developer
-3d Computer Systems Ltd.
-matth@3d-computers.co.uk
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (GNU/Linux)
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+iD8DBQE/YdK2Hb1edYOZ4bsRAtlYAKCHSEIj7yQbCqQ9A45jog1hST9zcACgjNHQ
+vZGJJ2MN3sTR5JJlLR2eAlM=
+=a3D1
+-----END PGP SIGNATURE-----
+
+--dAgelbNY+bLbwwMh--
