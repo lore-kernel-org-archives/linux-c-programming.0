@@ -1,39 +1,26 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: static or shared
-Date: Tue, 7 Jan 2003 17:10:58 +0000
+From: "qhwang" <qhwang@ieeta.pt>
+Subject: strange segmentation fault in malloc()
+Date: Tue, 7 Jan 2003 23:43:32 -0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15899.2594.867274.281756@cerise.nosuchdomain.co.uk>
-References: <Pine.LNX.4.33.0301071646230.5493-100000@soochak.ncst.ernet.in>
+Message-ID: <012c01c2b6a6$9778d4e0$70ab88c1@ieeta.pt>
+References: <Pine.LNX.4.33.0301071646230.5493-100000@soochak.ncst.ernet.in> <15899.2594.867274.281756@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0301071646230.5493-100000@soochak.ncst.ernet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
+Hi, there!
 
-Mohammed Khalid Ansari wrote:
+My app wants to read and then wavelet-transform image one by one. Now I got
+a strange segmentation fault in malloc().  The situation is only the first
+image can be processed successfully, but the second one fails due to the
+same call of "malloc(160*120*sizeof(float))" used in the processing of the
+first image. The return value of "malloc" is NULL . So how can I check the
+size of heap used by the system? Or how can I set the environment varible
+"MALLOC_CHECK_"? Someone said it can be set in the rc.sysinit, but I can't
+find this file. Any suggestion will be greatly appreciated. Many Thanks!
 
-> If /usr/lib contains both static and shared libraries of the same name 
-> eg odbc, which library compiler is going to take if I do..
-> 
-> gcc file.c -lodbc
+qhwang
 
-Shared libraries are preferred over static libraries, unless you use
-the -static flag (in which case, only static libraries are used).
-
-> How do I explicitly I define which library to take during compilation.
-
-You can specify an explicit filename, e.g. /usr/lib/libodbc.a
-(however, you shouldn't do this for shared libraries).
-
-IIRC, you can also use e.g.
-
-	gcc ... -Wl,-Bstatic -lodbc -Wl,-Bdynamic ...
-
-to link specific libraries statically.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
