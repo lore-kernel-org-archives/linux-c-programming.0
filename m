@@ -1,68 +1,40 @@
-From: "John T. Williams" <jowillia@vt.edu>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: literal constant..
-Date: Tue, 3 Feb 2004 10:04:26 -0500
+Date: Tue, 3 Feb 2004 15:07:19 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <003d01c3ea67$04607ff0$ed64a8c0@descartes>
-References: <31E38B53D182D51195FA00508BE3A334033CA936@zwnbc004.cala.nortel.com> <401FB158.40408@onlinehome.de>
-Reply-To: "John T. Williams" <jtwilliams@vt.edu>
+Message-ID: <16415.47399.788755.954825@cerise.nosuchdomain.co.uk>
+References: <20040203121616.2402884f.vadiraj@mail.cyberneme.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20040203121616.2402884f.vadiraj@mail.cyberneme.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-
-it is actually easier to see the difference if you divorce the assignment
-operation from the variable declarations.
+To: Vadiraj C S <vadiraj@mail.cyberneme.com>
+Cc: linux-c-programming@vger.kernel.org
 
 
-char* a;
-creates a pointer that points to nothing in particular ( its value is
-unknown)
+Vadiraj C S wrote:
 
-char b[2];
-creates a constant pointer that points to a specific place in memory that
-has 2 bytes set aside for its use.
+>   I just joined the group. I have a doubt here, might sound simple
+>   but need to be cleared well,
+> 
+> what is the diff between the following statements..
+> 
+>   char *c="c" ;
+> 
+>   char c[1] = "c" ;
 
-I can then make the call
+The first statement creates a pointer variable, c, which is
+initialised to point at the string literal "c", which is itself stored
+in the read-only data segment.
 
-a = (char*) malloc( 300 );  // and a would now point to an array of 300
-character in length (on the heap if you care)
+The second statement creates an array variable, c, which is intialised
+with the single character 'c'. Note that the array should have been
+declared to hold two bytes, to include the terminating NUL character.
 
-however the call
-b = (char*) malloc( 300); // is illegal, and should not compile.
+More generally: if you need to ask this question, you need to spend
+more time learning the basics of C before trying to program in it.
 
-
-
-
-
------ Original Message ----- 
-From: "Florian Attenberger" <fattenberger@onlinehome.de>
-To: "Sandro Dangui" <sdangui@nortelnetworks.com>;
-<linux-c-programming@vger.kernel.org>
-Sent: Tuesday, February 03, 2004 9:34 AM
-Subject: Re: literal constant..
-
-
-> char c[1]="c" is an unlucky example, it seems to be like this:
-> char c* = "c"; // make c point to "c\0".
-> char c[1] = "c"; // make c point to an undifined array of char of length
-> 1, set last char to '\0', _after_ that overwrite the array with "c",
-> since "c" is just as long as the whole array, the \0 gets overwritten.
->
-> To get the second example behave equal to the first, it needs to be:
-> char c[2] = "c"; // char[0] == 'c', char[1] == '\0'.
->
-> So much to code difference.
->
-> char c[] is however a constant pointer, so you cannot reassign it.
-> That doesn't have to result in any assembler code difference at all, its
-> just the compiler that complains.
->
-> flo
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
+-- 
+Glynn Clements <glynn.clements@virgin.net>
