@@ -1,46 +1,46 @@
-From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Subject: is it a buf or what?
-Date: Sat, 8 Jun 2002 16:03:35 +0530 (IST)
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: is it a buf or what?
+Date: Sat, 8 Jun 2002 13:03:02 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>
+Message-ID: <15617.62070.407934.637355@cerise.nosuchdomain.co.uk>
+References: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
 
-Hi,
+Mohammed Khalid Ansari wrote:
 
-I had written a small program as follows...
+> I had written a small program as follows...
+> 
+> #include <stdio.h>
+> 
+> int main()
+> {
+> 	char	*ptr;
+> 	
+> 	strcpy (ptr, "khalid");
+> 	printf ("%s\n", ptr);
+> 	return 0;
+> }
+> 
+> As you can see, I haven't allocated the space for the pointer ptr. When I 
+> ran the program, instead of giving me the segmentation fault, it just ran 
+> printing "khalid". Is it a bug of gcc or the kernel.
 
-#include <stdio.h>
+No.
 
-int main()
-{
-	char	*ptr;
-	
-	strcpy (ptr, "khalid");
-	printf ("%s\n", ptr);
-	return 0;
-}
+An automatic variables which isn't explicitly initialised will have a
+random value. It seems that, in this case, "ptr" just happens to point
+to writable memory.
 
-As you can see, I haven't allocated the space for the pointer ptr. When I 
-ran the program, instead of giving me the segmentation fault, it just ran 
-printing "khalid". Is it a bug of gcc or the kernel.
+This is an example of a program whose behaviour is "undefined". That
+means that anything might happen; it might even work.
 
 -- 
-
-**************************************************************************
-
-Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
-Assistant Manager II                          (off) : 0091-022-2024641
-National Centre for Software Technology   Fax       : 0091-022-2049573 
-8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in 	
-Mumbai 400021.
-
-Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
-
-**************************************************************************
-
+Glynn Clements <glynn.clements@virgin.net>
