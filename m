@@ -1,43 +1,28 @@
-From: "William N. Zanatta" <william@veritel.com.br>
-Subject: Re: Begining C book
-Date: Fri, 10 May 2002 09:44:06 -0300
+From: "william fitzgerald" <william.fitzgerald3@beer.com>
+Subject: how do i get a packets contents from using printks
+Date: Mon, 13 May 2002 15:03:17 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CDBC096.3010301@veritel.com.br>
-References: <3CDB4A4B.1060204@adelphia.net>
+Message-ID: <44D8933CAE839984FA29FC69B9F24B15@william.fitzgerald3.beer.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Mark Johnson <rmjohnson144@adelphia.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-The C programming Language is one of the best books ever!!
-by Kernighan and Ritchie, the creators!!!
+hi all,
 
-It is a very cheap and good book. It is not tied to any system. I didn't 
-started learning C with it but I'm using it for teaching purposes. It is 
-a 'must have'.
+i have inserted printk statements into a 2.4.14
+kernel in the networking code and want to trace a
+packet through the kerenl.
 
-I have it in HTML files. Don't know where I got it, I've lost the link. 
-If you want it mail me in private.
+i have being able to record a particular sk_buff
+by for example:
+printk(KERN_DEBUG"ip_forwrd(sk_buff %P)-> entry
+point",skb);
 
-
-william zanatta
-
-Mark Johnson wrote:
-> I am new to linux and would like to learn how to program in C.  can 
-> someone suggest a good beginners book that covers linux C.
-> 
-> -=Mark=-
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> 
+but how do i extract the packets headers etc from
+the sk_buff?
 
 
-
+Beer Mail, brought to you by your friends at beer.com.
