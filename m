@@ -1,35 +1,34 @@
-From: Fekete Gabor <feketga@delfin.unideb.hu>
-Subject: Re: New (sort of) to Linux programming
-Date: Tue, 2 Sep 2003 09:09:51 +0200 (DFT)
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.A41.4.20.0309020812580.53654-100000@delfin.unideb.hu>
-References: <200309020032.37600.tlw1mac@earthlink.net>
+From: "Yigit Can" <yigit.can@karel.com.tr>
+Subject: address and data bus accessing
+Date: Tue, 2 Sep 2003 15:38:43 +0300
+Sender: kernelnewbies-bounce@nl.linux.org
+Message-ID: <000701c3714f$26765470$3002a8c0@yigitcan>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200309020032.37600.tlw1mac@earthlink.net>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: 
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Return-path: <kernelnewbies-bounce@nl.linux.org>
+Errors-to: kernelnewbies-bounce@nl.linux.org
+List-help: <mailto:listar@nl.linux.org?Subject=help>
+List-unsubscribe: <mailto:kernelnewbies-request@nl.linux.org?Subject=unsubscribe>
+List-software: Listar version 1.0.0
+List-subscribe: <mailto:kernelnewbies-request@nl.linux.org?Subject=subscribe>
+List-owner: <mailto:riel@nl.linux.org>
+List-post: <mailto:kernelnewbies@nl.linux.org>
+List-archive: <http://mail.nl.linux.org/kernelnewbies/>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux c programming <linux-c-programming@vger.kernel.org>, kernelnewbies <kernelnewbies@nl.linux.org>
 
+Hi everybody,
 
+I am trying to write a driver for powerpc 850,
+my question is : I want to connect another cpu to my address and data bus,
+but i dont know how to access it.
 
-On Tue, 2 Sep 2003, Thomas Williams wrote:
+please help
 
-> calls. Is there an equivalent in Linux? I realize that there are a lot of 
-> libraries and packages and that not everything is going to be on one site, 
-> but if there are resources for looking up the calls for a particular library, 
-> it would really be helpful.
-> 
-
-i don't think so that there is this kind of site out there.
-but if you know which library you want to use then just go to
-the library's web site and i'm almost sure there'll be some docs
-about its usage or just simpy install the development packages because
-sometimes they have docs too.
-here are some links on programming under linux :
-
-http://leapster.org/linoleum/
-http://www.advancedlinuxprogramming.com/
+Yigit 
+--
+Kernelnewbies: Help each other learn about the Linux kernel.
+Archive:       http://mail.nl.linux.org/kernelnewbies/
+FAQ:           http://kernelnewbies.org/faq/
 
