@@ -1,41 +1,38 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: problem in open sys call
-Date: Tue, 20 Apr 2004 15:22:27 -0400
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: problem in open sys call
+Date: Tue, 20 Apr 2004 21:06:06 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <33120BB62E0A7643AE75E2B03CA0EDA08E3A18@mail7.monmouth.army.mil>
+Message-ID: <16517.33454.650019.399163@cerise.nosuchdomain.co.uk>
+References: <40856C8C.9090003@sancharnet.in>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <40856C8C.9090003@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "'gracecott@sancharnet.in'" <gracecott@sancharnet.in>, linux-c-programming@vger.kernel.org
-
-Hi,
-
-Try this:
-
-	if((fd=open(opcode, O_RDONLY))==-1)
-      {
-	  printf("Open failed, error code: %d\n%s\n", errno, strerror(errno)
-      }
-		
-you may need to add errno.h and string.h to the list of includes.  This will
-give you the error code and desctiption of why open is failing.
-
-George Huber
-SRI, International
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of joy
-Sent: Tuesday, April 20, 2004 2:32 PM
-To: linux-c-programming@vger.kernel.org
-Subject: problem in open sys call
+To: gracecott@sancharnet.in
+Cc: linux-c-programming@vger.kernel.org
 
 
-Hi,
-I have a small prblem i the open call. it fails every time and I dont 
-know why.
+joy wrote:
 
-thanx in advance,
-Joy.M.M
+> I have a small prblem i the open call. it fails every time and I dont 
+> know why.
+
+> const char opcode[]="opcode.sheet";
+
+> 	char buff[8192],temp[10],bin=0,opcode[3];
+==>	                               ^^^^^^
+
+> 	if((fd=open(opcode, O_RDONLY))==-1)
+> 		printf("oops");
+
+In the open() call, the variable "opcode" refers to the local variable
+of that name, which will be uninitialised, and not the global variable
+which actually contains your filename.
+
+Running your program under strace or a debugger would show that the
+filename which is passed to open() isn't what you are expecting.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
