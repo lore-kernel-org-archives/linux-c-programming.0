@@ -1,9 +1,8 @@
-From: Steve Graegert <graegerts@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: __asm__
-Date: Tue, 29 Mar 2005 09:40:17 +0200
-Message-ID: <6a00c8d505032823401b82ce07@mail.gmail.com>
+Date: Sat, 2 Apr 2005 14:18:45 +0100
+Message-ID: <16974.39861.142816.892982@gargle.gargle.HOWL>
 References: <20050329064829.52787.qmail@web52908.mail.yahoo.com>
-Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -14,33 +13,40 @@ Content-Type: text/plain; charset="us-ascii"
 To: Ankit Jain <ankitjain1580@yahoo.com>
 Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-On Mon, 28 Mar 2005 22:48:28 -0800 (PST), Ankit Jain
-<ankitjain1580@yahoo.com> wrote:
+
+Ankit Jain wrote:
+
 > can anybody tell me when we write like this while
 > writing asm construct then what does underscore mean?
 > 
 > __asm__("construct")
 
-Underscores in those contexts usually represent a lanugage extension
-and are used to make clear that this contruct may not be part of the
-language standard, although a lot of other C compiler may implement
-it. GNU C knows about a lot of other extensions like
-__attribute__((always_inline)) that is used for function inlining.
+Underscores are treated just like letters in macro and symbol names.
 
-> does it have any connection wit volatile?
+By convention, the implementation (compiler, core libraries) puts
+underscores at the beginning of any "private" names, so that they
+don't conflict with any names which you might use in your code (you
+wouldn't normally choose names beginning with underscores in your own
+code).
 
-Yes, it has. It prevents the compiler from modifying the inline asm
-code, like reordering of statements and the like. This makes sure,
-your code is handled by the compiler as is, so you will be using
-__volatile__ most of the time.
- 
-Kind Regards
+According to the ANSI C99 specification:
 
-    \Steve
+       7.1.3  Reserved identifiers
 
---
+       [#1] Each header declares or defines all identifiers  listed
+       in  its  associated  subclause,  and  optionally declares or
+       defines identifiers listed in its associated future  library
+       directions   subclause  and  identifiers  which  are  always
+       reserved either for  any  use  or  for  use  as  file  scope
+       identifiers.
 
-Steve Graegert <graegerts@gmail.com> // Anyone who considers arithmetical
-Software Consultant {C/C++ && .NET} // methods of producing random digits
-Mobile: +49 (176)  21 24 88 69     //   is, of course, in a state of sin.
- Voice: +49 (9131) 71 26 40 9     //           -- JOHN VON NEUMANN (1951)
+         -- All  identifiers  that  begin  with  an  underscore and
+            either an uppercase letter or  another  underscore  are
+            always reserved for any use.
+
+         -- All  identifiers  that  begin  with  an  underscore are
+            always reserved for use as identifiers with file  scope
+            in both the ordinary and tag name spaces.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
