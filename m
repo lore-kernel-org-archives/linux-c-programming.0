@@ -1,48 +1,30 @@
-From: wwp <subscript@free.fr>
-Subject: Re: malloc and free
-Date: Mon, 20 May 2002 12:06:07 +0200
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: ioctl command FIONREAD
+Date: Mon, 20 May 2002 13:59:10 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020520120607.275757c6.subscript@free.fr>
-References: <200205201126.QAA01696@ns1.dypatil.edu>
+Message-ID: <15592.62238.390702.8081@cerise.nosuchdomain.co.uk>
+References: <3CE8B6A8.92F8E7E@unidec.ro>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200205201126.QAA01696@ns1.dypatil.edu>
+In-Reply-To: <3CE8B6A8.92F8E7E@unidec.ro>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Sameer Maggon <smaggon@dypatil.edu>
+To: Bubulac Tatiana <bubulac@unidec.ro>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi Sameer,
 
+Bubulac Tatiana wrote:
 
-On Mon, 20 May 2002 16:56:30 +0530 (IST) Sameer Maggon <smaggon@dypatil.edu> wrote:
+> Does anyone know what FIONREAD ioctl command does means? I use SCO Open
+> Server 5.05.
 
-[snip]
->   char *token;
->   token = (char *)malloc(256 * sizeof(char));
-> 
->   ...
->   ...
->   token = strtok(...,"\0");
-[snip]
+As Harvinder says, it reports the number of bytes available for
+reading from a descriptor.
 
-The problem is there, you change "token"'s value, so you
-lost the value formerly returned by malloc (this one has
-to be free()'ed) because strtok returns a pointer to the next
-token IIRC. Then, the "token" you attempt to free is not
-the good one.
+> In Linux this command does not exist.
 
-For instance, if I didn't miss anything:
-	char *token, *buffer;
-	buffer = (char *)malloc(256 * sizeof(char));
-	token = buffer;
-	token = strtok(...,"\0");
-	..
-	free(buffer);
-
-
-Regards,
+Yes it does.
 
 -- 
-wwp
+Glynn Clements <glynn.clements@virgin.net>
