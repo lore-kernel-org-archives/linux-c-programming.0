@@ -1,31 +1,41 @@
-From: Nat Ersoz <nat.ersoz@myrio.com>
-Subject: Re: configure and make
-Date: 25 Nov 2002 16:42:22 -0800
+From: "William N. Zanatta" <william@veritel.com.br>
+Subject: select() and pipes
+Date: Thu, 28 Nov 2002 12:48:46 -0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1038271341.5865.492.camel@ersoz.et.myrio.com>
-References: <Pine.LNX.4.33.0211251139480.27485-100000@soochak.ncst.ernet.in>
+Message-ID: <3DE62CCE.2070003@veritel.com.br>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0211251139480.27485-100000@soochak.ncst.ernet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: linux-c-programming@vger.kernel.org
-
-I used GNU make exclusively, which is bundled with most linux
-distributions.  The complete documentation is here:
-
-http://www.gnu.org/manual/make-3.79.1/html_chapter/make_toc.html
-
--- 
-_________________________________________
-Nat Ersoz             nat.ersoz@myrio.com  -o)   My other boss 
-Myrio Corporation     Phone: 425.897.7278  /\\   is a Penguin
-3500 Carillon Point   Cell:  425.417.5182 _\_V
-Kirkland, WA 98033    Fax:   425.897.5600
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
 
+   Hi,
 
-	     
+   I'm writing a tiny program which gets its input from a pipe. It works 
+with apache like in this example...
+
+------ httpd.conf-------
+
+   CustomLog "|/path/my/bin"
+
+------ httpd.conf-------
+
+   On apache2 it works pretty well but on 1.3 series I'm experiencing 
+some problemas and one of them is the CPU Load. The program's main() 
+used to live in a infinite loop making a fgets() and checking for data 
+availability on the returned buffer.
+
+   Well, guessing this is the main reason for the CPU Load, I started 
+with select() to check for data availability and I've found that the 
+couple select() and the pipe as stdin will always return a ready to read 
+status even if there's no data to be read.
+
+   How does it work internally? How could I minimize the cpu load? 
+Should  I use named pipes instead and tell apache to throw logs there?
+
+   Thanks,
+
+william
 
