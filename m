@@ -1,33 +1,42 @@
-From: Ramzez <r4mz3z@yahoo.es>
-Subject: connect to postgre
-Date: Fri, 14 Jun 2002 22:09:49 -0500
+From: jnf <xjnfx@doityourself.com>
+Subject: saved eip question [was Re: c debugging w/ gdb revisited]
+Date: Sun, 16 Jun 2002 03:43:46 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E17J3sf-00069s-00@cue.satnet.net>
+Message-ID: <20020616104346.5EC782757@sitemail.everyone.net>
+Reply-To: xjnfx@doityourself.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-prog <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+yea i didnt think so, but i figured id ask, i was trying to see if i could follow eip honestly.
 
-Hi...
-  I need to know how do I connect to my c/c++ application to my database in 
-my linux RedHat 7.2... I mean wich are the functions or libraries
+any idea why a saved eip would be restored here
 
-a lot of thanks
+call function
+add $0xsomevalue, %esp
+push $value
 
-- -- 
-   Linux User Registered #232544
-         http://counter.li.org
-my GnuPG-key at www.keyserver.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.6 (GNU/Linux)
-Comment: For info see http://www.gnupg.org
+why it would die in between add and push, why a saved eip would be restored @ that point is really my question, i guess im asking this to the wrong mailing list ;]
 
-iD8DBQE9CrADs4dF9gl05swRAofJAJ9ck6uv7S8LMYQKd77nusWGdCNkugCcDHCh
-/xplF84lB9coxGxwiEOdaCw=
-=DcLP
------END PGP SIGNATURE-----
+
+--- Billy O'Connor <billy@oconnoronline.net> wrote:
+>   just a quick question, does anyone know if its possible to set a break/watchpoint in gdb when a register points to a certain location?
+>   i own the gdb manual, and have been playing in it for a bit and just cant seem to figure it out, is it possible?
+>
+>
+>I don't believe that could be done at all, the machine would have to
+>stop whenever it mov'd a value to the register so the debugger could
+>examine it.  I don't think that's possible on Intel machines, anyway.
+>
+>--
+>Billy O'Connor
+
+_____________________________________________________________
+Sign up for FREE email from DoItYourself.com at http://doityourself.com
+
+_____________________________________________________________
+Promote your group and strengthen ties to your members with email@yourgroup.org by Everyone.net  http://www.everyone.net/?btn=tag
