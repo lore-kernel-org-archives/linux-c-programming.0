@@ -1,33 +1,69 @@
-From: Nat Ersoz <nat.ersoz@myrio.com>
-Subject: Re: Debugging a Process ...
-Date: 31 Oct 2002 07:16:47 -0800
+From: =?iso-8859-1?q?will=20fitzgerald?= <linux_learning@yahoo.co.uk>
+Subject: important how to stop interrupts and start them again after finishing what you wanted to do??
+Date: Tue, 5 Nov 2002 17:35:55 +0000 (GMT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1036077407.15831.1174.camel@ersoz.et.myrio.com>
-References: <3DB86A25.5000109@uv.unitec.edu>
+Message-ID: <20021105173555.88591.qmail@web13102.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3DB86A25.5000109@uv.unitec.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Ivan Deras <ideras@uv.unitec.edu>
+To: linux-kernel@vger.kernel.org
 Cc: linux-c-programming@vger.kernel.org
 
-> * in gdb type `attach PID'
+Hi all,
 
-You might find the "ddd" will provide a nice graphical interface to
-gdb.  I've used it frequently, and am very pleased with it.  All gdb
-commands should work within it.
+does any know how i can stop and start interrupts.
+
+i have added a probe function to the kernel to measure
+network mechanisms times in cycles, called 
+probe_point().
+
+probe_point(int probeid){
+
+get rdtsc time and put id and time into buffer
+when full use printk to write buffer to disk.
+
+}
+
+then in mechanisms of interest i place a call to the
+probe_point()for example,
+
+vortex_interrupt(){
+
+probe_point(10);// entry of function
+.
+.function stuff
+.
+.probe_point(11);// exit of function
+}
+
+the problem is some times my buffer does not record
+some id's or times. i think this is because another
+interrupt took place and so the probe_point() exits
+before it gets a chance to store the id and time.
+
+how do i go about setting an non interrupt in the
+probe_point function to make sure it finishes what its
+supposed to do?
+
+for example:
+
+probe_point(int probeid){
+
+do not interrupt me until i do:
+
+get rdtsc time and put id and time into buffer
+when full use printk to write buffer to disk.
+
+now i have finshed puting an id and time into a buffer
+so you can interrpt now.
+
+}
 
 
--- 
-_________________________________________
-Nat Ersoz             nat.ersoz@myrio.com  -o) 
-Myrio Corporation     Phone: 425.897.7278  /\\
-3500 Carillon Point   Cell:  425.417.5182 _\_V
-Kirkland, WA 98033    Fax:   425.897.5600
-
-
-
-	     
-
+__________________________________________________
+Do You Yahoo!?
+Everything you'll ever need on one web page
+from News and Sport to Email and Music Charts
+http://uk.my.yahoo.com
