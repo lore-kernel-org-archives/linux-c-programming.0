@@ -1,69 +1,74 @@
-From: "A. Murat Eren" <meren@comu.edu.tr>
-Subject: Re: [Fwd: Re: Implementing a file counter (like "ls | wc")]
-Date: Thu, 8 Apr 2004 11:05:13 +0300
+From: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
+Subject: Re: How to execute a process in background by exec functions?
+Date: Thu, 8 Apr 2004 18:31:55 +0900
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200404081105.13485.meren@comu.edu.tr>
-References: <4074313A.5090808@ig.com.br> <200404090200.36787.meren@comu.edu.tr> <16500.55163.50294.74986@cerise.nosuchdomain.co.uk>
+Message-ID: <004501c41d4c$5503f820$de01a8c0@qnessmphibiki>
+References: <3AA03342E913FA4BA6D8BD0732BFC74B05530BA8@pdsmsx402.pd.intel.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <16500.55163.50294.74986@cerise.nosuchdomain.co.uk>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+To: "Zhang, Yanmin" <yanmin.zhang@intel.com>, linux-c-programming@vger.kernel.org
+
+Hi,
+Thanks a lot for your help.
+Yes, I have tired this way. The daemon started, but I hope its PPID
+is 1. We can do it by calling system("/home/wen/daemon &").
+How can I do it by fork&exec way?
+
+Best regards,
+
+--Wen
+
+----- Original Message -----=20
+=46rom: "Zhang, Yanmin" <yanmin.zhang@intel.com>
+To: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>;
+<linux-c-programming@vger.kernel.org>
+Sent: Thursday, April 08, 2004 3:00 PM
+Subject: RE: How to execute a process in background by exec functions?
 
 
- Hi,
+> It doesn't work in this approach. Try this:
+>
+> pid=3Dfork();
+> if(pid =3D=3D 0) {
+> execv("/home/wen/daemon", NULL);
+> exit(-1);
+> }
+>
+> ... do parent process.
+>
+> Yanmin
+>
+>
+> >-----Original Message-----
+> >From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
+> >programming-owner@vger.kernel.org] On Behalf Of Wen Guangcheng
+> >Sent: 2004=C3=84=C3=AA4=C3=94=C3=828=C3=88=C4=A0 13:41
+> >To: linux-c-programming@vger.kernel.org
+> >Subject: How to execute a process in background by exec functions?
+> >
+> >Hello All,
+> >I am trying to execute a process in background by exec functions.
+> >But it failed when I call the function of execv by
+> >execv("/home/wen/daemon &", NULL);
+> >The error is ENOENT(No such file or directory).
+> >Would anyone tell me how to do it?
+> >Thanks in advance.
+> >
+> >Best regards,
+> >
+> >--Wen
+> >-
+> >To unsubscribe from this list: send the line "unsubscribe linux-c-
+> >programming" in
+> >the body of a message to majordomo@vger.kernel.org
+> >More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
-> "cd" isn't a program; it's a built-in shell command. It has to be; a
-> process can't change the current directory of another process, so a
-> "cd" program just wouldn't work.
-
- Sorry about that, yes cd is a built-in function of shell. btw, i'm not using 
-it to change any program's working dir. i'm filling up my shell's current 
-working dir environment variable with calling it to able to use commands like 
-clone of ls without any extra parameter. So for example when i invoke my 
-listing program to see what is in my current working directory, it already 
-knows that i'm in /usr/src from the CWD envoriment var.
-
-> In most of the situations where you use syscalls, you can't avoid
-> using them; the point is not to use them excessively.
-> 
-> E.g. if you're reading a file (or any other descriptor), calling
-> read() a few times and reading a large amount of data each time is
-> more efficient than calling read() lots of times and reading a small
-> amount of data each time.
-> 
-> Or, for an "ls" replacement, only call stat() (or lstat()) if you
-> actually need the additional data (e.g. for "ls -l", "ls -F" etc)
-> rather than always calling it "just in case".
-
- Thank you, i've got the point completely.
- 
-> There is seldom any point in bypassing libc. For a syscall, the libc
-> function will usually consist of the syscall itself, plus setting
-> errno if the syscall returns an error status, so there wouldn't be
-> anything to gain from making the syscall directly.
-
- Thank you very much for your advices and time :)
-
-
- Regards.
--- 
-
-
-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
- A. Murat Eren
- meren@comu.edu.tr, evreniz@core.gen.tr
- http://zion.comu.edu.tr/~evreniz/
- 0x88FD9FC7, 
- 910A FCB3 2AAB 4CA5 E4D9 EFFA 6555 A33A 88FD 9FC7
-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-
---
- free software is a matter of liberty,
- not price. to understand the concept,
- you should think of "free speech",
- not "free beer".
 -
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
