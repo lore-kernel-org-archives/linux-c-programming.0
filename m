@@ -1,71 +1,35 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: const char * vs char[]
-Date: Tue, 23 Mar 2004 10:44:36 -0300
+From: Massimiliano Cialdi <cialdi@firenze.net>
+Subject: Re: const char * vs char[]
+Date: Tue, 23 Mar 2004 15:19:02 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000701c410dc$fb457820$0c81640a@aca.org.ar>
+Message-ID: <20040323151902.000048da.cialdi@firenze.net>
 References: <20040323130118.00005637.cialdi@firenze.net>
-Reply-To: <mariano_moreyra@aca.org.ar>
+	<000701c410dc$fb457820$0c81640a@aca.org.ar>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040323130118.00005637.cialdi@firenze.net>
+In-Reply-To: <000701c410dc$fb457820$0c81640a@aca.org.ar>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: 'Massimiliano Cialdi' <cialdi@firenze.net>, 'linux-c-programming' <linux-c-programming@vger.kernel.org>
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-I think that the problem is not a difference between "char*" and "char[]"
-The problem is that stampa is receiving a "char[]" and you are passing a
-"const char*" as the arg.
-The "qualifiers from pointer targer type" refers to the "const" part of the
-"const char*" declaration I belive.
-If you declare stampa like this:
+On Tue, 23 Mar 2004 10:44:36 -0300
+"Mariano Moreyra" <moremari@aca.org.ar> wrote:
 
-void stampa(const char s[]);
-
-you won't have this warning anymore.
-
-
-
------Mensaje original-----
-De: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]En nombre de
-Massimiliano Cialdi
-Enviado el: Martes, 23 de Marzo de 2004 09:01
-Para: linux-c-programming
-Asunto: const char * vs char[]
-
-
-I have this:
-
-#include <stdio.h>
-const char *str = "pippo";
-int main(void)
-{
-  void stampa(char s[]);
-  stampa(str);
-  return 0;
-}
-void stampa(char s[])
-{
- printf("%s\n", s);
-}
-
-and gcc gives me a warning:
-pippo.c:9: warning: passing arg 1 of `stampa' discards qualifiers from
-pointer target type
-
-
-what are the differences between char[] and const char *?
+> I think that the problem is not a difference between "char*" and
+> "char[]" The problem is that stampa is receiving a "char[]" and you
+> are passing a"const char*" as the arg.
+> The "qualifiers from pointer targer type" refers to the "const" part
+> of the"const char*" declaration I belive.
+> If you declare stampa like this:
+> 
+> void stampa(const char s[]);
+> 
+> you won't have this warning anymore.
+so what is a synonym of char[]? Maybe "char (const *)"?
 
 thanks
-
---
+-- 
 Massimiliano Cialdi
 cialdi@firenze.net
 m.cialdi@oksys.it
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
