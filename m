@@ -1,51 +1,48 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: problem in sending a message
-Date: Sun, 27 Feb 2005 18:07:31 +0800
-Message-ID: <42219BE3.8060609@hq.ntsp.nec.co.jp>
-References: <cvrpo8$h4g$1@sea.gmane.org>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: clear the screen
+Date: Mon, 28 Feb 2005 06:36:39 +0000
+Message-ID: <16930.48119.987267.500405@gargle.gargle.HOWL>
+References: <1108969688.5088.12.camel@localhost.localdomain>
+	<16923.52084.408249.817998@gargle.gargle.HOWL>
+	<20050223185457.A550@Imrashi.net.bd>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <cvrpo8$h4g$1@sea.gmane.org>
+In-Reply-To: <20050223185457.A550@Imrashi.net.bd>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: muruganandam@softhome.net, linux-c-programming@vger.kernel.org
-
-im not sure where ur problem is...
-is it with the sending of bytes/data or with the receiving part??
-
-A:
-actual size of image file: N bytes
-actual bytes sent: M bytes( where M < N)
-
-B:
-actual bytes sent: N bytes
-actual bytes read: M bytes ( where M < N)
-
-is it scenario A or scenario B?
-or a hybrid??
-
-can u send us some of ur code?
+Content-Type: text/plain; charset="us-ascii"
+To: Progga <abulfazl@juniv.edu>
+Cc: linux-c-programming@vger.kernel.org
 
 
-Muruganandam wrote:
+Progga wrote:
 
-> dear all,
-> when i sending the image file ,it is not exactly same size.it is lower 
-> than than actual image file.how to send a image file using sockets.i 
-> expect from u.
->
-> thank you,
->
-> with regards,
-> C.Muruganandam
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
+> > See the manpage for setupterm() and tigetstr() for more information.
+> 
+>  Should it be like this ? 
+> 
+> 
+> <code>
+>     char *area[100], bp[2048] ;
+> 
+>     tgetent( bp, getenv( "TERM" )) ;
+>     puts( tgetstr( "cl", area )) ;
+> </code>
 
+First, that's the old termcap interface; new programs should use the
+terminfo interface.
 
+Second, the use of the "area" variable is wrong. It should be
+something like:
+
+	char buf[100];
+	char *area = buf;
+	
+	puts(tgetstr("cl", &area));
+
+Repeated calls to tgetstr() will advance the "area" pointer, so that
+"buf" will contain, in order, all of the strings retrieved by
+tgetstr().
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
