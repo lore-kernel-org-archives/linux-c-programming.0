@@ -1,99 +1,70 @@
-From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-Subject: Re: pass 2 D array in C
-Date: Thu, 14 Oct 2004 10:13:50 -0300
+From: Adam Dyga <adeon@tlen.pl>
+Subject: automake & C++ library problem
+Date: Thu, 14 Oct 2004 18:05:31 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <416E7B8E.7080207@ig.com.br>
-References: <20041014112615.91429.qmail@web52901.mail.yahoo.com> <416E7A5E.6090603@ig.com.br>
+Message-ID: <200410141805.31790.adeon@tlen.pl>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <416E7A5E.6090603@ig.com.br>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: 
-Cc: Ankit Jain <ankitjain1580@yahoo.com>, linux prg <linux-c-programming@vger.kernel.org>
-
-Sorry, I found 2 big mistakes !!!
-the functions parameters, should be:
-
-fill_array(char **pp, int nLength)
-dump_array(char **pp, int nLength)
-
-instead of:
-fill_array(char *pp, int nLength)
-dump_array(char *pp, int nLength)
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
 
+Hello,
 
-Luciano Moreira - igLnx escreveu:
+It's not exactly C programming related question, but I suspect that many of you, linux developers, know autotools well.
 
-> The following sample was coded now, without compiling, then It can 
-> have some mistakes for compiler.
-> But I think that it ll can be good for your analyse. Using this 
-> sample, you can allocate any kind of array, like as 3D, 4D, 5D, and so 
-> on.
->
-> Luciano
-> ----------------------------------------------------------------------------------------- 
->
-> main()
-> {
->   int THE_LENGTH = 200; /* Numbers of itens of array */
->   long **p2DArray;
->
->   pp2DArray = new long[THE_LENGTH];
->   /* for C-ANSI: pp2DArray = malloc(sizeof(long) * THE_LENGTH); */
->
->   fill_array(pp2dArray, THE_LENGTH);
->   dump_array(pp2dArray, THE_LENGTH);
->
->   delete pp2DArray;
->  /* forC-ANSI:  free(pp2DArray); */
-> }
->
-> fill_array(char *pp, int nLength)
-> {
->   int ct;
->   for ct(=0; ct<nLength; ct++) {
->      ppArray[ct] = (long) rand();
->   }
-> }
->
->
-> dump_array(char *pp, int nLength)
-> {
->   int ct;
->   for (ct=0; ct<nLength; ct++) {
->      printf("Item %d: %ld\n", ct, ppArray[ct]);
->   }
-> }
-> ----------------------------------------------------------------------------------------- 
->
->
->
->
-> Ankit Jain escreveu:
->
->> its a simple question...
->>
->> how to pass a 2 D array address in C
->>
->> is there any way by **pointer?
->>
->> thanks
->>
->> ankit
->>
->> ________________________________________________________________________
->> Yahoo! Messenger - Communicate instantly..."Ping" your friends today! 
->> Download Messenger Now http://uk.messenger.yahoo.com/download/index.html
->> -
->> To unsubscribe from this list: send the line "unsubscribe 
->> linux-c-programming" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>
->>
->>  
->>
->
+I want to create a C++ library from scratch. So I created project directory, with configure.in and Makefile.am
+ in it, and  'src' subdirectory with Makefile.am.
+
+Mentioned files contain:
+
+configure.in:
+
+ AC_INIT(deflatec++, 1.00)
+ AM_INIT_AUTOMAKE
+ AC_LANG(C++)
+ AC_PROG_CXX
+ AC_PROG_INSTALL
+ AC_PROG_RANLIB
+ AC_OUTPUT(Makefile src/Makefile)
+
+Makefile.am:
+
+ SUBDIRS = src
+
+src/Makefile.am:
+
+ bin_PROGRAMS = deflatetest
+ deflatetest_SOURCES = deflatetest.cc
+ include_HEADERS = DeflateCompress.h DeflateDecompress.h 
+ lib_LIBRARIES = libdeflatec++.a
+ libdeflatec++_a_SOURCES = DeflateCompress.cc DeflateDecompress.cc DeflateCompress.h DeflateDecompress.h 
+
+(all files .h and .cc ofcourse exist)
+
+Running autoreconf gives me the following error (originated from automake in fact):
+
+/usr/share/automake-1.9/am/depend2.am: am__fastdepCC does not appear in AM_CONDITIONAL
+src/Makefile.am: C source seen but `CC' is undefined
+src/Makefile.am:
+src/Makefile.am: The usual way to define `CC' is to add `AC_PROG_CC'
+src/Makefile.am: to `configure.in' and run `autoconf' again.
+autoreconf: automake failed with exit status: 1
+
+And here I don't know what is going on, I don't know where automake see any C source... :(
+But OK, I'm adding AC_PROG_CC to configure.in and running autoreconf, configure and make.
+I'm getting this:
+
+Making all in src
+make[1]: Entering directory `/home/adeon/deflatec++/src'
+make[1]: *** No rule to make target `libdeflatec++.c', needed by `libdeflatec++.o'.  Stop.
+make[1]: Leaving directory `/home/adeon/deflatec++/src'
+make: *** [all-recursive] Error 1
+
+What am I doing wrong?
+
+Greets
+Adam
