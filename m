@@ -1,46 +1,29 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Elias Athanasopoulos <eathan@otenet.gr>
 Subject: Re: is it a buf or what?
-Date: Sat, 8 Jun 2002 13:03:02 +0100
+Date: Sat, 8 Jun 2002 19:40:46 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15617.62070.407934.637355@cerise.nosuchdomain.co.uk>
+Message-ID: <20020608194046.E12928@neutrino.particles.org>
 References: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.33.0206081601090.19134-100000@soochak.ncst.ernet.in>; from khalid@ncst.ernet.in on Sat, Jun 08, 2002 at 04:03:35PM +0530
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
 Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
+On Sat, Jun 08, 2002 at 04:03:35PM +0530, Mohammed Khalid Ansari wrote:
 
-Mohammed Khalid Ansari wrote:
-
-> I had written a small program as follows...
-> 
-> #include <stdio.h>
-> 
-> int main()
-> {
-> 	char	*ptr;
-> 	
-> 	strcpy (ptr, "khalid");
-> 	printf ("%s\n", ptr);
-> 	return 0;
-> }
-> 
 > As you can see, I haven't allocated the space for the pointer ptr. When I 
 > ran the program, instead of giving me the segmentation fault, it just ran 
 > printing "khalid". Is it a bug of gcc or the kernel.
 
-No.
+You are just lucky. If you run your program with efence or another mem
+debugging tool, you'll get a segfault for sure.
 
-An automatic variables which isn't explicitly initialised will have a
-random value. It seems that, in this case, "ptr" just happens to point
-to writable memory.
-
-This is an example of a program whose behaviour is "undefined". That
-means that anything might happen; it might even work.
+Elias
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
