@@ -1,72 +1,61 @@
-From: "John T. Williams" <jowillia@vt.edu>
-Subject: Re: Boot code in C
-Date: Mon, 05 Jul 2004 13:36:05 -0400
+From: Eric Bambach <eric@cisu.net>
+Subject: Signals And Chlidren
+Date: Mon, 5 Jul 2004 14:17:03 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1089048965.8347.16.camel@localhost>
-References: <1089035369.7299.48.camel@kaushal>
-Reply-To: jtwilliams@vt.edu
+Message-ID: <200407051417.03410.eric@cisu.net>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1089035369.7299.48.camel@kaushal>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kaushal <kaushal@rocsys.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-there are a couple of issues involved.
-1.  when you compile C programs they are linked against the at least the
-C library on your computer.  You can take care of that by using the
--static directive with either the linker or the gcc, but you have to
-have already installed the static version all libraries you link
-against. which you can find out using the ldd tool
-2.  System calls are part of The OS, so if you want a program to execute
-w/o first loading the kernel, you can't make any system calls.  This
-includes every input output function that I know of.  
-3.  you need a boot loader.  The BIOS will load the bootsector of a
-floppy into memory, and if your program is small enough to fit in the
-boot sector, then you have no problem, otherwise you have to write code
-to open your disk's filesystem, find your program, load it into memory
-and then start executing it.  
+Hello,
 
-In short, if you really want a program which runs off a floppy, and does
-anything useful, you need to learn a little assembly.
+	I am now trying to learn about signals and signal handling and I have the 
+following situation. 
 
-	
+Main program-
+	Child of main-
+		1st grandchild
+		2nd grandchild
 
+These are children created by fork() and the grandchildren are created by 
+fork() exec(). I need a method to send SIGTERM to only the children and not 
+to a whole process group. Specifically, I have a rather obvious problem 
+problem using the code below. When I use teh command
+#kill (pid of child of main)
+The program spits MANAGER CAUGHT TERM for quite a while until it causes the 
+whole program to exit. However, I think my code has more problems because I 
+thought SIGTERM would be blocked in a SIGTERM handler, isnt it?
 
+Most of the documentation I have read indicates that signal handlers cannot be 
+interrupted by the signals they are handling unless otherwise specified, 
+however the long loop of CAUGHT TERM messages indicates otherwise.
 
-On Mon, 2004-07-05 at 09:49, kaushal wrote:
-> Hello  all,
->           I want to know if there is a way to  generate a binary file,
-> from  a C program(Not from an assembly code)(can use any Linux
-> tools)that can be burned on to a floppy and which ,say--  just prints a
-> string on to the screen.
-> I tried out to the following:
-> 
-> 
-> 1.[kaushal@linuxbox]#cc Hello.c -static -o Hello
->   [kaushal@linuxbox]#strip Hello
->   [kaushal@linuxbox]#objcopy -O binary Hello Hello.bin
->   [kaushal@linuxbox]#dd if=Hello.bin of=/dev/floppy
-> 
-> 
-> 2.[kaushal@linuxbox]#cc Hello.c -S 
->   [kaushal@linuxbox]#as Hello.s -o Hello
->   [kaushal@linuxbox]#strip Hello
->   [kaushal@linuxbox]#objcopy -O binary Hello Hello.bin
->   [kaushal@linuxbox]#dd if=Hello.bin of=/dev/floppy
-> 
-> In the second case (2.)(Even if I don't give a "-static" switch for the
-> first one(1.)) the Hello size is MUCH less than its counterpart of case
-> (1.)
-> Either way it did not work.I think the problem occurs because of absence
-> of OS at boot time.So is there any way of atleast generating the
-> required assembly code from the C code(The optimised one).
-> 
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Is there any way to send signals to ONLY the children without having to 
+explicitly know their PID? 
 
+If the child recieves SIGTERM, I want to SIGTERM the grandchildren to make 
+sure they stop+cleanup instead of continuing and being reparented to init.
+
+I probably have other problems too ;). Let me know if you need more 
+information.
+-----------------CODE-------------
+
+void SigTermHandler(int value)
+{
+
+#ifdef DEBUG
+  cerr << "MANAGER CAUGHT TERM" << endl;
+#endif
+  kill((pid_t)0,SIGTERM); 
+}
+-----------------END CODE-------------
+
+Thank you for your time.
+
+-- 
+-EB
