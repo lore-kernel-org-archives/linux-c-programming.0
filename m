@@ -1,10 +1,8 @@
-From: "Alexi Jordanov" <a_jordanov@prosyst.bg>
-Subject: strange SIGSEGV
-Date: Tue, 25 Mar 2003 12:00:29 +0200
+From: "Luciano Moreira - igLnx" <lucianolnx@ig.com.br>
+Subject: Detecting deamons running
+Date: Fri, 28 Mar 2003 14:20:08 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <005701c2f2b5$5d8d0300$0266a8c0@psb>
-References: <Pine.LNX.4.33.0303051227480.30291-100000@soochak.ncst.ernet.in> <3E65B4EE.8080803@tscheinig.com>
-Reply-To: "Alexi Jordanov" <a_jordanov@prosyst.bg>
+Message-ID: <00b701c2f54e$4a57afb0$0b00a8c0@SPLUCIANO>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -12,47 +10,19 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hello to all,
+I have a application that run like a deamon, which write in a file its PID,
+that is used to stop it later by others programs. But, I ve noted that my
+users send signal 9 to stop deamons, and my application cannot remove its
+PID file, because it cannot handle singal 9, keeping its PID file at HD
+(FileSystem).
 
-I have a strange problem with listening for file change notification.
-Everything is fine in my handler fuction till the moment when I try to send
-this information through pipes:
+Can someone sugest me a way to know the deamon's PID, without write it to a
+file ?
+OR
+How can I do to know if my deamon is running and get its PID ?
 
-This works fine:
-===========
-static void handler(int sig, siginfo_t *si, void *data)
-{
- fprintf(stderr, "Got an event: %d.\n", si->si_fd);
-}
+Thanks,
 
-This cause SIGSEGV:
-===============
-static void handler(int sig, siginfo_t *si, void *data)
-{
- fprintf(stderr, "Got an event: %d.\n", si->si_fd);
- if (write(event_pipe[1], &si->si_fd, sizeof(int)) != sizeof(int))
- {
-  fprintf(stderr, "Write failed (handler) - %s.\n", errstr);
-  fflush(stderr);
- }
-}
+Luciano
 
-I try to start debugger to look for the problem, but all that I was found
-was:
-==================================================
-Program received signal SIGSEGV, Segmentation fault.
-0x00000004 in ?? ()
-(gdb) where
-#0  0x00000004 in ?? ()
-#1  0x90c3c9ec in ?? ()
-Cannot access memory at address 0x5d8bc031
-(gdb)
-
-The problem appears when I try to watch simultaneously two times one and the
-same directory. But I don't think that this is 100% true, because I don't
-have problem with other directories.
-
-Can somebody advise me how to deal with this problem?!
-
-Regards, Alex
 
