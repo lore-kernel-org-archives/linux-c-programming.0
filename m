@@ -1,41 +1,49 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Implementation of read( )
-Date: Mon, 26 Jan 2004 22:51:34 +0000
+From: tabris <tabris@tabris.net>
+Subject: C99 doesn't allow local scope variables?
+Date: Mon, 26 Jan 2004 21:30:30 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16405.39414.329911.489827@cerise.nosuchdomain.co.uk>
-References: <20040126201655.DBEB51E447@xprdmailfe25.nwk.excite.com>
+Message-ID: <200401262130.35636.tabris@tabris.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040126201655.DBEB51E447@xprdmailfe25.nwk.excite.com>
+Content-Description: clearsigned data
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: vintya@excite.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: Text/Plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Vineet Joglekar wrote:
+simple C program
 
-> I dont know if this question is relevant on this mailing list, but
-> please do help me out if you can.
-> 
-> For my project, I need to trace the read() function call till the VFS
-> level. I have read that read() makes the kernel invoke sys_read() and
-> I want to do the same thing with some additional functionalities. 
-> Where can i get the implementation of the read() function so that on
-> the parallel lines I will be able to write my own my_read() function
-> which in turn will call the sys_read() too?
+#include <stdlib.h>
+#include <stdio.h>
 
-read() is part of libc. However, it's just a trivial wrapper around
-the corresponding system call; the "source code" in
-sysdeps/unix/syscalls.list is just:
+int main(void)
+{
+    for (int i=0; i < 2; i++)
+        printf("crap\n");
+};
 
-read		-	read		i:ibn	__libc_read	__read read
+[tabris@tabriel tmp]$ gcc test.c -o test
+test.c: In function `main':
+test.c:6: error: `for' loop initial declaration used outside C99 mode
 
-The glibc build system generates the corresponding read.c file from
-the above line using the sysdeps/unix/make-syscalls.sh script.
+What does that mean, and why am I not allowed to make a local scope variable 
+for a for{;;} loop?
 
-If you want to see the code, the simplest solution is to build glibc.
+works fine if i declare the variable outside the loop. But I swear I used to 
+do this with gcc 2.95.
+- --
+tabris
+- -
+Body by Nautilus, Brain by Mattel.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.3 (GNU/Linux)
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+iD8DBQFAFc1J1U5ZaPMbKQcRAiJyAJ4namXjJa9zd6Y/VGbR+Y5pyHVjUwCcCy4s
+dW251Zxh2o3I97eabiisOMg=
+=21yl
+-----END PGP SIGNATURE-----
+
