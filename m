@@ -1,97 +1,76 @@
-From: Elias Athanasopoulos <eathan@otenet.gr>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: getch()
-Date: Thu, 7 Nov 2002 20:04:36 +0200
+Date: Thu, 7 Nov 2002 17:19:51 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20021107200436.C1136@neutrino.particles.org>
-References: <200211071046.24987.abulfazl@juniv.edu> <200211072135.59164.abulfazl@juniv.edu>
+Message-ID: <15818.41143.242454.812537@cerise.nosuchdomain.co.uk>
+References: <200211071046.24987.abulfazl@juniv.edu>
+	<200211072135.59164.abulfazl@juniv.edu>
+	<20021107200436.C1136@neutrino.particles.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200211072135.59164.abulfazl@juniv.edu>; from abulfazl@juniv.edu on Thu, Nov 07, 2002 at 09:35:59PM +0600
+In-Reply-To: <20021107200436.C1136@neutrino.particles.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Progga <abulfazl@juniv.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: Elias Athanasopoulos <eathan@otenet.gr>
+Cc: Progga <abulfazl@juniv.edu>, linux-c-programming@vger.kernel.org
 
-On Thu, Nov 07, 2002 at 09:35:59PM +0600, Progga wrote:
->   Is there any way to get a character without pressing return in a simple
->  console application ( something like getch() of ncurses ) ? It's needed in
->  a test shell for getting the arrow keypresses for using the history list.
->  TIA.
 
-Yes. Test it before, it is old code...
+Elias Athanasopoulos wrote:
 
-Using the code below, I had a loop (it is from a console game I
-was trying to write 4-5 years before):
+> >   Is there any way to get a character without pressing return in a simple
+> >  console application ( something like getch() of ncurses ) ? It's needed in
+> >  a test shell for getting the arrow keypresses for using the history list.
+> >  TIA.
+> 
+> Yes. Test it before, it is old code...
+> 
+> Using the code below, I had a loop (it is from a console game I
+> was trying to write 4-5 years before):
 
-    while (ch! = 'q') {
-      fflush (stdin);
-      if (read (STDIN_FILENO, &ch, 1) > 0) 
-	if (ch >= _UP && ch <= _LEFT) 
-	  {
-	    check_move (ch);
-	    ...
-	  }
-	....
-	....
-    }		
+This is basically the right approach (i.e. use tcsetattr() to disable
+canonical mode).
 
-And, what was _UP and _LEFT? Hmm... 
+However, I'll just mention a couple of other points:
 
-[anteater@neutrino berserkers]$ grep _UP *.h
-#define _UP 65
-[anteater@neutrino berserkers]$ grep _LEFT *.h
-#define TOP_LEFT 51
-#define BOT_LEFT 52
-#define _LEFT 68
+>     while (ch! = 'q') {
 
-Elias
+>       fflush (stdin);
 
---CUT HERE--
+fflush() is only applicable to output streams; using it on input
+streams seems to be a common programming "superstition".
 
-/*
- * Changing Terminal attributes using low level terminal handling,
- * in order to have non-buffered, non-echoed, non-blocking input.
- * 
- * */
+> And, what was _UP and _LEFT? Hmm... 
+> 
+> [anteater@neutrino berserkers]$ grep _UP *.h
+> #define _UP 65
+> [anteater@neutrino berserkers]$ grep _LEFT *.h
+> #define TOP_LEFT 51
+> #define BOT_LEFT 52
+> #define _LEFT 68
 
-#include <stddef.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <termios.h>
+IOW, 'A', 'B', 'C', 'D'. I doubt that you were actually using those
+keys; more likely, assuming that the cursor keys generated particular
+sequences and ignoring most of the sequence.
 
-struct termios saved_attrib;
+If you want to use extended keys (those which generate sequences
+rather than individual codes, e.g. cursor keys, function keys, numeric
+keypad, etc), use termcap/terminfo. Or just use curses; when someone
+wants getch(), they often want the other stuff which curses provides.
 
-void reset_input_mode(void)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &saved_attrib);
-}
+> struct termios saved_attrib;
+> 
+> void reset_input_mode(void)
+> {
+> 	tcsetattr(STDIN_FILENO, TCSANOW, &saved_attrib);
+> }
 
-void set_input_mode(void)
-{
-	struct termios attrib;
-	char *name;
-	
-	/* check stdin is a terminal */
-	
-	if (!isatty(STDIN_FILENO)) {
-		fprintf(stderr, "Not a terminal!\n");
-		exit(EXIT_FAILURE);
-	}
-	
-	/* save original attributes */
-	
-	tcgetattr(STDIN_FILENO, &saved_attrib);
-	atexit(reset_input_mode);
-	
-	/* make the changes */
-	
-	tcgetattr(STDIN_FILENO, &attrib);
-	attrib.c_lflag &= ~(ICANON|ECHO); /* disables canonical mode, echo */
-	attrib.c_cc[VMIN] = 0;            /* non-blocking input */
-	attrib.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &attrib);
-}
+[snip]
 
+> 	atexit(reset_input_mode);
+
+To be safe, you should also install signal handlers which restore the
+terminal mode.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
