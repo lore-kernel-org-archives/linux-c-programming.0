@@ -1,40 +1,53 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI"
-	 <George.K.Huber@us.army.mil>
-Subject: RE: Static memory allocation
-Date: Fri, 24 Sep 2004 10:21:25 -0400
-Sender: gcc-help-owner@gcc.gnu.org
-Message-ID: <E3E30069B061524E90BCEE4417E30661138537@monm207.monmouth.army.mil>
+From: Suciu Flavius <suciuflavius@tiscali.de>
+Subject: Re: _var_name
+Date: Fri, 24 Sep 2004 17:43:25 -0700
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <cj1eqa$m10$1@sea.gmane.org>
+References: <20040924025427.37460.qmail@web52909.mail.yahoo.com>
 Mime-Version: 1.0
-Return-path: <gcc-help-return-18023-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
-List-Post: <mailto:gcc-help@gcc.gnu.org>
-List-Help: <mailto:gcc-help-help@gcc.gnu.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: 'Ankit Jain' <ankitjain1580@yahoo.com>, gcc <gcc-help@gcc.gnu.org>, linux prg <linux-c-programming@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20040924025427.37460.qmail@web52909.mail.yahoo.com>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-Ankit wrote:
+Hi,
 
->[ankit@Ankit fft]$ cat try2.c
->#include <stdio.h>
->int main()
->{
->  double a[1450][1450];
->  a[1450][0]=999.999;
->  printf("%lf\n",a[1450][0]);
->  return 0;
->}
->[ankit@Ankit fft]$ gcc try2.c
->[ankit@Ankit fft]$ ./a.out
->Segmentation fault
->[ankit@Ankit fft]$
+__variables are LIBRARY related global variables,
+In a normal case you will NEVER use them directly.
+The functions from the library use this variables.
+It's named like this to be UGLY to use them, and
+somehow it's a convention to name internal library
+variables using prepended __
 
-This is a classic `off-by-one' error.  When you allocate an
-array int a[10] you are asking for ten storage locations that 
-are numbered 0 -- 9. (not 10).
+So, forget about them and use the functions  :)
 
-In your program, the legal range for each index is 0-1449 (not 1450).
 
-George
+
+
+Ankit Jain wrote:
+> hi
+> 
+> i have seen some variables in C defined in this
+> format(_var_name or __var1_name). generally like this
+> they are defined in header files also
+> 
+> how to use them
+> 
+> thanks
+> 
+> ankit
+> 
+> 
+> 
+> ________________________________________________________________________
+> Yahoo! Messenger - Communicate instantly..."Ping" 
+> your friends today! Download Messenger Now 
+> http://uk.messenger.yahoo.com/download/index.html
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+
