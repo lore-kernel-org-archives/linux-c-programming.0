@@ -1,67 +1,46 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: strange behavious
-Date: Wed, 25 Dec 2002 09:50:50 +0000
+Subject: RE: strange behavious
+Date: Wed, 25 Dec 2002 09:55:22 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15881.32634.771047.121020@cerise.nosuchdomain.co.uk>
-References: <15878.50935.669096.783873@cerise.nosuchdomain.co.uk>
-	<Pine.LNX.4.33.0212241046350.31854-100000@soochak.ncst.ernet.in>
+Message-ID: <15881.32906.386882.764352@cerise.nosuchdomain.co.uk>
+References: <75B979779CA1D311808400508B6F40FF06B4354E@zes06exm01.madrid.ecid.cig.mot.com>
+	<Pine.LNX.4.33.0212241011001.31854-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0212241046350.31854-100000@soochak.ncst.ernet.in>
+In-Reply-To: <Pine.LNX.4.33.0212241011001.31854-100000@soochak.ncst.ernet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Cc: Alvarez Alberto-AALVARB1 <AALVARB1@motorola.com>, linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
 
 Mohammed Khalid Ansari wrote:
 
-> > > I was running a simple program to test two dimensional pointer. When I 
-> > > compiled it and executed, it received segmentaion fault, but when I 
-> > > checked it in debugger step by step, it went smoothly and produced the 
-> > > expected output. I did it many times and got the same behavious. Following 
-> > > is my program
-> > > 
-> > > ###################
-> > > 
-> > > #include <stdio.h>
-> > > 
-> > > void parse (char **);
-> > > char	*words[] = {"mohammed", "khalid", "ansari"}; 
+> > 	i'll try to answer your question. This may be not be an accurate answer, but i think it'll do.
 > > 
-> > While the array of pointers will be mutable, the strings themselves
-> > aren't; if you attempt to modify them, you will get a segmentation
-> > fault.
+> > 	The way you've assigned values to 'words' is the reason of the failure. The allocation of memory takes place in program data space (the same place where code is), so you can't modify it.
+> > 	If you want to modify that array, you should dynamically allocate it. Something like this will work,
 > 
-> Is this in ANSI C?
+> that means it should not work for the following code as the memory is 
+> allocated in program data space, but it works...
+> 
+> #######
+> #include <stdio.h>
+> 
+> int main()
+> {
+> 	char	string[] = "mohammed";
+> 	
+> 	strcpy (string, "khalid");
+> 	printf ("%s\n", string);
+> 	
+> 	return 0;
+> }
+> #######
 
-Yes.
-
-Note that ANSI C doesn't *require* that constant data are stored in
-read-only memory (not all hardware supports memory protection);
-however, it does permit it, so any program which assumes that constant
-data (e.g. string literals) are mutable isn't portable.
-
-> Will you please elaborate why is it so with this array 
-> only
-
-It isn't.
-
-> and how it is different from the example you have given below because  
-> ultimately both examples are same ie array of pointers.
-
-The pointers point to different regions of memory. In your version,
-they point into the read-only data ("rodata") segment, which is
-read-only. In my second version, they point into the data segment,
-which is mutable.
-
-> As far as I know if there is an string in a code with sufficient memory,
-> it can be overwritten unless it is static.
-
-No; not all of the process' memory is writable. Program code and
-read-only data are stored in read-only areas of memory, so that they
-can be shared between multiple processes.
+Sure; in this case the variable "string" is stored in the data
+segment, which is mutable.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
