@@ -1,60 +1,63 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: what causes SIGTERMs?
-Date: Tue, 22 Jul 2003 17:11:21 +0200
+Date: Tue, 22 Jul 2003 21:47:55 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030722151118.GT7452@lug-owl.de>
-References: <00be01c34553$57ea97a0$caba0ba4@uwe.ac.uk> <16138.54505.701672.164306@cerise.nosuchdomain.co.uk> <012101c3462f$ec43a810$caba0ba4@uwe.ac.uk> <008101c35061$18aebb20$caba0ba4@uwe.ac.uk>
+Message-ID: <16157.41723.810976.389982@cerise.nosuchdomain.co.uk>
+References: <00be01c34553$57ea97a0$caba0ba4@uwe.ac.uk>
+	<16138.54505.701672.164306@cerise.nosuchdomain.co.uk>
+	<012101c3462f$ec43a810$caba0ba4@uwe.ac.uk>
+	<008101c35061$18aebb20$caba0ba4@uwe.ac.uk>
+	<20030722151118.GT7452@lug-owl.de>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="QCC2I/2CckNfI+Tr"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <008101c35061$18aebb20$caba0ba4@uwe.ac.uk>
+In-Reply-To: <20030722151118.GT7452@lug-owl.de>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
 
---QCC2I/2CckNfI+Tr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Jan-Benedict Glaw wrote:
 
-On Tue, 2003-07-22 15:54:04 +0100, Matthew Studley <matthew.studley@uwe.ac.=
-uk>
-wrote in message <008101c35061$18aebb20$caba0ba4@uwe.ac.uk>:
-> A brief follow-up
->=20
-> > > > * Am I correct that this is unlikely to be issued in response to a =
-bug
-> > in my
-> > > > code?
->=20
-> As it turns out, this was issued in response to a runaway memory leak in =
-my
-> code.  Still not sure where the signal came from.
+> > > > > * Am I correct that this is unlikely to be issued in response to a bug
+> > > in my
+> > > > > code?
+> > 
+> > As it turns out, this was issued in response to a runaway memory leak in my
+> > code.  Still not sure where the signal came from.
+> 
+> So, most probably you got SIGTERMinated by the kernel at some
+> out-of-memory situation after you grew too large...
 
-So, most probably you got SIGTERMinated by the kernel at some
-out-of-memory situation after you grew too large...
+If the kernel kills a process for exhausting system memory, it
+normally does so using SIGKILL. However, it will use SIGTERM if the
+process has the CAP_SYS_RAW_IO capability.
 
-MfG, JBG
+If a process attempts to exceed its data segment allocation
+(RLIMIT_DATA), brk() (and thus malloc() etc) will simply fail. If the
+process doesn't check the return value from e.g. malloc(), it will
+typically receive SIGSEGV from dereferencing NULL.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+If a process attempts to exceed its data stack segment allocation
+(RLIMIT_STACK), the stack won't be extended, so the process will
+receive SIGSEGV from writing below the end of the stack.
 
---QCC2I/2CckNfI+Tr
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+If a process exceeds its CPU allocation (RLIMIT_CPU), SIGKILL is used.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
+So, the most likely reason is that the kernel's OOM-killer decided to
+terminate your process to obtain some more memory. This isn't strictly
+a synchronous signal, in that it isn't necessarily sent to the process
+which is causing the problem.
 
-iD8DBQE/HVQVHb1edYOZ4bsRAvndAJ9AXiVDszoIjg5KmET1zapw6DX1ZQCfYWBK
-+Gq9hmXbK+aUoNfivUG8dzw=
-=9EA0
------END PGP SIGNATURE-----
+If the kernel is having difficulty obtaining memory, it will start
+killing off processes according to various criteria. One of these is
+the amount of memory which the process uses, so in the case of a
+single runaway process causing the shortage, the same process is
+likely to be killed.
 
---QCC2I/2CckNfI+Tr--
+However, if you had caught the SIGTERM, and didn't terminate quickly
+enough, the kernel may have started killing other processes in order
+to satisfy its memory requirements.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
