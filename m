@@ -1,85 +1,80 @@
-From: Francesco Gadaleta <francesco@gadaleta.org>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: assignment makes pointer from integer without a cast?
-Date: Mon, 13 Dec 2004 17:13:54 +0100
-Message-ID: <20041213161354.GD1487@sweetdream>
-References: <1102899159.7251.14.camel@guru.puzzled.xs4all.nl> <20041213014757.89052.qmail@web12706.mail.yahoo.com>
-Reply-To: francesco@gadaleta.org
+Date: Mon, 13 Dec 2004 20:53:16 +0100
+Message-ID: <20041213195316.GE16958@lug-owl.de>
+References: <1102899159.7251.14.camel@guru.puzzled.xs4all.nl> <20041213014757.89052.qmail@web12706.mail.yahoo.com> <20041213161354.GD1487@sweetdream>
 Mime-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="CGDBiGfvSTbxKZlW"
+	protocol="application/pgp-signature"; boundary="1BXV+/FYeXhtv2WT"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20041213014757.89052.qmail@web12706.mail.yahoo.com>
+In-Reply-To: <20041213161354.GD1487@sweetdream>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
 
---CGDBiGfvSTbxKZlW
-Content-Type: text/plain; charset=us-ascii
+--1BXV+/FYeXhtv2WT
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> void usage(char *prog_ptr) /* not int* */
-> {
-> 	fprintf(stdout,"progname is: %s\n",prog_ptr); /* not
-> *prog_ptr */
-> }
-> =09
-> int main(int argc, char *argv[])
-> {
-> 	char *prog_ptr; /* not int * */
-> 	prog_ptr =3D basename (argv[0]);
-> 	usage(prog_ptr); /* not &prog_ptr */
-> 	return(0);
-> }
+On Mon, 2004-12-13 17:13:54 +0100, Francesco Gadaleta <francesco@gadaleta.o=
+rg>
+wrote in message <20041213161354.GD1487@sweetdream>:
+> > void usage(char *prog_ptr) /* not int* */
+> > {
+> > 	fprintf(stdout,"progname is: %s\n",prog_ptr); /* not
+> > *prog_ptr */
+> > }
+> > =09
+> > int main(int argc, char *argv[])
+> > {
+> > 	char *prog_ptr; /* not int * */
+> > 	prog_ptr =3D basename (argv[0]);
+> > 	usage(prog_ptr); /* not &prog_ptr */
+> > 	return(0);
+> > }
+> change this line:
+> prog_ptr =3D basename (argv[0]);
 >=20
->=20
+> with this:
+> prog_ptr =3D (char*) basename (argv[0]);
 
+No, better include the proper header file <libgen.h> or <string.h>
+(after #defining _GNU_SOURCE). This way, you don't force gcc into
+guessing it's type. If you had compiled this with a C++ compiler (*), it
+wouldn't even had accepted the code or wouldn't link it later on.
 
-change this line:
-prog_ptr =3D basename (argv[0]);
+MfG, JBG
+(*) Compiling not-too-complicated C code with a C++ compiler can reveal
+some additional oddities that a pure C compiler wouldn't warn on. So if
+you keep your code being compileable with both a C and a  C++ compiler
+when you start a new project, this won't hurt (but probably pay back at
+some time). (-> Right, I'm a C programmer and personally don't use C++
+that often, because it's too hard to write "basic" stuff with it).
 
-with this:
-prog_ptr =3D (char*) basename (argv[0]);
 --=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
+k!   O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
 
-_________________________________________________
-Imagine no possessions
-I wonder if you can
-No need for greed or hunger
-A brotherhood of man
-Imagine all the people
-Sharing all the world...
-		John Lennon
-_________________________________________________
-_________________________________________________
-Francesco Gadaleta - Italian GNU/Linux User
-      web site: www.gadaleta.org
-
-email      : francesco@gadaleta.org
-ICQ        : 286063291
-Fingerprint: 3CB8 C721 FE99 BC98 38DC F463 BFDC E4EC CE3B 7327  (1024/DSA) =
-[with image]
-Linux Registered User #327326
-________________________________________________
-Non speditemi documenti in formato Word=20
-o Powerpoint.
-RMS vi spiega il motivo qui:
-http://www.gadaleta.org/allegati.html
-
---CGDBiGfvSTbxKZlW
+--1BXV+/FYeXhtv2WT
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 Content-Disposition: inline
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
+Version: GnuPG v1.2.5 (GNU/Linux)
 
-iD8DBQFBvb/Cv9zk7M47cycRAkooAJ42pOVGre3NcUfQjCFL+Tx2U8/fBQCffZur
-1ymlfEdYaXZggMwMiLeHE0s=
-=7UH0
+iD8DBQFBvfMsHb1edYOZ4bsRAh5pAJ4vAL0q1dqBXD6xuIKbv0d1u3FGZgCeI3ae
+g4iZmiPRgrmS3DCJCQ5dDL8=
+=gEjP
 -----END PGP SIGNATURE-----
 
---CGDBiGfvSTbxKZlW--
+--1BXV+/FYeXhtv2WT--
