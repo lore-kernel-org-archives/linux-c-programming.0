@@ -1,55 +1,49 @@
-From: wwp <subscript@free.fr>
+From: "J." <mailing-lists@xs4all.nl>
 Subject: Re: printf format type, precision...
-Date: Sat, 3 Jul 2004 01:19:23 +0200
+Date: Sat, 3 Jul 2004 01:29:03 +0200 (CEST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040703011923.4641036a@tethys.solarsys.org>
-References: <Pine.LNX.4.21.0407030018090.1619-100000@hestia>
+Message-ID: <Pine.LNX.4.21.0407030124050.1664-100000@hestia>
+References: <20040703011040.17c21d51@tethys.solarsys.org>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.21.0407030018090.1619-100000@hestia>
+In-Reply-To: <20040703011040.17c21d51@tethys.solarsys.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
-Cc: mailing-lists@xs4all.nl
 
-Hello J.,
+On Sat, 3 Jul 2004, wwp wrote:
 
+> Hello J.,
 
-On Sat, 3 Jul 2004 00:32:27 +0200 (CEST) "J." <mailing-lists@xs4all.nl> wrote:
+Hello wwp ;-)
+> On Sat, 3 Jul 2004 00:32:27 +0200 (CEST) "J." <mailing-lists@xs4all.nl> wrote:
 
-> Saturday, July 03 00:18:09
+<CUT>... question/code </CUT>
+
+> > Your comments and suggestions will be greatly appreciated..
 > 
-> Hello,
+> You meant:
+>  printf("%ld\n", result);
+> instead of:
+>  printf("%ld\n", value);
+
+I am sorry, that was a sloppy mistake from my side while cutting and
+pasting the code into the message and making sure the code didn't got
+garbled... 
+
+But I am affraid my problem/point still stands, it still prints
+the incorrect value.
+ 
+> What do you get, what do you expect?
 > 
-> I am trying to convert an IP address to it's eq. in base10
-> [homework]. However the outcome from the formula listed below isn't giving
-> me the right results.  Is this because I'm using the wrong precision type
-> for the `result' variable ? If that's the case what other precision type
-> should I use instead ? Right now I can't see the format tree's trhu the
-> precision forrest anmore .. ehum.
+> Regards,
+> 
+> -- 
+> wwp
 
-See if the following gives what you expect. Please not the () around the <<
-operation, try w/o them (you'll see the difference about operator precedence).
+Thnkx.. !
 
+J.
 
-#include <stdio.h>
-
-int main(void) {
- int var1 = 192; 
- int var2 = 168;
- int var3 = 1;
- int var4 = 10;
- long unsigned int result = 0;
-
- result = (var1 << 24) + (var2 << 16) + (var3 << 8) + var4;
- printf("%lu %0lx\n", result, result);
-
- return 0;
-}
-
-
-Regards,
-
--- 
-wwp
