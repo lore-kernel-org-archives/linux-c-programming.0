@@ -1,46 +1,30 @@
-From: Eugene Vigovskiy <vigov@com2com.ru>
-Subject: global parameters
-Date: Fri, 19 Apr 2002 11:48:01 +0400
+From: Gerald Waugh <gwaugh@frontstreetnetworks.com>
+Subject: child processes
+Date: Mon, 22 Apr 2002 09:39:01 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <463100409.20020419114801@com2com.ru>
-Reply-To: Eugene Vigovskiy <vigov@com2com.ru>
+Message-ID: <02042209461600.15975@linux1.fastinc.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-  Hello All.
+I am not doing a good job of explaining my requirements, but I am looking for
+ideas...
+ I have an assignment to do an applicaiton that must communicate on
+three different TCP ports...
+I was wondering if I could run a daemon that would create three child
+processes, one for each of the tcp ports?
+Then have the daemon run any time there was communications activity on any of
+the ports
+The daemon must translate the data coming in any one of the ports to a protocol
+acceptable to the port the data is to be sent to.
+Any ideas?.
 
-  I'd like to ask one question.
+ --
 
-  I've got a programm, and i'd like to read configuration from file.
-  I need in some data structure for it.
-
-  What is the best way to do it?
-  
-  I see at least two ways.
-  
-  The first is allocate a structure like this
-  struct somestruct {
-         param1;
-         param2;
-         .
-         .
-         paramn;
-  }
-  and create func what will fill and return pointer to it,  that I can use in any place.
-
-  The Second way is to
-
-  allocate some global variables and make them available through
-  "extern" in other modules.
-  Can anybody point me at advantages and disadvantages of this
-  methods.
-  
-
-
-
-Eugene Vigovskiy
-
+Gerald Waugh
+http://www.frontstreetnetworks.com
+Front Street Networks LLC - 203-785-0699
+229 Front Street, Ste. #C, New Haven CT, 06513-3203
