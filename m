@@ -1,54 +1,37 @@
-From: Mehran Rezaei <mehran@cs.unt.edu>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: realloc
-Date: Mon, 05 Aug 2002 18:26:54 +0000
+Date: Mon, 5 Aug 2002 22:26:19 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3D4EC36E.43A58552@cs.unt.edu>
+Message-ID: <15694.60795.709096.23045@cerise.nosuchdomain.co.uk>
 References: <20020805163543.A7759@atl.lmco.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20020805163543.A7759@atl.lmco.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Chuck Winters <cwinters@atl.lmco.com>
 Cc: linux-c-programming@vger.kernel.org
 
+
 Chuck Winters wrote:
 
-> Hello all,
->         Anyone know why a program would freeze at realloc?  I thought
-> if there was a problem, realloc would just fail.
->
-> Thanks,
-> Chuck
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 	Anyone know why a program would freeze at realloc?
 
-Hi,
+By far the most likely reasons are:
 
-The problem happens just because of specific allocator that you are using. You can
-avoid it by simply malloc new area, copy the content and free previos one. Just as
-follow:
+a) heap corruption, and
+b) passing an invalid pointer (one which wasn't returned from malloc
+(or similar), or which has since been freed.
 
-#include <sys/mman.h>
-ptr1=malloc(size1);
-.
-.
-.
-ptr2=realloc(ptr1,size2);
+> I thought if there was a problem, realloc would just fail.
 
-...........................
+If there is insufficient memory to satisfy a request, realloc would
+fail.
 
-ptr1=malloc(size1);
-.
-.
-.
-ptr2=malloc(size2);
-memcpy(ptr2,ptr1,size1);
-free(ptr1);
+OTOH, if the heap is corrupt, or if the pointer is invalid, all bets
+are off; calling malloc/calloc/realloc/free etc will result in
+"undefined behaviour".
 
-Good Luck,
-
-Mehran
-
+-- 
+Glynn Clements <glynn.clements@virgin.net>
