@@ -1,38 +1,29 @@
-From: Seika van Olstroem <seivan@gmx.net>
-Subject: Re: pointer to function ??
-Date: Thu, 20 May 2004 14:00:05 +0200
+From: "Venkatesharao, Lakshmesha" <Lakshmesha_Venkatesharao@Syntelinc.com>
+Subject: Help required
+Date: Thu, 20 May 2004 07:29:03 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <40AC9DC5.7080507@gmx.net>
-References: <40AC868E.5040408@gawab.com>
+Message-ID: <E84F4156F89E3E4286468CA99DF68E400284DCC6@Synbomexch3>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40AC868E.5040408@gawab.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Nasir Hossain <nhossain@gawab.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-Nasir Hossain wrote:
+Hi all,
 
-> hi,
->
-> can someone explain this to me :
->
-> 0:    using namespace ldm;
->
-> 1:    struct cmd_parse_t {
-> 2:        char flag;
-> 3:        void (*taskfunc)(ldm::diskio& dev, int argc, char** argv);
-> 4:        bool readonly;
-> 5:    };
->
-> what does line 3 do ? is it a pointer to a function or something else ?
+ I have a harddisk with partitions tables erased, but there is data in that
+harddisk.
+ Can anyone help me how to restore the partitions or atleast recover data.
 
-Exactly! It's a pointer to function.
-Prototype looks like follow:
+--lakshmesha
 
-void taskfunc(ldm::diskio& dev, int argc, char** argv);
 
-best regards,
-SoV
+____________________________________________
+Confidential:  This electronic message and all contents contain information
+from Syntel, Inc. which may be privileged, confidential or otherwise
+protected from disclosure. The information is intended to be for the
+addressee only. If you are not the addressee, any disclosure, copy,
+distribution or use of the contents of this message is prohibited.  If you
+have received this electronic message in error, please notify the sender
+immediately and destroy the original message and all copies.
