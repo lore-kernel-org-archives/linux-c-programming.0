@@ -1,26 +1,33 @@
-From: Felipe W Damasio <felipewd@terra.com.br>
-Subject: Re: c debugging w/ gdb revisited
-Date: Fri, 14 Jun 2002 10:57:04 +0000
+From: Ramzez <r4mz3z@yahoo.es>
+Subject: connect to postgre
+Date: Fri, 14 Jun 2002 22:09:49 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020614105704.6e696e45.felipewd@terra.com.br>
-References: <20020614065235.010E336F9@sitemail.everyone.net>
+Message-ID: <E17J3sf-00069s-00@cue.satnet.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020614065235.010E336F9@sitemail.everyone.net>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: xjnfx@doityourself.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-prog <linux-c-programming@vger.kernel.org>
 
-On Thu, 13 Jun 2002 23:52:35 -0700 (PDT)
-jnf <xjnfx@doityourself.com> wrote:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-J> just a quick question, does anyone know if its possible to set a break/watchpoint in gdb when a register points to a certain location?
-J> i own the gdb manual, and have been playing in it for a bit and just cant seem to figure it out, is it possible?
+Hi...
+  I need to know how do I connect to my c/c++ application to my database in 
+my linux RedHat 7.2... I mean wich are the functions or libraries
 
-	No, you can't (x86 at least).
+a lot of thanks
 
-	What you can do is to watch the contents of the registers constantly and then manually stop your program.
+- -- 
+   Linux User Registered #232544
+         http://counter.li.org
+my GnuPG-key at www.keyserver.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.6 (GNU/Linux)
+Comment: For info see http://www.gnupg.org
 
-Felipe
+iD8DBQE9CrADs4dF9gl05swRAofJAJ9ck6uv7S8LMYQKd77nusWGdCNkugCcDHCh
+/xplF84lB9coxGxwiEOdaCw=
+=DcLP
+-----END PGP SIGNATURE-----
