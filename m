@@ -1,39 +1,57 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: getch()
-Date: Fri, 8 Nov 2002 17:51:43 +0000
+From: Hemant Mohan <hemantm@pune.tcs.co.in>
+Subject: strtok_r crashing
+Date: Thu, 14 Nov 2002 18:16:04 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15819.63919.939202.386675@cerise.nosuchdomain.co.uk>
-References: <200211071046.24987.abulfazl@juniv.edu>
-	<200211072135.59164.abulfazl@juniv.edu>
-	<20021107200436.C1136@neutrino.particles.org>
-	<200211081504.01461.abulfazl@juniv.edu>
+Message-ID: <OF8E547BE6.AC22B859-ON65256C71.0045BBB6@pune.tcs.co.in>
+Reply-To: hemantm@pune.tcs.co.in
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200211081504.01461.abulfazl@juniv.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: abulfazl@juniv.edu
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+Hi,
+
+I am trying to parse a string using strtok_r (I need reentrant code) as
+follows:
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+  char *str = NULL;
+  char *temp = NULL;
+  char **ptr = NULL;   // Note that this is a char**
+  int x = 0;
+  int y = 0;
+
+  str = malloc (10*sizeof(char));
+  sprintf ( str,"%s", "320x240");
+  temp = strtok_r ( str, "Xx", ptr );
+  x = atoi(temp);
+  temp = strtok_r ( NULL, "Xx", ptr);
+  y = atoi(temp);
+  printf("x = %d\t y= %d\n", x, y);
+
+ return 0;
+}
 
 
-Progga wrote:
+This code receives a SIGSEGV in strtok_r.
 
->  If input is taken in non-blocking mode then something like:
-> 
->   while( read( STDIN_FILENO, &ch, 1 ) != 1 ) ;
-> 
->   needs to be used.
+However, if I change the declaration of ptr from char** to char* and change 
+the third arguement of strtok_r to  &ptr it works.
+That is
+char* ptr = NULL;
+temp = strtok_r ( str, "Xx" &ptr);
 
-NO! This will result in a "busy wait", consuming all available CPU
-time.
+Can anyone please help me know the difference between these two calls
+as I think both calls are similar.
 
-If you want to wait until a byte is actually available to be read,
-either:
+Thanks,
+Hemant Mohan
 
-a) don't use non-blocking mode in the first place,
-b) temporarily disable non-blocking mode, or
-c) use select() to wait until input is available.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+-------------------------------------------------------
