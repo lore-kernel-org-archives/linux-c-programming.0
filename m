@@ -1,33 +1,49 @@
-From: Jose Celestino <japc@co.sapo.pt>
-Subject: Re: Linux syscall list
-Date: Wed, 6 Aug 2003 11:47:34 +0100
+From: ronkhu <ronkhu@ntsp.nec.co.jp>
+Subject: socket send and recv
+Date: Thu, 07 Aug 2003 18:46:18 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030806104734.GB1319@co.sapo.pt>
-References: <200308050906.33542.rafael@thinkfreak.com.br>
+Message-ID: <3F322DFA.2030509@hq.ntsp.nec.co.jp>
+Reply-To: ronkhu@ntsp.nec.co.jp
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200308050906.33542.rafael@thinkfreak.com.br>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Rafael Costa dos Santos <rafael@thinkfreak.com.br>
-Cc: linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Earl Lapus <lapuz.rl@mp.ncos.nec.co.jp>, "Lejanson C. Go" <g_l-go@tmg99.ntes.nec.co.jp>, linux-c-programming@vger.kernel.org
 
-Words by Rafael Costa dos Santos [Tue, Aug 05, 2003 at 09:06:33AM +0000]:
-> Hi all,
-> 
-> Where can I find the last linux syscall list ?
-> 
+i have a client program which sends a sequence of bytes everytime 
+anything(plus carriage return)  is inputted into STDIN...
 
-In the source of course:
+but the problem lies in the receiving end of the socket connection...
+with a single call of the recv() function, multiple messages sent by the 
+client are concatenated into one stream..
 
-cd /usr/src/linux
 
-egrep -hr '^asmlinkage.+\ +sys_.+\(' *
+    unsigned char msg[] = { 0x00, 0x00, 0x00, 0x20, 0x20, 0x01, 0x00, 
+0x00, 0xB2, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 
+0x00, 0x20, 0x03, 0x06, 0x03, 0x16, 0x20, 0x10, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF };
 
--- 
-Jose Celestino | http://xpto.org/~japc/files/japc-pgpkey.asc
-----------------------------------------------------------------
-"Lately, the only thing keeping me from becoming a serial killer is
-my distaste for manual labor."        -- Dilbert
+        while(1)
+        {
+            FD_ZERO( &readSet );
+            FD_SET( 0, &readSet );
+            if ( select( 1, &readSet, NULL, NULL, NULL ) > 0 )
+            {
+                read( 0, temp, 10 );
+                send( sock, msg, 40, 0 ));
+            }
+        }
+
+
+
+
+because of this scenario, i was forced to add a sequence of bytes that 
+would serve as a delimter separating the messages. The server program
+would then pre-parsed the message by sub dividing the data using the 
+delimeter sequence of bytes
+
+
+
+
+
