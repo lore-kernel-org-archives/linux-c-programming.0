@@ -1,78 +1,247 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: Linux Kernel <linuxkrnl@yahoo.com>
 Subject: Re: Problem with pthreads on socket
-Date: Sun, 7 Nov 2004 18:05:07 +0100
-Message-ID: <20041107170507.GB10443@lug-owl.de>
-References: <20041106211522.GJ2094@lug-owl.de> <20041107091517.63691.qmail@web90004.mail.scd.yahoo.com>
+Date: Sun, 7 Nov 2004 09:47:34 -0800 (PST)
+Message-ID: <20041107174734.88175.qmail@web90003.mail.scd.yahoo.com>
+References: <418E1E83.4000905@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="V0207lvV8h4k8FAm"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20041107091517.63691.qmail@web90004.mail.scd.yahoo.com>
+In-Reply-To: <418E1E83.4000905@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>, linux prg <linux-c-programming@vger.kernel.org>
+
+Hi,
+Thks for you answer. :)
+For sure you are right.The problem is in my mind.
+I thinking like if i using fork().
+The mutex variable is initialized with
+PTHREAD_MUTEX_INITIALIZER.But is a global one and for
+this reason is not showed in the code.
+I will not use pthread_join() and i will try to
+intialize a memory to be shared between threads.
+Thks 
+ :)
+Zazoo
+
+--- Ron Michael Khu <ronkhu@ntsp.nec.co.jp> wrote:
+
+> perhaps  this is  a typical deadlock problem....
+> where is the mutex variable defined?? r u using or
+> accessing shared 
+> resources??
+> 
+> Im confused here:
+>
+------------------------------------------------------------------
+>               
+> 
+> if(th_res==0)
+>         {
+>         tCount++;
+>         printf("TH COUNT : %d\n",tCount);
+>         mThread[tCount-1].tIDX=tCount;
+>         mThread[tCount-1].tID=thread;      
+>         pthread_join(thread,&mRetTh);
+>         //close(new_fd); if i close the socket ,
+> accept will
+> create the same hnd_new_sock like previous...bad
+> ideea.
+>           
+>         }
+>         else
+>         {  
+>             perror("CREATE_THREAD");  
+>         }
+>
+--------------------------------------------------------------------------
+> 
+> why does the main thread (the one holding the server
+> socket)
+> perform a pthread_join() operation whenever it
+> creates a child thread?
+> 
+> I thought ur goal was to create a multi-tasking
+> server... with a server
+> thread constantly waiting and accepting client
+> connections while leaving 
+> it to
+> the client threads to handle the actual client
+> communication?
+> 
+> U see, with ur code, the main/server is actually
+> only capable of 
+> handling one client at a time...
+> pthread_join() causes the calling thread(in ur case,
+> the main thread) to 
+> wait or block until
+> the child thread terminates(or is cancelled)...
+> 
+> And in case my assumption is wrong(that u want a
+> multitasking server 
+> app) and if that the
+> desired behavior is to serve only one client at a
+> time, then what's the 
+> purpose of spawning
+> threads? =(
+> 
+> hmmm... i think ur still designing/coding in terms
+> of fork(), where u 
+> are spawning whole
+> processes instead of lightweight processes(or
+> threads)
+> 
+> 
+> 
+> Linux Kernel wrote:
+> 
+>  > Hi to everybody,
+>  > I'm not have too much exoerience eith pthread but
+> i
+>  > try to use this insted of fork() to have
+> independent
+>  > thread processes.
+>  > I write a server/client application using socket
+> and
+>  > the main problem is that affter first client is
+>  > accepted by accept(), the second accepted client
+> broke
+>  > the 1-st created thread an the socket remain
+> blocked.
+>  > I'm stuck and i don't understand what happening.
+>  > A *slice* of my code :
+>  > int main()  
+>  >     struct sockaddr_in my_addr;    /* my address
+>  > information */
+>  >        struct sockaddr_in their_addr; /*
+> connector's
+>  > address information */
+>  >          
+>  >     static int sockfd;
+>  >     int th_res=0;
+>  >     pthread_t thread;
+>  >     pthread_attr_t attr;
+>  >     int sin_size,yes=1,new_fd=0;
+>  >     char* mPath=NULL;
+>  >     MyARGV* marg;
+>  >     fd_set fd_read;
+>  >     void* mRetTh=NULL;
+>  >     int tCount=0,res_lock;
+>  >     T_THREAD mThread[10000];
+>  >    
+>  >       
+>  >     mPath=(char*)malloc(256);
+>  >     marg=(MyARGV*)malloc(sizeof(MyARGV)+256);    
+>        
+> mPath=getenv((const char*)"MY_PATH");  
+>  >    
+>  >    
+>  >     if ((sockfd = socket(AF_INET, SOCK_STREAM,
+> 0)) == -1)
+>  > {
+>  >            perror("socket");
+>  >            exit(1);
+>  >        }
+>  >    
+>  >     if
+>  >
+>
+(setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int))==-1)
+>  >     {
+>  >         perror("SET_SOCK_OPT : \n");
+>  >     }
+>  >    
+>  >        my_addr.sin_family = AF_INET;         /*
+> host
+>  > byte order */
+>  >        my_addr.sin_port = htons(MYPORT);     /*
+>  > short, network byte order */
+>  >        my_addr.sin_addr.s_addr = INADDR_ANY; /*
+>  > auto-fill with my IP */
+>  >        bzero(&(my_addr.sin_zero), 8);        /*
+> zero
+>  > the rest of the struct */
+>  >
+>  >        if (bind(sockfd, (struct sockaddr
+> *)&my_addr,
+>  > sizeof(struct sockaddr)) \
+>  >                                                  
+>                  == 
+> -1) {
+>  >            perror("bind");
+>  >            exit(1);
+>  >        }
+>  >
+>  >        if (listen(sockfd, 1) == -1) {
+>  >            perror("listen");
+>  >            exit(1);
+>  >        }
+>  >    
+>  >       
+>  >     FD_ZERO(&fd_read);
+>  >     FD_CLR(sockfd,&fd_read);
+>  >     FD_SET(sockfd,&fd_read);
+>  >    
+>  >        while(1) {  /* main accept() loop */
+>  >            sin_size = sizeof(struct sockaddr_in);
+>  >          
+> res_lock=select(sockfd+1,&fd_read,NULL,NULL,NULL);
+>  >                 if ((new_fd = accept(sockfd,
+> (struct sockaddr
+>  > *)&their_addr,&sin_size)) == -1) {
+>  >                perror("accept");
+>  >                continue;
+>  >            }
+>  >                      
+> marg->s=fcntl(new_fd,F_DUPFD,0);
+>  >         marg->mPath=mPath;
+>  >         marg->their_addr=their_addr;
+>  >
+>  >                 pthread_attr_init(&attr);
+>  >       
+>
+pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
+>  >       
+>
+th_res=pthread_create(&thread,&attr,(void*)MyProcess,(void*)marg);
+>  >         pthread_attr_destroy(&attr);
+>  >                 if(th_res==0)
+>  >         {
+>  >         tCount++;
+>  >         printf("TH COUNT : %d\n",tCount);
+>  >         mThread[tCount-1].tIDX=tCount;
+>  >         mThread[tCount-1].tID=thread;      
+>  >         pthread_join(thread,&mRetTh);
+>  >         //close(new_fd); if i close the socket ,
+> accept will
+>  > create the same hnd_new_sock like previous...bad
+>  > ideea.
+>  >           
+>  >         }
+>  >         else
+>  >         {
+>  >             perror("CREATE_THREAD");  
+>  >         }
+>  >                }
+>  >    }
+>  >
+>  > }
+>  > void MyProcess(MyARGV* MArg){  
+>  >     int maxtry=0,mTime=0;
+>  >     int lenrecv=0,lenwrite=0,mCount=1,dCnt=0;
+>  >     int MyWait=0;
+>  >     char* mBuff=NULL;
+>  >     char* realPath=NULL;
+> 
+=== message truncated ===
 
 
---V0207lvV8h4k8FAm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, 2004-11-07 01:15:17 -0800, Linux Kernel <linuxkrnl@yahoo.com>
-wrote in message <20041107091517.63691.qmail@web90004.mail.scd.yahoo.com>:
-> >From what i understand,in fact, this threads are
-> working asynchronus and by using mutex, to be a switch
-> between threads.
+		
+__________________________________ 
+Do you Yahoo!? 
+Check out the new Yahoo! Front Page. 
+www.yahoo.com 
+ 
 
-Correct is that they're asynchronous to each other. But mutexes aren't
-used to switch between them. Mutexes are used to lock-out any other
-thready while accessing commonly-used resources.
-
-For example, if you have an application that echoes everything back, you
-probably don't need *any* mutexes at all, because receiving one byte and
-sending it back doesn't access any commonly used resources.
-
-> I wish to know how the threads can run synchronus or
-> totally independent.
-
-They are independant. If you need "synchronous" working mode, you
-probably shouldn't use threads at all:-)
-
-> If you know, some how, a sample source code which is
-> working, please tell me.=20
-
-> P.S. I can send by e-mail the entire source code.
-
-Maybe first start with an exact description of what needs to be done. To
-speak honest (and not offending), parts of your sources looked quite
-spaghetti-like (but that may be because of cutting out any unneeded
-code). So maybe a description of the exact task would be a better start
-here...
-
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---V0207lvV8h4k8FAm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBjlXDHb1edYOZ4bsRAkpNAJ0YIRJhm1BcXt01tgUEPeQf69KLqgCdEJVi
-KH2AF85DWqzroaZPiV8kDpQ=
-=JkQF
------END PGP SIGNATURE-----
-
---V0207lvV8h4k8FAm--
