@@ -1,64 +1,53 @@
 From: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>
 Subject: Re: Question!
-Date: Thu, 4 Sep 2003 15:01:25 +0100
+Date: Thu, 4 Sep 2003 15:05:24 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030904140125.GA24691@lsd.di.uminho.pt>
-References: <000601c37247$f40f6540$0b04a8c0@aca.org.ar>
+Message-ID: <20030904140524.GB24691@lsd.di.uminho.pt>
+References: <3F565883.6040901@trofeospazos.com> <000001c372eb$9ee69b20$0b04a8c0@aca.org.ar>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <000601c37247$f40f6540$0b04a8c0@aca.org.ar>
+In-Reply-To: <000001c372eb$9ee69b20$0b04a8c0@aca.org.ar>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: mariano_moreyra@aca.org.ar
-Cc: linux-c-programming@vger.kernel.org
+Cc: 'Jorge Opaso Pazos' <jopaso@trofeospazos.com>, linux-c-programming@vger.kernel.org
 
-On Wed, Sep 03, 2003 at 03:19:44PM -0300, Mariano Moreyra wrote:
-> Hi!!
-> First...I'd like to know if there is any kind of digest on this list to see
-> old submited messages.
+On Thu, Sep 04, 2003 at 10:51:19AM -0300, Mariano Moreyra wrote:
+> Hola!
+> Te mando la seccion del programa que ejecuta el script en si.
 > 
-> Now...I have a little problem.
-> I have a process that is listening for incoming connections on a socket.
-> That process waits for a command and then
-> forks a child to run a bash script.
-> The problems is:
-> 	- When the bash script runs the safe_mysql script to run MySql engine, it's
-> like the child process never ends.
-> 	  And because of that, the parent can't close the connection with the
-> client socket.
-> 	- But if the bash script doesn't run the safe_mysql script...the child
-> process dies successfully and everything end
-> 	  Ok
+> Este proceso lo unico que espera del script es que el mismo conteste con un
+> "-" si hubo algun error o con un "+" si salio todo bien
 > 
-Hola,
+> ----------------------------------------------------------
+>     if(err==0) {
+>       pipe_in = popen(shell_cmd,"r");
+>       fgets(response,5,pipe_in);
+> 
+>       if(response[0]=='-') {
+>         err=1;
+>       } else if(response[0]=='+') {
+>         err=0;
+>       };
+>       while(fgets(response,5,pipe_in)) {
+>       };
+>       pclose(pipe_in);
+>     };
+> -----------------------------------------------------------
+> 
+> El script lo unico que hace es copiar algunos archivos y luego leventar el
+> MySQL con el
+> safe_mysqld
+> 
+> Espero que esto sirva! Muchas gracias!!
+> Saludos!!
 
-Your problem should be the socket inherited by the child that will run
-the script. I suppose the child doesn't need it, does it?
+Please, this is an international list, so write in english.
 
-So, close it and redirect /dev/null to stdin, stdout and stderr:
-if ((fork() == 0) { /* child */
-	int fd;
-	close(sock);
-	fd = open("/dev/null", O_RDONLY);
-	if (fd != 0) {
-		dup2(fd, 0);
-		close(fd);
-	}
-	fd = open("/dev/null", O_WRONLY);
-	if (fd != 1) {
-		dup2(fd, 1);
-		close(fd);
-	}
-	fd = open("/dev/null", O_WRONLY);
-	if (fd != 2) {
-		dup2(fd, 2);
-		close(fd);
-	}
-	execl("/usr/bin/safe_mysqld", "safe_mysqld", 0);
-	_exit(1);
-}
+Are you closing the socket before de popen(3)? Make sure you do and
+that if this is a child to exit(2) after being done with the script.
 
 Regards,
 Luciano Rocha
