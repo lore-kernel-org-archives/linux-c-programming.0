@@ -1,112 +1,145 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: viewing machine code
-Date: Thu, 11 Dec 2003 11:06:41 -0300
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Subject: Graphs: Arbitrary Dijkstra's algorithm implementation
+Date: Tue, 16 Dec 2003 09:06:38 -0600 (CST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000401c3bff0$00babc40$0c81640a@aca.org.ar>
-References: <000d01c3bf64$d94e0670$ed64a8c0@descartes>
-Reply-To: <mariano_moreyra@aca.org.ar>
+Message-ID: <Pine.LNX.4.44.0312151149040.15956-200000@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: MULTIPART/MIXED; BOUNDARY="1010017202-865173532-1071587198=:32518"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <000d01c3bf64$d94e0670$ed64a8c0@descartes>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: "'John T. Williams'" <jtwilliams@vt.edu>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-There is a way to see the hex machine code...
-May be there are better ways...but this is the only way that I found to=
- see
-hex machine code with gdb
-=46irst, you have to see the memory address where that instruction is.
-You can do that with "info line"
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Next, you have to use the command "x/NFU ADDR" where
+--1010017202-865173532-1071587198=:32518
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 
- N, the repeat count
-     The repeat count is a decimal integer; the default is 1.  It
-     specifies how much memory (counting by units U) to display.
+Hi.
 
- F, the display format
-     The display format is one of the formats used by `print', `s'
-     (null-terminated string), or `i' (machine instruction).  The
-     default is `x' (hexadecimal) initially.  The default changes each
-     time you use either `x' or `print'.
+I am trying to code a small program in Ansi C++ that somehow implements
+the famous Dijkstra algorithm that looks for the shortest path between 2
+nodes in a dinamic bidirectional directed pointer graph.
 
- U, the unit size
-     The unit size is any of
+Attached You will find the .cpp with both clases and implementations.
+The algorithm looks for the shortest path between 1 and a given node,
+actually, the algorithm follow common graph implementation and uses a
+static biarray of "weights" (a distance between x -> y), for example,
+weight[2][5] = 10 means that there is a cost of 10 from 2 to 5 without a
+scale in a other node of the same type.
 
-    `b'
-          Bytes.
+However, the algorithm is unable to use n > 6 nodes and I dont understand
+why, after a depuration and reading Tenenbaum's, I found out a function
+return "infinity" and afterwards an address memory violation. The
+algorithm should never return infinite because there is always a pending
+distance of the (latest-1 node ) != infinite
 
-    `h'
-          Halfwords (two bytes).
+I would really appreciate any comments or help, my goal is to code a
+algorithm that takes a matrix of weigth and prints out the nodes of the
+shortest path of (1,x)
 
-    `w'
-          Words (four bytes).  This is the initial default.
-
-    `g'
-          Giant words (eight bytes).
-
-     Each time you specify a unit size with `x', that size becomes the
-     default unit the next time you use `x'.  (For the `s' and `i'
-     formats, the unit size is ignored and is normally not written.)
-
- ADDR, starting display address
-     ADDR is the address where you want GDB to begin displaying memory.
-     The expression need not have a pointer value (though it may); it
-     is always interpreted as an integer address of a byte of memory.
-     *Note Expressions: Expressions, for more information on
-     expressions.  The default for ADDR is usually just after the last
-     address examined--but several other commands also set the default
-     address: `info breakpoints' (to the address of the last breakpoint
-     listed), `info line' (to the starting address of a line), and
-     `print' (if you use it to display a value from memory).
+best regards,
 
 
-specifying how many bytes does your instruction have, and giving the me=
-mory
-address you obtained with info line
-It's not a direct way, but it works :)
-If someone has a better way to do this with gdb....let me know please!!
-
-Mariano Moreyra
-
-P.S: Sorry about my english!!! I have to practice more, and take lesson=
-s!!
-:)
+---
+Fabio Andres Miranda
+Ingenieria de sistemas informaticos
+Universidad Latina - Costa Rica
 
 
 
+--1010017202-865173532-1071587198=:32518
+Content-Type: TEXT/x-c++src; name="dijsktra.cpp"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.LNX.4.44.0312160906380.32518@ns.isi.ulatina.ac.cr>
+Content-Description: 
+Content-Disposition: attachment; filename="dijsktra.cpp"
 
------Mensaje original-----
-De: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]En nombre de John T.
-Williams
-Enviado el: Mi=E9rcoles, 10 de Diciembre de 2003 18:31
-Para: linux-c-programming@vger.kernel.org
-Asunto: viewing machine code
-
-
-is there anyway to get gdb to display the hex code being exicuted?
-
-ie prentend that 0xF8 is the command for add, and I am exicuting the co=
-de
-
-addl 04,
-is there a way to get gdb to type
-0xF804 when exicuting that command.  sort of a step through the program=
- at
-the machine code level?
-
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+I2RlZmluZSAgICAgTk9ERVMgICA4DQ0KI2RlZmluZSAgICAgSU5GSU5JVFkg
+ICAgMTAwMDAgLy90aGUgdmFsdWUgcmVwcmVzZW50aW5nIGEgbm90IG51bWVy
+aWNhbCByZXN1bHQgcGF0aA0NCiNkZWZpbmUgICAgIGNvc3RvcyAgd2VpZ2h0
+ICAvLyBzcGFuaXNoIC0+IGVuZ2xpc2gNDQoNDQovLyBwcm9ibGVtID0+ICBp
+ZiBub2RlcyA8PSA4IHRoZSBhbGdvcml0aG0gZG9lc250IHdvcmsNDQoNDQoj
+aW5jbHVkZTxpb3N0cmVhbS5oPg0NCiNpbmNsdWRlPGNvbmlvLmg+DQ0KI2lu
+Y2x1ZGU8c3RyaW5nLmg+DQ0KDQ0KY2xhc3MgZ3JhZm8gLy8gZXMgbGEgY2xh
+c2UgZG9uZGUgZXN0YSBsYSBjbGFzZSB5IGxvcyBhbGdvcml0bW9zDQ0Kew0N
+CiAgcHVibGljOg0NCiAgdm9pZCBkaWprc3RyYSh2b2lkKTsNDQogIHZvaWQg
+bWFzY29ydG8odm9pZCk7DQ0KICB2b2lkIGNhbWlub3MoaW50IGksIGludCBq
+KTsNDQogIGdyYWZvKHZvaWQpIC8vaW5pY2lhbGl6YSBsYSBtYXRyaXogZGUg
+Y29zdG9zIHkgbG9zIHZlY3RvcmVzIHRlbXBvcmFsZXMNDQogIHsNDQogICAg
+ICBmb3IgKGludCBpPTE7IGk8PTc7IGkrKykNDQoJIGZvciAoaW50IGo9MTsg
+ajw9NzsgaisrKQ0NCgkgIGNvc3Rvc1tpXVtqXT0xMDAwMDsNDQogICAgICBj
+b3N0b3NbMV1bMl09MjAwOw0NCiAgICAgIGNvc3Rvc1sxXVs0XT0xNTA7DQ0K
+ICAgICAgY29zdG9zWzJdWzNdPTEwMDsNDQogICAgICBjb3N0b3NbM11bMV09
+NTA7DQ0KICAgICAgY29zdG9zWzNdWzddPTI1Ow0NCiAgICAgIGNvc3Rvc1s0
+XVszXT01MDA7DQ0KICAgICAgY29zdG9zWzRdWzVdPTIwMDsNDQogICAgICBj
+b3N0b3NbNV1bNl09MTc1Ow0NCiAgICAgIGNvc3Rvc1s2XVszXT0yNTA7DQ0K
+ICAgICAgY29zdG9zWzddWzVdPTMwMDsNDQogICAgICBmb3IgKGludCBpPTE7
+IGk8PTc7IGkrKykNDQogICAgICB7DQ0KCSB2ZXJ0aWNlc1tpXT1pOw0NCgkg
+dmVydGljZXMyW2ldPWk7DQ0KICAgICAgfQ0NCiAgfQ0NCiAgaW50IERbTk9E
+RVNdOy8vYXF1aSB2YW4gcXVlZGFuZG8gbG9zIGNvc3RvcyBtaW5pbW9zDQ0K
+ICBwcml2YXRlOg0NCiAgICAgaW50IHZlcnRpY2VzW05PREVTXTsgLy9zZSBn
+dWFyZGFuIGxvcyB2ZXJ0aWNlcw0NCiAgICAgaW50IHBbTk9ERVNdW05PREVT
+XTsvL3NlIHV0aWxpemEgcGFyYSBzYWNhciBsb3MgY2FtaW5vcw0NCiAgICAg
+aW50IGNvc3Rvc1tOT0RFU11bTk9ERVNdOy8vbWF0cml6IGRvbmRlIGVzdGFu
+IGxvcyBjb3N0b3MgZGUgaXIgZGUgdW4gdmVydGljZSBhIG90cm8NDQogICAg
+IGludCB2ZXJ0aWNlczJbTk9ERVNdOy8vYXF1aSB2YW4gcXVlZGFuZG8gbG9z
+IHZlcnRpY2VzIHZpc2l0YWRvcw0NCiAgICAgaW50IHc7Ly9jb250aWVuZSBl
+bCB2ZXJ0aWNlIHZpc2l0YWRvIGFjdHVhbG1lbnRlDQ0KICAgICBpbnQgYnVz
+Y2FtaW5pbW8odm9pZCk7DQ0KICAgICBpbnQgbWluKGludCB4LCBpbnQgeSk7
+DQ0KfTsNDQp2b2lkIGdyYWZvOjpkaWprc3RyYSh2b2lkKSAvL2NhbGN1bGEg
+bG9zIGNhbWlub3MgbWluaW1vcyBkZXNkZSBlbCB2ZXJ0aWNlIDEgaGFjaWEg
+bG9zIGRlbWFzDQ0Kew0NCiAgICBpbnQgY29uanVudG9bTk9ERVNdOyAvLyBh
+cXVpIHNlIHZhbiBndWFyZGFuZG8gbG9zIHZlcnRpY2VzIG5vIHZpc2l0YWRv
+cw0NCiAgICBpbnQgcG9zY29uanVudG89MTsNDQogICAgdmVydGljZXNbcG9z
+Y29uanVudG9dPTA7DQ0KICAgIERbMV09MDsNDQogICAgZm9yIChpbnQgaT0y
+OyBpPD1OT0RFUy0xOyBpKyspDQ0KCURbaV09Y29zdG9zWzFdW2ldOyAvL2lu
+aWNpYWxpemEgZWwgdmVjdG9yIGNvbiBsb3MgY29zdG9zIGRlIDEgYSBpDQ0K
+ICAgIGZvcihpbnQgaT0xOyBpPD0gTk9ERVMtMjsgaSsrKQ0NCiAgICB7DQ0K
+ICAgICAgdz1idXNjYW1pbmltbygpOy8vZGVqYSBlbiB3IGVsIHZlcnRpY2Ug
+bm8gdmlzaXRhZG8gY29uIGVsIG1lbm9yIGNvc3RvIGVuIGVzZSBtb21lbnRv
+DQ0KICAgICAgcG9zY29uanVudG8rKzsNDQogICAgICBjb25qdW50b1twb3Nj
+b25qdW50b109dzsvL2luc2VydGEgYWwgdmVydGljZSBlbiBsb3MgdmlzaXRh
+ZG9zDQ0KICAgICAgdmVydGljZXMyW3ddPTA7Ly9zYWNhIGFsIHZlcnRpY2Ug
+bG9zIG5vIHZpc2l0YWRvcw0NCiAgICAgIGZvciAoaW50IHY9Tk9ERVMtMS1w
+b3Njb25qdW50bzsgdjw9NzsgdisrKQ0NCgkgRFt2XT1taW4oRFt2XSxEW3dd
+K2Nvc3Rvc1t3XVt2XSk7Ly9hbmFsaXphIHNpIGVzIG1lbm9yIHBvciBlc3Rl
+IGNhbWlubyh3KSBvIHBvciBlbCBxdWUgZXN0YSBlbiBlc3RlIG1vbWVudG8N
+DQogICAgfQ0NCn07DQ0KaW50IGdyYWZvOjpidXNjYW1pbmltbyh2b2lkKS8v
+YnVzY2EgZWwgdmVydGljZSBjb24gY29zdG8gbWluaW1vIGRlIGxvcyBubyB2
+aXNpdGFkb3MNDQp7DQ0KCWludCBtaW5pbW89MTAwMDAsIHBvcz0xMDAwMDsN
+DQoJZm9yKGludCBpPTE7IGk8PU5PREVTLTE7IGkrKykNDQoJew0NCgkgIGlm
+ICh2ZXJ0aWNlczJbaV0gIT0wKQ0NCgkgICAgIGlmIChEW2ldIDwgbWluaW1v
+KQ0NCgkgICAgIHsNDQoJCW1pbmltbz1EW2ldOw0NCgkJcG9zPWk7DQ0KCSAg
+ICAgfQ0NCgl9DQ0KCXJldHVybiBwb3M7DQ0KfTsNDQppbnQgZ3JhZm86Om1p
+bihpbnQgeCwgaW50IHkpLy9yZXRvcm5hIGVsIHZhbG9yIGNvbiBtZW5vciBj
+b3N0bw0NCnsNDQogIGlmICh4IDwgeSkNDQogICAgIHJldHVybiB4Ow0NCiAg
+ZWxzZQ0NCiAgICAgIHJldHVybiB5Ow0NCn07DQ0Kdm9pZCBncmFmbzo6bWFz
+Y29ydG8odm9pZCkvL3NhY2EgbGEgcnV0YSBkZSBjYW1pbm9zIG1hcyBjb3J0
+b3MgZW50cmUgbG9zIHZlcnRpY2VzDQ0Kew0NCiAgaW50IGksaixrOw0NCiAg
+aW50IGFbTk9ERVNdW05PREVTXTsNDQogIGZvciAoaT0xO2k8PU5PREVTLTE7
+aSsrKQ0NCiAgICBmb3IgKGo9MTtqPD1OT0RFUy0xO2orKykNDQogICAgew0N
+CglhW2ldW2pdPWNvc3Rvc1tpXVtqXTsNDQoJcFtpXVtqXT0wOw0NCiAgICB9
+DQ0KICBmb3IgKGk9MTtpPD1OT0RFUy0xO2krKykNDQogICAgICBhW2ldW2ld
+PTA7DQ0KICBmb3IgKGs9MTtrPD1OT0RFUy0xO2srKykNDQogICAgICBmb3Ig
+KGk9MTtpPD1OT0RFUy0xO2krKykNDQoJICBmb3IgKGo9MTtqPD1OT0RFUy0x
+O2orKykNDQoJICAgICAgaWYgKChhW2ldW2tdK2Fba11bal0pPChhW2ldW2pd
+KSkNDQoJICAgICAgew0NCgkJYVtpXVtqXT1hW2ldW2tdK2Fba11bal07DQ0K
+CQlwW2ldW2pdPWs7DQ0KCSAgICAgIH0NDQp9Ow0NCnZvaWQgZ3JhZm86OmNh
+bWlub3MoaW50IGksIGludCBqKS8vaW1wcmltZSBsYSBydXRhIG1hcyBjb3J0
+YSBkZXNkZSBlbCB2ZXJ0aWNlIGkgaGFzdGEgZWwgag0NCnsNDQogICBpbnQg
+azsNDQogICBjaGFyIGM9JyAnOw0NCiAgIGs9cFtpXVtqXTsNDQogICBpZiAo
+az09MCkNDQogICAgICByZXR1cm47DQ0KICAgY2FtaW5vcyhpLGspOw0NCiAg
+IGNvdXQ8PGs7DQ0KICAgY291dDw8YzsNDQogICBjYW1pbm9zKGssaik7DQ0K
+fQ0NCnZvaWQgbWFpbiAodm9pZCkNDQp7DQ0KIGdyYWZvIGc7DQ0KIGcuZGlq
+a3N0cmEoKTsNDQogZy5tYXNjb3J0bygpOw0NCiBjaGFyIGM9JyAnOw0NCiBj
+aGFyIHNbMjBdPSJDYW1pbm8gTaFuaW1vOiAiOw0NCiBjaGFyIHMyWzIwXT0i
+Q29zdG86ICI7DQ0KIGZvciAoaW50IGk9MTsgaTw9Tk9ERVMtMTsgaSsrKS8v
+ZXN0ZSBjaWNsbyBpbXByaW1lIGxvcyBjYW1pbm9zIG1pbmltb3MgZGVzZGUg
+ZWwgdmVydGljZSAxIGhhc3RhIGxvcyBkZW2gcw0NCiB7DQ0KICAgY291dCA8
+PCBzOw0NCiAgIGNvdXQgPDwgMTsNDQogICBjb3V0IDw8IGM7DQ0KICAgZy5j
+YW1pbm9zKDEsaSk7DQ0KICAgY291dCA8PCBpOw0NCiAgIGNvdXQgPDwgYzsN
+DQogICBjb3V0IDw8IHMyOw0NCiAgIGNvdXQgPDwgZy5EW2ldPDwiXG4iOw0N
+CiB9DQ0KICAgZ2V0Y2goKTsNDQp9DQ0KDQ0KDQ0K
+--1010017202-865173532-1071587198=:32518--
