@@ -1,82 +1,79 @@
-From: canbaby <canbaby@21cn.com>
-Subject: Re: array size 1 ? 	All headers
-Date: Wed, 21 Jul 2004 11:19:57 +0800
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: array size 1 ?
+Date: Wed, 21 Jul 2004 04:48:20 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <40FDE0DD.50008@21cn.com>
-References: <20040721015338.M80608@sni.ph> <20040720235713.4cb83b20.lcapitulino@terra.com.br>
+Message-ID: <16637.59268.855189.354687@cerise.nosuchdomain.co.uk>
+References: <002601c46e79$3da5f100$d3113b80@Viper>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040720235713.4cb83b20.lcapitulino@terra.com.br>
+In-Reply-To: <002601c46e79$3da5f100$d3113b80@Viper>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
-Cc: Gre Taguran <gtaguran@sni.ph>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: "Anshuman S. Rawat" <asr@cs.columbia.edu>
+Cc: linux-c-programming@vger.kernel.org
 
-Luiz Fernando N. Capitulino wrote:
 
-> Hi Gre,
->
->Em Wed, 21 Jul 2004 10:27:35 +0800
->"Gre Taguran" <gtaguran@sni.ph> screveu:
->
->| i think its not array of 1 but instead array of 2 which is 0 and 1 index.
->
-> Wrong.
->
-> K&R defines array as: array[lenght]
->
-> So, if you defines an array as:
->
-> int luiz[10]
->
-> You will have 10 memory cells for it, and if you do:
->
-> int luiz[1]
->
-> You will have one memory cell.
->
-> But, the _access_ is made from 0, so for the first example, we have:
->
-> luiz[0], luiz[1], luiz[2]... luiz[9].
->
-> For the second, just:
->
-> luiz[0].
->
->| maybe 
->| it is because u were thinking that the last array index (in this case is 1) is 
->| null, but it is only applicable when handling string because string needs a 
->| terminated string. ex.
->| 
->| char tst[1];
->| tst[0]='g';
->| tst[1]='r';
->| printf("%s",tst); //this would print gr<and more chars here because it is not 
->| terminated
->| printf("%c=%c"); //this will print gr meaning tst[1] is alocated by 'r'
->
-> The program:
->
-> char tst[1];
-> tst[0]='g';
-> tst[1]='r';
->
-> printf("%c %c\n", tst[0], tst[1]);
->
-> compiles and works here! but to be honest, I don't why. I can prove it is
->an odd case, becase this also works (here):
->
-> char tst[1];
-> tst[0]='g';
-> tst[1]='r';
-> tst[2]='z';
->
-> printf("%c %c %c\n", tst[0], tst[1], tst[2]);
->
->PS: GCC compiled.
->
->  
->
-but your code had  over the array bound, the sequent is risk.
-I  think the GCC should detect the index value
+Anshuman S. Rawat wrote:
+
+> What does an array of size 1 mean? or maybe I might be putting it wrong, so
+> here's the declaration -
+> 
+> struct option_state {
+>     int refcnt;
+>     int universe_count;
+>     int site_universe;
+>     int site_code_min;
+>     VOIDPTR universes[1];
+> };
+> 
+> (code from ISC DHCP sources includes/dhcpd.h)
+> 
+> What does universes[1] mean here?
+
+It means an array of size one.
+
+However, an array of size one at the end of a structure is often a
+clue that the structure is intended to be a "header" for a larger
+block of data, where the rest of the block is an array whose size
+isn't fixed at compile time.
+
+Given the names of the fields, I would guess that the universe_count
+field holds the actual number of elements in the array.
+
+C doesn't support variable-sized arrays directly (actually, C99
+supports variable-sized arrays, but C89 doesn't). However, you can do
+something like:
+
+	struct option_state *p;
+	int i;
+
+	p = malloc(sizeof(struct option_state) + (count-1) * sizeof(VOIDPTR));
+	...
+	p->universe_count = count;
+	...
+	for (i = 0; i < count; i++)
+		p->universes[i] = ...;
+
+Also, gcc supports zero-length arrays for exactly this purpose. The
+"Zero Length" node in the gcc Info file (under "C Extensions") says:
+
+	Zero-length arrays are allowed in GNU C.  They are very useful as the
+	last element of a structure which is really a header for a
+	variable-length object:
+
+	     struct line {
+	       int length;
+	       char contents[0];
+	     };
+
+	     struct line *thisline = (struct line *)
+	       malloc (sizeof (struct line) + this_length);
+	     thisline->length = this_length;
+
+In practice, it's probably better to just use an array of length one
+(which will work with all compilers) and just subtract one when
+computing the size.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
