@@ -1,56 +1,29 @@
-From: John Richard Moser <nigelenki@comcast.net>
+From: Rik van Riel <riel@redhat.com>
 Subject: Re: Garbage Collection and Swap
-Date: Fri, 09 Jul 2004 23:10:55 -0400
+Date: Sat, 10 Jul 2004 20:57:56 -0400 (EDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <40EF5E3F.90401@comcast.net>
-References: <40EF3BCD.7080808@comcast.net> <20040710023245.GE21066@holomorphy.com>
+Message-ID: <Pine.LNX.4.44.0407102057230.14732-100000@chimarrao.boston.redhat.com>
+References: <40EF3BCD.7080808@comcast.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040710023245.GE21066@holomorphy.com>
+In-Reply-To: <40EF3BCD.7080808@comcast.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: William Lee Irwin III <wli@holomorphy.com>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: John Richard Moser <nigelenki@comcast.net>
 Cc: linux-kernel@vger.kernel.org, linux-c-programming <linux-c-programming@vger.kernel.org>
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On Fri, 9 Jul 2004, John Richard Moser wrote:
 
+> I've been researching garbage collection.
 
+Look up "generational garbage collection".
 
-William Lee Irwin III wrote:
-| On Fri, Jul 09, 2004 at 08:43:57PM -0400, John Richard Moser wrote:
-|
-|>Read that.  It's in all caps, so you should read it.  It has meaning.
-|>How about, everything is using Bohem GC.  Bohem wanders around in the
-|>heap concurrently.  So all of your applications are wandering around
-|>through their vm space everywhere, continuously.
-|>You get low on ram.  Let's say an app is using 500M of ram (Mozilla).
-|>What's going to happen?  Obvious.  It's going to yank shit out of swap.
-|>If we all linked against a GC, what kinds of swap hell do you think we'd
-|>encounter?
-|
-|
-| Ones almost as bad as the Hell of trolls going nuts over hypothetical
-| problems no one is stupid enough to cause in practice anyway.
-|
-|
+I suspect that, when tuned right, generational garbage
+collection could actually be quite VM friendly...
 
-I'm actually trying to get the boehm one up, but it keeps setting PaX
-off for some odd reason.  I'd intended to have some test data right
-about now. . . . >/  Firefox, gimp, hell vim can't run with boehm
-LD_PRELOAD to redirect malloc().  Nano can.  A simple tester can.
-fortune can't.  BASH doesn't seem to like it.
+-- 
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
 
-It's only hypothetical until I prove or disprove it; and I'm not afraid
-to do either.
-
-| -- wli
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
-
-iD8DBQFA7145hDd4aOud5P8RAkTCAJ9onJMZS5bFzu8ppfvyWg8vOE5SzQCeL5SR
-NZPBU5gMs/ZSl0iXuJmvnYQ=
-=UVWv
------END PGP SIGNATURE-----
