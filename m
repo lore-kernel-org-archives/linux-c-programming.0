@@ -1,32 +1,21 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Problems installing libc documentation
-Date: Tue, 30 Dec 2003 09:44:40 +0000
+From: Massimiliano Cialdi <cialdi@firenze.net>
+Subject: generating ethernet packets
+Date: Tue, 30 Dec 2003 15:35:02 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16369.18696.500775.607139@cerise.nosuchdomain.co.uk>
-References: <LCAOBHPHFKMJHBAA@mailcity.com>
+Message-ID: <20031230153502.0c98a9cd.cialdi@firenze.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <LCAOBHPHFKMJHBAA@mailcity.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: parvezp@lycos.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+I need to generate custom ethernet packets. I want to test a protocol.
+How can I send my custom ethernet packets through the network? Do I need libpcap?
 
-Parvez Pathan wrote:
-
-> I would like to install the libc documentation on my linux box. Can
-> anybody please tell me how to go about with it. I would like to see
-> the documentation using the "info libc" command.
-
-It should get installed by "make install" (if building from source),
-or as part of the appropriate development package (e.g. for RedHat
-6.2, it's in the glibc-devel RPM).
-
-The files in question will normally go into /usr/info, and all begin
-with "libc.info". You may need to manually update the /usr/info/dir
-before the files can be accessed.
+thanks
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+Massimiliano Cialdi
+cialdi@firenze.net
+m.cialdi@oksys.it
