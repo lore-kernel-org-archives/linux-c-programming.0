@@ -1,45 +1,56 @@
-From: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
-Subject: Re: array size 1 ? 	All headers
-Date: Wed, 21 Jul 2004 09:10:02 -0300
+From: Ronaldo Zacarias Afonso <r_zaca@ig.com.br>
+Subject: Pointer to int
+Date: Wed, 21 Jul 2004 18:11:29 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040721091002.5efb175a.lcapitulino@terra.com.br>
-References: <20040721015338.M80608@sni.ph>
-	<20040720235713.4cb83b20.lcapitulino@terra.com.br>
-	<40FDE037.6080309@sancharnet.in>
+Message-ID: <20040721_211129_060718.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1090444289"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40FDE037.6080309@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: gracecott@sancharnet.in
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Em Wed, 21 Jul 2004 08:47:11 +0530
-joy <gracecott@sancharnet.in> screveu:
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
-| Luiz Fernando N. Capitulino wrote:
-| 
-| > The program:
-| >
-| > char tst[1];
-| > tst[0]='g';
-| > tst[1]='r';
-| >
-| > printf("%c %c\n", tst[0], tst[1]);
-| >
-| > compiles and works here! but to be honest, I don't why. I can prove it is
-| >an odd case, becase this also works (here):
-| >
-| >  
-| >
-| correct me if I'm wrong, but I feel that the code you have written is 
-| the classic case of a buffer overflow.
+--Message-Boundary-by-Mail-Sender-1090444289
+Content-Type: text/plain; charset="iso-8859-1"
+Content-description: Mail message body
+Content-Transfer-Encoding: quoted-printable
+Content-disposition: inline
 
- Yes, you right.
 
- I did it to show to Greg if the program with buf[1], even indexed with
-buf[1] works, it is wrong.
+  Hello everybody,=20
 
--- 
-Luiz Fernando
+  I'm iniciating in the C programming language and there are some things=20
+that I realy need to understand, so the question is:=20
+
+  In the code:=20
+
+  int i;=20
+  struct some_struct *ptr;=20
+
+  ptr =3D &some_other_struct;=20
+
+  i =3D (int) ptr;=20
+
+
+  1) Is the last sentence a valid one?=20
+  2) If it is, what is realy happening?=20
+
+note - It seems very stranger to me. A struct pointer being "transformed"=20
+into a int variable.=20
+
+  Thanks.=20
+
+
+___________________________________________________________________________=
+______
+Quer mais velocidade?
+S=F3 com o acesso Aditivado iG, a velocidade que voc=EA quer na hora que vo=
+c=EA precisa.
+Clique aqui: http://www.acessoaditivado.ig.com.br
+
+
+--Message-Boundary-by-Mail-Sender-1090444289--
+
