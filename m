@@ -1,39 +1,59 @@
-From: Alfonso Alba =?iso-8859-1?q?Garc=EDa?= 
-	<A.Alba-Garcia@IRI.TUDELFT.NL>
-Subject: Re: recompile kernel without tc/ip stack
-Date: Thu, 16 May 2002 11:22:17 +0200
+From: Rajesh Radhakrishnan <rajeshrk@mascon.co.in>
+Subject: Re: Adapting VAT for TAO on Linux.
+Date: Sat, 18 May 2002 13:52:39 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <01KHSL24WH4E9OEZ34@IRI.TUDELFT.NL>
-References: <200205160820.NAA09968@WS0005.indiatimes.com>
+Message-ID: <33D492BAFECCD4118A2F001083FC3AB5820E71@GRMAIL>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200205160820.NAA09968@WS0005.indiatimes.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: praveenjohri <praveenjohri@indiatimes.com>, linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-have a look at 
+Hi,
 
-http://www.tldp.org/HOWTO/Kernel-HOWTO.html
+I am trying to adapt Visual Audio Tool for the TAO( the ACE ORB) framework.
+I had tried to communicate the authors of VAT at Berkeley Labs,
+unfortunately they are no longer there.
 
-there you can see how to compile a kernel.
+I am trying to run VAT on RH7.2 and I have the following problem
 
-cheers
-Alfonso
 
-On Thursday 16 May 2002 10:17 am, praveenjohri wrote:
-> can anybody tell me how to recompile kernel without tcp/ip stack
->
-> cheers
-> praveen
-> Get Your Private, Free E-mail from Indiatimes at
-> http://email.indiatimes.com
->
->  Buy Music, Video, CD-ROM, Audio-Books and Music Accessories from
-> http://www.planetm.co.in
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+		I loaded the gsm files above the vat directory and the
+"configure" produced a "Makefile". However when i run the "make" i have the
+following message ....
+
+
+				In file included from inet.c:33
+				config.h:87:conflicting types for
+'gethostid'
+				/usr/include/unistd.h:805:previous
+declaration of "gethostid"
+				In file included from inet.c:34
+				inet.h:98:redefinition of 'struct msghdr'
+				make : *** [inet.o] Error 1
+
+Can somebody give some info on modifying the RTP specific components of VAT
+and how to adapt them to the TAO framework. I have a copy of the book
+"Pattern Oriented Software Architecture" by Doug Schmidt et.al which deals
+with the handles of TAO.
+
+Any help will be greatly appreciated.
+TIA,
+Raj
+
+
+ 
+****************************************************************************
+This e-mail and any files transmitted with it are for the sole use of the
+intended recipient(s) and may contain confidential and privileged
+information. If you are not the intended recipient, please contact the
+sender by reply e-mail and destroy all copies of the original message. Any
+unauthorised review, use, disclosure, dissemination, forwarding, printing or
+copying of this email or any action taken in reliance on this e-mail is
+strictly prohibited and may be unlawful.
+Visit us @ http://www.masconit.com
+****************************************************************************
+
+
+
