@@ -1,28 +1,38 @@
-From: Sascha Retzki <lantis@iqranet.info>
-Subject: Re: Linux based router for Gigabit traffic
-Date: Sun, 22 Aug 2004 12:56:58 +0200
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
+Subject: Re: Efficient UDP Programming
+Date: Mon, 23 Aug 2004 10:10:47 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1093172218.1397.5.camel@linux.local>
-References: <7a436d9b040822033876f4b823@mail.gmail.com>
-Reply-To: lantis@iqranet.info
+Message-ID: <4129ECD7.9040305@ig.com.br>
+References: <1093057706.5080.28.camel@nicodemus>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <7a436d9b040822033876f4b823@mail.gmail.com>
+In-Reply-To: <1093057706.5080.28.camel@nicodemus>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Chuck Winters <chuckw@ieee.org>
+Cc: linux-c-programming@vger.kernel.org
 
-Am So, 2004-08-22 um 12.38 schrieb Anantha Kiran:
-> Can anybody suggest  linux based routers for Gigabit traffic.
+I suggest you to have a fixed size for your header, then you can read 
+the header that ll say you about the rest of data following the header.
+
+Luciano
+
+Chuck Winters escreveu:
+
+>Is there anyway of reading some data from a UDP socket without removing
+>it from the received queue?  What I need to do is read in the header
+>from a packet to determine how large of a memory chunk I need to
+>allocate.
+>
+>Thanks,
+>Chuck
+>
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+>
 >  
-
-1.) This message/question is not connectable to the kernel-programming
-or linux-c programming, why do you send it to those lists ?
-
-2.) You wrote the kernel-list wrong. twice.
-
-3.) What about telling what is important for you, and send that message
-to a list is more suitable for the topic ?
-
-
+>
