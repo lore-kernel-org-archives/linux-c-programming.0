@@ -1,16 +1,28 @@
-From: Ivan Deras <ideras@uv.unitec.edu>
-Subject: Debugging a Process ...
-Date: Thu, 24 Oct 2002 15:46:13 -0600
+From: Damir Cosic <damir@fatpipeinc.com>
+Subject: Re: Debugging a Process ...
+Date: Fri, 25 Oct 2002 17:39:56 -0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3DB86A25.5000109@uv.unitec.edu>
+Message-ID: <20021025233955.GA2186@snowbird.fatpipeinc.com>
+References: <3DB86A25.5000109@uv.unitec.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <3DB86A25.5000109@uv.unitec.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-I want to know how to debug a process in Linux, i know that in Windows i 
-can use Windows-API to attach a debugger process to the debugged 
-process, but in Linux i don't know ...
 
+
+* find out PID of the process (man pidof)
+
+* call gdb with name of the program you want to debug as an argument
+
+* in gdb type `attach PID'
+
+
+On Oct 10/24/02 15:46, Ivan Deras wrote:
+> I want to know how to debug a process in Linux, i know that in Windows i 
+> can use Windows-API to attach a debugger process to the debugged 
+> process, but in Linux i don't know ...
