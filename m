@@ -1,14 +1,26 @@
-From: "Vijayekkumaran.M" <m_vkumaran@yahoo.com>
-Subject: SIGFPE captured repeatedly..
-Date: Thu, 2 Sep 2004 04:36:48 -0700 (PDT)
+From: <Ganesh_Borse@Dell.com>
+Subject: RE: SIGFPE captured repeatedly..
+Date: Thu, 2 Sep 2004 17:18:57 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040902113648.10036.qmail@web41108.mail.yahoo.com>
+Message-ID: <BBE1167D4F12C74681106630ADE282B964A050@blrx2kmbgl303.blr.amer.dell.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+To: m_vkumaran@yahoo.com, linux-c-programming@vger.kernel.org
+
+See 4th paragraph in Notes section in "man signal"
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of
+Vijayekkumaran.M
+Sent: Thursday, September 02, 2004 5:07 PM
 To: linux-c-programming@vger.kernel.org
+Subject: SIGFPE captured repeatedly..
+
 
 Hi,
 
@@ -65,3 +77,8 @@ __________________________________
 Do you Yahoo!?
 New and Improved Yahoo! Mail - Send 10MB messages!
 http://promotions.yahoo.com/new_mail 
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
