@@ -1,28 +1,28 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: select: Interrupted system call
-Date: Sun, 28 Apr 2002 00:20:16 +0100
+Subject: Re: C module won't load
+Date: Sun, 28 Apr 2002 00:34:06 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15563.12848.736860.137599@cerise.nosuchdomain.co.uk>
-References: <200204271503.g3RF3lF04667@fsn3.frontstreetnetworks.com>
-	<200204271602.g3RG24F07174@fsn3.frontstreetnetworks.com>
-	<15562.64140.625327.285565@cerise.nosuchdomain.co.uk>
-	<200204272037.g3RKb1F18623@fsn3.frontstreetnetworks.com>
+Message-ID: <15563.13678.310301.532264@cerise.nosuchdomain.co.uk>
+References: <3CCB320E.8030503@adelphia.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200204272037.g3RKb1F18623@fsn3.frontstreetnetworks.com>
+In-Reply-To: <3CCB320E.8030503@adelphia.net>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Gerald Waugh <gwaugh@frontstreetnetworks.com>
-Cc: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+To: Mark Johnson <rmjohnson144@adelphia.net>
+Cc: linux-c-programming@vger.kernel.org
 
 
-Gerald Waugh wrote:
+Mark Johnson wrote:
 
-> I would really like to know why select()
-> gets that  Interrupted system call
+>      I am new to linux and C and I am having trouble loading in my new 
+> network drivers.  I compile the module like the docs say, and everything 
+> seems to be OK, but when I insmod it into memory I get an error: 
+> unresolved symbol pci_drv_unregister and pci_drv_register.
 
-If you have "strace", that should show which signal is being caught.
+Try using "modprobe" instead of "insmod". BTW, you also need to have
+installed the pci-scan.o module.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
