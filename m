@@ -1,66 +1,89 @@
-From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: dynamic allocation of array of structures
-Date: Sat, 22 Mar 2003 23:00:44 +0200
+Date: Sat, 22 Mar 2003 21:28:04 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030322230044.B6857@neutrino.particles.org>
-References: <20030322202720.267284000B9@mwinf0501.wanadoo.fr> <Pine.LNX.4.21.0303222141500.5852-100000@hestia>
+Message-ID: <15996.54628.878592.818662@cerise.nosuchdomain.co.uk>
+References: <20030322202720.267284000B9@mwinf0501.wanadoo.fr>
+	<Pine.LNX.4.21.0303222141500.5852-100000@hestia>
+	<20030322230044.B6857@neutrino.particles.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.21.0303222141500.5852-100000@hestia>; from mailing-lists@xs4all.nl on Sat, Mar 22, 2003 at 09:48:12PM +0100
+In-Reply-To: <20030322230044.B6857@neutrino.particles.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "J." <mailing-lists@xs4all.nl>
-Cc: linux-c-programming@vger.kernel.org
-
-On Sat, Mar 22, 2003 at 09:48:12PM +0100, J. wrote:
-> Maybe some of you could give a hunch what goes wrong. 
-
-You should use linked lists. The code below can work if you save
-the starting offset of you elements, but in general it is not safe.
+To: linux-c-programming@vger.kernel.org
 
 
-> #include <stdio.h>
-> #include <stdlib.h>
+J. wrote:
+
+> struct {
+>  char *name;
+>  int telnr;
+> } people[100];
 > 
-> typedef struct {
->  char initial;
->  int roomnr;
-> } record;
+> Instead of statically allocating an array of 100 of these structures like
+> I have done, I want to dynamically allocate the array at run-time and
+> resize the number of structures some where at any time in the main
+> program. 
 > 
-> int main(void) {
->  int i = 0;
-
--  record *ptr;
-+  record *ptr, *t;
-
->  if((ptr = (record *)malloc(10 * sizeof(record))) == NULL) {
->   fprintf(stderr, "Error: failed malloc\n");
->   return 1;
->  }
-
-+  t = ptr;
-
->  for(i = 0; i < 10; i++, ptr++) {
->   ptr->initial = 'A' + i;
->   ptr->roomnr = i;
->  }
-
-+  ptr = t;
-
->  for(i = 0; i < 10; i++, ptr++) {
->   printf("ptr->initial = %c, ", ptr->initial);
->   printf("ptr->roomnr = %d\n", ptr->roomnr);
->  }
+> I know how to resize char arrays and int arrays but I never (re)sized an
+> array of structres which can be accessed with something as: ``people[4].name''. 
+> In Google nothing really usefull turns up.
 > 
->  return 0;
-> }
+> Can this be done without having to resort to other implementations like
+> linked lists etc.. ? If so how ?
 
-Elias
+Use malloc() and realloc(), i.e.
+
+	ptr = malloc(count * sizeof(record));
+and:
+	ptr = realloc(ptr, count * sizeof(record));
+
+Elias Athanasopoulos wrote:
+
+> > Maybe some of you could give a hunch what goes wrong. 
+> 
+> You should use linked lists.
+
+I can't see any reason to use linked lists here.
+
+> The code below can work if you save
+> the starting offset of you elements, but in general it is not safe.
+
+[snip]
+
+> +  t = ptr;
+> 
+> >  for(i = 0; i < 10; i++, ptr++) {
+> >   ptr->initial = 'A' + i;
+> >   ptr->roomnr = i;
+> >  }
+> 
+> +  ptr = t;
+
+It's better to just leave the original pointer alone, and work on the
+copy, e.g.
+
+  for(i = 0, t = ptr; i < 10; i++, t++) {
+   t->initial = 'A' + i;
+   t->roomnr = i;
+  }
+
+Actually, using explicit pointer increment operations for array
+iteration is a throwback to the days before compilers commonly
+performed loop induction optimisation.
+
+Nowadays, you may as well just write:
+
+  for(i = 0; i < 10; i++) {
+   record *t = &ptr[i];
+   t->initial = 'A' + i;
+   t->roomnr = i;
+  }
+
+Leave the induction up to the compiler; it's less likely to get it
+wrong than a programmer is.
 
 -- 
-University of Athens			I bet the human brain 
-Physics Department				is a kludge --Marvin Minsky 
-
-	
+Glynn Clements <glynn.clements@virgin.net>
