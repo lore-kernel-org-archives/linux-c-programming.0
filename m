@@ -1,136 +1,57 @@
-From: rinku rathore <rinku_ques@yahoo.com>
-Subject: Re: exit(42)
-Date: Sat, 25 Sep 2004 03:57:36 -0700 (PDT)
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040925105736.71615.qmail@web53005.mail.yahoo.com>
-References: <20040925011323.GD3825@luna.mooo.com>
+From: Patrick Percot <ppercot@free.fr>
+Subject: Re: Static memory allocation
+Date: Sat, 25 Sep 2004 23:51:08 +0200 (CEST)
+Sender: gcc-help-owner@gcc.gnu.org
+Message-ID: <20040925.235108.67854428.ppercot@free.fr>
+References: <20040924.145113.74752222.ppercot@free.fr>
+	<20040925091401.39110.qmail@web52907.mail.yahoo.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040925011323.GD3825@luna.mooo.com>
+Content-Transfer-Encoding: quoted-printable
+Return-path: <gcc-help-return-18037-gcc-help=m.gmane.org@gcc.gnu.org>
+List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
+List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
+List-Post: <mailto:gcc-help@gcc.gnu.org>
+List-Help: <mailto:gcc-help-help@gcc.gnu.org>
+In-Reply-To: <20040925091401.39110.qmail@web52907.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Micha Feigin <michf@post.tau.ac.il>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: Text/Plain; charset="iso-8859-1"
+To: linux-c-programming@vger.kernel.org, gcc-help@gcc.gnu.org
+
+On Sat, 25 Sep 2004 10:14:01 +0100 (BST), Ankit Jain <ankitjain1580@yah=
+oo.com> wrote
+
+Hello Ankit,
+
+> sorry boss but this also gives problem
+> =
+
+> [ankit@Ankit fft]$ cat try2.c
+> #include <stdio.h>
+> int main()
+> {
+> double a[1450][1450];
+>  a[149][0]=3D999.999;
+>  printf("%lf\n",a[149][0]);
+>  return 0;
+> }
+> [ankit@Ankit fft]$ gcc try2.c
+> [ankit@Ankit fft]$ ./a.out
+> Segmentation fault
+> =
 
 
---- Micha Feigin <michf@post.tau.ac.il> wrote:
+Sure,  Claudio Bley  gave  you the  solution  (look at  ulimit). I  jus=
+t
+pointed you on another potential problem in your code.
 
-> On Fri, Sep 24, 2004 at 12:57:59PM +0100, Ankit Jain
-> wrote:
-> > well do any body know what does this mean?
-> > 
-> > exit(42)
-> > 
-> 
-> It means return value 42 as the exit value for the
-> program. Every
-> program returns an exit value (integer) when it
-> exits. 0 means not
-> error, anything else is an error value and the
-> specific number can mean
-> the type of error if its documented and the caller
-> knows what to expect.
-> 
-> > and also when we say exit(0) or exit(1) then there
-> is
-> > anyway to catch these values
-> > 
-> 
-> From the caller you can catch this value, read the
-> documentation for
-> your shell about the return value. I think its $?
-> under bash.
-> 
-> > also when we return from main fn then what is the
-> > benfit?
-> > 
-> > does it have any utilisation?
-> > 
-> 
-> main is just another function almost like any other
-> in your
-> program. The system doesn't look for the function
-> main to run, its just
-> a convention used by c (in windows the main function
-> is called winmain
-> for example, don't remember what its called in
-> pascal, but IIRC
-> something different also).
-> 
-> when you compile your program its linked with some
-> assembler code that
-> handles setting up you environment. The system looks
-> for a symbol in
-> your program called _start and start the execution
-> from there. This
-> function is responsible for setting everything up,
-> including argc and
-> argv (the command line arguments and environment
-> variables) and possibly
-> handling calling constructors of global classes in
-> c++ (not sure about
-> that though). It then calls your main function with
-> the proper values
-> of argc and argv.
-> 
-> When you main function returns, or when you call
-> exit, a function called
-> exit is called which handles all the cleaning up of
-> your program and
-> then the function _exit is called to finish exiting
-> the program. You
-> are not supposed to call _exit directly since it
-> bypasses cleaning up,
-> calling it directly is only useful if you use vfork
-> where you don't
-> want any cleaning up done since it messes things up
-> (you shouldn't use
-> vfork for most things nowadays since fork has almost
-> no more
-> overhead. If you don't know you need it, then you
-> don't).
-> 
-> > thanks
-> > 
-> > ankit
-> > 
-> >
->
-________________________________________________________________________
-> > Yahoo! Messenger - Communicate instantly..."Ping" 
-> > your friends today! Download Messenger Now 
-> > http://uk.messenger.yahoo.com/download/index.html
-> > -
-> > To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at 
-> http://vger.kernel.org/majordomo-info.html
-> >  
-> >  +++++++++++++++++++++++++++++++++++++++++++
-> >  This Mail Was Scanned By Mail-seCure System
-> >  at the Tel-Aviv University CC.
-> > 
-> -
-> To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at 
-> http://vger.kernel.org/majordomo-info.html
-> 
-this could also be the reason:
-if we r working with child and parent procees then as
-child get terminated it has to pas some status to the
-parent that is going to exit then by using exit(42)
-child give information to the parent that it is goig
-to exit now having status 42.
+[..Zapp=E9 94 lignes et 2428 caract=E8res..]
 
-thanx
+=C0+
+PP
+-- =
 
+Groupe Morbihannais d'Utilisateurs de Logiciels Libres http://www.tuxbi=
+han.org
+GPG fingerprint =3D 1A4F E154 3D2C A20E E4CA  A543 7951 C5C2 E44A A0B5
 
-		
-_______________________________
-Do you Yahoo!?
-Declare Yourself - Register online to vote today!
-http://vote.yahoo.com
+Patrick Percot.
