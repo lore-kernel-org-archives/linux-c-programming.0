@@ -1,55 +1,101 @@
-From: "mike" <ruler@isolate.net>
+From: "Oleg O. Ossovitskii" <oleg@kgpa.ru>
 Subject: Re: Misc C question
-Date: Thu, 20 Jun 2002 01:08:38 -0400
+Date: Thu, 20 Jun 2002 09:28:23 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <002701c21818$8a302d10$0201a8c0@ws1>
-References: <20020619214332.A299@nietzsche>    <010701c21808$1a7315b0$0201a8c0@ws1> <20020619234424.A480@nietzsche>
+Message-ID: <1293884575.20020620092823@kgpa.ru>
+References: <20020619214332.A299@nietzsche>
+Reply-To: "Oleg O. Ossovitskii" <oleg@kgpa.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20020619214332.A299@nietzsche>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: xmp <xmp@multipasto.net.co>, linux-c-programming@vger.kernel.org
+To: xmp <xmp@multipasto.net.co>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+Hello xmp,
 
-"r" is for readonly, if you don't include what it should do with the file,
-you will get an error on compile. :)  The possible options are "r", "w",
-"r+" "w+", and more.  You should consult a book/website which will explain
-everything you need to know about them :)
+Thursday, June 20, 2002, 5:46:02 AM, you wrote:
 
-Also after you fopen(); you should always fclose(); somewhere after :)
+x> hi, What is the correct unix-style way to check if a file exists ? create it ? and delete it ?.
+x> Maybe trying to fopen() it and if call != NULL it exist, else it doesnt?.
+x> I want to know the most standard and used in system such as FreeBSD and solaris, linux.
 
-And, no, the call won't return NULL if you don't have "r", it simply won't
-compile, and can't give you anything ;)
+You should use stat() function:
 
-Thanks.
------ Original Message -----
-From: "xmp" <xmp@multipasto.net.co>
-To: "mike" <ruler@isolate.net>
-Cc: <linux-c-programming@vger.kernel.org>
-Sent: Thursday, June 20, 2002 12:44 AM
-Subject: Re: Misc C question
+=========================================================================
+stat()
+get information about a file or directory
+
+Synopsis:
+#include <sys/stat.h>
+int stat( const char *path, struct stat *buf );
+Description:
+The stat() function obtains information about the file or directory referenced in path. This information is placed in the structure located at the address indicated by buf. 
 
 
-> > Basically, you could use the fexist() function (I think that's what its
-> > called), or the way most people do it..
-> > FILE *blah;
-> > if ((blah = fopen("/path/to/file, "r")) != NULL) {
-> >     printf("File does not exist.");
-> >     exit(0);
-> > }
-> hi, thanks for reply me.
-> About your example, What happens if the file exist and you dont have "r"
-permission? the call will return NULL?.
->
-> bye
->
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+--------------------------------------------------------------------------------
+ This function follows symbolic links and gives you information about the resulting file or directory. If you want information about the link itself, use lstat() instead. 
+
+--------------------------------------------------------------------------------
+
+The file <sys/stat.h> contains definitions for the structure stat. 
+
+At least the following macros are defined in the <sys/stat.h> header file: 
+
+S_ISBLK(m) 
+Test for block special file. 
+S_ISCHR(m) 
+Test for character special file. 
+S_ISDIR(m) 
+Test for directory file. 
+S_ISFIFO(m) 
+Test for FIFO. 
+S_ISREG(m) 
+Test for regular file. 
+The value m supplied to the macros is the value of the st_mode field of a stat structure. The macro evaluates to a nonzero value if the test is true, and zero if the test is false. 
+
+The access permissions for the file or directory are specified as a combination of bits in the st_mode field of a stat structure. These bits are defined in the <sys/stat.h> header file, and are described in the section on this file in the Header Files chapter. The following bits are also encoded in the st_mode field: 
+
+S_ISUID 
+Set user ID on execution. The process's effective user ID is set to that of the owner of the file when the file is run as a program. On a regular file, this bit should be cleared on any write. 
+S_ISGID 
+Set group ID on execution. Set effective group ID on the process to the file's group when the file is run as a program. On a regular file, this bit should be cleared on any write. 
+Returns:
+0 
+the information was successfully obtained. 
+-1 
+the information wasn't successfully obtained. 
+Errors:
+EACCES 
+Search permission is denied for a component of path. 
+EIO 
+A physical error occurred on the block device. 
+ENAMETOOLONG 
+The argument path exceeds PATH_MAX in length, or a pathname component is longer than NAME_MAX. These manifests are defined in the <limits.h> header file. 
+ENOENT 
+The named file doesn't exist, or path is an empty string. 
+ENOTDIR 
+A component of path isn't a directory. 
+Examples:
+#include <stdio.h>
+#include <sys/stat.h>
+
+void main()
+  {
+    struct stat buf;
+
+    if( stat( "file", &buf ) != -1 ) {
+      printf( "File size = %d\n", buf.st_size );
+    }
+  }
+
+===================================================================================
+
+
+Best regards, Oleg O. Ossovitskii
+programming engineer, KGPA Ltd.
+tel: +7(0112)46-23-40, fax: +7(0112)43-64-96
+mailto:oleg@kgpa.ru, icq# 33366588
 
