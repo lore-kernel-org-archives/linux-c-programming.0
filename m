@@ -1,28 +1,37 @@
-From: Kurt Wall <kwall@kurtwerks.com>
+From: "Carlos Fernandez Sanz" <cfernandez@myalert.com>
 Subject: Re: Begining C book
-Date: Fri, 10 May 2002 00:20:08 -0400
+Date: Fri, 10 May 2002 10:35:41 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020510002008.L23136@marta>
+Message-ID: <005401c1f7fd$b379b910$0b40440a@madcfernandez>
 References: <3CDB4A4B.1060204@adelphia.net>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <3CDB4A4B.1060204@adelphia.net>; from rmjohnson144@adelphia.net on Thu, May 09, 2002 at 09:19:23PM -0700
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Mark Johnson <rmjohnson144@adelphia.net>
-Cc: linux-c-programming@vger.kernel.org
+To: Mark Johnson <rmjohnson144@adelphia.net>, linux-c-programming@vger.kernel.org
 
-Scribbling feverishly on May 09, Mark Johnson managed to emit:
-> I am new to linux and would like to learn how to program in C.  can 
+Forget about 'linux C', there's not such a thing. Learn standard C (there
+are many good books on the topic - I used to like Schildt's, but probably
+there are even better ones now), and one you know at least the basics you
+can get the usual masterpieces on UNIX programming.
+
+----- Original Message -----
+From: "Mark Johnson" <rmjohnson144@adelphia.net>
+To: <linux-c-programming@vger.kernel.org>
+Sent: Friday, May 10, 2002 6:19 AM
+Subject: Begining C book
+
+
+> I am new to linux and would like to learn how to program in C.  can
 > someone suggest a good beginners book that covers linux C.
+>
+> -=Mark=-
+>
+> -
+> To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
-C on Linux should be C on anything else. I like KN King's book, "C: A
-Modern Approach." You'll also want to know how to use an editor and,
-eventually, a debugger and probably make.
-
-Kurt
--- 
-Life is like an onion: you peel off layer after layer, then you find
-there is nothing in it.
