@@ -1,35 +1,35 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Curses and key-up information
-Date: Mon, 6 Jan 2003 16:00:39 +0000
+Subject: Re: using sh in execl command in C
+Date: Mon, 6 Jan 2003 15:43:36 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15897.43047.454804.466506@cerise.nosuchdomain.co.uk>
-References: <4DB84F6A7711D511A5020002A550C8B778710B@BELL>
+Message-ID: <15897.42024.690331.181717@cerise.nosuchdomain.co.uk>
+References: <426C1E9EBA27D411839000D0B74752F80562C4B3@punmsg02.ad.infosys.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4DB84F6A7711D511A5020002A550C8B778710B@BELL>
+In-Reply-To: <426C1E9EBA27D411839000D0B74752F80562C4B3@punmsg02.ad.infosys.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Steve Goodwin <SteveG@bitscorp.com>
+To: nomit kalidhar <nomit_kalidhar@infosys.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-Steve Goodwin wrote:
+nomit kalidhar wrote:
 
-> I'm writing to write a little curses maze game that involves a lot of key
-> handling, and the most obvious way to handle the control is with a
-> IsKeyDown(char key) type-function. Alas, curses doesn't appear to have one
-> and was wondering is anyone else has found a way around this problem (either
-> within curses, or using ioctl/poll or similar).
+> I have the following snippet in C
+> 
+> Main()
+> 
+> {
+>             execl("/usr/bin/sh","Name","-c","ls",NULL);
+> }
+> 
+> in the execl instead of "Name" I can specify any thing it does not
+> affect the program. I wanted to what is the field where the "Name" is
+> used for.
 
-It can't be done. The process only receives notification of key
-presses; there is no way to discover when a key is released.
-
-Bear in mind that Unix terminal I/O was designed for terminals (vt100
-etc) rather than a keyboard which is attached directly. Terminals
-(whether hardware terminals such as the vt100, emulators such as
-xterm, the linux console, telnet etc) simply don't send anything when
-a key is released, so there's no way to detect it.
+All arguments after the first are used to initialise argv[] in the new
+program, so the second argument becomes the value of argv[0].
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
