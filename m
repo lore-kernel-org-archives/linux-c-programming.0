@@ -1,54 +1,70 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: struct passwd usage
-Date: Thu, 1 May 2003 01:55:41 +0100
+Subject: Re: Returning pointer to array of structures
+Date: Thu, 1 May 2003 01:49:21 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16048.28813.203668.916383@cerise.nosuchdomain.co.uk>
-References: <Pine.LNX.4.44.0304301445001.29006-100000@ns.isi.ulatina.ac.cr>
+Message-ID: <16048.28433.119139.292067@cerise.nosuchdomain.co.uk>
+References: <20030429083122.GA22282@gre.ac.uk>
+	<UP74EBBAEBHCKGTNLKMJPL95LFFDV.3ead0903@rafaelnote.ns1.lhost.com.br>
+	<20030430082421.GH22282@gre.ac.uk>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.44.0304301445001.29006-100000@ns.isi.ulatina.ac.cr>
+In-Reply-To: <20030430082421.GH22282@gre.ac.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming@vger.kernel.org
+To: Martin Buchan <M.J.Buchan@gre.ac.uk>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
-Fabio Miranda Hamburger wrote:
+Martin Buchan wrote:
 
-> what is wrong with this code:
+> > Try the modifications above.
+> >
+> > - menuentry parseSubmenu (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr, int i)
+> > + void parseSubmenu (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr, int i)
 > 
-> main(){
-> struct passwd *pwd;
-> char *user;
-> puts("username:");
-> pwd=getpwnam(user);
+> Thanks. Ive done as you suggested and it all works. 
+> 
+> As the way i had coded it before where i was returning the structure
+> each time worked, I am assuming this is a better way to code it (seeing 
+> as you guys have suggested it and i know diddly squat :-)
+> 
+> Why is this so?
+> Is it just because i do not have the extra overhead of
+> passing/returning the structure for each function call or is there
+> something more fundamental?
 
-The variable "user" points to a random memory location at this point. 
-getpwnam() expects its argument to point at a valid string, which is
-the username for which to retrieve the passwd entry.
+The main issue is that it's unnecessary in this case. That lead me
+(and probably others) to suspect that you might have misunderstood
+what was happening and/or meant to do something else.
 
-> puts(pwd->pw_name);
-> }
+E.g. parseSection() calls parseSubmenu(), passing mePtr as an
+argument. parseSubmenu() stores data in the elements of mePtr, and
+also returns the first element (*mePtr, equivalent to mePtr[0]) as a
+result. parseSection() then stores the result in *mePtr, even though
+the value it's storing is bound to be exactly what's already there.
 
-If you meant to prompt for the username, you need to do something like
-this:
+In general, there are two ways to return values from a function:
 
-int main(void)
-{
-	struct passwd *pwd;
-	char user[64];
+1. Return the value as the function's result.
 
-	puts("username:");
-	gets(user);
-	pwd=getpwnam(user);
-	puts(pwd->pw_name);
+2. Pass in a pointer to where you want the value to be stored, and
+have the function store it there.
 
-	return 0;
-}
+Option 2 is normally chosen if you want to return:
 
-Except that you should add error checking, use fgets() instead of
-gets() etc.
+a) multiple values,
+b) an array, or
+c) large structures.
+
+Option 1 is normally chosen if you only want to return a single, small
+value (usually a primitive type such as int, float etc).
+
+Case a) is due to C functions only being able return a single value. 
+Case b) is because arrays are always passed by reference (a pointer to
+the first element of the array). Case c) is for efficiency; returning
+a result typically involves the callee copying it onto the stack, then
+the caller copying it from the stack.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
