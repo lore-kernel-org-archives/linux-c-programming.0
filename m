@@ -1,48 +1,42 @@
-From: "William N. Zanatta" <william@veritel.com.br>
-Subject: GCC and Memory Organization
-Date: Tue, 09 Apr 2002 12:07:08 -0300
+From: adwin <fox@sby.centrin.net.id>
+Subject: Re[2]: start learning gcc ... how to ?
+Date: Tue, 9 Apr 2002 23:01:18 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CB3039C.4070404@veritel.com.br>
+Message-ID: <1913993471.20020409230118@sby.centrin.net.id>
+References: <200204091150.g39Bo4825347@jupiter.centrin.net.id>
+ <20020409130444.GA276@wotan>
+Reply-To: adwin <fox@sby.centrin.net.id>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+In-Reply-To: <20020409130444.GA276@wotan>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-Hello brothers,
+MG> Hi,
+MG>         gcc has lots of options, but theses are (almost) all I've needed:
+MG> -Wall  (Warnings:ALL)
+MG> -g      (generate debug info)
+MG> -ggdb   (idem but with gdb extensions)
+MG> -o      (output to file)
+MG> -c      (compile only, don't link for makeing .o)
+MG> -ansi   (kindda obvious)
+MG> Well, I know is little but it might help you to start
 
-   I have a question on memory organization...
-   In my Computer Architeture classes, I've learned something like that 
-there are two ways to organize data in memory.
-   The first one puts it in a linear mode like:
+how about with -l option ? (for library). I still don't understand
+when I have to use this option and when I don't need to use it.
+for example for compiling program that use math.h,it need -lm and when
+you  create  a program with QT library you need to use -lqt and -lglut
+for opengl etc etc ...
 
-      +---------------+
-12k  | z | z |   |   |
-      |---------------|
-8k   | y | y | z | z |
-      |---------------|
-4k   | x | x | x | y |
-      +---------------+
+MG> I'd strongly recomend you reading a make tutorial
 
-   And the second way is a non-linear, a block mode like:
+do you mean gnu automake and autoconf tutorial ?
 
-      +---------------+
-12k  | z | z | z | z |
-      |---------------|
-8k   | y | y | y |   |
-      |---------------|
-4k   | x | x |   |   |
-      +---------------+
+is there any IDE like Borland Turbo C++ ?
+or may be how to use KDevelop ?
 
-   The second way should be faster than the first one for memory 
-management, right?! That a kindda obviuos as it wouldn't be necessary to 
-scan all the block to find the next entry. Also it can be expensive 
-since the 4k block is allocated for only 2k of real data.
-
-   My question is, how does GCC works with this? Does it have any switch 
-for optimizing (or not) the code?? What's the default action???
-
-   Thank you, keep it hard!
-
-William Zanatta
+-- 
+Best regards,
+ adwin                            
 
