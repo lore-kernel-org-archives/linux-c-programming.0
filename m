@@ -1,76 +1,73 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: wwp <subscript@free.fr>
 Subject: Re: A Calendar app on C
-Date: Wed, 2 Jun 2004 11:07:17 +0100
+Date: Wed, 2 Jun 2004 12:38:52 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16573.42709.469676.426778@cerise.nosuchdomain.co.uk>
+Message-ID: <20040602123852.7ff77abf@localhost>
 References: <Pine.LNX.4.58.0406012354140.12322@ns.isi.ulatina.ac.cr>
+	<200406020910.41006.Christian.Beckel@gmx.de>
+	<200406020917.10404.Christian.Beckel@gmx.de>
+	<1086167937.23773.24.camel@localhost>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.58.0406012354140.12322@ns.isi.ulatina.ac.cr>
+In-Reply-To: <1086167937.23773.24.camel@localhost>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+Hello John,
 
 
-Fabio Miranda Hamburger wrote:
+On Wed, 02 Jun 2004 05:18:57 -0400 "John T. Williams" <jowillia@vt.edu> wrote:
 
-> I am trying to program a basic calendar software in C. The idea is to ask
-> for a year and display all the calendar from january to december. How to
-> code such app taking care of 31/28 days month and check each 4 year for a
-> leap year? Any idea/comment/advice/code is welcome.
+> isn't there some rule about if the year is year%100=0  then is has to
+> also be yea%400 to be a leap year?   
 
-A year is a leap year if:
+Yes there is! Google would report many pages around this.
+According to http://www.mitre.org/tech/cots/LEAPCALC.html:
 
-	static int is_leap(int year)
-	{
-		return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-	}
+             if (year mod 4 != 0)
+                 {use 28 for days in February}
+             else if  (year mod 400 == 0)
+                 {use 29 for days in February}
+             else if (year mod 100 == 0)
+                 {use 28 for days in February}
+             else
+                 {use 29 for days in February}
 
-Thus:
 
-	static int days_in_year(int year)
-	{
-		return is_leap(year) ? 366 : 365;
-	}
+Regards,
 
-So the number of days in a month is:
+> On Wed, 2004-06-02 at 03:17, Christian Beckel wrote:
+> > oops, I forgot to test if there is a leap or not, the first line should be:
+> > 
+> > if (i == 2)
+> > 	days = (i % 4 != 0) ? 28 : 29;
+> > 
+> > 
+> > > Hi,
+> > >
+> > > there are several possibilities to compute the number of days in a month or
+> > > if there is a leap or not.
+> > >
+> > > if (i == 2)
+> > > 	days = 28;
+> > > else
+> > > 	days = 31 - ( (i != 4 || i != 6 || i != 9 || i != 11) ? 1 : 0 );
+> > >
+> > > I think there is no simpler way, because the numbers of months are
+> > > unregular.
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
 
-	static int days_in_month(int year, int month)
-	{
-		static const int days[2][12] = {
-			{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-			{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-		};
-
-		return days[is_leap(year)][month-1];
-	}
-
-As for the relationship between days of the year and the days of the
-week, note that the 400-year cycle for leap years is an exact number
-of weeks (400 years == 400 * 365 + 97 == 146097 days == 20871 * 7
-days), and that 2000-01-01 was a Saturday, so:
-
-	int year_start(int year)
-	{
-		int day = 6;	/* Saturday */
-		int i;
-
-		year %= 400;
-
-		for (i = 0; i < year; i++)
-			day += days_in_year(i);
-
-		return day % 7;
-	}
-
-This could easily be optimised (e.g. using a lookup table), but the
-above is all of the information required to produce a calendar for any
-given year.
-
-[Unless, that is, you want it to work for years prior to the adoption
-of the Gregorian calendar; note the output from "cal 1752".]
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+wwp
