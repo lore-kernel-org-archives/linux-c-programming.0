@@ -1,96 +1,120 @@
-From: "Chandan Chopra" <chandan.chopra@patni.com>
-Subject: RE: Memory Allocation Problem
-Date: Wed, 15 Sep 2004 12:08:08 +0530
+From: sheetal fegde <sheetalfegde@yahoo.com>
+Subject: RedHat Itanium 64 GCC 3.2.3 linking problems
+Date: Wed, 15 Sep 2004 01:33:40 -0700 (PDT)
 Sender: gcc-help-owner@gcc.gnu.org
-Message-ID: <000201c49aee$90a80180$c55ba8c0@patni.com>
-References: <ci8ne4$j4k$1@sea.gmane.org>
-Reply-To: <chandan.chopra@patni.com>
+Message-ID: <20040915083340.19367.qmail@web52710.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------=_1095230136-9496-72"
-Return-path: <gcc-help-return-17893-gcc-help=m.gmane.org@gcc.gnu.org>
+Return-path: <gcc-help-return-17896-gcc-help=m.gmane.org@gcc.gnu.org>
 List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
 List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
 List-Post: <mailto:gcc-help@gcc.gnu.org>
 List-Help: <mailto:gcc-help-help@gcc.gnu.org>
-In-Reply-To: <ci8ne4$j4k$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: 'Suciu Flavius' <suciuflavius@tiscali.de>, linux-c-programming@vger.kernel.org
-Cc: gcc-help@gcc.gnu.org
-
-This is a multi-part message in MIME format...
-
-------------=_1095230136-9496-72
-Content-Type: text/plain;
-	charset="US-ASCII"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+To: gcc-help@gcc.gnu.org
+Cc: linux-c-programming@vger.kernel.org
+
+Hi,
+
+I am facing some problem while linking using gcc-3.2.3
+
+Machine Information
+RedHat  IA64
+Linux  2.4.21-4.EL #1 SMP Fri Oct 3 17:29:39 EDT 2003
+ia64 ia64 ia64 GNU/Linux
+
+g++/gcc information
+> gcc -v
+ Reading specs from
+/usr/lib/gcc-lib/ia64-redhat-linux/3.2.3/specs
+ Configured with: ../configure --prefix=/usr
+--mandir=/usr/share/man --infodir=/usr/share/info
+--enable-shared --enable-threads=posix
+--disable-checking --with-system-zlib --
+enable-__cxa_atexit --host=ia64-redhat-linux
+ Thread model: posix
+ gcc version 3.2.3 20030502 (Red Hat Linux 3.2.3-20)
+
+>g++- v
+Reading specs from
+/usr/lib/gcc-lib/ia64-redhat-linux/3.2.3/specs
+Configured with: ../configure --prefix=/usr
+--mandir=/usr/share/man --infodir=/usr/share/info
+--enable-shared --enable-threads=posix
+--disable-checking --with-system-zlib
+--enable-__cxa_atexit --host=ia64-redhat-linux
+Thread model: posix
+gcc version 3.2.3 20030502 (Red Hat Linux 3.2.3-20)
 
 
-Or workaround could be you make declaration of 'a' global.
+I am trying to build some application with oracle oci,
+while linking I am getting following errors.
+I feel there is no worng with my code as it works with
+gcc 2.96, when i try with 3.2.3 it gives following
+problems..
 
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Suciu
-Flavius
-Sent: Wednesday, September 15, 2004 9:06 PM
-To: linux-c-programming@vger.kernel.org
-Cc: gcc-help@gcc.gnu.org
-Subject: Re: Memory Allocation Problem
+gcc  -c -g -Wno-deprecated -DROGUE6 -DRW_MLS_LIBRARY
+-DUSE_SOURCEPRO
+-D_RWCONFIG_LINUXGCC323K2421DEBUG_NtvSTL_NoThr_64bit_sd
+-DFULL_ORACLE8OCI -DOBT -DREMOTE_HOST_BACKUP -DLINUX
+-DDEBUGIO -D_GNU_SOURCE -D__LP64__   -I../oracle/mml 
+-o /usr/oracle/OBTBld/obj/obacktrack/lib/mmlIO.o 
+../oracle/mml/mmlIO.c 
+
+DtCSharedArchive
+/usr/oracle/OBTBld/obj/obacktrack/lib/libobk.so 
+
+#	g++  -Xlinker -G  -static -g  -o 
+/usr/oracle/OBTBld/obj/obacktrack/lib/libobk.so 
+/usr/oracle/OBTBld/obj/obacktrack/lib/mml.o
+/usr/oracle/OBTBld/obj/obacktrack/lib/mmlChlCommn.o
+/usr/oracle/OBTBld/obj/obacktrack/lib/mmlIO.o  ;
+	g++  -Xlinker -G   -o 
+/usr/oracle/OBTBld/obj/obacktrack/lib/libobk.so 
+/usr/oracle/OBTBld/obj/obacktrack/lib/mml.o
+/usr/oracle/OBTBld/obj/obacktrack/lib/mmlChlCommn.o
+/usr/oracle/OBTBld/obj/obacktrack/lib/mmlIO.o  ;
+
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0x31): In
+function `__libc_csu_init':
+: undefined reference to `__init_array_start'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0x32): In
+function `__libc_csu_init':
+: undefined reference to `__init_array_end'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0x40): In
+function `__libc_csu_init':
+: undefined reference to `__init_array_start'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0x41): In
+function `__libc_csu_init':
+: undefined reference to `__init_array_end'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0xd1): In
+function `__libc_csu_fini':
+: undefined reference to `__fini_array_start'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0xe0): In
+function `__libc_csu_fini':
+: undefined reference to `__fini_array_end'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0xf0): In
+function `__libc_csu_fini':
+: undefined reference to `__fini_array_start'
+/usr/lib/libc_nonshared.a(elf-init.oS)(.text+0xf1): In
+function `__libc_csu_fini':
+: undefined reference to `__fini_array_end'
+/usr/bin/ld:
+/usr/oracle/OBTBld/obj/obacktrack/lib/libobk.so:
+hidden symbol `__fini_array_end' isn't defined
+collect2: ld returned 1 exit status
+
+What is going wrong? I feel this some problem in
+glibc.
+can somebody help me on this.
+Thanks,
+Sheetal.
 
 
-1450 * 1450 * 8 = 16 MEGA!!!!!!!!!
-So, you need a 16 mega of stack which I think is a little too much  ;)
 
-The solution is to malloc() but check if you have 16 mega of ram ;)
-
-
-Ankit Jain wrote:
->       1 #include <stdio.h>
->       2 int main()
->       3 {
->       4    double a[1450][1450];
->       5
->       6    a[1449][0] = 999;
->       7    printf( "%lf\n", a[1449][0] );
->       8    return 1;
->       9 }
->
->
-> it gives segementation fault
->
-> if i use malloc also it gives wrong result
->
-> what to do?
->
-> ankit
->
-> ________________________________________________________________________
-> Yahoo! Messenger - Communicate instantly..."Ping"
-> your friends today! Download Messenger Now
-> http://uk.messenger.yahoo.com/download/index.html
->
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-
-http://www.patni.com
-World-Wide Partnerships. World-Class Solutions.
-_____________________________________________________________________
-
-This e-mail message may contain proprietary, confidential or legally
-privileged information for the sole use of the person or entity to
-whom this message was originally addressed. Any review, e-transmission
-dissemination or other use of or taking of any action in reliance upon
-this information by persons or entities other than the intended
-recipient is prohibited. If you have received this e-mail in error
-kindly delete  this e-mail from your records. If it appears that this
-mail has been forwarded to you without proper authority, please notify
-us immediately at netadmin@patni.com and delete this mail. 
-_____________________________________________________________________
-
-------------=_1095230136-9496-72--
+		
+__________________________________
+Do you Yahoo!?
+Yahoo! Mail - 50x more storage than other providers!
+http://promotions.yahoo.com/new_mail
