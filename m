@@ -1,60 +1,60 @@
-From: Shanks <mshanks79@yahoo.co.in>
+From: "Govind Raghuram" <Govind_Raghuram@Sifycorp.com>
 Subject: Re: strange gcc warning
-Date: Mon, 13 Jan 2003 22:00:31 -0800 (PST)
+Date: Tue, 14 Jan 2003 12:31:41 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030114060031.7262.qmail@web8005.mail.in.yahoo.com>
-References: <20030113182613.GA11191@cam.ac.uk>
+Message-ID: <65256CAE.00269D5F.00@Sifycorp.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030113182613.GA11191@cam.ac.uk>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Steven Smith <sos22@cam.ac.uk>
-Cc: linux-c-programming@vger.kernel.org
+To: Shanks <mshanks79@yahoo.co.in>
+Cc: Elias Athanasopoulos <eathan@otenet.gr>, linux-c-programming@vger.kernel.org
 
-Thanks Steven for the clean and detailed explanation.
-It all makes sense now... 
 
--Shanks.
 
---- Steven Smith <sos22@cam.ac.uk> wrote:
-> > void
+Your definition will remain local as long as you dont include errno.h
+
+
+
+                                              Placed At :
+
+
+Shanks <mshanks79@yahoo.co.in> on 01/13/2003 11:37:50 PM
+
+To:   Elias Athanasopoulos <eathan@otenet.gr>
+cc:   linux-c-programming@vger.kernel.org (bcc: Govind Raghuram/Satyam)
+
+Subject:  Re: strange gcc warning
+
+
+
+
+--- Elias Athanasopoulos <eathan@otenet.gr> wrote:
+> On Mon, Jan 13, 2003 at 09:57:55AM -0800, Shanks wrote:
 > > my_print(int errno)
-> Defining a parameter to shadow a global variable is always a bad idea,
-> but it's an especially bad idea for errno. In multi-threaded programs,
-> and programs compiled with a certain set of flags, errno is actually a
-> preprocessor macro.  Usually, when using glibc, errno expands to
-> (*__errno_location()), and so your prototype expands to void
-> my_print(int (*__errno_location())).  gcc interprets this as a pointer
-> to a function returning an int pointer, which was probably not what
-> you expected.
-> 
-> > {
-> >     printf("ERRNO: %d\n", errno);
-> Now, this expands to ``printf("ERRNO: %d\n", (*__errno_location()));".
-> __errno_location is a function pointer returning an int *, and so
-> this calls the first argument, and then dereferences the returned
-> value.
-> 
-> > }
-> > 
-> > int
-> > main()
-> > {
-> >     int a = 10;
-> >     errno = 0;
-> >     my_print(a);
-> a is now implicitly converted to a pointer to function returning int
-> *.  When the code is run, my_print tries to call a function at address
-> 10 in memory, and crashes.
-> 
-> > }
-> 
-> Steven Smith,
-> sos22@cam.ac.uk.
+>
+> errno is defined in errno.h. You shouldn't use a new variable with this
+> name.
+Yes i am aware of errno being defined in errno.h
+But isn't my definition local to my func.
+Any technical reason why i am getting such a gdb output(pasted in prev mail)
+
+> Elias
+-Shanks
 
 __________________________________________________
 Do you Yahoo!?
 Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
 http://mailplus.yahoo.com
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming"
+in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+
+
