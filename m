@@ -1,76 +1,87 @@
-From: "Charlie Gordon" <gmane@chqrlie.org>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: complex variable
-Date: Mon, 13 Sep 2004 21:32:06 +0200
+Date: Mon, 13 Sep 2004 23:57:42 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <ci4sid$kgu$1@sea.gmane.org>
-References: <E3E30069B061524E90BCEE4417E30661138525@monm207.monmouth.army.mil> <chml6d$kri$1@sea.gmane.org> <20040908120658.GZ6985@lug-owl.de> <chnv2v$j6n$1@sea.gmane.org> <20040910200519.GJ19967@lug-owl.de>
+Message-ID: <20040913215742.GZ19967@lug-owl.de>
+References: <E3E30069B061524E90BCEE4417E30661138525@monm207.monmouth.army.mil> <chml6d$kri$1@sea.gmane.org> <20040908120658.GZ6985@lug-owl.de> <chnv2v$j6n$1@sea.gmane.org> <20040910200519.GJ19967@lug-owl.de> <ci4sid$kgu$1@sea.gmane.org>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="ZNveOOYjKturpEFp"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <ci4sid$kgu$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-"Jan-Benedict Glaw" <jbglaw@lug-owl.de> wrote in message
-news:20040910200519.GJ19967@lug-owl.de...
 
-> Right, too. Here's how it ought to work:
+--ZNveOOYjKturpEFp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
------------------------------------------------------------
-#include <complex.h>
-#include <stdio.h>
-#include <stdlib.h>
+On Mon, 2004-09-13 21:32:06 +0200, Charlie Gordon <gmane@chqrlie.org>
+wrote in message <ci4sid$kgu$1@sea.gmane.org>:
+> "Jan-Benedict Glaw" <jbglaw@lug-owl.de> wrote in message
+> news:20040910200519.GJ19967@lug-owl.de...
+[...]
+> > So you basically use creal() and cimag() to access the two numbers.
+>=20
+> Well it is still too vague :
+> - what is the floating type of complex variable co ?
 
-int
-main (int argc, char *argv[])
-{
- complex co;
+Not specified, I guess GCC "assumes" something there. But that doesn't
+seem (from my reading) to match with C99 rules.
 
- co = 1.3 + I * 2.9;
- printf ("%lf %lf\n", creal (co), cimag (co));
+> - You did not specify float, double or long double, so what is the defaul=
+t ?
 
- return EXIT_SUCCESS;
-}
------------------------------------------------------------
+Hmmm. You're probably right. I've digget into C99, but to be honest, my
+reading is that a simple "complex" (without a real floating type) is
+just illegal...
 
-> So you basically use creal() and cimag() to access the two numbers.
+> - Reading tens of pages from C99 leaves that question open (!)
 
-Well it is still too vague :
-- what is the floating type of complex variable co ?
-- You did not specify float, double or long double, so what is the default ?
-- Reading tens of pages from C99 leaves that question open (!)
-- The creal and cimag macros apply to all 3 complex types.
-- if it is float, then real and imaginary parts will be converted to double
-when passed to printf.
-- If it is long double, they will be passed as such, but the format
-specifier will be incorrect.
-- Why do you use %lf ? %lf means double in fscanf, it is meaningless in
-printf.
-- If you meant long double, you should specify %Lf.
+Right. At least from my point of view :-)
 
-Consequently, I think it should read:
+> - The creal and cimag macros apply to all 3 complex types.
 
-double complex co; ...
-printf ("%f %f\n", creal(co), cimag(co));
+Well, there has been some type-conversion in between :-)
+-----------
+7.3.9.2 The cimag functions
+Sysnopsis
+	#include <complex.h>
+	double cimag(double complex z);
+	float cimagf(float complex z);
+	long double cimagl(long double complex z);
+-----------
 
-or
+> PS: I have always hated floating point stuff ;-)
 
-complex co;
-printf ("%f %f\n", (double)creal(co), (double)cimag(co));
+/me too, but sometimes, it helps to achieve more correct numbers :-)
 
-just to be safe.
+MfG, JBG
 
-C is not very user friendly for floating point stuff.  A lot of confusion
-arises from historical lack of consistency in the libraries.  A lot of
-newbie C programmers will naturally use the float type instead of double.
-Yet it is both less precise than even 32 bit ints, less efficient because of
-the extra conversions, and slower on today's processors...  Aside from hard
-core SIMD and 3D afficionados, that will hand code their stuff in assembly,
-'float' is pretty much obsolete.
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
 
-Chqrlie.
+--ZNveOOYjKturpEFp
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
-PS: I have always hated floating point stuff ;-)
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
 
+iD8DBQFBRhfWHb1edYOZ4bsRAsSUAJsG9PAjkXLeA5fjIp95DfI536d8SwCfV8Js
+eQuC3hGpQL2ME/cdzDqTlXo=
+=yE6z
+-----END PGP SIGNATURE-----
 
-
+--ZNveOOYjKturpEFp--
