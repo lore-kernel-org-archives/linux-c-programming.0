@@ -1,50 +1,87 @@
-From: <Sreecharan.Sivadevuni@nokia.com>
-Subject: RE: Splitter
-Date: Tue, 23 Mar 2004 17:19:16 +0800
+From: syedk <syedk@intotoinc.com>
+Subject: Re: Splitter
+Date: 23 Mar 2004 17:08:20 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <79A2DB53BC51BD448F0D19A86FB1DB63030FC529@siebe002.apac.nokia.com>
+Message-ID: <1080041902.7454.54.camel@one.test.com>
+References: <Pine.LNX.4.44.0403231456450.8971-100000@csews41.cse.iitk.ac.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
+In-Reply-To: <Pine.LNX.4.44.0403231456450.8971-100000@csews41.cse.iitk.ac.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming-owner@vger.kernel.org
-Cc: linux-c-programming@vger.kernel.org
+To: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
+Cc: Jad Saklawi <Jad@Saklawi.info>, linux-c-programming@vger.kernel.org
 
-hi,
-         Just add a module to the running kernel and use the firewall 
-registration mechanism. With that you will get the packet in your input 
-function and once you have the packet you can do anything with it right ?
-its very simple u need not change the kernel code at all; all u need to 
-do is load a module into kernel.
+you can look into dev_queue_xmit(sk_buff) function in net/core/dev.c
 
-regards
-Sreecharan.S
+ sk_buff->dev  has the information abt the device (can be any interface
+registered using register_netdevice() for that matter)...
 
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]
-Sent: Tuesday, March 23, 2004 12:12 AM
-To: Glynn Clements
-Cc: linux-c-programming@vger.kernel.org
-Subject: Re: Splitter
+dev_queue_xmit just transfers the sk_buff for the device for
+delivery....
+
+I feel the best way to solve your problem would be use NF_IP_PRE_ROUTING
+hook of netfilter by which u get all packets ( even before any routing
+decisions has been made : that is what u wanted RIGHT??) and then call
+dev_queue_xmit function by setting the sk_buff->dev as whatever
+interface u wish to redirect....
+
+I hope this would help....
+
+Best regards
+syed sk
 
 
+On Tue, 2004-03-23 at 15:09, K.Anantha Kiran wrote:
+> Hi,
+>  Thanks a lot for ur guidance.
+>  I am following the same files(i mean NET directory).But i am facing 
+> following problem.
+>  " where the output interface variable (rtable->key->oif) is changed to 
+> the index of interface through which packet has to go out. In the function 
+> /net/route.c ip_route_input_slow() they are setting it to 0 what is it 
+> mean.
+> 
+> 	When a packet has to be put on to an interface what are the fields 
+> will it use to decide that( in skbuff structure).
+> 
+> Thanks 
+> regards,
+> K. Anantha kiran
+> 
+> 
+> On Mon, 22 Mar 2004, Jad Saklawi wrote:
+> 
+> > Date: Mon, 22 Mar 2004 09:41:22 +0200
+> > From: Jad Saklawi <Jad@Saklawi.info>
+> > To: K.Anantha Kiran <ananth@cse.iitk.ac.in>
+> > Cc: linux-c-programming@vger.kernel.org
+> > Subject: Re: Splitter
+> > 
+> > K.Anantha Kiran wrote:
+> > 
+> > >Hi,
+> > > Thanks for ur suggetsion.
+> > > But we are not clear about the sentece "re invent the loop".
+> > > Can u give clear explanantion about the "iptables" solution.
+> > > IMP: Our machine should not work like a router.I should be able to decide 
+> > >to which interface i want to redirect to , on the fly for each packet 
+> > >using a HASH like functions.
+> > >  
+> > >
+> >  It`s your choice then, check out net/core/dev.c net/core/dv.c 
+> > net/ipv4/tcp_input.c net/ipv4/tcp_output.c net/ethernet/eth.c You have 
+> > to take a look at the whole net directory and modify accordingly. I 
+> > doubt you will be able to do any thing. Any way good luck!!!
+> > 
+> > Greets,
+> > Jad
+> > 
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Hi,
-  I am giving some what better description of my problem.I want to modify 
-the Linux code for " REDIRECTING PACKETS REACHING ONE INTERFACE , AS IT IS 
-TO ANOTHER INTERFACE OF MY INTEREST OUT OF ALL AVAILABLE 
- INTERFACES".Note PACKETS here should not be allowed to go beyond IP 
-layer .That means System should not do any changes to the packet 
-before outputting.What part of CODE , do i need to concentrate on.
 
- Thanks in advance,
- K.AnanthaKiran
- 
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
