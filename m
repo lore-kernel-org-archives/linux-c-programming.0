@@ -1,25 +1,58 @@
-From: Ankit Jain <ankitjain1580@yahoo.com>
-Subject: uint8_t  mean8[8] __attribute__ ((aligned (32))), *mp;
-Date: Fri, 26 Nov 2004 06:18:31 +0000 (GMT)
-Message-ID: <20041126061831.5905.qmail@web52903.mail.yahoo.com>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: pthread stack limit.
+Date: Thu, 25 Nov 2004 11:48:36 +0100
+Message-ID: <20041125104836.GE2067@lug-owl.de>
+References: <6eee1c404112423345c1d792f@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="m4E4Spob7u7JiHeu"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <6eee1c404112423345c1d792f@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux prg <linux-c-programming@vger.kernel.org>
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-if somebody can tell me what attribute is aligned here
 
- uint8_t  mean8[8] __attribute__ ((aligned (32))),
-*mp;
+--m4E4Spob7u7JiHeu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks
+On Thu, 2004-11-25 13:04:01 +0530, Vadiraj <vadiraj.cs@gmail.com>
+wrote in message <6eee1c404112423345c1d792f@mail.gmail.com>:
 
-ankit jain
+>   Does any one has idea on how this thread stack limit is decided
+> upon. I see different max stack limit for different pthread
+> implementation. Is there a standard that is followed in deciding on
+> thread stack size and number of threads?
 
-________________________________________________________________________
-Yahoo! Messenger - Communicate instantly..."Ping" 
-your friends today! Download Messenger Now 
-http://uk.messenger.yahoo.com/download/index.html
+I guess pthread_attr_getstacksize() and pthread_attr_setstacksize()
+can be used for getting/setting the size...
+
+MfG, JBG
+
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
+
+--m4E4Spob7u7JiHeu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQFBpbiEHb1edYOZ4bsRAnkUAKCSQlu9JB8a/4jDrUUuvX/EZYsMEACeIOZ3
+OzbpY1J9O4nYRZDW8Rsyh08=
+=HuZM
+-----END PGP SIGNATURE-----
+
+--m4E4Spob7u7JiHeu--
