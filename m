@@ -1,49 +1,58 @@
-From: Vadiraj <vadiraj.cs@gmail.com>
-Subject: Re: deletion in singly linked list--pls resend replies
-Date: Thu, 25 Nov 2004 12:42:35 +0530
-Message-ID: <6eee1c40411242312610a6734@mail.gmail.com>
-References: <5959EA4638D8734599AB75EAAFBB6FEFA471DD@mtv01ex04.mindtree.com>
-	 <1101203754.3786.54.camel@myLinux> <1101268688.3786.50.camel@myLinux>
-Reply-To: Vadiraj <vadiraj.cs@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: usage of WIN_SMART
+Date: Thu, 25 Nov 2004 07:08:32 +0000
+Message-ID: <16805.34033.574.53616@cerise.gclements.plus.com>
+References: <1101293397.3787.34.camel@myLinux>
+	<20041124121036.GQ2067@lug-owl.de>
+	<1101356823.3795.9.camel@myLinux>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1101268688.3786.50.camel@myLinux>
+In-Reply-To: <1101356823.3795.9.camel@myLinux>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Cc: Jan-Benedict Glaw <jbglaw@lug-owl.de>, Linux C Programming <linux-c-programming@vger.kernel.org>
 
-On Wed, 24 Nov 2004 09:28:08 +0530, Jagadeesh Bhaskar P
-<jbhaskar@hclinsys.com> wrote:
-> On Tue, 2004-11-23 at 15:05, Bakki Srinivas wrote:
-> > Until and unless u free the memory obtained by malloc,the address space is
-> > still in the process address space.
 
- I guess the address space is still in our process address space with
-in the free pool.
-Further request to malloc() with <= freed size is picked up from the
-free pool rather from the system...
+Jagadeesh Bhaskar P wrote:
 
- Please, correct me if I'm wrong
-
+> I meant how to use WIN_SMART in the code? Not its uses or advantages!!
 > 
-> Even if i do free it, where will the address A->next point to. Since it
-> is not inside the process address space, wont that segfault??
- 
-> NB: My mail server was down yesterday :-(. If anyone of u had sent any
-> replies, pls do resend it.
-> 
-> --
-> Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+> Can someone help me with that??
 
+Look at the source code of an existing program which uses it, such as
+those to which Jan-Benedict referred.
+
+Also, within a few clicks of the linux-ide.org URL, I found:
+
+	http://www.linux-ide.org/smart/smartmontools-5.0/
+
+which says:
+
+  == REFERENCES ==
+  If you need help in understanding the output of smartctl, a good place
+  to start is to read Section 8.41 of the AT Attachment with Packet
+  Interface-5 (ATA/ATAPI-5) specification.  This documents the
+  S.M.A.R.T. functionality which the smartmontools utilities provide
+  access to.  You can find Revision 1 of this document at:
+  http://www.t13.org/project/d1321r1c.pdf
+  
+  Future versions of the specifications (ATA/ATAPI-6 and ATA/ATAPI-7)
+  can be obtained from:
+  http://www.t13.org/#FTP_site
+  Later revisions (2, 3) of the ATA/ATAPI-5 specification are also
+  available there.
+  
+  The functioning of S.M.A.R.T. is also described by the SFF-8035i
+  revision 2 specification.  This is a publication of the Small Form
+  Factors Committee, and can be obtained from SFF Committee, 14426 Black
+  Walnut Ct., Saratoga, CA 95070, USA.  
+  SFF FaxAccess: (408) 741-1600
+  Ph: (408) 867-6630
+  Fax: (408) 867-2115
+  E-Mail: 250-1752@mcimail.com.
 
 -- 
-cheers,
-Vadi
+Glynn Clements <glynn@gclements.plus.com>
