@@ -1,22 +1,27 @@
-From: jnf <xjnfx@doityourself.com>
-Subject: c debugging w/ gdb revisited
-Date: Thu, 13 Jun 2002 23:52:35 -0700 (PDT)
+From: Billy O'Connor <billy@oconnoronline.net>
+Subject: Re: c debugging w/ gdb revisited
+Date: Fri, 14 Jun 2002 02:21:38 -0400 (EDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020614065235.010E336F9@sitemail.everyone.net>
-Reply-To: xjnfx@doityourself.com
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <20020614062138.240CD89@dps7.oconnoronline.net>
+References: <20020614065235.010E336F9@sitemail.everyone.net>
+Reply-To: billy@oconnoronline.net
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <20020614065235.010E336F9@sitemail.everyone.net>
+	(xjnfx@doityourself.com)
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: xjnfx@doityourself.com
+Cc: linux-c-programming@vger.kernel.org
 
-just a quick question, does anyone know if its possible to set a break/watchpoint in gdb when a register points to a certain location?
-i own the gdb manual, and have been playing in it for a bit and just cant seem to figure it out, is it possible?
+   just a quick question, does anyone know if its possible to set a break/watchpoint in gdb when a register points to a certain location?
+   i own the gdb manual, and have been playing in it for a bit and just cant seem to figure it out, is it possible?
 
-_____________________________________________________________
-Sign up for FREE email from DoItYourself.com at http://doityourself.com
 
-_____________________________________________________________
-Promote your group and strengthen ties to your members with email@yourgroup.org by Everyone.net  http://www.everyone.net/?btn=tag
+I don't believe that could be done at all, the machine would have to
+stop whenever it mov'd a value to the register so the debugger could
+examine it.  I don't think that's possible on Intel machines, anyway.
+
+--
+Billy O'Connor
