@@ -1,60 +1,82 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: linux-c-programming-owner@vger.kernel.org
 Subject: Re: script in c
-Date: Mon, 8 Nov 2004 07:48:53 +0100
-Message-ID: <20041108064852.GE10443@lug-owl.de>
-References: <50C05B7AA7D6924FB5E384EF14BC647B495D93@inba1mx2.corp.emc.com> <418F12F9.6070701@hq.ntsp.nec.co.jp>
+Date: Sun, 7 Nov 2004 22:50:24 -0800 (PST)
+Message-ID: <20041108065024.35087.qmail@web14001.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="7CZp05NP8/gJM8Cl"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <418F12F9.6070701@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 To: linux-c-programming@vger.kernel.org
 
+--- kaushal <kaushal@rocsys.com> wrote:
 
---7CZp05NP8/gJM8Cl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hello  all,
 
-On Mon, 2004-11-08 14:32:25 +0800, Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-wrote in message <418F12F9.6070701@hq.ntsp.nec.co.jp>:
+Hello,
 
-[Calling a script from within a C program]
+>            Is there a way by which I can exec a
+> shell script without
+> using the "system()" call?
+> Thanks in advance.
 
-> or the exec functions =3D)
+You can use exec*() family for this purpose.
 
-Which is generally preferred over system().  system() is a horrible
-mess: you face a hard time to properly supply command line arguments
-(think about arguments with tabs, spaces, CR or LF in them...).
+man exec
 
-Just always use the exec functions.
+Here is a little sample:
 
-MfG, JBG
+[mbaris@zion:/tmp/code_temp]$ cat exec.c
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+int main(void)
+{
+  if (execl("/bin/sh", "-c", "./script.sh", NULL)=3D=3D-1)
+  {
+    printf("ERROR: %s\n", strerror(errno));
+  }
 
---7CZp05NP8/gJM8Cl
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+  return 0;
+}
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
 
-iD8DBQFBjxbTHb1edYOZ4bsRAuPVAJ0VChjyOzv7/PwcNrd/y0uebCglvwCeKWQ3
-QlD2Q7+nLjnGf+rBDIRAR5U=
-=urF3
------END PGP SIGNATURE-----
+[mbaris@zion:/tmp/code_temp]$ cat script.sh
+#!/bin/bash
 
---7CZp05NP8/gJM8Cl--
+echo "Fired!";
+exit;
+
+[mbaris@zion:/tmp/code_temp]$ gcc -o exec exec.c
+[mbaris@zion:/tmp/code_temp]$ ./exec
+Fired!
+[mbaris@zion:/tmp/code_temp]$
+
+> =20
+> cheers-
+> kaushal.
+>=20
+
+
+=3D=3D=3D=3D=3D
+M.Bar=FD=FE Demiray
+
+DOS: n., A small annoying boot virus that causes random=20
+spontaneous system crashes, usually just before saving a massive project. E=
+asily cured by UNIX.  See also MS-DOS, IBM-DOS, DR-DOS.
+
+
+	=09
+__________________________________=20
+Do you Yahoo!?=20
+Check out the new Yahoo! Front Page.=20
+www.yahoo.com=20
+=20
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programmi=
+ng" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
