@@ -1,58 +1,33 @@
-From: "John T. Williams" <jowillia@vt.edu>
-Subject: Re: New (sort of) to Linux programming
-Date: Tue, 2 Sep 2003 11:05:23 -0400
+From: "Mariano Moreyra" <moremari@aca.org.ar>
+Subject: Question!
+Date: Wed, 3 Sep 2003 15:19:44 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001b01c37163$a24dbb10$ed64a8c0@descartes>
-References: <Pine.A41.4.20.0309020812580.53654-100000@delfin.unideb.hu>
-Reply-To: "John T. Williams" <jtwilliams@vt.edu>
+Message-ID: <000601c37247$f40f6540$0b04a8c0@aca.org.ar>
+Reply-To: <mariano_moreyra@aca.org.ar>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "John T. Williams" <jtwilliams@vt.edu>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-I'm not going to make the claim that this is anywhere neer complete, but its
-at least the idea for which you were looking.
+Hi!!
+First...I'd like to know if there is any kind of digest on this list to see
+old submited messages.
 
-http://www.linux-directory.com/links/pages/Programming/Libraries/
+Now...I have a little problem.
+I have a process that is listening for incoming connections on a socket.
+That process waits for a command and then
+forks a child to run a bash script.
+The problems is:
+	- When the bash script runs the safe_mysql script to run MySql engine, it's
+like the child process never ends.
+	  And because of that, the parent can't close the connection with the
+client socket.
+	- But if the bash script doesn't run the safe_mysql script...the child
+process dies successfully and everything end
+	  Ok
 
-
------ Original Message ----- 
-From: "Fekete Gabor" <feketga@delfin.unideb.hu>
-To: <unlisted-recipients:>; <no To-header on input>
-Cc: "linux-c-programming" <linux-c-programming@vger.kernel.org>
-Sent: Tuesday, September 02, 2003 3:09 AM
-Subject: Re: New (sort of) to Linux programming
-
-
->
->
-> On Tue, 2 Sep 2003, Thomas Williams wrote:
->
-> > calls. Is there an equivalent in Linux? I realize that there are a lot
-of
-> > libraries and packages and that not everything is going to be on one
-site,
-> > but if there are resources for looking up the calls for a particular
-library,
-> > it would really be helpful.
-> >
->
-> i don't think so that there is this kind of site out there.
-> but if you know which library you want to use then just go to
-> the library's web site and i'm almost sure there'll be some docs
-> about its usage or just simpy install the development packages because
-> sometimes they have docs too.
-> here are some links on programming under linux :
->
-> http://leapster.org/linoleum/
-> http://www.advancedlinuxprogramming.com/
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Sorry about my english, but I hope that I made my self clear....
+Bye!
 
