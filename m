@@ -1,39 +1,155 @@
-From: Chuck Winters <cwinters@atl.lmco.com>
-Subject: Asynchronous I/O
-Date: Thu, 23 May 2002 20:20:46 -0400
+From: Thomas Ackermann <Thomas.Ackermann@eWave.at>
+Subject: having probs with files > 2G
+Date: Fri, 24 May 2002 16:41:23 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020523202046.A25509@atl.lmco.com>
+Message-ID: <3CEE5113.1000702@eWave.at>
 Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------050600060602040907040400"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+This is a multi-part message in MIME format.
+--------------050600060602040907040400
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I have been messing around with Asynchronous I/O for a couple of days
-and I have a couple of questions.  First, I am setting my own signal(SIGUSR1)
-to be fired instead of SIGIO.  That means I have to use the F_SETSIG fcntl.
-Next, I am also setting SA_SIGINFO so that I get a little more info with
-the signal.  Now the questions:
+hi!
+i hope i'm not off topic with this, but, i'having problems with some 
+split-like program i'm writing at the moment.
 
-	1)  Using this combination of F_SETSIG and SA_SIGINFO, I am told(by the man
-	    page) that when the signal is fired, the file(socket in my case) descriptor
-			is placed in the si_fd field of the siginfo_t structure.  Well, when
-			my registered function is run,  I check that the si_fd is the socket I am
-			using to communicate, and also that the signal in si_signo is the signal
-			I am listening for.  Good.  Now what happens is that recv blocks!! Can 
-			anyone tell me why??
+when opening files > 2GB the program freezes when data is read from the 
+file the first time.
+had it already working before with a buffer size of (char)1 before but 
+that went really slow..
 
-	2)  I also wrote 2 little test programs which just created a connection between
-	    them over localhost.  Then set the Asynchronous I/O on the reader program.
-			And the writer program the user can enter data and it shows up in the 
-			reader terminal(big deal).  Now with the code I am writing for real, I am
-			running into the above problem(1).  Now, can the F_SETSIG/F_SETOWN/FASYNC
-			be set *after* the connection is established, or is this behaviour 
-			undefined?  The little test programs worked ok with that setup.  Is this
-			just a fluke? 
+source code is attached, please help..
 
-I thank you all for your time.
-Chuck Winters
+thx, thomas
+
+--------------050600060602040907040400
+Content-Type: text/plain;
+ name="asplit.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="asplit.c"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <string.h>
+
+void usage (char *pn)
+{
+	printf("\
+%s - split INPUT file into a piece of\n\
+SIZE1 bytes and remaining pieces of SIZE2\n\n\
+Usage: %s [SIZE1 SIZE2 INPUT]\n"
+			,pn,pn);
+	exit(0);
+}
+
+int main (int argc, char *argv[] )
+{
+	char *progname;
+
+	int fdin, fdout;
+	char *buf;
+
+	char *file;
+	char *fileout;
+
+	int ac, bc;
+	int fc = 0;
+
+	int bsize, bread;
+	int btotal = 0;
+
+	struct stat stat_buf;
+	struct stat64 *stat_buf64;
+
+	progname = argv[0];
+	if (argc < 4)
+		usage(progname);
+
+	file = argv[3];
+	ac = atoi(argv[1]);
+	bc = atoi(argv[2]);
+
+	fileout = malloc (sizeof(char) * (strlen(file) + 24));
+	sprintf(fileout, "%s.slice-%d", file, fc);
+
+	// open input file
+	fdin = open64(file, O_RDONLY);
+	if (fdin == -1)
+	{
+		printf("error: %s\n", strerror(errno));
+		exit(0);
+	}
+
+	// adjust read buffer to an optimal size
+	if (fstat(fdin, &stat_buf) < 0)
+	{
+		if (errno == 75)
+		{
+			if (fstat64(fdin, stat_buf64) < 0)
+			{
+				printf("error 0: %s\n", strerror(errno));
+				exit(0);
+			} else 
+				bsize = (int) stat_buf64->st_blksize;
+		}
+		else
+		{
+			printf("error 1: %s\n", strerror(errno));
+			exit(0);
+		}
+	} else 
+		bsize = (int) stat_buf.st_blksize;
+
+	buf = (char *) malloc (bsize + 1);
+	
+	// read first bytes
+	bread = read(fdin, buf, bsize);
+
+	printf("read:%d\n", bread);
+	if (bread == -1)
+	{
+		printf("error 2: %s\n", strerror(errno));
+		close(fdin);
+		exit(0);
+	}
+	
+	// if successfilly read, open output file
+	fdout = open64(fileout, O_WRONLY|O_CREAT|O_TRUNC, 0666);
+
+	// while data can be read from file
+	while (bread > 0)
+	{
+		btotal += bread;
+		write(fdout, buf, bread);
+
+		// cut off first slice
+		if ((fc > 0 && btotal >= bc) || (fc == 0 && btotal >= ac ))
+		{
+			fc++;
+			sprintf(fileout, "%s.slice-%d", file, fc);
+			close(fdout);
+			fdout = open64(fileout, O_CREAT|O_WRONLY|O_TRUNC, 0666);
+			btotal = 0;
+		}
+
+		bread = read(fdin, buf, bsize);
+	}
+	
+	close(fdout);
+	close(fdin);
+}
+
+--------------050600060602040907040400--
+
