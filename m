@@ -1,30 +1,23 @@
-From: Elias Athanasopoulos <elathan@phys.uoa.gr>
-Subject: Re: function pointers in C++
-Date: Thu, 18 Mar 2004 13:17:59 +0200
+From: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
+Subject: Splitter
+Date: Mon, 22 Mar 2004 23:31:46 +0530 (IST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040318111759.GA804@velka.phys.uoa.gr>
-References: <31E38B53D182D51195FA00508BE3A334036497A1@zwnbc004.cala.nortel.com> <20040315112849.GA774@velka.phys.uoa.gr> <16470.45491.927067.620232@cerise.nosuchdomain.co.uk>
+Message-ID: <Pine.LNX.4.44.0403222328140.3052-100000@csews32.cse.iitk.ac.in>
+References: <16341.9977.646069.322209@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <16470.45491.927067.620232@cerise.nosuchdomain.co.uk>
+In-Reply-To: <16341.9977.646069.322209@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: Glynn Clements <glynn.clements@virgin.net>
-Cc: Sandro Dangui <sdangui@nortelnetworks.com>, linux-c-programming@vger.kernel.org, Dar?o Mariani <dmarian@fi.uba.ar>
+Cc: linux-c-programming@vger.kernel.org
 
-On Tue, Mar 16, 2004 at 07:50:11AM +0000, Glynn Clements wrote:
-> If you want a fixed number of Foo's, you need one wrapper and one
-> static variable for each. If you want an arbitrary number of Foo's,
-> you're out of luck.
+Hi,
+ I want to modify the Linux code for " REDIRECTING PACKETS FROM ONE 
+INTERFACE TO ANOTHER INTERFACE OF MY INTEREST OUT OF ALL AVAILABLE 
+INTERFACES". What part of CODE , do i need to concentrate on.
 
-Thanx Glynn for the detailed answer. It seems that I am out of luck
-here, but your answer was very insightful.
+Thanks in advance,
+K.AnanthaKiran
 
-Regards,
--- 
-University of Athens			I bet the human brain 
-Physics Department				is a kludge --Marvin Minsky 
-
-	
