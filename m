@@ -1,56 +1,62 @@
-From: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
+From: canbaby <canbaby@21cn.com>
 Subject: Re: Pointer to int
-Date: Wed, 21 Jul 2004 20:14:26 -0300
+Date: Thu, 22 Jul 2004 13:21:25 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040721201426.2856ba87.lcapitulino@terra.com.br>
+Message-ID: <40FF4ED5.4020208@21cn.com>
 References: <20040721_211129_060718.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <20040721_211129_060718.r_zaca@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
 To: Ronaldo Zacarias Afonso <r_zaca@ig.com.br>
 Cc: linux-c-programming@vger.kernel.org
 
+Ronaldo Zacarias Afonso wrote:
 
- Hi Ronaldo,
-
-Em Wed, 21 Jul 2004 18:11:29 -0300
-Ronaldo Zacarias Afonso <r_zaca@ig.com.br> screveu:
-
-|   I'm iniciating in the C programming language and there are some things 
-| that I realy need to understand, so the question is: 
-| 
-|   In the code: 
-| 
-|   int i; 
-|   struct some_struct *ptr; 
-| 
-|   ptr = &some_other_struct; 
-| 
-|   i = (int) ptr; 
-| 
-| 
-|   1) Is the last sentence a valid one? 
-
- Yes, but depending on the architecture the int variable will not be enough.
-
-|   2) If it is, what is realy happening? 
-| 
-| note - It seems very stranger to me. A struct pointer being "transformed" 
-| into a int variable. 
-
- Variables address are also numbers, so you can handle it with int variables.
-
- The two most important questions here are: 1) you need to _know_ exactly what
-you are doing, and 2) the variable size.
-
- For i386 architecture, you will need a 32-bit variable to store an address, so
-for you example "unsigned int" is what we want (assuming you want all the address,
-maybe you want a half of it, or something like that).
-
- And do a +1 in a pointer is not the something to do a +1 in the `i' above.
-
--- 
-Luiz Fernando
+>  Hello everybody,=20
+>
+>  I'm iniciating in the C programming language and there are some thin=
+gs=20
+>that I realy need to understand, so the question is:=20
+>
+>  In the code:=20
+>
+>  int i;=20
+>  struct some_struct *ptr;=20
+>
+>  ptr =3D &some_other_struct;=20
+>
+>  i =3D (int) ptr;=20
+>
+>
+>  1) Is the last sentence a valid one?=20
+>  2) If it is, what is realy happening?=20
+>
+>note - It seems very stranger to me. A struct pointer being "transform=
+ed"=20
+>into a int variable.=20
+>
+>  Thanks.=20
+>
+>
+>______________________________________________________________________=
+___________
+>Quer mais velocidade?
+>S=F3 com o acesso Aditivado iG, a velocidade que voc=EA quer na hora q=
+ue voc=EA precisa.
+>Clique aqui: http://www.acessoaditivado.ig.com.br
+>
+> =20
+>
+yes,it's a validate one.
+now the var i have the the some_other_struct address value,you could=20
+reconstruct the struct like this:
+struct some_struct *newstruct =3D (struct some_struct *)i;
+then freely use the newstruct.
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
