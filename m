@@ -1,57 +1,53 @@
-From: "Yigit Can" <yigit.can@karel.com.tr>
-Subject: getprotobyname failure
-Date: Tue, 25 Feb 2003 10:57:00 +0200
+From: Mat Harris <mat.harris@genestate.com>
+Subject: writing logfile
+Date: Tue, 25 Feb 2003 10:57:40 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <014901c2dcab$dba77ba0$3002a8c0@yigitcan>
+Message-ID: <20030225105740.A31033@genestate.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-md5;
+	protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux c programming <linux-c-programming@vger.kernel.org>, linux kernel <linux-kernel@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
 
-Hello,
+--3V7upXqbjpZ4EhLz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have a problem with getprotobyname() function.
+WARNING: Newbie ALERT!!!
 
-I wrote a simple program that only uses getprotobyname function
+I am trying to write three functions to plugin to my app. They are defined=
+=20
+in log.h and are used for opening, writing to, and closing a logfile. I have
+attached log.h.
 
-I can run this program on my development machine=20
-but when I try to run this program on my basic kernel it gives me the =
-"memory fault" error.
+My questions are: How do I tell fopen to create if not there or append if
+it is? I seem to get an error either way.=20
 
-I'm using libc-2.2.5 on a powerpc 8xx development kit
-so, i'm using the same library on the host and target machine.
+And: Why does the fputs cause a segfault? Is there a better way of doing it?
+I know I do not understand types and casting very well so I may have it
+totally wrong.
 
-my development machine has celeron  type processor
-and my target board is TQM850L (has ppc_850 processor).
+Thanks
 
-I've replaced my protocols and nsswitch.conf files with host machines (my
-protocols file contians "tcp 6 TCP" line)
-and that's made no difference.
+--=20
+Mat Harris			OpenGPG Public Key ID: C37D57D9
+mat.harris@genestate.com	www.genestate.com=09
 
-what can I do?
- 
-please help,
- 
+--3V7upXqbjpZ4EhLz
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
- my program :
- 
-#include <netdb.h>
-#include <stdio.h>
- 
- int main(void){
- 
-    struct sockaddr_in addr;
-    struct protoent *protocol=3DNULL;
-    protocol=3Dgetprotobyname("tcp");
-    printf("\n RESULT : %02x \n",protocol->p_proto);
- 
-    return 0;
-}
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.6 (GNU/Linux)
+Comment: For info see http://www.gnupg.org
 
-Yigit CAN
-Karel Electronics Corp.
-yigit.can@karel.com.tr
+iD8DBQE+W0wkEsYvZsN9V9kRAoXdAJ96CScmQpB8MSJKAfy6JbmsykjfDwCguUPU
+SO3Y47NPrxFe0NWZdgXbueI=
+=wVx9
+-----END PGP SIGNATURE-----
 
+--3V7upXqbjpZ4EhLz--
