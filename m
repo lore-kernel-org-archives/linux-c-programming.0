@@ -1,72 +1,98 @@
-From: joy <gracecott@sancharnet.in>
-Subject: ioctl fails....
-Date: Sun, 16 May 2004 10:43:26 +0530
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: ioctl fails....
+Date: Sun, 16 May 2004 11:18:24 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <40A6F876.50405@sancharnet.in>
-Reply-To: gracecott@sancharnet.in, gracecott@sancharnet.in
+Message-ID: <20040516091823.GG1912@lug-owl.de>
+References: <40A6F876.50405@sancharnet.in>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="yJGMwzir+WFaxbyA"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <40A6F876.50405@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
-This is a multi-part message in MIME format.
 
---Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)
-Content-type: text/plain; charset=us-ascii; format=flowed
-Content-transfer-encoding: 7BIT
+--yJGMwzir+WFaxbyA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-     Hi,
+On Sun, 2004-05-16 10:43:26 +0530, joy <gracecott@sancharnet.in>
+wrote in message <40A6F876.50405@sancharnet.in>:
+> #include<linux/ppdev.h>
+> #include<stdlib.h>
+> #include<unistd.h>
+> #include<linux/parport.h>
 
-I'm trying to do some low level data transmission using the parallel
-port .in Debian, it is /dev/par0
-my source is attached .perror gives me "invalid argument". if I change
-the file being
-opened to say, lp0, it gives me "bad file descriptor".
-should I use ioperm() even in this case?
-and also,is it guaranteed that the parallel port is assigend par0(I have
-only one P port)?
+parport.h shouldn't be needed.
 
-Thanx in advance,
-Joy.M.Monteiro.
+> #include<time.h>
+> #include<sys/types.h>
+> #include<sys/stat.h>
+> #include<fcntl.h>
+> #include<linux/ioctl.h>
 
+For a small program I wrote, these headers were sufficient:
 
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <linux/ppdev.h>
 
+Generally, try to keep the number of needed OS dependand headers small.
+That keeps you informed about that needs to be ported if you ever need
+to go to another OS.
 
---Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)
-Content-type: text/plain; name=test.c
-Content-transfer-encoding: 7BIT
-Content-disposition: inline; filename=test.c
+> main()
+> {
+> 	int filedes;
+> 	char data=3D0xff;
+> 	struct timespec time;
+> 	filedes=3Dopen("/dev/par0",O_RDWR);
+> 	if(ioctl(filedes,PPCLAIM)=3D=3D-1)
+> 		perror("OPEN");
+> =09
+> 	if(ioctl(filedes, PPWDATA, &data)=3D=3D-1)
+> 		perror("Hi");
+> 	time.tv_sec=3D1;
+> 	time.tv_nsec=3D1000;
+> 	nanosleep(&time,NULL);
+> 	close(filedes);
+> 	return;
+> }
 
-#include<linux/ppdev.h>
-#include<stdlib.h>
-#include<unistd.h>
-#include<linux/parport.h>
-#include<time.h>
-#include<sys/types.h>
-#include<sys/stat.h>
-#include<fcntl.h>
-#include<linux/ioctl.h>
+The code itself looks okay technically (well, early exit on failure
+would be nice:), but I suspect that you're using a wrong device. Is your
+device /dev/par0 a char-dev with major=3D99 and minor=3D0? Is the ppdev
+driver loaded?
 
-main()
-{
-	int filedes;
-	char data=0xff;
-	struct timespec time;
-	filedes=open("/dev/par0",O_RDWR);
-	if(ioctl(filedes,PPCLAIM)==-1)
-		perror("OPEN");
-	
-	if(ioctl(filedes, PPWDATA, &data)==-1)
-		perror("Hi");
-	time.tv_sec=1;
-	time.tv_nsec=1000;
-	nanosleep(&time,NULL);
-	close(filedes);
-	return;
-}
-	
-	
+MfG, JBG
 
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
+PA));
 
---Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)--
+--yJGMwzir+WFaxbyA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFApzHfHb1edYOZ4bsRAvrqAJ4tde8ELQ1OnIH7Mg7DmPC0UkEanQCeOjYQ
+LJpzU6B7CO50VxVXzUkEzMY=
+=69tF
+-----END PGP SIGNATURE-----
+
+--yJGMwzir+WFaxbyA--
