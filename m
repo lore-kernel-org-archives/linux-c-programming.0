@@ -1,43 +1,78 @@
-From: Eric Bambach <eric@cisu.net>
-Subject: Re: C Newbie
-Date: Mon, 13 Dec 2004 10:03:57 -0600
-Message-ID: <200412131003.57421.eric@cisu.net>
-References: <BDE318F8.1618%dsessions@ionosphere.net>
-Reply-To: eric@cisu.net
+From: Darren Sessions <dsessions@ionosphere.net>
+Subject: Re: Newbie - Perl Equivalent Split - Seg Faults
+Date: Mon, 13 Dec 2004 12:10:08 -0500
+Message-ID: <BDE33720.1627%dsessions@ionosphere.net>
+References: <BDE333E9.1622%dsessions@ionosphere.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <BDE318F8.1618%dsessions@ionosphere.net>
-Content-Disposition: inline
+In-Reply-To: <BDE333E9.1622%dsessions@ionosphere.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Darren Sessions <dsessions@ionosphere.net>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Monday 13 December 2004 09:01 am, you wrote:
-> I need to know (before I get flamed) if this is an appropriate spot to post
-> questions on C programming or not and the very most newbie level. I'm
-> attempting a transition from Perl and, while I understand a lot of the
-> fundamentals of C, am having a hard time with string (char) manipulation.
->
-> Thanks,
->
+Oh.. I almost forgot, if I place the strtok in main instead of calling it as
+a function in split_char - it works.
+
+Thanks,
+
+ - Darren
+
+
+On 12/13/04 11:56 AM, "Darren Sessions" <dsessions@ionosphere.net> wrote:
+
+> Here is a super simple program that (trys) to split a charvar based on a
+> delimiter. I get no compile errors. If I remove the strtok line, then
+> split_var returns the string passed to it from main just fine.
+> 
+> I tried changing the char *delim from *delim to delim[50] - same problem.
+> 
+> This is something stupid, and probably super simple. Coming from the Perl
+> world, I'm trying to write some equivalent string manipulation functions
+> that I can use throughout my programs to avoid repetition and make the code
+> cleaner and easier to read.
+> 
+> Thanks in advance,
+> 
 >  - Darren
+> 
+> 
+> 
+> 
+> #include <stdio.h>
+> #include <string.h>
+> 
+> char *split_char(char *string, char *delim) {
+>   fprintf( stderr, "\tString = %s \n", string);
+>   fprintf( stderr, "\tDelimiter = %s \n", delim);
+>   string = strtok(string, delim);
+>   return string;
+> }
+> 
+> int main()
+> {
+>   char *testvar;
+>   testvar = split_char("test-hello", "-");
+>   fprintf( stderr, "\tArray = %s \n", testvar);
+>   return(0);
+> }
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming"
+> in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-As JBG advised yes please don't hijack threads. It confuses me AND my mailer. 
-Other than that I would be happy to assist on the list if I can, even though 
-my programming skills aren't great yet. My advice is to limit your questions 
-though. Try to do most of the reasearch off list and ask specifc questions 
-when something stumps you or doesnt work as expected after you've tried to 
-debug it yourself. If it looks like you didn't try (ex. throwing code at us 
-with the subject it doesnt compile) or cant give us specific code with 
-questions to help on you're less likely to get any useful information off the 
-list.
 
-Other than that, I hope I can be of help and I hope the list gurus agree with 
-me.
-
--- 
-
--EB
