@@ -1,35 +1,28 @@
-From: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
-Subject: Question on memcpy()
-Date: Wed, 15 Sep 2004 20:17:11 +0900
+From: Eljay Love-Jensen <eljay@adobe.com>
+Subject: Re: Memory Allocation Problem
+Date: Wed, 15 Sep 2004 07:01:29 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <011b01c49b15$8bd3f980$de01a8c0@voip>
-References: <20040915083340.19367.qmail@web52710.mail.yahoo.com>
+Message-ID: <6.1.2.0.2.20040915065922.03539130@iplan-mn.corp.adobe.com>
+References: <20040915060237.55405.qmail@web52910.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-reply-to: <20040915060237.55405.qmail@web52910.mail.yahoo.com>
+References: <20040915060237.55405.qmail@web52910.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Ankit Jain <ankitjain1580@yahoo.com>, gcc <gcc-help@gcc.gnu.org>, linux prg <linux-c-programming@vger.kernel.org>
 
-Hello Gurus,
+Hi Ankit,
 
-I am trying to fix a bug in a  code. I found something like this,
+Your OS probably does not provide that many megabytes of STACK space.
 
-struct sample A, B;
-...
-...
-memset(&A, 0, sizeof(sample));
-memcpy(&A, (char *)&B, sizeof(sample));
-...
-I could not understand why the second argument is (char *)&B, but not &B.
-I think it should be &B. 
+Allocate your enormous 2-dimensional array on the HEAP or in the BSS or in 
+the DATA areas instead.
 
-Sometimes I found A is all zero. but B is not all zero in fact.  
-Is it due to the second argument (char *)&B?
+Or check out if your can adjust the size of your STACK to around 32 
+MB.  That might be a linker option.  Depends on your OS.
 
-Any comment is appreciated and thanks in advance.
-
-Best regards,
-
---Wen
+HTH,
+--Eljay
 
