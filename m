@@ -1,163 +1,105 @@
-From: Sudheer Vutukuru <sudheer.vutukuru@gmail.com>
-Subject: How to know PCI configuration
-Date: Wed, 18 Aug 2004 15:29:43 +0530
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: sequence of steps that goes from compilation to execution
+Date: Wed, 18 Aug 2004 14:10:58 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <55ee29e00408180259a005ed0@mail.gmail.com>
-Reply-To: Sudheer Vutukuru <sudheer.vutukuru@gmail.com>
+Message-ID: <20040818121058.GG16935@lug-owl.de>
+References: <55ee29e004081712346075d5b4@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_10_7900299.1092823183938"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="CUR78EuMd8EhT3+C"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <55ee29e004081712346075d5b4@mail.gmail.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
-------=_Part_10_7900299.1092823183938
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+
+--CUR78EuMd8EhT3+C
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, 2004-08-18 01:04:51 +0530, Sudheer Vutukuru <sudheer.vutukuru@gmail=
+=2Ecom>
+wrote in message <55ee29e004081712346075d5b4@mail.gmail.com>:
+> Hi all,
+>=20
+>     Why a program which is compiled on linux does not execute on windows.=
+=2E=20
+> (though the machine architecture is same)..
+
+It's not enough that both operating system / game loader use the same
+(or at least widely compatible) CPUs. Also, the whole ABI (Application
+Binary Interface) and the backing file format need to be supported.
+
+Linux uses the ELF format, while Windows uses something that's IIRC
+called PEXEC (paged executable) format. That is, Windows doesn't simply
+know where to load the binary to, how to initialize BSS and the like.
+However, one can try to play some dirty tricks like Wine (running
+Windows binaries on Linux) does. You do all the loading manually and
+just start it. Upon access violations (and other things that would go
+wrong), control is given back to Wine to emulate the missing parts.
+
+>  Also   Can u please suggest me references or help me in knowing the
+> details of what goes on, from compilation to execution (i.e how
+> loading,linking libraries is done.. how addresses
+> are known dynamically etc.. ).
+
+C code gets translated to assembler, which is then compiled to object
+code. (This format is already different on Windows vs. Linux.) The
+object code then gets linked to the resulting final binary.
+
+(The Linuxish view) upon startup of a dynamically linked ELF binary,
+binfmt_elf.c starts the binary's "interpreter", which has to finally
+(dynamically) link the binary. This is basically done by mmap()ing the
+needed libraries and correcting all symbol references (so by now, the
+program really knows about "printf").
+
+After linking, control is transferred to the libc's startup function,
+which will initialize the buffered IO subsystem (fprintf and friends),
+call any constructor functions and (finally) jump to main(), your
+program's user-visible start function.
+
+After main() returns, control is given back to libc's shutdown functions
+which may do some cleanups (like calling destructors, flushing buffers,
+calling atexit functions and so on).
+
+I guess it's quite similar on Windows, but a different file format is
+used for binaries and libraries.
+
+>  for string literals whether memory is allocated in heap or in code
+> segment only..
+> i.e char* ptr =3D "Hello World";
+>   the ptr points into code segement or heap..
+
+It points to a read-only data segment:)
+
+Basically, it depends on where you define a variable and how/if you
+initialize it at all where backing storage is taken from.
+
+MfG, JBG
+
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
+
+--CUR78EuMd8EhT3+C
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 Content-Disposition: inline
 
-Hi all,
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
 
-  I want to know clock speed and width of PCI can any one tell me how
-can i find that
- 
-  i took the output of lspci but i cannot interpret it.
+iD8DBQFBI0dSHb1edYOZ4bsRAkeaAJ9u+Z0ALN1vIHirawo0lJgx1Sl1FQCeI2xh
+rVOeGpwWHF54SLZ4nx1ASxk=
+=iCj0
+-----END PGP SIGNATURE-----
 
- can any one tell me how to do this i am attching the output of 
-"lspci -vv"
-
-thanks 
-sudheer
-
-***************************************************************************
- V V N Sudheer,
- Master of Technology,
- Dept. of Computer Science,
- IIT Kanpur.
- ---------------------------------------------------------------------------------------------
- Address:  Room No F-316, Hall - 7,
-                I I T Kanpur,
-                Kanpur.
- Phone : 09839324794(M) , 0512-259-7598(O)
-***************************************************************************
-
-------=_Part_10_7900299.1092823183938
-Content-Type: application/octet-stream; name="lspcioutput"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="lspcioutput"
-
-MDA6MDAuMCBIb3N0IGJyaWRnZTogSW50ZWwgQ29ycC4gODI4NDVHL0dMIFtCcm9va2RhbGUtR10g
-Q2hpcHNldCBIb3N0IEJyaWRnZSAocmV2IDAxKQoJU3Vic3lzdGVtOiBJbnRlbCBDb3JwLiA4Mjg0
-NUcvR0wgW0Jyb29rZGFsZS1HXSBDaGlwc2V0IEhvc3QgQnJpZGdlCglDb250cm9sOiBJL08tIE1l
-bSsgQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJTlYtIFZHQVNub29wLSBQYXJFcnItIFN0ZXBw
-aW5nLSBTRVJSKyBGYXN0QjJCLQoJU3RhdHVzOiBDYXArIDY2TWh6LSBVREYtIEZhc3RCMkIrIFBh
-ckVyci0gREVWU0VMPWZhc3QgPlRBYm9ydC0gPFRBYm9ydC0gPE1BYm9ydCsgPlNFUlItIDxQRVJS
-LQoJTGF0ZW5jeTogMAoJUmVnaW9uIDA6IE1lbW9yeSBhdCBmODAwMDAwMCAoMzItYml0LCBwcmVm
-ZXRjaGFibGUpIFtzaXplPTY0TV0KCUNhcGFiaWxpdGllczogPGF2YWlsYWJsZSBvbmx5IHRvIHJv
-b3Q+CgowMDowMi4wIFZHQSBjb21wYXRpYmxlIGNvbnRyb2xsZXI6IEludGVsIENvcnAuIDgyODQ1
-Ry9HTCBbQnJvb2tkYWxlLUddIENoaXBzZXQgSW50ZWdyYXRlZCBHcmFwaGljcyBEZXZpY2UgKHJl
-diAwMSkgKHByb2ctaWYgMDAgW1ZHQV0pCglTdWJzeXN0ZW06IEludGVsIENvcnAuOiBVbmtub3du
-IGRldmljZSA0YzU5CglDb250cm9sOiBJL08rIE1lbSsgQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1l
-bVdJTlYtIFZHQVNub29wLSBQYXJFcnItIFN0ZXBwaW5nLSBTRVJSLSBGYXN0QjJCLQoJU3RhdHVz
-OiBDYXArIDY2TWh6LSBVREYtIEZhc3RCMkIrIFBhckVyci0gREVWU0VMPWZhc3QgPlRBYm9ydC0g
-PFRBYm9ydC0gPE1BYm9ydC0gPlNFUlItIDxQRVJSLQoJTGF0ZW5jeTogMAoJSW50ZXJydXB0OiBw
-aW4gQSByb3V0ZWQgdG8gSVJRIDExCglSZWdpb24gMDogTWVtb3J5IGF0IGYwMDAwMDAwICgzMi1i
-aXQsIHByZWZldGNoYWJsZSkgW3NpemU9MTI4TV0KCVJlZ2lvbiAxOiBNZW1vcnkgYXQgZmZhODAw
-MDAgKDMyLWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9NTEyS10KCUNhcGFiaWxpdGllczog
-PGF2YWlsYWJsZSBvbmx5IHRvIHJvb3Q+CgowMDoxZC4wIFVTQiBDb250cm9sbGVyOiBJbnRlbCBD
-b3JwLiA4MjgwMURCIFVTQiAoSHViICMxKSAocmV2IDAxKSAocHJvZy1pZiAwMCBbVUhDSV0pCglT
-dWJzeXN0ZW06IEludGVsIENvcnAuOiBVbmtub3duIGRldmljZSA0YzU5CglDb250cm9sOiBJL08r
-IE1lbS0gQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJTlYtIFZHQVNub29wLSBQYXJFcnItIFN0
-ZXBwaW5nLSBTRVJSLSBGYXN0QjJCLQoJU3RhdHVzOiBDYXAtIDY2TWh6LSBVREYtIEZhc3RCMkIr
-IFBhckVyci0gREVWU0VMPW1lZGl1bSA+VEFib3J0LSA8VEFib3J0LSA8TUFib3J0LSA+U0VSUi0g
-PFBFUlItCglMYXRlbmN5OiAwCglJbnRlcnJ1cHQ6IHBpbiBBIHJvdXRlZCB0byBJUlEgMTEKCVJl
-Z2lvbiA0OiBJL08gcG9ydHMgYXQgZTgwMCBbc2l6ZT0zMl0KCjAwOjFkLjEgVVNCIENvbnRyb2xs
-ZXI6IEludGVsIENvcnAuIDgyODAxREIgVVNCIChIdWIgIzIpIChyZXYgMDEpIChwcm9nLWlmIDAw
-IFtVSENJXSkKCVN1YnN5c3RlbTogSW50ZWwgQ29ycC46IFVua25vd24gZGV2aWNlIDRjNTkKCUNv
-bnRyb2w6IEkvTysgTWVtLSBCdXNNYXN0ZXIrIFNwZWNDeWNsZS0gTWVtV0lOVi0gVkdBU25vb3At
-IFBhckVyci0gU3RlcHBpbmctIFNFUlItIEZhc3RCMkItCglTdGF0dXM6IENhcC0gNjZNaHotIFVE
-Ri0gRmFzdEIyQisgUGFyRXJyLSBERVZTRUw9bWVkaXVtID5UQWJvcnQtIDxUQWJvcnQtIDxNQWJv
-cnQtID5TRVJSLSA8UEVSUi0KCUxhdGVuY3k6IDAKCUludGVycnVwdDogcGluIEIgcm91dGVkIHRv
-IElSUSA1CglSZWdpb24gNDogSS9PIHBvcnRzIGF0IGU4ODAgW3NpemU9MzJdCgowMDoxZC4yIFVT
-QiBDb250cm9sbGVyOiBJbnRlbCBDb3JwLiA4MjgwMURCIFVTQiAoSHViICMzKSAocmV2IDAxKSAo
-cHJvZy1pZiAwMCBbVUhDSV0pCglTdWJzeXN0ZW06IEludGVsIENvcnAuOiBVbmtub3duIGRldmlj
-ZSA0YzU5CglDb250cm9sOiBJL08rIE1lbS0gQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJTlYt
-IFZHQVNub29wLSBQYXJFcnItIFN0ZXBwaW5nLSBTRVJSLSBGYXN0QjJCLQoJU3RhdHVzOiBDYXAt
-IDY2TWh6LSBVREYtIEZhc3RCMkIrIFBhckVyci0gREVWU0VMPW1lZGl1bSA+VEFib3J0LSA8VEFi
-b3J0LSA8TUFib3J0LSA+U0VSUi0gPFBFUlItCglMYXRlbmN5OiAwCglJbnRlcnJ1cHQ6IHBpbiBD
-IHJvdXRlZCB0byBJUlEgOQoJUmVnaW9uIDQ6IEkvTyBwb3J0cyBhdCBlYzAwIFtzaXplPTMyXQoK
-MDA6MWQuNyBVU0IgQ29udHJvbGxlcjogSW50ZWwgQ29ycC4gODI4MDFEQiBVU0IgRUhDSSBDb250
-cm9sbGVyIChyZXYgMDEpIChwcm9nLWlmIDIwIFtFSENJXSkKCVN1YnN5c3RlbTogSW50ZWwgQ29y
-cC46IFVua25vd24gZGV2aWNlIDRjNTkKCUNvbnRyb2w6IEkvTy0gTWVtKyBCdXNNYXN0ZXIrIFNw
-ZWNDeWNsZS0gTWVtV0lOVi0gVkdBU25vb3AtIFBhckVyci0gU3RlcHBpbmctIFNFUlIrIEZhc3RC
-MkItCglTdGF0dXM6IENhcCsgNjZNaHotIFVERi0gRmFzdEIyQisgUGFyRXJyLSBERVZTRUw9bWVk
-aXVtID5UQWJvcnQtIDxUQWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVSUi0KCUxhdGVuY3k6IDAK
-CUludGVycnVwdDogcGluIEQgcm91dGVkIHRvIElSUSAxMAoJUmVnaW9uIDA6IE1lbW9yeSBhdCBm
-ZmE3ZmMwMCAoMzItYml0LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0xS10KCUNhcGFiaWxpdGll
-czogPGF2YWlsYWJsZSBvbmx5IHRvIHJvb3Q+CgowMDoxZS4wIFBDSSBicmlkZ2U6IEludGVsIENv
-cnAuIDgyODAxQkEvQ0EvREIgUENJIEJyaWRnZSAocmV2IDgxKSAocHJvZy1pZiAwMCBbTm9ybWFs
-IGRlY29kZV0pCglDb250cm9sOiBJL08rIE1lbSsgQnVzTWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJ
-TlYtIFZHQVNub29wLSBQYXJFcnItIFN0ZXBwaW5nLSBTRVJSKyBGYXN0QjJCLQoJU3RhdHVzOiBD
-YXAtIDY2TWh6LSBVREYtIEZhc3RCMkIrIFBhckVyci0gREVWU0VMPWZhc3QgPlRBYm9ydC0gPFRB
-Ym9ydC0gPE1BYm9ydC0gPlNFUlItIDxQRVJSKwoJTGF0ZW5jeTogMAoJQnVzOiBwcmltYXJ5PTAw
-LCBzZWNvbmRhcnk9MDEsIHN1Ym9yZGluYXRlPTAxLCBzZWMtbGF0ZW5jeT0zMgoJSS9PIGJlaGlu
-ZCBicmlkZ2U6IDAwMDBkMDAwLTAwMDBkZmZmCglNZW1vcnkgYmVoaW5kIGJyaWRnZTogZmY4MDAw
-MDAtZmY4ZmZmZmYKCVByZWZldGNoYWJsZSBtZW1vcnkgYmVoaW5kIGJyaWRnZTogZTZhMDAwMDAt
-ZTZhZmZmZmYKCUJyaWRnZUN0bDogUGFyaXR5LSBTRVJSKyBOb0lTQSsgVkdBLSBNQWJvcnQtID5S
-ZXNldC0gRmFzdEIyQi0KCjAwOjFmLjAgSVNBIGJyaWRnZTogSW50ZWwgQ29ycC4gODI4MDFEQiBJ
-U0EgQnJpZGdlIChMUEMpIChyZXYgMDEpCglDb250cm9sOiBJL08rIE1lbSsgQnVzTWFzdGVyKyBT
-cGVjQ3ljbGUrIE1lbVdJTlYtIFZHQVNub29wLSBQYXJFcnItIFN0ZXBwaW5nLSBTRVJSKyBGYXN0
-QjJCLQoJU3RhdHVzOiBDYXAtIDY2TWh6LSBVREYtIEZhc3RCMkIrIFBhckVyci0gREVWU0VMPW1l
-ZGl1bSA+VEFib3J0LSA8VEFib3J0LSA8TUFib3J0LSA+U0VSUi0gPFBFUlItCglMYXRlbmN5OiAw
-CgowMDoxZi4xIElERSBpbnRlcmZhY2U6IEludGVsIENvcnAuIDgyODAxREIgSUNINCBJREUgKHJl
-diAwMSkgKHByb2ctaWYgOGEgW01hc3RlciBTZWNQIFByaVBdKQoJU3Vic3lzdGVtOiBJbnRlbCBD
-b3JwLjogVW5rbm93biBkZXZpY2UgNGM1OQoJQ29udHJvbDogSS9PKyBNZW0rIEJ1c01hc3Rlcisg
-U3BlY0N5Y2xlLSBNZW1XSU5WLSBWR0FTbm9vcC0gUGFyRXJyLSBTdGVwcGluZy0gU0VSUi0gRmFz
-dEIyQi0KCVN0YXR1czogQ2FwLSA2Nk1oei0gVURGLSBGYXN0QjJCKyBQYXJFcnItIERFVlNFTD1t
-ZWRpdW0gPlRBYm9ydC0gPFRBYm9ydC0gPE1BYm9ydC0gPlNFUlItIDxQRVJSLQoJTGF0ZW5jeTog
-MAoJSW50ZXJydXB0OiBwaW4gQSByb3V0ZWQgdG8gSVJRIDkKCVJlZ2lvbiAwOiBJL08gcG9ydHMg
-YXQgPHVuYXNzaWduZWQ+CglSZWdpb24gMTogSS9PIHBvcnRzIGF0IDx1bmFzc2lnbmVkPgoJUmVn
-aW9uIDI6IEkvTyBwb3J0cyBhdCA8dW5hc3NpZ25lZD4KCVJlZ2lvbiAzOiBJL08gcG9ydHMgYXQg
-PHVuYXNzaWduZWQ+CglSZWdpb24gNDogSS9PIHBvcnRzIGF0IGZmYTAgW3NpemU9MTZdCglSZWdp
-b24gNTogTWVtb3J5IGF0IDEwMDAwMDAwICgzMi1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXpl
-PTFLXQoKMDA6MWYuMyBTTUJ1czogSW50ZWwgQ29ycC4gODI4MDFEQiBTTUJ1cyAocmV2IDAxKQoJ
-U3Vic3lzdGVtOiBJbnRlbCBDb3JwLjogVW5rbm93biBkZXZpY2UgNGM1OQoJQ29udHJvbDogSS9P
-KyBNZW0tIEJ1c01hc3Rlci0gU3BlY0N5Y2xlLSBNZW1XSU5WLSBWR0FTbm9vcC0gUGFyRXJyLSBT
-dGVwcGluZy0gU0VSUi0gRmFzdEIyQi0KCVN0YXR1czogQ2FwLSA2Nk1oei0gVURGLSBGYXN0QjJC
-KyBQYXJFcnItIERFVlNFTD1tZWRpdW0gPlRBYm9ydC0gPFRBYm9ydC0gPE1BYm9ydC0gPlNFUlIt
-IDxQRVJSLQoJSW50ZXJydXB0OiBwaW4gQiByb3V0ZWQgdG8gSVJRIDMKCVJlZ2lvbiA0OiBJL08g
-cG9ydHMgYXQgZTAwMCBbc2l6ZT0zMl0KCjAwOjFmLjUgTXVsdGltZWRpYSBhdWRpbyBjb250cm9s
-bGVyOiBJbnRlbCBDb3JwLiA4MjgwMURCIEFDJzk3IEF1ZGlvIChyZXYgMDEpCglTdWJzeXN0ZW06
-IEludGVsIENvcnAuOiBVbmtub3duIGRldmljZSAwMzAzCglDb250cm9sOiBJL08rIE1lbSsgQnVz
-TWFzdGVyKyBTcGVjQ3ljbGUtIE1lbVdJTlYtIFZHQVNub29wLSBQYXJFcnItIFN0ZXBwaW5nLSBT
-RVJSLSBGYXN0QjJCLQoJU3RhdHVzOiBDYXArIDY2TWh6LSBVREYtIEZhc3RCMkIrIFBhckVyci0g
-REVWU0VMPW1lZGl1bSA+VEFib3J0LSA8VEFib3J0LSA8TUFib3J0LSA+U0VSUi0gPFBFUlItCglM
-YXRlbmN5OiAwCglJbnRlcnJ1cHQ6IHBpbiBCIHJvdXRlZCB0byBJUlEgMwoJUmVnaW9uIDA6IEkv
-TyBwb3J0cyBhdCBlNDAwIFtzaXplPTI1Nl0KCVJlZ2lvbiAxOiBJL08gcG9ydHMgYXQgZTA4MCBb
-c2l6ZT02NF0KCVJlZ2lvbiAyOiBNZW1vcnkgYXQgZmZhN2Y4MDAgKDMyLWJpdCwgbm9uLXByZWZl
-dGNoYWJsZSkgW3NpemU9NTEyXQoJUmVnaW9uIDM6IE1lbW9yeSBhdCBmZmE3ZjQwMCAoMzItYml0
-LCBub24tcHJlZmV0Y2hhYmxlKSBbc2l6ZT0yNTZdCglDYXBhYmlsaXRpZXM6IDxhdmFpbGFibGUg
-b25seSB0byByb290PgoKMDE6MDEuMCBFdGhlcm5ldCBjb250cm9sbGVyOiBJbnRlbCBDb3JwLiA4
-MjU0MEVNIEdpZ2FiaXQgRXRoZXJuZXQgQ29udHJvbGxlciAocmV2IDAyKQoJU3Vic3lzdGVtOiBJ
-bnRlbCBDb3JwLiBQUk8vMTAwMCBNVCBEZXNrdG9wIEFkYXB0ZXIKCUNvbnRyb2w6IEkvTysgTWVt
-KyBCdXNNYXN0ZXIrIFNwZWNDeWNsZS0gTWVtV0lOVisgVkdBU25vb3AtIFBhckVyci0gU3RlcHBp
-bmctIFNFUlIrIEZhc3RCMkItCglTdGF0dXM6IENhcCsgNjZNaHorIFVERi0gRmFzdEIyQi0gUGFy
-RXJyLSBERVZTRUw9bWVkaXVtID5UQWJvcnQtIDxUQWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVS
-Ui0KCUxhdGVuY3k6IDMyICg2Mzc1MG5zIG1pbiksIGNhY2hlIGxpbmUgc2l6ZSAwOAoJSW50ZXJy
-dXB0OiBwaW4gQSByb3V0ZWQgdG8gSVJRIDcKCVJlZ2lvbiAwOiBNZW1vcnkgYXQgZmY4ZTAwMDAg
-KDMyLWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9MTI4S10KCVJlZ2lvbiAxOiBNZW1vcnkg
-YXQgZmY4YzAwMDAgKDMyLWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9MTI4S10KCVJlZ2lv
-biAyOiBJL08gcG9ydHMgYXQgZGMwMCBbc2l6ZT02NF0KCUV4cGFuc2lvbiBST00gYXQgZmY4YTAw
-MDAgW2Rpc2FibGVkXSBbc2l6ZT0xMjhLXQoJQ2FwYWJpbGl0aWVzOiA8YXZhaWxhYmxlIG9ubHkg
-dG8gcm9vdD4KCjAxOjA4LjAgRXRoZXJuZXQgY29udHJvbGxlcjogSW50ZWwgQ29ycC4gODI4MDFC
-RCBQUk8vMTAwIFZFIChMT00pIEV0aGVybmV0IENvbnRyb2xsZXIgKHJldiA4MSkKCVN1YnN5c3Rl
-bTogSW50ZWwgQ29ycC46IFVua25vd24gZGV2aWNlIDMwMDkKCUNvbnRyb2w6IEkvTysgTWVtKyBC
-dXNNYXN0ZXIrIFNwZWNDeWNsZS0gTWVtV0lOVisgVkdBU25vb3AtIFBhckVyci0gU3RlcHBpbmct
-IFNFUlIrIEZhc3RCMkItCglTdGF0dXM6IENhcCsgNjZNaHotIFVERi0gRmFzdEIyQisgUGFyRXJy
-LSBERVZTRUw9bWVkaXVtID5UQWJvcnQtIDxUQWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVSUi0K
-CUxhdGVuY3k6IDMyICgyMDAwbnMgbWluLCAxNDAwMG5zIG1heCksIGNhY2hlIGxpbmUgc2l6ZSAw
-OAoJSW50ZXJydXB0OiBwaW4gQSByb3V0ZWQgdG8gSVJRIDQKCVJlZ2lvbiAwOiBNZW1vcnkgYXQg
-ZmY4OWYwMDAgKDMyLWJpdCwgbm9uLXByZWZldGNoYWJsZSkgW3NpemU9NEtdCglSZWdpb24gMTog
-SS9PIHBvcnRzIGF0IGQ4ODAgW3NpemU9NjRdCglDYXBhYmlsaXRpZXM6IDxhdmFpbGFibGUgb25s
-eSB0byByb290PgoK
-------=_Part_10_7900299.1092823183938--
+--CUR78EuMd8EhT3+C--
