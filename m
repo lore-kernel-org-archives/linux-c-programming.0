@@ -1,58 +1,28 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: dynamic linking
-Date: Mon, 9 Sep 2002 15:24:57 +0100
+From: Codex <codex@telkom.net>
+Subject: Libraries
+Date: Tue, 10 Sep 2002 18:32:11 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15740.44857.172146.892963@cerise.nosuchdomain.co.uk>
-References: <200209082200.26275.wrazlov@gmx.net>
-	<200209082203.49132.wrazlov@gmx.net>
-	<200209082306.27699.freyther@gmx.net>
-	<200209091306.17099.wrazlov@gmx.net>
+Message-ID: <20020910183211.2b0a6448.codex@telkom.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200209091306.17099.wrazlov@gmx.net>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: wrazlov@gmx.net
-Cc: linux-c-programming@vger.kernel.org
+To: Linux-C-Programming <linux-c-programming@vger.kernel.org>
 
+HI There's, I'm Still a newcomer in C programming, excuse if contain a
+newbie question, okay!
 
-Wrazlov wrote:
+It sayd that there's a 3 type of libraries what C can be, static, shared,
+and err.. something, Somebody can short explain me what difference 3 lib
+there?
 
-> > I'm new to this list and actually didn't read the faq but man dlopen is
-> > your friend.
-> > After dlopening you need to dlsym the 'entry point' of your plugin
-> 
-> Thanks for that, but that's only one part, for I don't know how to compile 
-> such a lib.so?
+Once more, if i compile a program(gcc) with command
+> gcc -c -o prog.o prog.c
+is that also a libraries..? if so what type is it..?
 
-1. Ensure that the source files are compiled with the "-fPIC" switch,
-e.g.
-	gcc -c -fPIC -o foo.o foo.c
-	gcc -c -fPIC -o bar.o bar.c
-
-2. Link using "gcc -shared ...", e.g.
-
-	gcc -shared -fPIC -o libfoo.so foo.o bar.o
-
-Note: this is sufficient for "private" shared libraries, e.g. plugins. 
-If you wish to build "public" shared libraries (to be installed in
-e.g. /usr/local/lib), you should add a version, e.g.
-
-	gcc -shared -fPIC -Wl,-soname,libfoo.so.1 -o libfoo.so.1.0 foo.o bar.o
-	ln -s libfoo.so.1.0 libfoo.so.1
-	ln -s libfoo.so.1.0 libfoo.so
-
-> Is it possible to import let's say a class using dlopen?
-
-No; classes don't exist. At least, they don't exist as data within a
-binary (object file, library, executable). Classes only exist within
-the C++ compiler. The object files only contain individual functions
-and (global) variables.
-
-While it is possible to dynamically load libraries which are written
-in C++, it's a lot easier if you write C wrappers for the entry
-points.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+---------------------------------------------------------------------------
+ > Telepon anda sibuk, panggilan tidak bisa masuk.
+ > Putar nomor 166 - Info Telkom Memo atau
+ > Klik http://www.plasa.com/informasi/telkom-memo/
+ ---------------------------------------------------------------------------
