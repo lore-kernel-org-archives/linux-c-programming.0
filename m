@@ -1,45 +1,45 @@
-From: "Steven Smith" <sos22@cam.ac.uk>
-Subject: Re: Linux source code: malloc.c
-Date: Thu, 6 Jan 2005 09:11:04 +0000
-Message-ID: <20050106091104.GA3805@archibold>
-References: <20041230130432.4f93abe2@tethys.montpellier.4js.com> <000b01c4eff2$623ff7e0$8a7e4ed5@j0s6l8> <013701c4f3be$6b230710$dc846840@apac.cisco.com>
+From: r_zaca <r_zaca@ig.com.br>
+Subject: [Re] Linux source code malloc
+Date: Thu, 6 Jan 2005 08:34:05 -0200
+Message-ID: <20050106_103405_056621.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="J2SCkAp4GZ/dPZZf"
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1105007645"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <013701c4f3be$6b230710$dc846840@apac.cisco.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Venkatesh Joshi <joshiv@cisco.com>
-Cc: linux-c-programming@vger.kernel.org, sos22@srcf.ucam.org
+To: linux-c-programming@vger.kernel.org
 
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
---J2SCkAp4GZ/dPZZf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--Message-Boundary-by-Mail-Sender-1105007645
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
 
-> Where can I see the implementation of free() and malloc() in Linux
-> source code? I am not able to locate the file malloc.c.
-That's because malloc() isn't in Linux-the-kernel: it's in glibc.
-The file you're looking for is malloc/malloc.c in the glibc tarball.
+   Hi venkatesh 
 
-Steven Smith.
---=20
-One day, I'm going to get an Alice-bot to answer all my email for me,
-and see how long it takes people to notice.
+   These two functions are part of glibc, so I suggest you look for  them in 
+/usr/include directory. I think it is very difficult to find a file called 
+malloc.c, but you can try. If you are using linux, try "man malloc" and you 
+will see in what header file these functions are referenced in, and maybe 
+you can trace where the source code of them are. 
+   Good luck! 
 
---J2SCkAp4GZ/dPZZf
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+Hi, 
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.6 (FreeBSD)
+Where can I see the implementation of free() and malloc() in Linux 
+source code? I am not able to locate the file malloc.c. 
 
-iD8DBQFB3QCoO4S8/gLNrjcRAorGAKCROZKAUO336PZu0dwz5s8rOlJpRACg2bD0
-Bd4sm7b+TyNYxWRzlXVd45g=
-=f1bS
------END PGP SIGNATURE-----
+thanks, 
+venkatesh 
+- 
+To unsubscribe from this list: send the line "unsubscribe 
+linux-c-programming" in 
+the body of a message to majordomo@vger.kernel.org 
+More majordomo info at  http://vger.kernel.org/majordomo-info.html 
 
---J2SCkAp4GZ/dPZZf--
+--Message-Boundary-by-Mail-Sender-1105007645--
+
