@@ -1,37 +1,49 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: i386 x SPARC
-Date: Thu, 19 Sep 2002 00:48:19 +0100
+From: Alina Valea <avalea@home.ro>
+Subject: Re: latex problem
+Date: 19 Sep 2002 06:35:45 -0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15753.4291.717024.716062@cerise.nosuchdomain.co.uk>
-References: <20020918225856Z269456-685+50331@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <20020919063545.5292.qmail@relay1.home.ro>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020918225856Z269456-685+50331@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-To: RCS <cryptik@ig.com.br>
+Content-Transfer-Encoding: 7bit
+To: Mehran Rezaei <mehran@cs.unt.edu>
 Cc: linux-c-programming@vger.kernel.org
 
 
-RCS wrote:
 
->   I am new to this discussion group. And I need help. 
-> 
->   Is it possible to compile a software with gcc under Linux for another 
-> plataform? 
->   For example, I am using Linux under Intel and I want to create a software 
-> for SPARC (RISC - SUN processors). 
->   Is that possible? Does kylix or gcc enables me to do that? 
+Hi,
 
-It is possible, but you need versions of gcc and binutils which were
-compiled for the desired target platform. I'm not aware of any
-precompiled binaries, so you will probably need to compile them
-yourself.
+Maybe this has something to do with kpathsea (a library for
+specifying search paths). Check at
+http://www.tug.org/kpathsea/
 
-See the Cross-GCC FAQ at:
+Alina
 
-	http://www.objsw.com/CrossGCC/
+Pe 18 Sep 2002, la 01:58, Mehran Rezaei <mehran@cs.unt.edu> a
+scris:
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+> >Hello all, >
+
+>It may not be the right place to post this question, but I
+would like to >give it a try. >So I wanted to install a new
+package to the latex that I have, it is >latex2e. The package
+that I tried to install happened to be the color >package. So
+after creating sty file, I put it in the input directory
+>which is base. Now, when I include the package in the tex
+file. It could >not find it. Is there anything else I need to
+do before using the >package. >Any help is appreciated. >
+
+>Mehran >
+
+>- >To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in >the body of a message to
+majordomo@vger.kernel.org >More majordomo info at
+http://vger.kernel.org/majordomo-info.html
+
+
+----
+
+Home, no matter how far...
+http://www.home.ro
