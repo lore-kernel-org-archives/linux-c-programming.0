@@ -1,80 +1,161 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: mid file deletion
-Date: Wed, 2 Jul 2003 23:15:09 +0100
+From: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
+Subject: another socket connection question
+Date: Thu, 03 Jul 2003 11:14:58 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16131.22893.47581.672680@cerise.nosuchdomain.co.uk>
-References: <000701c340f4$225660f0$ed64a8c0@descartes>
+Message-ID: <3F039FB2.3070600@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <000701c340f4$225660f0$ed64a8c0@descartes>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: "John T. Williams" <jtwilliams@vt.edu>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
 
-John T. Williams wrote:
+             Client                       Server
+               .                             .
+               .                             .
+               .    retry connect until      .
+               o---------------------------->.
+               .         success             .
+               .                             .
+               .<----------------------------o
+               .                             .
+               .                             .
+               .                             .
+               .                             .
+               .      getServerNodeId        .
+               o---------------------------->.  Server wont be ready
+               .    retry until success      .  until some time
+               .                             .
+               .                             .
 
-> What is the best way to remove data from the middle of a file. Here i=
-s the
-> Scenario: I have a file that is 20MB in size, about =BC th way throug=
-h it is a
-> 1 line I want to remove. I can use lseek to bring me to the beginning=
- of the
-> section I want to remove, and then lseek again to bring me to the end=
- of
-> that section. The only thing I can think to do is load everything fro=
-m the
-> file after the point I want to delete into memory, remove the part I =
-don't
-> want from what is stored in memory (or simply don't load it), truncat=
-e the
-> file at the point where the part I wanted to delete began, and re-wri=
-te the
-> rest of the file. The alternative (since 20MB is rather big for loadi=
-ng into
-> memory on a multi-User multi-Media machine) is to load the bits I wan=
-t to
-> keep into a temporary file, rather into memory. However, I was thinki=
-ng that
-> for removing 20bytes of information, reading and writing 15MB to 30MB=
- is a
-> lot of work. Is there a better way?
 
-You can just read/write arbitrary-sized chunks in a loop, e.g.
 
-	for (;;)
-	{
-		int n;
-		lseek(fd, src_offset, SEEK_SET);
-		n =3D read(fd, buf, sizeof(buf));
-		if (!n)
-			break;
-		lseek(fd, dst_offset, SEEK_SET);
-		write(fd, buf, n);
-		src_offset +=3D n;
-		dst_offset +=3D n;
-	}
-	ftruncate(fd, dst_offset);
+I am trying to make a client server application where a client
+is trying to get the nodeId of the server.
 
-Alternatively, you could mmap() the file and use memmove() instead of
-the read/write pair (but not memcpy(); that isn't guaranteed to work
-if source and destination overlap). That should provide better
-performance; however, you shouldn't assume that you can mmap() the
-entire file in one go, nor should you assume that both source and
-destination will fit within a single mmap()'d region, so you would
-need a pair of "scrolling windows". You would also have to deal with
-the page-alignment issues.
+The server opens up its ports and my client connects to the server.
+If unsuccessful the client side will retry to connect until it is
+successful.
 
-BTW, if you were inserting (and hence shifting toward the end of the
-file), you would have to start at the end of the file then work
-backward.
+Considering the client is connected. Client application then will
+send a GetServerNodeId request to the server.
 
---=20
-Glynn Clements <glynn.clements@virgin.net>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+What if the server is not ready to receive any request, how will
+I make my GetServerNodeId request to be sent without errors? My
+client application displays "Broken Pipe" when I run the client.
+
+
+Steps in Testing:
+
+1. run server
+2. client connects to server until success
+3. server is not ready to read requests
+4. getServerNodeId - retry until success.
+
+
+My problem revolves on my getServerNodeId request. Since my client
+application have no way of knowing if the server is already accepting
+requests from the client.
+
+Can anyone help me please?
+
+
+Here is a code snippet of the getServerNodeId :
+
+
+//--------------------- SNIP -----------------------------//
+
+inti sendNMCommand( void *data, inti size )
+{
+   int ret = -1;
+
+   if (nmCmdSockConnected == FALSE)
+   {
+     return (ERR);
+   }
+
+   ret = write( nmCmdSock, data, size );
+
+   if (ret != size)
+   {
+       return (ERR);
+   }
+
+   return( ret );
+}
+
+
+inti getServerNodeId(void)
+{
+   MSG_HEADER     header;
+   NODE_INFO      node_info;
+   int    stat;
+   char   *str;
+   struct in_addr tmpAddr;
+
+   memset( &header, 0, sizeof(header));
+   memset( &node_info, 0, sizeof(node_info));
+
+   header.msg_type     = CLI_NM_MSG_TYPE_NODE_ID | 
+CLI_NM_MSG_TYPE_COMMAND_SHOW;
+   header.msg_size = sizeof(header);
+
+   stat = sendNMCommand( &header, sizeof(header) );
+
+   if (stat == ERR )
+   {
+     return(ERR);
+   }
+
+   memset( &header, 0, sizeof(header));
+
+   stat = read(nmCmdSock, &header, sizeof(header));
+
+   if (stat <= 0)
+   {
+     return (ERR);
+   }
+
+   if (header.msg_ret_code != CLI_NM_MSG_RETCODE_SUCCESS)
+   {
+     return (ERR);
+   }
+
+   if (header.msg_type == (CLI_NM_MSG_TYPE_NODE_ID | 
+CLI_NM_MSG_TYPE_COMMAND_SHOW))
+   {
+     stat = recvNMData( &node_info, sizeof(node_info), &nmCmdSock);
+     if (stat == ERR)
+     {
+       return (ERR);
+     }
+
+     tmpAddr.s_addr = node_info.node_id;
+     str = inet_ntoa(tmpAddr);
+     setPrompt(str);
+   }
+   else
+   {
+     return (ERR);
+   }
+   return(OK);
+}
+
+
+//--------------------- SNIP -----------------------------//
+
+
+
+
+
+->end.
+
+
+
+
+
+
+
+
+
