@@ -1,30 +1,39 @@
-From: Fekete Gabor <feketga@delfin.unideb.hu>
-Subject: Re: using the same port with two sockets
-Date: Thu, 25 Sep 2003 21:35:51 +0200 (DFT)
+From: Sapuglha <sapuglha@yahoo.com.br>
+Subject: Newbie Question -> writing Hexadecimal values
+Date: Thu, 25 Sep 2003 18:11:17 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.A41.4.20.0309252133350.71280-100000@delfin.unideb.hu>
-References: <5.2.1.1.0.20030925100439.01af0250@no.incoming.mail>
+Message-ID: <20030925181117.256d0a31.sapuglha@yahoo.com.br>
+Reply-To: sapuglha@yahoo.com.br
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <5.2.1.1.0.20030925100439.01af0250@no.incoming.mail>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: 
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
+Hello people,
 
+my problem is:
 
-On Thu, 25 Sep 2003, Jeff Woods wrote:
+I have an hexadecimal value. It's char, but correspond to an hexa value. Then I
+want to write it to a file. But in the file, if viewed in hexa (ie. using
+hexdump) I want to see "3e" and not the correspondig values in hexa to "3" and
+to "e".
 
-> Unlike SOCK_STREAM (aka TCP sockets) SOCK_DGRAM (aka UDP sockets) are 
-> connectionless.  Every new UDP packet arrives at the single listening 
-> socket which is bound to the UDP port addressed.  You can not have two 
-> sockets listening on the same UDP port (IIUC).
-> 
-it's ok. i know it.
-i mean i would like to emulate the TCP connections with UDP.
-ok the truth is, i need it because i want to make a client/server stuff
-with udp.
+An example that works:
 
+	fprintf(test, "%c", 0x3e);
 
+But in my case "3e" is stored in a variable, so I'd like to use something like:
+
+	strcmp(variable, "3e");
+	fprintf(test, "%c", variable);
+
+Is it possible? Any light?
+
+Thanks 
+
+-- 
+ 
+=> Tiago Sant' Anna - Linux user #136940
+	[.. ..]
