@@ -1,36 +1,28 @@
-From: "William N. Zanatta" <william@veritel.com.br>
-Subject: About getopt()
-Date: Thu, 08 Aug 2002 11:48:47 -0300
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: About getopt()
+Date: Thu, 8 Aug 2002 18:41:19 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3D5284CF.8090708@veritel.com.br>
+Message-ID: <15698.44351.527488.846163@cerise.nosuchdomain.co.uk>
+References: <3D5284CF.8090708@veritel.com.br>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <3D5284CF.8090708@veritel.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
-
-Hey,
-
-   getopt() does memory allocation for the optarg pointer it sets when a 
-value for it is found, right?
-   ok, thus if I'm making something like
-
-   char *str;
-   ...
-
-   str = optarg;
+Content-Type: text/plain; charset="us-ascii"
+To: "William N. Zanatta" <william@veritel.com.br>
+Cc: linux-c-programming@vger.kernel.org
 
 
-   I'll have to free() str later.
+William N. Zanatta wrote:
 
-   Is that right???
+>    getopt() does memory allocation for the optarg pointer it sets when a 
+> value for it is found, right?
 
-   Thanks,
+No. optarg will point at or into one of the elements of argv.
 
-william
+E.g. for "./foo -a hello", optarg will be equal to argv[2], while for
+"./foo -ahello", optarg will be equal to argv[1]+2.
 
 -- 
-Perl combines all of the worst aspects of BASIC, C and line noise.
-                 -- Keith Packard
-
+Glynn Clements <glynn.clements@virgin.net>
