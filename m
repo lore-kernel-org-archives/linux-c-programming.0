@@ -1,8 +1,8 @@
 From: Hossein Mobahi <hmobahi@yahoo.com>
 Subject: Re: Problem with read() and named pipe (FIFO) (pipe not disk)
-Date: Tue, 17 Aug 2004 12:24:16 -0700 (PDT)
+Date: Tue, 17 Aug 2004 12:25:11 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040817192416.30900.qmail@web12705.mail.yahoo.com>
+Message-ID: <20040817192511.83411.qmail@web12703.mail.yahoo.com>
 References: <41224737.9010006@sancharnet.in>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -47,5 +47,5 @@ to flush stdio's buffer out of that process.
 		
 __________________________________
 Do you Yahoo!?
-New and Improved Yahoo! Mail - Send 10MB messages!
-http://promotions.yahoo.com/new_mail 
+Yahoo! Mail - 50x more storage than other providers!
+http://promotions.yahoo.com/new_mail
