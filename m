@@ -1,44 +1,79 @@
 From: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
-Subject: Re: array size 1 ?
-Date: Tue, 20 Jul 2004 23:49:36 -0300
+Subject: Re: array size 1 ? 	All headers
+Date: Tue, 20 Jul 2004 23:57:13 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040720234936.279eef15.lcapitulino@terra.com.br>
-References: <40EF3BCD.7080808@comcast.net>
-	<40F45DEF.8060307@techsource.com>
-	<40F475FC.9090202@comcast.net>
-	<002601c46e79$3da5f100$d3113b80@Viper>
+Message-ID: <20040720235713.4cb83b20.lcapitulino@terra.com.br>
+References: <20040721015338.M80608@sni.ph>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <002601c46e79$3da5f100$d3113b80@Viper>
+In-Reply-To: <20040721015338.M80608@sni.ph>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Anshuman S. Rawat" <asr@cs.columbia.edu>
+To: Gre Taguran <gtaguran@sni.ph>
 Cc: linux-c-programming@vger.kernel.org
 
 
- Hi Anshuman,
+ Hi Gre,
 
-Em Tue, 20 Jul 2004 12:47:27 -0400
-"Anshuman S. Rawat" <asr@cs.columbia.edu> screveu:
+Em Wed, 21 Jul 2004 10:27:35 +0800
+"Gre Taguran" <gtaguran@sni.ph> screveu:
 
-| Hi,
-| What does an array of size 1 mean? or maybe I might be putting it wrong, so
-| here's the declaration -
-| 
-| struct option_state {
-|     int refcnt;
-|     int universe_count;
-|     int site_universe;
-|     int site_code_min;
-|     VOIDPTR universes[1];
-| };
-| 
-| (code from ISC DHCP sources includes/dhcpd.h)
-| 
-| What does universes[1] mean here?
+| i think its not array of 1 but instead array of 2 which is 0 and 1 index.
 
- I think is best to ask for the author, seems to me it is not usual.
+ Wrong.
+
+ K&R defines array as: array[lenght]
+
+ So, if you defines an array as:
+
+ int luiz[10]
+
+ You will have 10 memory cells for it, and if you do:
+
+ int luiz[1]
+
+ You will have one memory cell.
+
+ But, the _access_ is made from 0, so for the first example, we have:
+
+ luiz[0], luiz[1], luiz[2]... luiz[9].
+
+ For the second, just:
+
+ luiz[0].
+
+| maybe 
+| it is because u were thinking that the last array index (in this case is 1) is 
+| null, but it is only applicable when handling string because string needs a 
+| terminated string. ex.
+| 
+| char tst[1];
+| tst[0]='g';
+| tst[1]='r';
+| printf("%s",tst); //this would print gr<and more chars here because it is not 
+| terminated
+| printf("%c=%c"); //this will print gr meaning tst[1] is alocated by 'r'
+
+ The program:
+
+ char tst[1];
+ tst[0]='g';
+ tst[1]='r';
+
+ printf("%c %c\n", tst[0], tst[1]);
+
+ compiles and works here! but to be honest, I don't why. I can prove it is
+an odd case, becase this also works (here):
+
+ char tst[1];
+ tst[0]='g';
+ tst[1]='r';
+ tst[2]='z';
+
+ printf("%c %c %c\n", tst[0], tst[1], tst[2]);
+
+PS: GCC compiled.
 
 -- 
 Luiz Fernando
