@@ -1,61 +1,39 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: development tools for interpreting code
-Date: Tue, 21 Dec 2004 19:08:25 +0100
-Message-ID: <20041221180825.GJ2460@lug-owl.de>
-References: <cq9icd$cpa$1@sea.gmane.org>
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: development tools for interpreting code
+Date: Tue, 21 Dec 2004 13:39:02 -0500
+Message-ID: <D2AA47A6FB2C1A48AF0526440C0F245CAA3624@monm207.nae.ds.army.mil>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="yr/DzoowOgTDcSCF"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <cq9icd$cpa$1@sea.gmane.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: 'soraberri' <421246@posta.unizar.es>, linux-c-programming@vger.kernel.org
+
+soraberri wrote:
+
+>at some point of the code I find a call to a function or a typedef name 
+>(for exmple str2ba) and I would like to find the header file or even the 
+>source file where this function (or type) is defined. I can only use the 
+>Grep:str2ba command found under "Find in files..." dialog but sometimes 
+>this is not suitable because I have to tell manually the path from the 
+>starting point of the search, and if I don't know exactly the rigth 
+>folder, the number of results searched can be too many for examining. I 
+>guess it may be a better way, since the program compiles and has the 
+>appropiate includes (#include <header>), so the compiler must know where 
+>the function is defined.
+
+As others have suggested, ctags, cflow and cscope are three very useful programs for 
+dealing with this.  In addition to the these two, I also find `calltree'
+(see ftp://ftp.berlios.de/pub/calltree/) to be very useful.  `calltree' produces
+a call graph for given set of input files - useful to understand the static structure
+of a program.
+
+In addition, valgrind using the calltree (or is it now callgrind) skin along with 
+cachegrind produces useful information during the execution of the program.
 
 
---yr/DzoowOgTDcSCF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hope this helps,
+George
 
-On Tue, 2004-12-21 17:17:41 +0100, soraberri <421246@posta.unizar.es>
-wrote in message <cq9icd$cpa$1@sea.gmane.org>:
-> at some point of the code I find a call to a function or a typedef name=
-=20
-> (for exmple str2ba) and I would like to find the header file or even the=
-=20
-> source file where this function (or type) is defined. I can only use the=
-=20
 
-cscope and ctags are two programs written for exactly this task.
-
-They integrate nicely into vim, so I don't know if it is useful with a
-graphical IDE, though...
-
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---yr/DzoowOgTDcSCF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFByGaZHb1edYOZ4bsRAt9TAKCBO1tc/y51YvulOy4a9G5YCrDZIQCeJdsY
-rExU6J6urmm/Vup86lMgrjc=
-=6ZTQ
------END PGP SIGNATURE-----
-
---yr/DzoowOgTDcSCF--
