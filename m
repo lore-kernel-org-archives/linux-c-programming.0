@@ -1,8 +1,8 @@
 From: canbaby <canbaby@21cn.com>
 Subject: Re: 'C' source analyzer.
-Date: Fri, 03 Sep 2004 15:02:21 +0800
+Date: Fri, 03 Sep 2004 15:01:52 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <413816FD.1050603@21cn.com>
+Message-ID: <413816E0.4040702@21cn.com>
 References: <05ac01c48b8e$b9abfdd0$c901010a@zoom>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
