@@ -1,46 +1,27 @@
-From: szaffarano@banelco.com.ar
-Subject: Re: Using Bison and Flex
-Date: Mon, 8 Apr 2002 10:26:35 -0300
+From: fox@sby.centrin.net.id
+Subject: start learning gcc ... how to ?
+Date: Tue, 9 Apr 2002 18:50:05 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <03256B95.00498510.00@nt1banelco.intranet.banelco.com.ar>
-Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Message-ID: <200204091150.g39Bo4825347@jupiter.centrin.net.id>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+Hi...
 
-a book: "lex & yacc", by o'reilly it's an excelent reference!
+I'm newbie here...:)(also newbie in Linux)
+I  know  a  little  about C/C++ programming (in DOS) and now I want to
+learn  about GCC, where I can find some (good) tutorials about it (urls
+please)?
+may be I need some example for compiling (and debugging) with
+gcc...because gcc's option too many and it's not simple I think.
 
+And, also, where I can find some good tutorials about using KDevelop ?
 
+thank you...
 
-
-
-Dar=EDo Mariani <dmarian@fi.uba.ar> con fecha 05/04/2002 18:00:03
-
-Destinatarios: unlisted-recipients:; (no To-header on input)
-CC:       linux-c <linux-c-programming@vger.kernel.org> (cci: SEBASTIAN
-          ZAFFARANO/BANELCO/AR)
-Asunto:   Using Bison and Flex
-
-
-
-
-Hello:
-  Does anyone knows of a tutorial of Bison and Flex?
-     Thanks,
-          Dar=EDo
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Best regards,
+ adwin
