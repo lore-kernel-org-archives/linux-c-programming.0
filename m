@@ -1,41 +1,30 @@
-From: Martin Buchan <M.J.Buchan@gre.ac.uk>
-Subject: Re: Returning pointer to array of structures
-Date: Wed, 30 Apr 2003 09:24:22 +0100
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Subject: struct passwd usage
+Date: Wed, 30 Apr 2003 14:49:13 -0600 (CST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030430082421.GH22282@gre.ac.uk>
-References: <20030429083122.GA22282@gre.ac.uk> <UP74EBBAEBHCKGTNLKMJPL95LFFDV.3ead0903@rafaelnote.ns1.lhost.com.br>
+Message-ID: <Pine.LNX.4.44.0304301445001.29006-100000@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <UP74EBBAEBHCKGTNLKMJPL95LFFDV.3ead0903@rafaelnote.ns1.lhost.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Rafael Santos <rafael@thinkfreak.com.br>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Hi,
+what is wrong with this code:
 
-On Mon, Apr 28, 2003 at 07:57:07AM -0300, Rafael Santos wrote:
-> Try the modifications above.
->
-> - menuentry parseSubmenu (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr, int i)
-> + void parseSubmenu (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr, int i)
+main(){
+struct passwd *pwd;
+char *user;
+puts("username:");
+pwd=getpwnam(user);
+puts(pwd->pw_name);
+}
 
-Thanks. Ive done as you suggested and it all works. 
 
-As the way i had coded it before where i was returning the structure
-each time worked, I am assuming this is a better way to code it (seeing 
-as you guys have suggested it and i know diddly squat :-)
+---
+Fabio Andres Miranda
+Ingenieria de sistemas informaticos
+Universidad Latina - Costa Rica
 
-Why is this so?
-Is it just because i do not have the extra overhead of
-passing/returning the structure for each function call or is there
-something more fundamental?
 
-Excuse my ignorance but this is my first C program after hello world
-:-)
 
-Thanks again.
-
-Martin
