@@ -1,38 +1,25 @@
-From: Fischer Ulrich <ulrich.fischer@sfwte.ch>
-Subject: Guide line for RT-Signals
-Date: Tue, 05 Aug 2003 15:03:56 +0200
+From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
+Subject: MIME library
+Date: Tue, 05 Aug 2003 14:00:31 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F2FAB3C.5080506@aerodynamics.ch>
+Message-ID: <3F2FE2AF.8080104@fi.uba.ar>
+References: <3EAD78F1.9050408@fi.uba.ar> <16045.46253.955065.525478@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="iso-8859-1"; 
 To: linux-c-programming@vger.kernel.org
 
-Hi,
+Hello:
+   Does anyone know of a MIME library that's more or less well=20
+documented and has a free license (GPL, BSD, etc.)?
+   Thanks,
 
-I'm new on this list. I hope, my thread is not in the wrong place.
+		Dar=EDo
 
-Is there a philiosohpy or a guide line on how to use RT-Signals in 
-Linux. I mean, normal signals have predefined meanings, defined by 
-POSIX, and RT-Signals are designed for free use. This gives me thousands 
-  of posibilities to use them (I can see a lot of them), but which ones 
-makes sense, how should I use them?
-Google gave now answer to this question.
-
-thanks
-
-Ulrich
-
--- 
-Ulrich G. Fischer
-Dipl. Natw. ETH
-Center Aerodynamics
-
-Ruag Aerospace				Tel. +41 41 268 23 53
-Technologies/Projects Division		Fax. +41 41 268 38 97
-P.O. Box 301				ulrich.fischer@aerodynamics.ch
-CH-6032 Emmen				ulrich.fischer@ruag.com
-Switzerland			        www.ruag.com	
-
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
