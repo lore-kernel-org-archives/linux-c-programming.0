@@ -1,41 +1,76 @@
-From: =?iso-8859-1?q?Ankit=20Jain?= <ankitjain1580@yahoo.com>
-Subject: complex.h
-Date: Mon, 13 Sep 2004 05:29:02 +0100 (BST)
+From: "John T. Williams" <jowillia@vt.edu>
+Subject: Re: connecting to a hoast
+Date: Mon, 13 Sep 2004 02:16:45 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040913042902.7546.qmail@web52906.mail.yahoo.com>
+Message-ID: <1095059805.2813.0.camel@client001>
+References: <Pine.LNX.4.61.0409121703550.2066@debian>
+Reply-To: jtwilliams@vt.edu
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.61.0409121703550.2066@debian>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux prg <linux-c-programming@vger.kernel.org>
-Cc: gcc <gcc-help@gcc.gnu.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: John T Williams <jtwilliams@contextweb.com>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-hi
+Ok
 
-i am working on complier version gcc 2.96
+-------- Start Code ---------------------------------
+#include <sys/socket.h>         // for connection api
+#include <sys/types.h>          // for predefined values
+#include <netdb.h>              // for hostname resolution api
 
-a simple program gives many error like parse error in
-line 4 etc.
+char* host =3D "ftp.domain.com=A1;
+int port =3D 25;
+struct sockaddr_in passive; =20
+struct protoent * proto;
+int skt;
 
-  1 #include<complex.h>
-      2 int main()
-      3 {
-      4 complex a[3][4];
-      5 return 0;
-      6 }
+proto =3D getprotobyname("tcp")  =20
+// gets the prototype number for tcp/ip=20
 
-on latest compiler it works
+skt =3D socket(PF_INET, SOCK_STREAM, proto->p_proto );   =20
+//creates a socket=20
 
-so will it matter on portability of the program?
+passive.sin_family      =3D AF_INET;             =20
+// IPv4 connection type
+passive.sin_addr        =3D gethostbye(host);    =20
+// resolves the hostname and returns the correct in_addr
+passive.sin_port        =3D htons(port);         =20
+// htons changes the bit order so that it is in network format
 
-thanks 
+connect(skt, &passive, sizeof(passive));       =20
+// connect to host  =20
 
-ankit
+close(skt);
+// close connection
+-------- End Code -----------------------------------
+this code does not check for errors and will probably crash if anything
+goes wrong.  How ever it does show how to connect to a server.
+
+You should read:
+http://www.gnu.org/software/libc/manual/html_node/Connections.html#Conn=
+ections
+
+- John
 
 
+On Sun, 2004-09-12 at 16:04, Ameer Armaly wrote:
+> Hi all.
+> I was wondering, where is a step by step instructions to connect to a=
+=20
+> hoast?
+> The documentation seems very cryptic, and doesn't give directions.
+>=20
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
+gramming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-________________________________________________________________________
-Yahoo! Messenger - Communicate instantly..."Ping" 
-your friends today! Download Messenger Now 
-http://uk.messenger.yahoo.com/download/index.html
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
