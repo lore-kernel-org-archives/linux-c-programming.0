@@ -1,52 +1,60 @@
-From: "Ranga Reddy M - CTD ,Chennai." <rangareddym@ctd.hcltech.com>
-Subject: RE: Some question about one method.
-Date: Fri, 21 May 2004 16:24:23 +0530
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: Some question about one method.
+Date: Fri, 21 May 2004 23:17:14 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <53BBBB3235C2C74583722B212B36CA0D61F909@vishnu.ctd.hcltech.com>
+Message-ID: <20040521211714.GP1912@lug-owl.de>
+References: <1085135081.21344.21.camel@relay.localnet>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="3Yrl+jGa2CfIAyZq"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <1085135081.21344.21.camel@relay.localnet>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Alphex Kaanoken <alphex@crew.org.ru>, Linux devellist <linux-c-programming@vger.kernel.org>
-
-Hi,
-
-char ch[1];
-ch[0]=(char) sym;
-ch[1]='\0';
-
-strcat(tmp,ch);
-
-usage of the strcat as you mentioned.
-But, how fast this is going to be I have no idea.
-
-Cheers,
-Ranga
-
------Original Message-----
-From: Alphex Kaanoken [mailto:alphex@crew.org.ru]
-Sent: Friday, May 21, 2004 3:55 PM
-To: Linux devellist
-Subject: Some question about one method.
+To: Linux devellist <linux-c-programming@vger.kernel.org>
 
 
-Hi guys,
-I'm have a some question
-how I can change the:
-sprintf(tmp,"%s%c",tmp,sym);
-where - char *tmp;int sym;
-may I use strcat or another method.
-I need a fast and better method for do it.
+--3Yrl+jGa2CfIAyZq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanx.
+On Fri, 2004-05-21 14:24:41 +0400, Alphex Kaanoken <alphex@crew.org.ru>
+wrote in message <1085135081.21344.21.camel@relay.localnet>:
+> Hi guys,
+> I'm have a some question
+> how I can change the:
+> sprintf(tmp,"%s%c",tmp,sym);
+> where - char *tmp;int sym;
+> may I use strcat or another method.
+> I need a fast and better method for do it.
 
--- 
-Senior Developer of Crew IT research labs
-Alphex Kaanoken <alphex@crew.org.ru>
-Web: http://crew.org.ru
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+That's perfectly good in C. Why do you want to change that? It the
+length of ths ASCIIZ string pointed to by temp is known, there's a good
+chance to optimize it. However, that's against readability, so I'd
+advise against it.
+
+MfG, JBG
+
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
+PA));
+
+--3Yrl+jGa2CfIAyZq
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFArnHaHb1edYOZ4bsRAmXPAJ42IU/i1LvGevgnsq/p3wsIuwZL9QCfS/Zv
+8iGfQX8NrczIEY8h910mJbo=
+=pOm8
+-----END PGP SIGNATURE-----
+
+--3Yrl+jGa2CfIAyZq--
