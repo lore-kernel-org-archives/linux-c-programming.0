@@ -1,56 +1,32 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: ftp through c program
-Date: Mon, 8 Nov 2004 07:57:08 +0100
-Message-ID: <20041108065708.GF10443@lug-owl.de>
-References: <20041108065154.93258.qmail@web52908.mail.yahoo.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Which two types signal cannot be produce in user program?
+Date: Mon, 8 Nov 2004 07:16:23 +0000
+Message-ID: <16783.7495.321101.11146@cerise.gclements.plus.com>
+References: <cmmm0k$cqg$1@sea.gmane.org>
+	<418EEDC9.7070406@hq.ntsp.nec.co.jp>
+	<418EEE0F.9020400@hq.ntsp.nec.co.jp>
+	<e1e1d5f40411072012714c0b05@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="f61P+fpdnY2FZS1u"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20041108065154.93258.qmail@web52908.mail.yahoo.com>
+In-Reply-To: <e1e1d5f40411072012714c0b05@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Daniel Souza <thehazard@gmail.com>
+Cc: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>, linux-c-programming@vger.kernel.org
 
 
---f61P+fpdnY2FZS1u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Daniel Souza wrote:
 
-On Mon, 2004-11-08 06:51:54 +0000, Ankit Jain <ankitjain1580@yahoo.com>
-wrote in message <20041108065154.93258.qmail@web52908.mail.yahoo.com>:
-> if anybody know this?
->=20
-> i want to use ftp instruction through the C program so
-> that i can send the file to another destination?
+> well... I dont know if I got your question but... i believe that a
+> signal like SIGCHLD cant be sent to another process via normal kill(),
+> cuz the OS is responsible for deliver it...
 
-Maybe libcurl does that, but I'm not sure...
+You can send any signal via kill(), provided that you have sufficient
+permission (the permission issue affects which processes you can
+signal, but it affects all signals equally). There isn't anything
+special about SIGCHLD.
 
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---f61P+fpdnY2FZS1u
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBjxjEHb1edYOZ4bsRAsvkAKCEtgytn0i+v4Oism4GNyLlgBb70QCfRLf7
-s1o5dtbLNAUFjePxRCh/M4U=
-=6wq8
------END PGP SIGNATURE-----
-
---f61P+fpdnY2FZS1u--
+-- 
+Glynn Clements <glynn@gclements.plus.com>
