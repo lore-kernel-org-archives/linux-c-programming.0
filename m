@@ -1,25 +1,20 @@
-From: simon <simon.guinot@laposte.net>
-Subject: Re: Size of the terminal with curses
-Date: Fri, 22 Oct 2004 01:06:26 +0200
+From: p.boehm@d-trust.net
+Subject: building shared libaries
+Date: Mon, 25 Oct 2004 09:17:20 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <417840F2.1060103@laposte.net>
-References: <cl6gpb$gap$1@sea.gmane.org>
+Message-ID: <OFAA9403EB.EB64135C-ONC1256F38.00273527@bln.d-trust.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <cl6gpb$gap$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Tyler <tyler@agat.net>
-Cc: linux-C-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-hello
+Hi,
+I need to know how to build up shared libaries. e.g. how do I export libary-functions, what
+(gcc-)compiler-
+options are necessary to create .so-files, what other stuff (e.g. libtool) I need?
+To understand it would reach an explanation with a short pseudo-example.
+thanks in advance
+pb
 
-Tyler wrote:
-> Hey,
-> 
-> How can I get the size of the terminal (in lines and cols) of the actual 
-> terminal ? It would be cool if the solution uses some curses function.
-nothing to do with ncurses... juste use LINES and COLS macro...
-
-simon
