@@ -1,44 +1,41 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: [jason@txt.com: Re: Problem with "chars"]
-Date: Wed, 24 Jul 2002 23:38:01 +0100
+From: xlp <xlp@emtel.net.co>
+Subject: New project
+Date: Fri, 26 Jul 2002 06:41:56 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15679.11337.893330.249174@cerise.nosuchdomain.co.uk>
-References: <go0nha.u6f.ln@thune.mrc-home.org>
-	<200207242105.g6OL5i2L021592@grinch.txt.com>
+Message-ID: <20020726064156.C365@nietzsche.metrotel.net.co>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200207242105.g6OL5i2L021592@grinch.txt.com>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Hi, I am coding a new project that demands me advanced C programming, I am bored
+of "Learn how to program in C" and those basic C tasks.
+I decided to make my own projects, understand manual pages style, learn how
+to make sucessfull web search, use irc channel and so on...
+I am coding a project, that It's a like a telnetd with login features, it
+becomes a daemon, listens on certain port, accepts connection, autenticate, and
+execute a shell.
+The problem is when authentication is successful, It execve() a /bin/sh
+however, I want to define certain variable such as PATH, TERM, etc.
+I want that when a client 'logs in', my daemon set certain variables (ej.
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin) and then
+executes the shell, so the client has a presetted variables on his session.
+You may think, Why dont you read his .cshrc ?, I dont want to read any file
+on the system , I just want my daemon set everything and then executes the 
+shell.
+smthg like:
+char *PATH="/bin:/sbin:/usr/bin:/usr/sbin";
+char *TERM="vt100";
+char *FOO="bar";
 
-Jason P. Winters wrote:
+I read putenv() man, Does it have any relation?, I dont know who to put it
+to work...
 
-> > >It seems that this issue has become a religious thing, tho I don't see why. It
-> > >is clear that the return of malloc need not (and must not--for correctness) be
-> > >casted.
-> > 
-> > I believe it was necessary for pre or early ANSI C, so a lot of old code
-> > written by some pretty smart people used it.
-> 
-> I beleive that totally.  And when you add in the fact that a lot of people
-> move transparently between C and C++, which still requires casting, you can
-> see that adding the extra casts is a common and easilly understood thing.
+Thank you for any advice/help
 
-Casting in C++ is anything but easily understood. Primarily due to the
-fact that the correspondence between method names and methods is
-controlled by an object's type, but also due to the existence of type
-conversion methods.
+bye.
 
-If you get a type mismatch in C++, the *last* thing that you should do
-is to simply add a cast to make the warning/error go away without
-actually analysing the consequences.
 
-Even in C, casting may affect the code which is generated, e.g. due to
-alignment/packing issues, aliasing rules, non-uniform pointer
-representation etc.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
