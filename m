@@ -1,59 +1,57 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: RE: const char * vs char[]
-Date: Tue, 23 Mar 2004 20:37:25 +0000
+Subject: Re: const char * vs char[]
+Date: Tue, 23 Mar 2004 20:26:47 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16480.40965.341202.697242@cerise.nosuchdomain.co.uk>
+Message-ID: <16480.40327.998566.932705@cerise.nosuchdomain.co.uk>
 References: <20040323151902.000048da.cialdi@firenze.net>
 	<000f01c410e6$6d7197e0$0c81640a@aca.org.ar>
+	<20040323170446.GB11933@lug-owl.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <000f01c410e6$6d7197e0$0c81640a@aca.org.ar>
+In-Reply-To: <20040323170446.GB11933@lug-owl.de>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: mariano_moreyra@aca.org.ar
-Cc: 'Massimiliano Cialdi' <cialdi@firenze.net>, 'linux-c-programming' <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
 
-Mariano Moreyra wrote:
+Jan-Benedict Glaw wrote:
 
-> No... "char*" and "char []" are synonyms.
-
-They aren't equivalent in the general case, only when declaring
-function arguments.
-
-> But in this case, you were having a warning because you were passing a
-> "const char *" to a function that expected a "char *" so the warning was
-> about the "const" qualifier.
-> If you have a code like this you wont have any warning at all
+> > No... "char*" and "char []" are synonyms.
 > 
-> #include <stdio.h>
-> char *str = "pippo";    <---- Note there is no "const" quailfier anymore
+> There's a subtle difference:
 
-Whilst this may be legitimate from the perspective of the language
-specification, it's less than ideal, as "str" is being initialised to
-pointing at immutable storage.
+I wouldn't say that the difference between pointers and arrays is
+subtle; the difference is actually rather substantial.
 
-With the above definition, the code:
+The reason why beginners tend to confuse the two is that C treats an
+array as a pointer to its first element in almost all of the
+situations where an array can be used.
 
-	*str = '\0';
-
-won't generate a type error at compile time, but it will probably
-segfault at run time (unless you used gcc's -fwritable-strings switch
-(or the equivalent for whichever compiler you are using).
-
-> void stampa(char s[])
-> {
->  printf("%s\n", s);
+> char *hello_ptr = "A really loooong hello world";
+> char write_string[] = "this is some long garbage";
+> 
+> void main(void) {
+> 	/* legal */
+> 	sprintf (write_string, "%s", "stuff");
+> 
+> 	/* illegal - may be in a read-only segment */
+> 	sprintf (hello_ptr, "%s", "Don't do that");
 > }
+> 
+> So if you're preparing some space for say building up some packet (to be
+> sent out to hardware), use "char xx[]", but if you only want to have a
+> read-only string (to printf() it to the user), you can use "char *xx".
 
-Given that the array isn't being modified, the argument should be
-declared with the "const" qualifier. Doing so would allow you to pass
-a "const char *" or "const char []" to it without the need for an
-explicit type cast.
+In the latter case, you could also use "const char xx[]".
 
-More generally, the "const" qualifier should only be omitted when the
-function can actually modify the data to which the argument points.
+The main reasons to make a variable a pointer rather than an array
+are:
+
+1. You want the pointer to point at some pre-existing data.
+
+2. You want to be able to change the pointer itself (as opposed to
+what it points at).
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
