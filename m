@@ -1,38 +1,39 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: shared mapping of /dev/zero
-Date: Fri, 8 Nov 2002 17:54:41 +0000
+Subject: Re: getch()
+Date: Fri, 8 Nov 2002 17:51:43 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15819.64097.457887.296919@cerise.nosuchdomain.co.uk>
-References: <20021108172415.A22564@natasha.zzz.zzz>
+Message-ID: <15819.63919.939202.386675@cerise.nosuchdomain.co.uk>
+References: <200211071046.24987.abulfazl@juniv.edu>
+	<200211072135.59164.abulfazl@juniv.edu>
+	<20021107200436.C1136@neutrino.particles.org>
+	<200211081504.01461.abulfazl@juniv.edu>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20021108172415.A22564@natasha.zzz.zzz>
+In-Reply-To: <200211081504.01461.abulfazl@juniv.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Denis Zaitsev <zzz@cd-club.ru>
+To: abulfazl@juniv.edu
 Cc: linux-c-programming@vger.kernel.org
 
 
-Denis Zaitsev wrote:
+Progga wrote:
 
-> I'm trying to do something like the anonymous mapping of the same
-> memory region thru a different virtual addresses.  I.e.:
+>  If input is taken in non-blocking mode then something like:
 > 
->     char *a, *b;
->     int z= open("/dev/zero", O_RDWR);
->     a= mmap(NULL, 0x2000, PROT_READ|PROT_WRITE, MAP_SHARED, z,0);
->     b= mmap(a+0x1000, 0x1000, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED, z,0);
+>   while( read( STDIN_FILENO, &ch, 1 ) != 1 ) ;
 > 
-> And what I have as the result, are two mapping as if they was created
-> with MAP_ANONYMOUS flag, so they do not share the same space (of file
-> desc z, at offset 0), as required.  So, mapping of /dev/zero is just
-> the synonum for the anonymous mapping...  Is this the correct
-> behaviour, and if so, what is the way to do the trick?
+>   needs to be used.
 
-AFAICT, this trick is a BSD-ism; it doesn't work on Linux. If you want
-shared memory, you have to use the SysV IPC approach, i.e. shmget(),
-shmat() etc.
+NO! This will result in a "busy wait", consuming all available CPU
+time.
+
+If you want to wait until a byte is actually available to be read,
+either:
+
+a) don't use non-blocking mode in the first place,
+b) temporarily disable non-blocking mode, or
+c) use select() to wait until input is available.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
