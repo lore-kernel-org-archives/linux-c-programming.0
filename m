@@ -1,27 +1,28 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: dynamic loading of objects/modules in C/C++
-Date: Tue, 17 Jun 2003 03:58:46 +0100
+From: "John T. Williams" <jtwilliams@vt.edu>
+Subject: stdio
+Date: Wed, 18 Jun 2003 05:58:42 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16110.33766.806799.581717@cerise.nosuchdomain.co.uk>
-References: <3EEE6518.3030004@hq.ntsp.nec.co.jp>
+Message-ID: <011801c33580$48425aa0$e764a8c0@fesnel.noip.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3EEE6518.3030004@hq.ntsp.nec.co.jp>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ronkhu@ntsp.nec.co.jp
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
+I am trying to figure out how to cause a character to be printed to a
+specific place on the terminal
 
-ronkhu wrote:
+what I'm actually trying to accomplish is to make a progress bar
 
-> Is there a "java-like-reflection API" for C++ and C that would enable a 
-> program( already in execution) to dynamically load a particular 
-> module(files with .o extension)  or class? (how about dynamic loading of 
-> functions?)
+example:
 
-Is dlopen()/dlsym() sufficient? Or did you want something else?
+Progress [*****                           ]  25%
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+and I want it to fill up the box with stars as my program progresses, but I
+can't figure out how to just get c to write a single '*'  to anywhere other
+then the end of the streak
+I tried lseek and got no good results.
+
+I'd really like any advice anyone has on this.
+
