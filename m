@@ -1,48 +1,27 @@
-From: "simon\.guinot" <simon.guinot@laposte.net>
-Subject: memory_allocation
-Date: Fri, 13 Aug 2004 14:27:51 +0200
+From: Henry Margies <henry.margies@gmx.de>
+Subject: Re: memory_allocation
+Date: Fri, 13 Aug 2004 14:34:17 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <I2DXAF$7B97927BCA10A589B58FC0F34E16A58F@laposte.net>
+Message-ID: <20040813143417.589e13b5.henry.margies@gmx.de>
+References: <I2DXAF$7B97927BCA10A589B58FC0F34E16A58F@laposte.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <I2DXAF$7B97927BCA10A589B58FC0F34E16A58F@laposte.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-hello,
+Hi
 
-i have a problem with a structure memory allocation...
-=20
-struct dns_answer {
-         unsigned short type;
-         unsigned short class;
-         unsigned int ttl;
-         unsigned short rdlength;
-         unsigned int addr_answer;
-         } dns_answ;
-
-all this element are not adjacent in memory... i have two
-"free bytes" between rdlenght and addr_answer...
-since here, i have alway made my headers like this... and no
-problem...
-an idea to force this structure elements to be adjacent in
-memory ?
-=20
-thank by advance for help
-
-simon
-
-ps : sorry for my poor english...
+You could use -fpack-struct, if you are using gcc. But maybe there is
+a finer solution.
 
 
-Acc=E9dez au courrier =E9lectronique de La Poste : www.laposte.net ;=20
-3615 LAPOSTENET (0,34=80/mn) ; t=E9l : 08 92 68 13 50 (0,34=80/mn)
+Henry
 
+-- 
 
+Hi! I'm a .signature virus! Copy me into your
+~/.signature to help me spread!
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
