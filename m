@@ -1,34 +1,48 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: Re: character set support
-Date: Wed, 9 Mar 2005 14:53:02 +0100 (CET)
-Message-ID: <Pine.LNX.4.21.0503091443570.768-100000@hestia>
-References: <422EF613.3020201@iitk.ac.in>
-Reply-To: linux prg <linux-c-programming@vger.kernel.org>
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: processor       : 0
+Date: Wed, 9 Mar 2005 10:37:15 -0800 (PST)
+Message-ID: <20050309183715.84484.qmail@web52901.mail.yahoo.com>
 Mime-Version: 1.0
-In-Reply-To: <422EF613.3020201@iitk.ac.in>
+Content-Transfer-Encoding: 7BIT
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
 To: linux prg <linux-c-programming@vger.kernel.org>
 
-On Wed, 9 Mar 2005, Anupam wrote:
 
-> On 03/08/2005 11:21 PM, AFAIR, Nate Jenkins wrote:
-> 
-> > I am writing a program and wish to be able to print characters in
-> > several languages...  I like to use stdio functions.  How can I use
-> > extended characters of various code pages?  Can someone point me in the
-> > right direction?
-> 
-> `man wchar.h' and
-> http://www-106.ibm.com/developerworks/linux/library/l-linuni.html
-> 
-> HTH,
-> Anupam
+[root@ravi sridhar]# more /proc/cpuinfo
 
-What's also usefull is `The Unicode HOWTO' from tldp.org:
-http://www.tldp.org/HOWTO/Unicode-HOWTO-6.html
+if somebody can tell me whats this processor 0
+indicates. my system is having intel processor PIV
 
-J.
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 15
+model             : 2
+model name    : Intel(R) Pentium(R) 4 CPU 2.40GHz
+stepping          : 7
+cpu MHz         : 2400.114
+cache size        : 512 KB
+fdiv_bug          : no
+hlt_bug            : no
+f00f_bug          : no
+coma_bug        : no
+fpu             	    : yes
+fpu_exception  : yes
+cpuid level       : 2
+wp                    : yes
+flags                 : fpu vme de pse tsc msr pae mce
+cx8 apic sep mtrr pge mca 
+     cmov pat pse36 clflush dts acpi mmx fxsr sse sse2
+ss ht tm
+bogomips        : 4784.12
 
+thanks
+
+
+	
+		
+__________________________________ 
+Celebrate Yahoo!'s 10th Birthday! 
+Yahoo! Netrospective: 100 Moments of the Web 
+http://birthday.yahoo.com/netrospective/
