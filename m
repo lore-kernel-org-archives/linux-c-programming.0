@@ -1,52 +1,66 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: retriving a dhcp assigned ip
-Date: Sat, 22 Mar 2003 21:46:22 +0100
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: dynamic allocation of array of structures
+Date: Sat, 22 Mar 2003 23:00:44 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030322204622.GK22528@lug-owl.de>
-References: <20030322214216.45bc5681.cialdi@firenze.net>
+Message-ID: <20030322230044.B6857@neutrino.particles.org>
+References: <20030322202720.267284000B9@mwinf0501.wanadoo.fr> <Pine.LNX.4.21.0303222141500.5852-100000@hestia>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="Rex5+51txc1ort/q"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20030322214216.45bc5681.cialdi@firenze.net>
+In-Reply-To: <Pine.LNX.4.21.0303222141500.5852-100000@hestia>; from mailing-lists@xs4all.nl on Sat, Mar 22, 2003 at 09:48:12PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: "J." <mailing-lists@xs4all.nl>
+Cc: linux-c-programming@vger.kernel.org
+
+On Sat, Mar 22, 2003 at 09:48:12PM +0100, J. wrote:
+> Maybe some of you could give a hunch what goes wrong. 
+
+You should use linked lists. The code below can work if you save
+the starting offset of you elements, but in general it is not safe.
 
 
---Rex5+51txc1ort/q
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> #include <stdio.h>
+> #include <stdlib.h>
+> 
+> typedef struct {
+>  char initial;
+>  int roomnr;
+> } record;
+> 
+> int main(void) {
+>  int i = 0;
 
-On Sat, 2003-03-22 21:42:16 +0100, Massimiliano Cialdi <cialdi@firenze.net>
-wrote in message <20030322214216.45bc5681.cialdi@firenze.net>:
-> How can I retrive the ip address assigned to my host by a dhcp server?
-> I think I need to use ioctl with SIOCGIFADDR parameter, but I don't know
-> where the address is saved.
+-  record *ptr;
++  record *ptr, *t;
 
-Look for a sample program that does the job. For example, "ifconfig"
-from the net-tools package fetches the IP address...
+>  if((ptr = (record *)malloc(10 * sizeof(record))) == NULL) {
+>   fprintf(stderr, "Error: failed malloc\n");
+>   return 1;
+>  }
 
-MfG, JBG
++  t = ptr;
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+>  for(i = 0; i < 10; i++, ptr++) {
+>   ptr->initial = 'A' + i;
+>   ptr->roomnr = i;
+>  }
 
---Rex5+51txc1ort/q
-Content-Type: application/pgp-signature
-Content-Disposition: inline
++  ptr = t;
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
+>  for(i = 0; i < 10; i++, ptr++) {
+>   printf("ptr->initial = %c, ", ptr->initial);
+>   printf("ptr->roomnr = %d\n", ptr->roomnr);
+>  }
+> 
+>  return 0;
+> }
 
-iD8DBQE+fMueHb1edYOZ4bsRAgwaAJ9LvrxjxgmjpHF8chTmv1TEgg8b7QCcDiX0
-q1E4YiwSEahrrJg9bOwVGtg=
-=6RpL
------END PGP SIGNATURE-----
+Elias
 
---Rex5+51txc1ort/q--
+-- 
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
+
+	
