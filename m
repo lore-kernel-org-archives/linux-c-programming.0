@@ -1,63 +1,143 @@
-From: "Charlie Gordon" <gmane@chqrlie.org>
-Subject: Re: Question on memcpy()
-Date: Wed, 15 Sep 2004 16:34:37 +0200
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: feof fails
+Date: Wed, 15 Sep 2004 10:57:32 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <ci9jsn$1jq$1@sea.gmane.org>
-References: <E3E30069B061524E90BCEE4417E3066113852B@monm207.monmouth.army.mil>
+Message-ID: <E3E30069B061524E90BCEE4417E3066113852C@monm207.monmouth.army.mil>
+Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-"Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil> wrote
-in message
-news:E3E30069B061524E90BCEE4417E3066113852B@monm207.monmouth.army.mil...
-> Wen wrote,
->
-> >struct sample A, B;
-> >...
-> >...
-> >memset(&A, 0, sizeof(sample));
-> >memcpy(&A, (char *)&B, sizeof(sample));
-> >...
-> >I could not understand why the second argument is (char *)&B, but not &B.
-> >I think it should be &B.
->
+Christian wrote:
 
-This is correct, I suspect this cast comes from the programmer ancient
-belief that memcpy should be passed char pointers (confusingly refered to as
-byte pointers).  Since it is defined to take (void *, const void*, size_t) ,
-passing it any type of pointer is fine, including superfluous casts.
+>I have a simple problem. I opened a file with fopen and read from the file 
+>with:
+>  while ( !feof( infile ) )
+> {
+>   fgets( buffer, BUFFER_SIZE, infile );
+>   new_number = atoi ( buffer );
+>.....
 
-It should be noted that while the initialization to 0 required a call to
-memset, copying the raw contents of une struct to another can be done more
-efficiently (usually) in C by writing:
+>The file is filled withe a stack of numbers, 7 charakters and each is 
+>terminated by an '\n'. 
 
-A = B;
+>My problem now is, that the last number is been read twice. What is the 
+>problem?
 
-as far as why sizeof(sample) is accepted at all by the compiler, there 3
-possible explanations:
+The problem is not with feof, but rather how input works (this issue plagued
+me for a number of years).  Lets assume that the last line of your file is
+(where
+^ represents the new-line `character', and the arrow is the current file
+pointer):
 
-- there is a typedef for sample, at it better be defined to struct sample.
-- there is a variable by the name sample in scope, and it better be an
-instance of struct sample.
-- there is a #define defining the identifier sample to something valid as an
-operand to sizeof.  Again, it better be consistent with the use in these 2
-lines.
+    1234567^
+   ^
+   |
 
-It would be better to make no assumptions about the types of A and B and
-write:
+Now, when fgets process this line, it reads up to and including the the new
+line
+character, moving the file pointer thus:
 
-memset(&A, 0, sizeof(A));
-...
-A = B;
+    1234567^
+            ^
+            |
 
-This way, the compiler will protest if A and B types don't match, and will
-compute the right size for A no matter what type it's defined to be.
+At this point, we have not hit the EOF `character' as it is the next
+`character' to
+be read in.  So we will go through the loop one more time.  This time the
+call to 
+fgets will fail due to hitting the end-of-file as the first character (and
+thus not 
+placing anything in the output buffer).  The contents the buffer are left
+unmodified 
+and will be processed by the remainder of the loop body.  Now the next time
+through 
+the loop, feof will return true and the loop will be exited - thus the
+problem of 
+reading the last line twice.  You can see this behaviour in the following
+code 
+snippet:
 
-Chqrlie.
+while(!feof(fp))
+{
+    //memset((void*)buffer, '\0', BUFFER_SIZE);
+    fgets(buffer, BUFFER_SIZE, fp);
+    buffer[strlen(buffer)-1] = '\0';              // eat new line
+    printf("***%s***",buffer);
+}
 
+Now if the input file contains the lines (where ^ represents a new line):
 
+123456^
+234567^
+345678^
 
+The output is:
+
+***123456***
+***234567***
+***345678***
+***34567***
+
+(the last line is truncated due to the logic to eat the new line, the
+contencts 
+ of buffer is shortened by one twice).
+
+If the memset line is uncomment, the output is:
+
+***123456***
+***234567***
+***345678***
+******
+
+We have not gained much, at least the last line will not be reprocessed
+since we 
+clear the buffer prior to each read.  But it does not really solve your
+problem 
+(yet).  The hint, is to look at the return value of fgets which is either
+the 
+buffer or NULL on error of if EOF is encountered.  With this, we can change
+the 
+logic of the above loop to:
+
+while(!feof(fp))
+{
+    memset((void*)buffer, '\0', BUFFER_SIZE);
+    if(NULL == fgets(buffer, BUFFER_SIZE, fp))
+    {
+	if(ferror(fp))
+      {
+	   fprintf(stderr, "fgets failed.");
+      }
+
+      break;
+    }
+    else
+    {
+       int nLen = strlen(buffer) - 1;
+       if(buffer[nLen] == '\n') buffer[nLen] = '\0';
+       printf("***%s***",buffer);
+    }
+}
+
+Using the above code, the output is:
+
+***123456***
+***234567***
+***345678***
+
+Also, with the change in logic of handling new-lines, we can now handle
+files of 
+the sort:
+
+123456^
+234567^
+345678
+
+i.e. - files that do not end with a new line.  
+
+Hope this helps,
+
+George
