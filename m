@@ -1,62 +1,70 @@
-From: Theodore Ts'o <tytso@mit.edu>
-Subject: Re: Adding a field to ext2_dir_entry_2
-Date: Mon, 4 Apr 2005 23:53:14 -0400
-Message-ID: <20050405035314.GB9131@thunk.org>
-References: <20050405000857.0C26B8AEAC@xprdmailfe2.nwk.excite.com> <20050405011251.GP1753@schnapps.adilger.int>
+From: "M.Baris Demiray" <baris@labristeknoloji.com>
+Subject: Re: Array Empty Slots
+Date: Tue, 05 Apr 2005 08:39:59 +0000
+Message-ID: <42524EDF.8040601@labristeknoloji.com>
+References: <Pine.LNX.4.58.0503221104060.30671@ns.isi.ulatina.ac.cr> <200503221305.32606.eric@cisu.net> <Pine.LNX.4.58.0503221215250.31636@ns.isi.ulatina.ac.cr> <001301c53923$2804a9c0$0101010a@dioxide>
 Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------060101020403020907070601"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20050405011251.GP1753@schnapps.adilger.int>
+In-Reply-To: <001301c53923$2804a9c0$0101010a@dioxide>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+To: Chris <nanakos@wired-net.gr>
+Cc: linux-c-programming@vger.kernel.org
+
+This is a multi-part message in MIME format.
+--------------060101020403020907070601
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-To: Vineet Joglekar <vintya@excite.com>, linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
 
-On Mon, Apr 04, 2005 at 07:12:51PM -0600, Andreas Dilger wrote:
-> > Let me be more clear about what I am trying to do. In my masters
-> > project, I am encrypting inodes along with the data part of the file. Keys
-> > of different users are different. In the same directory, if there are
-> > 2 files stored by different users, their inodes will be encrypted with
-> > different keys. If user1 is doing "ls" on that directory, the inode
-> > of the other file - which is encrypted by user2, will be decrypted by
-> > using user1's key, resulting into garbage. To avoid this, I am trying
-> > to store the uid in the directry entry, so that  I can match it with
-> > current->fsuid and skip decrypting the inode if the file doesn't belong
-> > to the current user. (assuming user1 doesnt want to share that file and
-> > different users can store different files under same directory.)
+
+Chris wrote:
+> Hi all,
+
+Hi,
+
+> Lets assume we have a very very big array with sequential integer numbers
+> from 1-30000, but we have some slots that are empty.
+> Which is the faster way(algorithm maybe) that we can track those empty
+> slots???
+
+A very common approach is using a linked list. Also, if you implement
+a separate list for empty slots, your searches will be much faster.
+OTOH, as you may guess, additional overhead will occur because of the
+maintenance of the extra list.
+
+Another option could be using a bitmap for _all_ (not only for empty
+ones) slots. There are special instructions in many architectures
+(like bsfl in i386) for the job "find first bit set" (hint, this is
+the search keyword) and could be used inlined. I think that will be
+much faster than searching a linked list.
+
+Regards
+
 > 
-> This is broken by design.  What happens if you chown a file?  The UID will
-> change in the inode, but nothing will be updated in the directory.  This
-> key must be stored in the inode along with the ownership info (it can be
-> an EA, and possibly a fast EA or fixed inode field in a large inode).
+> 
+> Best regards,
+> Chris.
 
-What else is broken about this design.  Let me count the ways...
+-- 
+"You have to understand, most of these people are not ready to be
+unplugged. And many of them are no inert, so hopelessly dependent
+on the system, that they will fight to protect it."
+                                                         Morpheus
 
-1)  What about group access to files?
+--------------060101020403020907070601
+Content-Type: text/x-vcard; charset=utf-8;
+ name="baris.vcf"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="baris.vcf"
 
-2)  It means that you can't do a filesystem consistency check without
-knowing all of the keys, since the block pointers in the inode would
-also be encrypted.
-
-3) If user1 has previously accessed the file, the encrypted inode
-information will already be cached, and visible when user2 accesses
-the file; stat() doesn't result in a call into filesystem code if the
-information is already cached.  
-
-What's the point of encrypting the inode?  What problem are you trying
-to solve?
-
-As to why you're having problems:
-
-"ext2-fs error (device fd(2,0)): ext2_check_page: bad entry in directory #2:
-unaligned directory entry - offset=0, inode=2, rec_len=46, name_len=0"
-
-46 is ascii for '.'.  You missed a spot in mke2fs where you changed
-the directory entry structure.  Specifically, in libext2fs, and note
-that some portions of the ext2fs library which still use
-ext2_dir_entry as well as ext2_dir_entry_2, for historical / ABI
-backwards compatibility reasons.
-
-						- Ted
-
+YmVnaW46dmNhcmQNCmZuOk0uQmFyaXMgRGVtaXJheQ0KbjpEZW1pcmF5O00uQmFyaXMNCm9y
+ZzpMYWJyaXMgVGVrbm9sb2ppDQphZHI6OztUZWtub2tlbnQgU2lsaWtvbiBCaW5hIE5vOjI0
+IE9EVFU7QW5rYXJhOzswNjUzMTtUdXJrZXkNCmVtYWlsO2ludGVybmV0OmJhcmlzQGxhYnJp
+c3Rla25vbG9qaS5jb20NCnRpdGxlOllhemlsaW0gR2VsaXN0aXJtZSBVem1hbmkNCnRlbDt3
+b3JrOis5MDMxMjIxMDE0OTANCnRlbDtmYXg6KzkwMzEyMjEwMTQ5Mg0KeC1tb3ppbGxhLWh0
+bWw6RkFMU0UNCnVybDpodHRwOi8vd3d3LmxhYnJpc3Rla25vbG9qaS5jb20NCnZlcnNpb246
+Mi4xDQplbmQ6dmNhcmQNCg0K
+--------------060101020403020907070601--
