@@ -1,161 +1,59 @@
-From: Dimitar Peikov <mitko@rila.bg>
-Subject: Re: Memory Leak issue
-Date: Mon, 18 Nov 2002 09:10:08 +0200
+From: Matthew Harrison <matthew.harrison@3d-computers.co.uk>
+Subject: newbie with big project
+Date: Thu, 21 Nov 2002 09:11:33 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200211180910.11126.mitko@rila.bg>
-References: <OF7DE96D1E.50C4E532-ON65256C73.002605A2@pune.tcs.co.in> <15830.55936.935730.39210@cerise.nosuchdomain.co.uk> <OF805226EB.26EFA4FA-ON65256C75.0020557C@pune.tcs.co.in>
-Reply-To: mitko@rila.bg
+Message-ID: <20021121091133.GB999@genestate.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <OF805226EB.26EFA4FA-ON65256C75.0020557C@pune.tcs.co.in>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
 
-On Monday 18 November 2002 07:57, Hemant Mohan wrote:
-> As I am working in a multi threaded environment, I think the garbage
-> collector approach may be the best one.
-> Can I use a time based approach for the garbage collector, I free the
-> memory if that memory is not used for a certain period of time.
-> Also can you suggest some URLS which can help me in designing the garbage
-> collector.
+--uZ3hkaAS1mZxFaxD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If your threads are time dependent ... some kind of external synchronization 
-not in the scope of the threads, who has to guarantee that this memory is 
-free? Instead see the Java or .NET garbage collectors design patterns.
+hey guys,
 
->
-> Thanks,
-> Hemant
->
-> On Sunday 17 November 2002 05:23, Glynn Clements wrote:
-> > Hemant Mohan wrote:
-> > > Is it possible to have a C function return a char*, and have void
-> >
-> > arguememnts
-> >
-> > > without the caller having to free the memory??
-> > > I mean something like this:
-> > >
-> > > char* foo(void)
-> > > {
-> > >    char *ret;
-> > >    .....
-> > >    .....
-> > >
-> > >    return(ret);
-> > > }
-> > >
-> > > int main()
-> > > {
-> > >    ....
-> > >    char * temp;
-> > >    temp = foo();
-> > >    /* here I don't want to do a free(temp) */
-> > >    .....
-> > >
-> > > }
-> > >
-> > > To my understanding in this case the function foo will have to
-> > > internally
-> >
-> > to
-> >
-> > > do a malloc for ret before doing any processing on it. And it will not
-> > > be able free this memory.  This implies that the calling function will
-> > > have
-> >
-> > to
-> >
-> > > free the return pointer of foo somewhere to prevent any memory
-> > > leakeage.
-> >
-> > Is
-> >
-> > > there any alternative solution to return a char* ?
-> >
-> > If you can be sure that you only need to use last result from foo(),
-> > you can return a pointer to statically allocated memory, e.g.
-> >
-> >      char *foo(void)
-> >      {
-> >           static char buff[...];
-> >           ...
-> >           return buff;
-> >      }
-> >
-> > Or you can dynamically allocate the memory but store it in a static
-> > pointer, e.g.
-> >
-> >      char *foo(void)
-> >      {
-> >           static char *ptr;
-> >           if (ptr)
-> >                free(ptr);
-> >           ptr = malloc(...);
-> >           ...
-> >           return ptr;
-> >      }
-> >
-> > These won't leak memory, but you have to ensure that you have finished
-> > using the result from the previous call to foo() before calling it
-> > again. That rules out using this approach in multi-threaded programs.
-> >
-> > A few library functions work this way, e.g. gethostbyname(),
-> > gethostent(), getmntent(), getpwent() etc. However, it requires the
-> > caller to either use the return value before control is passed to
-> > anything which might need to call the function again, or to copy the
-> > data.
-> >
-> > If you need the data to remain valid indefinitely, then the simplest
-> > approach is to have foo() allocate the data with malloc() and make the
-> > caller responsible for free()ing it when it's no longer needed.
-> >
-> > However, if you need to do this a lot, and keeping track of the memory
-> > is likely to be a lot of work, then it may be worth considering a
-> > garbage-collecting allocator. This is the mechanism which is used by
-> > most high-level languages. Here, data is dynamically allocated, and is
-> > freed automatically when it's no longer used.
-> >
-> > The tricky part is in determining when data is no longer used. The
-> > need for the garbage collector to make this decision normally imposes
-> > certain rules upon the overall program. Consequently, garbage
-> > collection is normally only used where the effort involved in
-> > "manually" tracking dynamically-allocated memory would be so high that
-> > a garbage-collecting allocator is the only feasible solution.
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+after teaching myself perl from scratch, i think i have found the best
+learning methods for me. is there a site for c (not c++) that is equivalent
+to perldoc.com or php.net?
 
-- -- 
-Dimitar Peikov
-Programmer Analyst
-Globalization Group
-"We Build e-Business"  
+i need a site that will let me enter a general keyword on what i want to do
+(like 'open') and it will give me some ideas.
 
-RILA Solutions  
-27 Building, Acad.G.Bonchev Str.  
-1113 Sofia, Bulgaria  
+cheers.
 
-phone: (+359 2) 9797320 
-phone: (+359 2) 9797300 
-fax:   (+359 2) 9733355  
-http://www.rila.com 
+--=20
+Matthew Harrison
+Technical Developer
+3d Computer Systems
+Email:	matthew.harrison@3d-computers.co.uk
+GPG Public Key ID: C37D57D9
+Phone:	++44 1249 460766
+Mobile:	++44 7764 609 055
+Post:	3d Computer Systems Ltd
+	11 New Road
+	Chippenham
+	Wiltshire
+	SN15 1HJ
+	England
 
-GnuPG key       http://earth.rila.bg/~mitko/mitko.key.asc
-GnuPG key       http://www.bgzone.com/~mitko/mitko.key.asc
-Key fingerprint 97AF 6192 78E2 AC68 FD56  CCB0 68B9 DF7D B3C1 9ED7
+--uZ3hkaAS1mZxFaxD
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.0.6 (GNU/Linux)
 Comment: For info see http://www.gnupg.org
 
-iD8DBQE92JJTaLnffbPBntcRAouTAJ96UpcW27B7QVy6/PfT8HWPMo5eggCgl2r4
-86ymnUlfZQmmL/twfMyzQtk=
-=9W7L
+iD8DBQE93KNEEsYvZsN9V9kRAgI/AKC5nkX5HaALT3toei6Y19Xzkc1SwQCeMKZ/
+6ZzfWq1n8UyflTPjEZ5lTko=
+=jBal
 -----END PGP SIGNATURE-----
+
+--uZ3hkaAS1mZxFaxD--
