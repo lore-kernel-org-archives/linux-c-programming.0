@@ -1,27 +1,26 @@
-From: kaushal <kaushal@rocsys.com>
-Subject: automate an interactive process
-Date: 07 Jul 2004 10:44:27 +0530
+From: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
+Subject: SIOCGMIIPHY and SIOCGIFCONF
+Date: Wed, 07 Jul 2004 15:31:19 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1089177267.1118.5.camel@kaushal>
+Message-ID: <40EBA6C7.902@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-Hello  all,
-	Iam trying to automate the login program.That is I want "my process" to
-spawn login process and then provide it with the username and password
-without my interaction.
+Good day,
 
-I know that I can use the "expect" program for it which is based on TCL.
-But I want to do this from within a C program.
+I am a newbie in this list. I am bit confused in this 2 flags.
+I am planning to make a network program which determines if the
+interface is still up, down or unknown in real time.
+Which of the 2 should I used? Which is more advisable?
 
-  Thanks in advance.
-Regards-
-Kaushal
+Thanks a lot.
 
+Lejanson
 
-
+-- 
+Revenge is best served when cold.
 
