@@ -1,92 +1,87 @@
-From: James Stevenson <james@ez-dsp.com>
-Subject: Re: Can i use dev_queue_xmit()
-Date: Mon, 19 Apr 2004 11:59:08 +0100 (BST)
+From: joy <gracecott@sancharnet.in>
+Subject: problem in open sys call
+Date: Wed, 21 Apr 2004 00:01:40 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.44.0404191158340.18753-100000@Beast.ez-dsp.com>
-References: <Pine.LNX.4.44.0404121616450.11451-100000@csews110.cse.iitk.ac.in>
+Message-ID: <40856C8C.9090003@sancharnet.in>
+Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="Boundary_(ID_MUzZrV0aja/CE1sPUNOqxQ)"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.44.0404121616450.11451-100000@csews110.cse.iitk.ac.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
-Cc: Anupam <anupamg@iitk.ac.in>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+This is a multi-part message in MIME format.
+
+--Boundary_(ID_MUzZrV0aja/CE1sPUNOqxQ)
+Content-type: text/plain; charset=us-ascii; format=flowed
+Content-transfer-encoding: 7BIT
+
+Hi,
+I have a small prblem i the open call. it fails every time and I dont 
+know why.
+
+thanx in advance,
+Joy.M.M
+
+--Boundary_(ID_MUzZrV0aja/CE1sPUNOqxQ)
+Content-type: text/plain; name=opgen.c
+Content-transfer-encoding: 7BIT
+Content-disposition: inline; filename=opgen.c
 
 
-Thats 2 off topic posts i count on this.
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<string.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
 
-linux-c-programming is userspace releated you might want
-to try the linux-kernel list or the kernelnewbies list
+const char opcode[]="opcode.sheet";
+const char target[]="opcode.sheet";
 
-	James
+main()
+{
+	char buff[8192],temp[10],bin=0,opcode[3];
+	int fd,fd1,bytes_read=8192,count,i=0,inter_count=0;
+	int offset=0,j=0,tempy;
+	char head[]="OPCODE SHEET";
+	
+	if((fd=open(opcode, O_RDONLY))==-1)
+		printf("oops");
+	if((fd1=open(target, O_RDWR|O_CREAT))==-1)
+		printf("O");
+	while(bytes_read==8192)
+	{
+	bytes_read=read(fd,buff,8192);
+	while(inter_count<bytes_read)
+	{
+		i=0;
+		do
+		{
+			bin=buff[inter_count];
+			temp[i]=buff[inter_count];
+			inter_count++;
+			i++;
+		}while(bin!=10);
+		temp[i++]=0;
+		j=0;
+	write(fd1,head,sizeof(head));
+		for(j=0;j<i;j++)
+		{
+			tempy=(int)(temp[j]-0);
+			offset+=tempy;
+		}
+		if(lseek(fd1,offset,SEEK_SET)==-1)
+			printf("HI");
+		
+		printf("%s : ",temp);
+		scanf("%s",opcode);
+	      write(fd1,opcode,sizeof(opcode));
+		printf("%s %d \n",temp ,offset);
+	}
+	}
+	return(0);
+}
 
-On Mon, 12 Apr 2004, K.Anantha Kiran wrote:
-
-> Hi,
-> 
->   Sorry, we did not put our question in correct way. 
->   We came to know that whenever qdisc is full some flag is set and
-> it will be unset only when qdisc is completely empty once again.
->   Because of this we are unable to enque packets in the qdisc even when 
-> some space is available. What i want is to enqueue packets as soon as 
-> qdisc has space for atleast one packet.
->   Even if i am increasing the qdisc length, then also after some time
-> again the qdisc is getting full and packets are getting dropped.
-> 
->  Note: I am using gigabit ethernet cards.
-> 
->  Please help me in this matter.
-> 
-> Thanks in advance,
-> Regards,
-> Ananth.
-> 
-> 
-> On Mon, 12 Apr 2004, Anupam wrote:
-> 
-> > Date: Mon, 12 Apr 2004 14:16:43 +0530
-> > From: Anupam <anupamg@iitk.ac.in>
-> > To: K.Anantha Kiran <ananth@cse.iitk.ac.in>
-> > Subject: Re: Can i use dev_queue_xmit()
-> > 
-> > K.Anantha Kiran wrote:
-> > >  	The problem is that " is there any flag that tell the queue is 
-> > >  full and once it is full it will not take any pkts in and drops all 
-> > >  till the queue is empty". If so can u plz suggest a solution to this 
-> > >  problem.
-> > 
-> > 
-> > Hi Anantha,
-> > 
-> >  From above description of yours, I presume that you're trying something 
-> > that is called "Flush Queue", i.e., when a queue is overloaded, there is 
-> >   option to drop all packets in queue. This means that all the adaptive 
-> > flow should back-off. However it is quite inefficient since all the 
-> > backed-off flows will startup again.
-> > 
-> > Anyways, I didn't get the chance to dig up the code myself, but my guess 
-> > is that solution for you lies in: linux/net/sched/cls_api.c.
-> > 
-> > 
-> > >  thanks,
-> > >  Ananth.
-> > 
-> > 
-> > Please do let me know how things go.
-> > 
-> > Regards,
-> > 
-> > Anupam Gupta, Ph.D.
-> > mailto:anupamg@iitk.ac.in
-> > Deptt. of EE,
-> > Res. E1-315, Hall-4
-> > IIT Kanpur.
-> > 
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-
+--Boundary_(ID_MUzZrV0aja/CE1sPUNOqxQ)--
