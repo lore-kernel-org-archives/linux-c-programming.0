@@ -1,8 +1,8 @@
 From: "Jogesh Kanojia" <jogesh.kanojia@patni.com>
-Subject: A C program to merge content of 2 binary tree
-Date: Tue, 11 May 2004 09:11:13 +0530
+Subject: Help in Shell script
+Date: Tue, 11 May 2004 10:05:43 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000001c43709$cf564f70$ae63d103@patni.com>
+Message-ID: <000e01c43711$6c2a4de0$ae63d103@patni.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -11,12 +11,16 @@ Content-Type: text/plain; charset="us-ascii"
 To: "Linux-C-Programming (E-mail)" <linux-c-programming@vger.kernel.org>
 
 Hi
-can any body help me in writing a C program to merge the contents of two
-binary search trees into one. What are the time and storage complexities of
-program?
 
-i am no that good in data structure
+I want shell programs for the following:
+(a)  To find the smallest number among the 3 numbers given.
+(b)  To check whether the given string is a palindrome or not.
+(c)  To sort the given list of numbers in descending order.
+(d)  To check, how many times a given substring occurs in a given main
+string.
+(e)  To find the factorial of a given number
 
+If any one have this do send it to me
 
 Regards,
 Jogesh Kanojia,
