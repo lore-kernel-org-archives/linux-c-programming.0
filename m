@@ -1,27 +1,46 @@
-From: "John T. Williams" <jtwilliams@vt.edu>
-Subject: SEGFAULT
-Date: Wed, 20 Aug 2003 14:56:12 -0400
+From: "Sandro Dangui" <sdangui@nortelnetworks.com>
+Subject: RE: SEGFAULT
+Date: Wed, 20 Aug 2003 16:21:07 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001301c3674c$bc7dc3c0$ed64a8c0@descartes>
-References: <3F3D20F3.7030304@fi.uba.ar>
+Message-ID: <31E38B53D182D51195FA00508BE3A33402972939@zwnbc004.cala.nortel.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: "John T. Williams" <jtwilliams@vt.edu>, linux-c-programming@vger.kernel.org
 
-    I can't figure out why this code sigfaults when it exits.
-gdb only tells me
+
+I can see two mistakes:
+
+First, you have to initialize hostnamelength = sizeof(HOSTNAME);
+
+Second, accept() doesn't alloc memory to return data in sockaddr_in*;
+Then, you must define "active" variable like this: struct sockaddr_in
+active;
+And call: accept(skt, (struct sockaddr *) &active, &activeLen);
+
+
+
+
+-----Original Message-----
+From: John T. Williams [mailto:jtwilliams@vt.edu] 
+Sent: quarta-feira, 20 de agosto de 2003 15:56
+To: linux-c-programming@vger.kernel.org
+Subject: SEGFAULT
+
+
+    I can't figure out why this code sigfaults when it exits. gdb only tells
+me
 
 Program received signal SIGSEGV
 0xda64a8c0 in ? ()
 
 and shows the step as being the final "}"  in main ().
 as far as I can tell this means either one of the linux libraries is wrong
-or my code is doing something funny with a buffer.
-I'll gladly e-mail a dollar to anyone who can tell me what is wrong with
-this short bit of code.  Well, I mean what is wrong that causes the SIGSEGV.
+or my code is doing something funny with a buffer. I'll gladly e-mail a
+dollar to anyone who can tell me what is wrong with this short bit of code.
+Well, I mean what is wrong that causes the SIGSEGV.
 
 
 _________________CODE______________________
@@ -106,3 +125,7 @@ int main( ) {
 }
 _______________________END CODE________________
 
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
