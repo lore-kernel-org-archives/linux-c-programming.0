@@ -1,31 +1,25 @@
-From: Bubulac Tatiana <bubulac@unidec.ro>
-Subject: SIGTERM
-Date: Tue, 21 May 2002 13:51:09 +0300
+From: "James Stevenson" <mistral@stev.org>
+Subject: mcrypt ?
+Date: Tue, 21 May 2002 13:54:01 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CEA269D.CF8569AE@unidec.ro>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
 Hi,
 
-    I want to terminate a parent process that attach several shared
-memory segments
-with kill(pid, SIGTERM) but it fails to terminate.
-    Even if I give the command from command line it fails to terminate.
-    If I give kill -9 pid it terminates but the shred memory segments
-remains.
-    Why I cannot terminate it with  SIGTERM signal?
+is there such a function in a linux c libary
+for the md5 crypt the same as crypt() but
+for the more modern shadow passwords
 
-    "....
-    status = kill ((pid_t)pid, SIGTERM);
-     printf("status = %d\n", status);
-    ...."
-The status is 0. The pid is correct.
+if so.
+which libary ?
 
-TIA,
-Bubulac Tatiana.
+thanks
+    James
+
 
