@@ -1,61 +1,31 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: Remote host name
-Date: Thu, 16 Dec 2004 00:02:08 +0800
-Message-ID: <41C06000.4040503@hq.ntsp.nec.co.jp>
-References: <200412151636.28714.hitoc_mail@yahoo.it>
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: is there any prob in accessing new field added to inode mem structure, in some other functions?
+Date: Wed, 15 Dec 2004 11:29:32 -0500 (EST)
+Message-ID: <20041215162932.AB4C03DDD@xprdmailfe11.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200412151636.28714.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: HIToC <hitoc_mail@yahoo.it>
-Cc: linux-c-programming@vger.kernel.org
-
-use gethostbyname().....
-
-example:
-gethostname( strVariable, len );
-printf( "hostname: %s\n", strVariable );
-
-gethostbyname(), on the other hand, is for returning the equivalent ip 
-address of  the specified name..
-hence the name "gethostbyname"...
+To: linux-c-programming@vger.kernel.org
 
 
+Hi all,
 
-HIToC wrote:
+I am using linux 2.4.21 and I am trying to play with the etx2 file system. My aim is to allocate a data structure dynamically to every file that is opened, at the time of opening.
+What I tried to do was: added the structure pointer in the inode data structure "ext2_inode" say "x_ptr". In the function "ext2_read_inode" which reads the hard disk copy of inode into memory, I allocated memory to this pointer and filled the appropriate value. I chose this function as I thought when a file is opened, this function will be always called once. Upto this is working fine.
 
->Hi all.
->I am writing a function that returns the name of the remote host which we are
->connected to. About the remote host I only know its IP address...I have tried
->to use function "gethostbyname" passing for argument the IP address in
->standard dot notation:
->
->[man 3 gethostbyname: The gethostbyname() function returns a structure of 
->type hostent for the given host name. Here name is either a host name, or
->an IPv4 address in standard dot notation, or an IPv6 address in colon
->(and possibly dot) notation.]
->
->
->struct sockaddr_in destination;
->
->char* get_remote_host_name()
->{
->  hostent* remote_host_information;
->  char* host_IP;
->
->  host_IP =  inet_ntoa(destination.sin_addr);
->  remote_host_information = gethostbyname(host_IP);
->
->  return remote_host_information->h_name;
->}
->
->
->This function returns the IP address of the remote host, not its (DNS) name!
->Can anybody help me?
->  
->
+Now when I try to use this pointer "x_ptr" in some other function, that is, "do_generic_file_read" - which is called while reading a file, I am not getting any value in that pointer, but a null. (which is supposed to be there as I am filling up appropriate value in function ext2_read_inode)
+In the do_generic_file_read, VFS inode is availavle, so I am trying to access my pointer as inode->u.ext2_i.x_ptr and I had accessed this pointer in the same way while allocating memory for it in read_inode. At the same time, in do_generic_file_read, I can access other inode parameters, but not this new one added.
 
+Can someone please tell me where am I going wrong, or what could be the alternate solution to achieve this? This is very important for me.
 
+Thanks and regards,
+
+Vineet
+
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
