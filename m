@@ -1,64 +1,43 @@
-From: <Ganesh_Borse@Dell.com>
+From: "Colovic (ext_evosoft) Aleksandar" 
+	<aleksandar.colovic.external@siemens.com>
 Subject: RE: SIGFPE captured repeatedly..
-Date: Thu, 2 Sep 2004 17:18:57 +0530
+Date: Thu, 2 Sep 2004 14:24:09 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <BBE1167D4F12C74681106630ADE282B964A050@blrx2kmbgl303.blr.amer.dell.com>
+Message-ID: <063A80A4DD54DB4D8547CD10A9DA3A0F5FAFD9@erlf440a.erlf.siemens.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: m_vkumaran@yahoo.com, linux-c-programming@vger.kernel.org
-
-See 4th paragraph in Notes section in "man signal"
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of
-Vijayekkumaran.M
-Sent: Thursday, September 02, 2004 5:07 PM
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
-Subject: SIGFPE captured repeatedly..
-
 
 Hi,
 
-I am trying to write a small program which handles
-SIGFPE..
-The problem is that the handler is called infinitely..
 
-Could somebody please tell me what I am missing..?
-Please find the program below..
+here is slightly modified code:
 
-"Red Hat Linux release 7.3 (Valhalla)
-Kernel 2.4.18-3 on an i686
-gcc version 2.96"
-
-Regards
-Vijay
-
-/*********************************************/
 #include <signal.h>
 #include <stdio.h>
 
+static int j;
+
 void sig_s(int signo)
 {
- printf("Hai Division by zero:Floation point
-exception\n");
- /*signal(SIGFPE,sig_s);*/
+	j = 3;
+ 	printf("Hai Division by zero:Floation point exception\n");
+
 }
 
 #define BUFFER_SIZE 1024
 
 int main()
 {
- int i,j,z;
+ int i,z;
  char Buffer[BUFFER_SIZE];
  int x;
  FILE* fp = fdopen(0,"r");
- signal(SIGFPE,sig_s);
- 
+ signal(SIGFPE,&sig_s);
+
  for(x=0;x<5;x++)
  {
   fflush(fp);
@@ -71,14 +50,19 @@ int main()
 }
 /*********************************************/
 
+Explanation: In case of 'divide error' system sends SIGFPE to your process.
+Default action would be core dump and abortion of the
+process, but since you installed an exception handler for this signal,
+system expects that your signal handler somehow corrects invalid 
+situation and transfers control again to problematic division. Since you
+didn't corrected the problem, CPU raises again 'divide error' exception and
+system's exception handler (divide_error()) sends again SIGFPE to your
+signal handler ....
 
-		
-__________________________________
-Do you Yahoo!?
-New and Improved Yahoo! Mail - Send 10MB messages!
-http://promotions.yahoo.com/new_mail 
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+In the code above, I declared problematic j variable as static and corrected
+its value in the signal handler ... so loop continues and everything's well.
+
+I hope, this helps
+
+Aleksandar Colovic,
+
