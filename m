@@ -1,37 +1,41 @@
-From: Elias Athanasopoulos <eathan@otenet.gr>
+From: Progga <abulfazl@juniv.edu>
 Subject: Re: getch()
-Date: Thu, 7 Nov 2002 22:58:24 +0200
+Date: Fri, 8 Nov 2002 15:04:01 +0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20021107225824.E1136@neutrino.particles.org>
-References: <200211071046.24987.abulfazl@juniv.edu> <200211072135.59164.abulfazl@juniv.edu> <20021107200436.C1136@neutrino.particles.org> <15818.41143.242454.812537@cerise.nosuchdomain.co.uk>
+Message-ID: <200211081504.01461.abulfazl@juniv.edu>
+References: <200211071046.24987.abulfazl@juniv.edu> <200211072135.59164.abulfazl@juniv.edu> <20021107200436.C1136@neutrino.particles.org>
+Reply-To: abulfazl@juniv.edu
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <15818.41143.242454.812537@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Thu, Nov 07, 2002 at 05:19:51PM +0000
+In-Reply-To: <20021107200436.C1136@neutrino.particles.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Glynn Clements <glynn.clements@virgin.net>
-Cc: Progga <abulfazl@juniv.edu>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Thu, Nov 07, 2002 at 05:19:51PM +0000, Glynn Clements wrote:
-> fflush() is only applicable to output streams; using it on input
-> streams seems to be a common programming "superstition".
 
-Correct. I really can't tell why this was there. :-) (I can't also
-tell why I didn't see the bogocity while copy-pasting it...)
+> 	tcgetattr(STDIN_FILENO, &attrib);
+> 	attrib.c_lflag &= ~(ICANON|ECHO); /* disables canonical mode, echo */
+> 	attrib.c_cc[VMIN] = 0;            /* non-blocking input */
+> 	attrib.c_cc[VTIME] = 0;
+> 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &attrib);
 
-> > [anteater@neutrino berserkers]$ grep _LEFT *.h
-> > #define TOP_LEFT 51
-> > #define BOT_LEFT 52
-> > #define _LEFT 68
-> 
-> IOW, 'A', 'B', 'C', 'D'. I doubt that you were actually using those
-> keys; more likely, assuming that the cursor keys generated particular
-> sequences and ignoring most of the sequence.
+ Thanks all for the super suggestions. I only had to change one line for 
+getting what I need :
 
-Yes. IIRC, each arrow kay had a sequence of 3 codes. I was matching only
-the first one, because otherwise (i.e. by matching each one of the 3 codes) 
-the game was too slow. :-)
+ > 	attrib.c_cc[VMIN] = 0;            /* non-blocking input */
+to
+ 	attrib.c_cc[VMIN] = 1;            /* blocking input */
 
-Elias
+ If input is taken in non-blocking mode then something like:
+
+  while( read( STDIN_FILENO, &ch, 1 ) != 1 ) ;
+
+  needs to be used. It's also OK. But to use getchar()/cin, using blocking 
+mode appeared the most suitable. So I did the change. The chance to control 
+the echo and nonecho mode is another beauty. I needed the nonecho and it was 
+already in the code. Thanks again from me and my friend Mahbub.
+
+ Khoda Hafez 
+ Progga
+
