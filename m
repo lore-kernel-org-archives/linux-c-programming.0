@@ -1,42 +1,47 @@
-From: Kurt Wall <kwall@kurtwerks.com>
-Subject: Re: mcrypt ?
-Date: Wed, 22 May 2002 09:08:51 -0400
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: SIGTERM
+Date: Wed, 22 May 2002 15:18:50 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020522090851.A3571@marta>
-References: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com> <15594.22897.778388.25242@cerise.nosuchdomain.co.uk> <003901c2018d$388b6070$0cfea8c0@ezdsp.com>
+Message-ID: <15595.43210.911536.966345@cerise.nosuchdomain.co.uk>
+References: <3CEA269D.CF8569AE@unidec.ro>
+	<15594.22731.28513.237490@cerise.nosuchdomain.co.uk>
+	<3CEB3890.2EEC90FE@unidec.ro>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <003901c2018d$388b6070$0cfea8c0@ezdsp.com>; from mistral@stev.org on Wed, May 22, 2002 at 01:35:56PM +0100
+In-Reply-To: <3CEB3890.2EEC90FE@unidec.ro>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
-Cc: James Stevenson <mistral@stev.org>
+To: Bubulac Tatiana <bubulac@unidec.ro>
+Cc: linux-c-programming@vger.kernel.org
 
-Scribbling feverishly on May 22, James Stevenson managed to emit:
+
+Bubulac Tatiana wrote:
+
+> In the parent process I have the  line no 6 where it blocks.
 > 
-> > > is there such a function in a linux c libary
-> > > for the md5 crypt the same as crypt() but
-> > > for the more modern shadow passwords
-> > >
-> > > if so.
-> > > which libary ?
-> >
-> > The "crypt" add-on for glibc 2.x supports MD5 password hashes, as well
-> > as DES. The details are in the "libc" Info file (search for "crypt").
+> ...
+> 1     signal (SIGTERM, die);
+> 2     signal (SIGALRM, dummy);
+> ...
+> 3    for (min = 0; min < 15 && not_done; min++)
+> 4    {
+> 5         alarm ((unsigned int) 60); /* wait for 1 minute */
+> 6         pid = wait (&status);    /* Wait for a process to end */
+> 7         alarm ((unsigned int) 0); /* Reset alarm */
+> ....
+> 8    }
 > 
-> unfortunatly i think my info file is out of date. though i do have glibc 2.x
-> i dont suppose you have an exmaple of how it is used to generate md5
-> password
-> hashes instead of des or any idea of how to get it to work like that.
+> The problem is that the child process did not catch the signal. I put a
+> printf in the child signal handler
+> function.
+> If I give the "kill child_pid" also nothing happens.
 
-When using crypt, one of the functions of the SALT parameter 
-is to select the encryption algorithm. If SALT consists of "$1$" followed
-by up to 8 characters and optionally ending with "$", the MD5-based
-algorithm is used. If SALT consists of two initial alpha-numeric
-characters, followed by 11 more, crypt selects the DES-based algorithm.
+That suggests that the child *is* catching the signal. If the child
+didn't catch SIGTERM, it would die.
 
-Kurt
+Try changing the child's signal handler to call fflush(), or to use
+write() instead of printf().
+
 -- 
-"I used to think I was indecisive, but now I'm not so sure."
+Glynn Clements <glynn.clements@virgin.net>
