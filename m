@@ -1,18 +1,45 @@
-From: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>
-Subject: Re: Question!
-Date: Thu, 4 Sep 2003 18:53:35 +0100
+From: "Mariano Moreyra" <moremari@aca.org.ar>
+Subject: RE: Question!
+Date: Thu, 4 Sep 2003 15:41:36 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030904175335.GA25820@lsd.di.uminho.pt>
-References: <000001c372eb$9ee69b20$0b04a8c0@aca.org.ar> <3F57629B.2000004@trofeospazos.com>
+Message-ID: <000401c37314$2c440020$0b04a8c0@aca.org.ar>
+References: <20030904175335.GA25820@lsd.di.uminho.pt>
+Reply-To: <mariano_moreyra@aca.org.ar>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <3F57629B.2000004@trofeospazos.com>
+In-Reply-To: <20030904175335.GA25820@lsd.di.uminho.pt>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
-To: Jorge Opaso Pazos <jopaso@trofeospazos.com>
+To: 'Luciano Miguel Ferreira Rocha' <luciano@lsd.di.uminho.pt>, 'Jorge Opaso Pazos' <jopaso@trofeospazos.com>
 Cc: linux-c-programming@vger.kernel.org
+
+The problem is that the child is waiting for the script to finish (the =
+one
+that start mysqld) so the child sends a response to the client telling =
+him
+that the script finished ok (or not).
+So, if I close the socket, the child can't send the response.
+I tried to find a solution to this situation, but the client needs to k=
+now
+the exit status of the script.
+The parent process has his own socket listening for incoming connection=
+s and
+forks the childs. These childs accepts the connections on his own socke=
+ts,
+so  childs doesn't inherit the parent's socket.
+It's ok to do that?? Or I'm doing something wrong with the sockets??
+Thanks a lot to all of you for your answers!!
+
+-----Mensaje original-----
+De: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]En nombre de Luciano
+Miguel Ferreira Rocha
+Enviado el: Jueves, 04 de Septiembre de 2003 14:54
+Para: Jorge Opaso Pazos
+CC: linux-c-programming@vger.kernel.org
+Asunto: Re: Question!
+
 
 On Thu, Sep 04, 2003 at 12:04:43PM -0400, Jorge Opaso Pazos wrote:
 > Mariano Moreyra wrote:
@@ -20,7 +47,8 @@ On Thu, Sep 04, 2003 at 12:04:43PM -0400, Jorge Opaso Pazos wrote:
 > >Te mando la seccion del programa que ejecuta el script en si.
 > >
 > >Este proceso lo unico que espera del script es que el mismo conteste=
- con un
+ con
+un
 > >"-" si hubo algun error o con un "+" si salio todo bien
 > >
 > >----------------------------------------------------------
@@ -40,7 +68,8 @@ On Thu, Sep 04, 2003 at 12:04:43PM -0400, Jorge Opaso Pazos wrote:
 > >-----------------------------------------------------------
 > >
 > >El script lo unico que hace es copiar algunos archivos y luego leven=
-tar el
+tar
+el
 > >MySQL con el
 > >safe_mysqld
 > >
@@ -74,7 +103,7 @@ cket.
 > >>That process waits for a command and then
 > >>forks a child to run a bash script.
 > >>The problems is:
-> >>	- When the bash script runs the safe_mysql script to run MySql=20
+> >>	- When the bash script runs the safe_mysql script to run MySql
 > >>	engine,
 > >
 > >it's
@@ -83,7 +112,7 @@ cket.
 > >>	  And because of that, the parent can't close the connection with =
 the
 > >>client socket.
-> >>	- But if the bash script doesn't run the safe_mysql script...the=20
+> >>	- But if the bash script doesn't run the safe_mysql script...the
 > >>	child
 > >>process dies successfully and everything end
 > >>	  Ok
@@ -109,15 +138,15 @@ the
 > >the body of a message to majordomo@vger.kernel.org
 > >More majordomo info at  http://vger.kernel.org/majordomo-info.html
 > >
->=20
-> English: I suspect that the problem is that safe_mysqld don't return=20
+>
+> English: I suspect that the problem is that safe_mysqld don't return
 > until mysqld ends.
 > Try to execute safe_mysqld in background in the shellscript:
->=20
+>
 > 	if ! pgrep mysqld
 > 	then
 > 		/usr/bin/safe_mysqld &
-> 	fi=09
+> 	fi
 As the socket is inherited, the remote client will never exit.
 If the popen is after a fork(), then it doesn't matter if safe_mysql do=
 esn't
@@ -130,14 +159,20 @@ cket,
 then the connection won't close until mysqld does.)
 
 > Castellano: El problema debe ser que no termina safe_mydqld hasta que=
- no=20
-> termina mysqld. Se podr=EDa solucionar llamando a safe_mysqld en=20
+ no
+> termina mysqld. Se podr=EDa solucionar llamando a safe_mysqld en
 > "background" de la forma anterior.
 
 Portugues: AH! that would be something :)
 
 Regards,
 Luciano Rocha
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
 -
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
