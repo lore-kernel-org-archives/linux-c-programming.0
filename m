@@ -1,48 +1,81 @@
-From: "Chris Nanakos" <nanakos@wired-net.gr>
+From: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>
 Subject: Re: ioperm() and setuid()
-Date: Mon, 13 Oct 2003 16:11:08 +0300
+Date: Mon, 13 Oct 2003 14:42:56 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <003901c3918b$794d3310$711805d5@carlos>
+Message-ID: <20031013134256.GA24603@lsd.di.uminho.pt>
 References: <3F89EB91.7070509@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Received: from carlos (ppp24-113-gw01.athens.access.acn.gr [213.5.24.113])
-	by enigma.wired-net.gr (8.12.8/******) with SMTP id h9DDJbxR001882;
-	Mon, 13 Oct 2003 16:19:39 +0300
+Content-Disposition: inline
+In-Reply-To: <3F89EB91.7070509@hq.ntsp.nec.co.jp>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>, linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
+Cc: linux-c-programming@vger.kernel.org
 
-Can you send your source code please????
-
-
-Best regards,
-Chris.
-
------ Original Message -----
-From: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
-To: <linux-c-programming@vger.kernel.org>
-Sent: Monday, October 13, 2003 3:02 AM
-Subject: ioperm() and setuid()
-
-
+On Mon, Oct 13, 2003 at 08:02:25AM +0800, Lejanson C. Go wrote:
 > Hello,
->
+> 
 > Does anyone know how to allow non root users in linux to
 > access to i/o ports using ioperm() and setuid().
->
-> I tried using the ioperm() function and setuid() but i still
-> get a message of permission access denied.
->
-> Can anyone help me on this?
->
-> Lejanson
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
 
+I think you're misunderstanding setuid(). For a program to have I/O access,
+it needs root permissions.
+
+For a normal user to gain those permissions, the executable needs to be
+owned by root and have the set-user-id bit set.
+
+Or you can use the userhelper package to give temporary root permissions
+to the user for that program.
+
+Here's code I use for that purpose (changed a little):
+
+int main(int ac, char *av[])
+{
+
+        /* parse and check args */
+        if (parse(ac, av))
+                return 1;
+        /* check if enough privileges for io ops */
+        if (geteuid()) {
+                if (!helped)
+                        /* haven't tried consolehelper yet, try it */
+                        use_ch(ac, av);
+                fprintf(stderr, "%s: must run with superuser privileges\n",
+                        pname);
+                return 1;
+        }
+        /* get privileges for out|in_p delay */
+        if (ioperm(0x80, 1, 1)) {
+                err("port 0x80 (pause)");
+                return 1;
+        }
+        /* get privileges for out|in to lp ports */
+        if (ioperm(port, IORANGE, 1)) {
+                err2("port %#03x", port);
+                return 1;
+        }
+	...
+}
+
+/* not running with root privileges, try consolehelper */
+void use_ch(int oac, char *oav[])
+{
+        extern char **environ;
+        char **nav;
+                                                                                
+        if (!(nav = calloc(oac + 2, sizeof(char *)))) {
+                err("new args");
+                return;
+        }
+        /* copy old args */
+        memcpy(nav, oav, oac * sizeof(char *));
+        /* args = args + "-c" */
+        nav[oac] = "-c";
+        execve("/usr/bin/consolehelper", nav, environ);
+        err("consolehelper");
+}
+
+Regards,
+Luciano Rocha
