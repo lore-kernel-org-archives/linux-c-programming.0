@@ -1,62 +1,70 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Marius Nita <marius@cs.pdx.edu>
 Subject: Re: [jason@txt.com: Re: Problem with "chars"]
-Date: Wed, 17 Jul 2002 19:54:13 +0100
+Date: Wed, 17 Jul 2002 12:30:24 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15669.48469.154653.841599@cerise.nosuchdomain.co.uk>
-References: <20020717205559.J1163@neutrino.particles.org>
-	<200207171755.g6HHtsF0004688@grinch.txt.com>
-	<15669.45653.26064.996776@cerise.nosuchdomain.co.uk>
+Message-ID: <20020717123023.A2248@cs.pdx.edu>
+References: <20020717205559.J1163@neutrino.particles.org> <200207171755.g6HHtsF0004688@grinch.txt.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <15669.45653.26064.996776@cerise.nosuchdomain.co.uk>
+Content-Disposition: inline
+In-Reply-To: <200207171755.g6HHtsF0004688@grinch.txt.com>; from jason@txt.com on Wed, Jul 17, 2002 at 10:55:52AM -0700
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Jason P. Winters" <jason@txt.com>, Elias Athanasopoulos <eathan@otenet.gr>, xlp <xlp@emtel.net.co>, linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-
-Glynn Clements wrote:
-
-> > If you don't cast it, you get a warning message:
+On Wed, Jul 17, 2002 at 10:55:52AM -0700, Jason P. Winters wrote:
+>  
+> > On Wed, Jul 17, 2002 at 09:33:16AM -0500, xlp wrote:
+> > > char *foo()
+> > > {
+> > > 	char *retbar;
+> > > 	retbar = (char *)malloc(20);
 > > 
-> > tst.c: In function `foo':
-> > tst.c:17: warning: assignment makes pointer from integer without a cast
+> > Although it's tend to be an aesthitic issue, it is a *good* habit to not
+> > cast malloc().  
 > 
-> Which should provide a clue that you forgot the prototype, which is
-> normally obtained using:
+> Huh?  I mean, excuse me?  Where do you find a reference to _not_ casting
+> the output of malloc()?   Malloc returns a (void *) reference, you -need-
+> to cast it to the type you're assigning it as.
+
+The other folks already answered this, but it's worth pointing out that W
+Richard Stevens talks about this in Advanced Programming in the Unix
+Environment, and points out that the return of malloc should NOT be casted,
+and stdlib.h should be included to avoid warnings..
+
+It seems that this issue has become a religious thing, tho I don't see why. It
+is clear that the return of malloc need not (and must not--for correctness) be
+casted.
+
+Besides,
+
+  struct Blah *foo = malloc( sizeof(struct Blah) );
+
+looks a lot more readable than
+
+  struct Blah *foo = (struct Blah *)malloc( sizeof(struct Blah) );
+
+> If you don't cast it, you get a warning message:
 > 
-> 	#include <stdlib.h>
+> tst.c: In function `foo':
+> tst.c:17: warning: assignment makes pointer from integer without a cast
 > 
-> An implicit cast between an *integer* (undeclared functions are
-> assumed to return "int") and any pointer *will* generate a warning
-> (unless the integer is a literal zero).
 > 
-> This is exactly *why* you *shouldn't cast* the result of malloc(),
-> because it will hide this problem.
-
-In retrospect, it's worth mentioning that a more reliable approach is,
-where possible, to explictly enable warnings for undeclared functions. 
-For gcc, this is controlled by the options:
-
-`-Wimplicit-int'
-     Warn when a declaration does not specify a type.
-
-`-Wimplicit-function-declaration'
-`-Werror-implicit-function-declaration'
-     Give a warning (or error) whenever a function is used before being
-     declared.
-
-`-Wimplicit'
-     Same as `-Wimplicit-int' and `-Wimplicit-function-'
-     `declaration'.
-
-[Note that -Wimplicit is enabled by -Wall.]
-
-While the "don't cast return types" rule is still useful (it shouldn't
-normally be necessary to cast return types, and may hide problems), it
-won't catch other cases (e.g. if the return value was assigned to an
-"int" variable, no warning would be generated, regardless of what the
-function actually returned).
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+> So, do we ignore the message from the compiler? 
+> 
+> Now, *That's* a bad habit to get into...
+> 
+> Ciao!
+> 
+> Jason
+> -- 
+> |UUCP  jason@txt.com                        Who wills, Can.
+> |VOICE (408) 243-3425                         Who tries, Does.
+> |LOCAL Hey, Jason!                              Who loves, Lives.          o_.
+> |Disclaimer:  Not me! I didn't do *THAT!*                                 <|
+> |Local Disclaimer:  I'm not here!                   A. McCaffrey           4
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
