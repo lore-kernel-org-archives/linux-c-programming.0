@@ -1,49 +1,26 @@
-From: Alina Valea <avalea@home.ro>
-Subject: Re: latex problem
-Date: 19 Sep 2002 06:35:45 -0000
+From: Karthik Vishwanath <karthik@northstar.dartmouth.edu>
+Subject: writing a large array to disk
+Date: Thu, 19 Sep 2002 14:27:07 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020919063545.5292.qmail@relay1.home.ro>
+Message-ID: <Pine.SGI.4.05.10209191421390.81557-100000@tesla.dartmouth.edu>
+Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Mehran Rezaei <mehran@cs.unt.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: C-programming <linux-c-programming@vger.kernel.org>
 
+Hello,
 
+I have a (fairly) large 4-d array in my program that I want to dump to
+disk as text data (so that it may be suitably parsed later). I was
+wondering if there was an easy (hopefully, single library call!) that
+would do this?
 
-Hi,
+If there is none, and I must write the data out "by hand", what would be
+the most optimal way of doing this? 
 
-Maybe this has something to do with kpathsea (a library for
-specifying search paths). Check at
-http://www.tug.org/kpathsea/
+Thanks,
 
-Alina
+-K
 
-Pe 18 Sep 2002, la 01:58, Mehran Rezaei <mehran@cs.unt.edu> a
-scris:
-
-> >Hello all, >
-
->It may not be the right place to post this question, but I
-would like to >give it a try. >So I wanted to install a new
-package to the latex that I have, it is >latex2e. The package
-that I tried to install happened to be the color >package. So
-after creating sty file, I put it in the input directory
->which is base. Now, when I include the package in the tex
-file. It could >not find it. Is there anything else I need to
-do before using the >package. >Any help is appreciated. >
-
->Mehran >
-
->- >To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in >the body of a message to
-majordomo@vger.kernel.org >More majordomo info at
-http://vger.kernel.org/majordomo-info.html
-
-
-----
-
-Home, no matter how far...
-http://www.home.ro
