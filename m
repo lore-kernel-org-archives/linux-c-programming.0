@@ -1,36 +1,34 @@
-From: Jeff Woods <kazrak+kernel@cesmail.net>
-Subject: Re: pointer notation
-Date: Tue, 28 Oct 2003 10:46:26 -0800
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: Is it possible to trace back from where a user comes
+Date: Wed, 29 Oct 2003 08:29:09 +0000 (GMT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <5.2.1.1.0.20031028103917.01841e48@no.incoming.mail>
-References: <3F9E5A41.40204@ig.com.br>
- <20031028094205.GA4228@mrna.tn.nic.in>
- <3F9E5A41.40204@ig.com.br> <20031028174605.GA5517@mrna.tn.nic.in>
+Message-ID: <Pine.LNX.4.44.0310290808580.16385-100000@praktifix.dwd.de>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20031028174605.GA5517@mrna.tn.nic.in>
-References: <3F9E5A41.40204@ig.com.br>
- <20031028094205.GA4228@mrna.tn.nic.in>
- <3F9E5A41.40204@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: km <km@mrna.tn.nic.in>
-Cc: Luciano Moreira - igLnx <lucianolnx@ig.com.br>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-At 10/28/2003 11:16 PM +0530, km wrote:
->In the above code we can see the statement called "(*s)->previous = 
->NULL;". I didnt get what exactly it means to be and how different is *s 
->different from (*s) in this context. can it be written in any other form 
->alternatively ?
+Hello
 
-"*s" and "(*s)" are exactly the same.  However, "*s->next" and "(*s)->next" 
-are NOT the same because without the parentheses field selection through 
-the pointer ("->") wouild be done before indirection ("*") of the "handle" 
-(pointer to a pointer) "s".  IOW, the parentheses are only there (as is 
-usually the case in a C expression) to control precedence of binding.
+I have written a small program that allows a user to do some configuration.
+Now everytime the user does configure something it gets logged to a log
+file. Usually when someone comes from a remote machine I took the
+environment variable DISPLAY and if that is not there the output from
+"who am i", to determine from where the user comes. However this does
+not work reliably since DISPLAY is set to localhost when the user is using
+ssh, also "who am i" does not always tell me from where a user comes.
+Another problem is when the user first logs in on say host1 then to host2
+and then to host3. Is there a way to determine that the user comes from
+host1? The SSH_CLIENT environment variable is always set to the last
+host, so this can not be used. SSH_CONNECTION is not set so this can
+also not be used. I also looked at struct utmp it to does not provide
+the information, it is also not very portable since the structure differs
+a lot from system to system.
 
---
-Jeff Woods <kazrak+kernel@cesmail.net> 
+So is there a way to determine from where a user comes?
 
+Thanks,
+Holger
 
