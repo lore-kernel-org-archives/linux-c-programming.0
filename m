@@ -1,51 +1,52 @@
-From: Voicu Liviu <pacman@mscc.huji.ac.il>
-Subject: Re: C++ class inheritance
-Date: Thu, 02 Oct 2003 10:30:22 +0300
+From: "Sandro Dangui" <sdangui@nortelnetworks.com>
+Subject: RE: C++ class inheritance
+Date: Thu, 2 Oct 2003 09:27:51 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F7BD40E.3050100@mscc.huji.ac.il>
-References: <200310020400.13292.rafael@thinkfreak.com.br>
+Message-ID: <31E38B53D182D51195FA00508BE3A33402C89DFB@zwnbc004.cala.nortel.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200310020400.13292.rafael@thinkfreak.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: rafael@thinkfreak.com.br
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: rafael@thinkfreak.com.br, linux-c-programming@vger.kernel.org
 
-Rafael Costa dos Santos wrote:
 
->Can anyone explain me what does < > means ? 
->Example:
->
->class RegistrationRequestPDU : public RasPDU<H225_RegistrationRequest>
->{
->} ;
->
->Is "RegistrationRequestPDU" inheriting from RasPDU, H225_RegistrationRequest 
->or both ?
->
->  
->
-RegistrationRequestPDU  inherits from RasPDU using template H225_RegistrationRequest ?
+RasPDU is a template.
+If you look at its .h file you will see something like this:
 
+template <class T> 
+class RasPDU
+{
+  ...
+};
+
+In your case, "T" will be replaced (compiler) by H225_RegistrationRequest.
+In my opinion, tamplates are the most powerful feature of C++.
+
+
+
+
+-----Original Message-----
+From: Rafael Costa dos Santos [mailto:rafael@thinkfreak.com.br] 
+Sent: quinta-feira, 2 de outubro de 2003 01:00
+To: linux-c-programming@vger.kernel.org
+Subject: C++ class inheritance
+
+
+
+Can anyone explain me what does < > means ? 
+Example:
+
+class RegistrationRequestPDU : public RasPDU<H225_RegistrationRequest> { } ;
+
+Is "RegistrationRequestPDU" inheriting from RasPDU, H225_RegistrationRequest
+
+or both ?
 
 -- 
-Liviu Voicu
-Assistant Programmer and network support
-Computation Center, Mount Scopus
-Hebrew University of Jerusalem
-Tel: 972(2)-5881253
-E-mail: "Liviu Voicu"<pacman@mscc.huji.ac.il>
-
-/**
- * cat /usr/src/linux/arch/i386/boot/bzImage > /dev/dsp
- * ( and the voice of God will be heard! )
- *
- */
-
-Click here to see my GPG signature:
-----------------------------------
-	http://search.keyserver.net:11371/pks/lookup?template=netensearch%2Cnetennomatch%2Cnetenerror&search=pacman%40mscc.huji.ac.il&op=vindex&fingerprint=on&submit=Get+List
-
-
+Rafael Costa dos Santos
+rafael@thinkfreak.com.br
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
