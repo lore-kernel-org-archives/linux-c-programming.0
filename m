@@ -1,48 +1,41 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: clear the screen
-Date: Wed, 23 Feb 2005 00:16:52 +0000
-Message-ID: <16923.52084.408249.817998@gargle.gargle.HOWL>
-References: <1108969688.5088.12.camel@localhost.localdomain>
+Subject: Re: Host IP address
+Date: Wed, 23 Feb 2005 00:26:08 +0000
+Message-ID: <16923.52640.306669.975526@gargle.gargle.HOWL>
+References: <200502221751.44585.hitoc_mail@yahoo.it>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <1108969688.5088.12.camel@localhost.localdomain>
+In-Reply-To: <200502221751.44585.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kaushal@rocsys.com
-Cc: linux-c <linux-c-programming@vger.kernel.org>
+To: HIToC <hitoc_mail@yahoo.it>
+Cc: linux-c-programming@vger.kernel.org
 
 
-kaushal wrote:
+HIToC wrote:
 
-> 	Sorry for a very basic question.I would like to know how to clear the
-> screen from within a c program without using system("clear") or any of
-> the ncurses functions.Can we do this using printf?My program is in raw
-> mode so is there any feature available by which I can use the termios
-> structure for clearing the screen if it is not possible with printf.Long
-> ago when I used work in the dos platform I used conio.h and clrscr()
-> rourine.I guess I have to write that clrscr() routine's code itself.Im
-> working on a linux machine now.
+> Sometimes is useful to know the IP address of the machine we are working on,
+> for example when we connect a SMTP server and do the EHLO <domain> command.
+> I have written a short C++ program that first prints the host name and the
+> host IP address, then if arguments from command line are passed prints
+> the IP address of each domain name.
 
-Unix systems don't have a "screen", they have terminals. Historically,
-these would be physical terminals (e.g. vt220s) connected via serial
-ports. The Linux kernel uses the keyboard and the graphics card's text
-mode to emulate a number of terminals, as well as supporting physical
-terminals connected to a serial port (either directly or via modems)
-and pseudo-terminals (used by programs which emulate terminals, e.g. 
-telnetd, xterm, screen etc).
+> My intent is to know my real IP address!
 
-To clear the terminal's screen (assuming that it's a video terminal;
-hardcopy terminals don't have a screen), you have to send the
-appropriate control sequence. The exact sequence depends upon the type
-of terminal (which can be determined from the value of the TERM
-environment variable).
+A system may have any number of IP addresses, including zero. You
+can't assume that there is exactly one IP address.
 
-To obtain the correct control sequence, use the terminfo library to
-obtain the sequence for the "clear" capability, then send that
-sequence to the terminal (i.e. stdout).
+Also, the results obtained from gethostname() and gethostbyname()
+aren't necessarily correct. That just tells you what your hostname
+resolves to using whatever name resolution method(s) your system is
+configured to use (e.g. /etc/hosts, DNS, NIS etc).
 
-See the manpage for setupterm() and tigetstr() for more information.
+If you want to determine the IP addresses of any local interfaces,
+first obtain a list of interfaces by either calling ioctl(SIOCGIFCONF)
+or parsing /proc/net/dev. Then call ioctl(SIOCGIFADDR) for each
+interface to obtain its address. See the source code for "ifconfig"
+(from the net-tools package) for more details.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
