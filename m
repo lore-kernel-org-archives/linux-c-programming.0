@@ -1,131 +1,112 @@
-From: "John T. Williams" <jowillia@vt.edu>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: Newbie question on malloc()
-Date: Thu, 03 Jun 2004 20:14:36 -0400
+Date: Fri, 4 Jun 2004 00:53:53 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1086308075.22895.3.camel@localhost>
+Message-ID: <16575.47633.683051.92531@cerise.nosuchdomain.co.uk>
 References: <002d01c44897$78ae58d0$de01a8c0@qnessmphibiki>
-	 <20040603012832.GC2562@luna.mooo.com>
-	 <16574.55886.797709.765778@cerise.nosuchdomain.co.uk>
-	 <1086301555.22497.0.camel@localhost>  <001501c449c1$efc075e0$3410fea9@zoom>
-Reply-To: jtwilliams@vt.edu
+	<20040603012832.GC2562@luna.mooo.com>
+	<16574.55886.797709.765778@cerise.nosuchdomain.co.uk>
+	<1086301555.22497.0.camel@localhost>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <001501c449c1$efc075e0$3410fea9@zoom>
+In-Reply-To: <1086301555.22497.0.camel@localhost>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Paul Gimpelj <pgimpelj@sympatico.ca>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
-
-According to the glibc documentation, it is not guaranteed to do so
-
-http://www.gnu.org/software/libc/manual/html_node/Termination-Internals.html#Termination%20Internals
+To: jtwilliams@vt.edu
+Cc: Micha Feigin <michf@post.tau.ac.il>, linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
+John T. Williams wrote:
 
+> but I believe that it is simply good practice to always be aware
+> of memory you have dynamically allocated and always free it after you no
+> more use for it.
 
+As an "all other factors being equal ..." argument, I would agree with
+that. But, most of the time, all other factors aren't equal.
 
+There are many situations where keeping track of allocated memory
+blocks would add significant complexity. E.g. when using heavily
+linked data structures, it's common to copy pointers, so there may be
+many pointers to the same block of memory.
 
-On Thu, 2004-06-03 at 19:24, Paul Gimpelj wrote:
-> hi,
-> pardon me for patching to this thread,
-> 
-> but, following this conversation,
-> if files are left open at exit, does the operating system (linux) flush the
-> i/o buffers to disk before closing files?
-> This is not the case with windows 95/98  and dos.
-> OR, does the _exit() function in the c runtime do it.
-> Thanks.
-> 
-> thanks
-> 
-> regards,
-> Paul
-> 
-> 
-> ----- Original Message -----
-> From: "John T. Williams" <jowillia@vt.edu>
-> To: "Glynn Clements" <glynn.clements@virgin.net>
-> Cc: "Micha Feigin" <michf@post.tau.ac.il>; "linux-c-programming"
-> <linux-c-programming@vger.kernel.org>
-> Sent: Thursday, June 03, 2004 6:25 PM
-> Subject: Re: Newbie question on malloc()
-> 
-> 
-> >
-> > I think this is may be a somewhat misleading statement. Not freeing
-> > memory before normal termination decreases re-usability of your code.
-> > You never know when your main function might be reused verbatim as
-> > another sub function. Failing to free memory before all reference leave
-> > scope can lead to massive memory leeks. Further, the more memory your
-> > program is holding at any given moment of operation the more pages it
-> > holds, the more pages it holds the more likely any particular call to a
-> > memory location will lead to a page fault, and page faults are
-> > expensive. Freeing memory allows malloc to reassign that memory next
-> > time its called. Now I know that this was a question about freeing
-> > memory before termination, and therefore unless we are talking about a
-> > situation where your code is being reused my last two arguments hold no
-> > weight, but I believe that it is simply good practice to always be aware
-> > of memory you have dynamically allocated and always free it after you no
-> > more use for it. In this way you don't get used to saying well if I miss
-> > it the operating system will clean it up for me. Please note I do not
-> > suggest that one should go to out of the way to free memory on abnormal
-> > termination, but its simply good practice to free memory when it is no
-> > longer being used in the normal behavior of your code.
-> >
-> >
-> >
-> > On Thu, 2004-06-03 at 03:59, Glynn Clements wrote:
-> > > Micha Feigin wrote:
-> > >
-> > > > > I have made a daemon in which dynamic memory is gotten
-> > > > > by malloc(). Does the memory get free automatically without
-> > > > > free() by the deamon  when the daemon process is killed?
-> > > > > Thanks in advance.
-> > > >
-> > > > It does, but in general its not in good practice to count on process
-> > > > exit for freeing memory (a good way to get memory leaks).
-> > >
-> > > This is incorrect.
-> > >
-> > > You shouldn't make an effort to return memory to the process' heap (by
-> > > calling free()) if the program is about to terminate.
-> > >
-> > > Doing so consumes CPU time (and probably disk bandwidth, given that
-> > > some of that memory will probably be swapped out) and doesn't provide
-> > > any benefit (free() won't usually return memory to the OS and, in any
-> > > case, all of the process' memory will be returned to the OS upon
-> > > exit).
-> > >
-> > > The only valid reason for free()ing memory blocks upon termination is
-> > > if the structure of the program is such that it isn't practical to
-> > > avoid doing so. E.g. if data structures have matched setup/cleanup
-> > > routines, and you need to call the cleanup code for other reasons, and
-> > > the cleanup code will free the memory anyway.
-> > >
-> > > Similarly, you don't need to explicitly close() file descriptors, or
-> > > release file locks (those obtained with flock/lockf/fcntl) as the OS
-> > > will do that.
-> > >
-> > > The sort of actions which might make sense to perform before calling
-> > > exit() are:
-> > >
-> > > + Writing a log entry reporting shutdown
-> > > + Deleting temporary files
-> > > + Deleting any SysV IPC structures which aren't shared with other
-> > >   processes.
-> > > + Informing other networked processes of termination, e.g. sending a
-> > >   "QUIT" command.
-> > > + Killing child processes.
-> >
-> > -
-> > To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+In that situation, you can't just traverse the data structure, freeing
+all of the pointers which you encounter; doing so would result not
+only in freeing blocks multiple times, but quite possibly freeing
+blocks which you will subsequently need to traverse into.
 
+Another example: if you are storing strings in dynamically allocated
+memory, you can "discard" some bytes from the beginning of the string
+by advancing the pointer. However, you can't then pass the modified
+pointer to free(); for that purpose, you would have to keep the
+original pointer around as well.
+
+In either case, you essentially have to add an additional layer of
+memory management, so that allocating a block adds it to the set of
+allocated blocks while freeing the block removes it.
+
+For a short-lived program (i.e. a typical Unix command-line utility),
+there is often no need to do this; often you can just allocate memory
+as you need it and not to bother explicitly freeing anything.
+
+Essentially, memory leaks are only an issue for programs which either
+run indefinitely (e.g. daemons or interactive applications) or which
+process large amounts of data in a linear sequence (i.e. you wouldn't
+want "grep" to allocate a new block of memory for every line).
+
+> In this way you don't get used to saying well if I miss
+> it the operating system will clean it up for me. Please note I do not
+> suggest that one should go to out of the way to free memory on abnormal
+> termination, but its simply good practice to free memory when it is no
+> longer being used in the normal behavior of your code. 
+
+But that assumes that you know when memory is no longer being used. In
+non-trivial programs, determining "liveness" can itself be
+non-trivial.
+
+When you release a structure which contains pointers to other
+structures, you can only release any referenced structures when you
+remove the last remaining reference. And it may not be straightforward
+to determine whether other references exist.
+
+There are a number of solutions, all of which have some drawbacks:
+
+1. Reference counting. Not only does this requires significant
+discipline (ensuring that you always increment/decrement reference
+counts at the right points), but it doesn't cope with circular
+references: if A references B and B references A, the reference counts
+will be non-zero, so the structures won't be released even if nothing
+else references either A or B.
+
+2. Mark/Scan. This requires that you can reliably enumerate all
+referencess to dynamic memory blocks. Unlike reference counting, this
+scheme handles circular references correctly, but the effort involved
+tends to make this approach impractical for anything other than
+language interpreters or projects of such complexity that no other
+solution is practical.
+
+3. Copy everything; i.e. never duplicate or modify pointers. If you
+need to copy data, copy the entire structure (and anything which it
+references) rather than just the pointer. If you need a substring,
+copy the relevant portion into a newly-allocated memory block. Not
+only is this approach only feasible with "lightly" linked data
+structures, it can easily result in significant bloat.
+
+And, to keep to the original point (freeing memory upon termination),
+if you're going to add your own memory management layer, one obvious
+feature would be:
+
+	extern int shutting_down;
+
+	void my_free(void *p)
+	{
+		if (!shutting_down)
+			free(p);
+	}
+
+I.e. explicitly skip calling free() if you know that you're about to
+quit.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
