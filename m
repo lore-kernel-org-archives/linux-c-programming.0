@@ -1,27 +1,51 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: using perl regex engine from C ?
-Date: Fri, 14 Feb 2003 00:32:27 +0100 (CET)
+From: Steven Smith <sos22@cam.ac.uk>
+Subject: Re: (F)using perl regex engine from C ?
+Date: Thu, 13 Feb 2003 23:46:23 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0302140025040.8019-100000@hestia>
-References: <15936.11120.748235.577740@cerise.nosuchdomain.co.uk>
+Message-ID: <20030213234623.GA14860@cam.ac.uk>
+References: <15936.11120.748235.577740@cerise.nosuchdomain.co.uk> <Pine.LNX.4.21.0302140025040.8019-100000@hestia>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <15936.11120.748235.577740@cerise.nosuchdomain.co.uk>
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.21.0302140025040.8019-100000@hestia>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: "J." <mailing-lists@xs4all.nl>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello...
 
-I was wondering if it is possible to access the perl regex engine from a
-C program. Is there a interface to it? Have people done it ? I
-guess so, but where should I start searching ? G00gle fails to coff up
-anything usefull and I am not really perlological enlightend. 
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Any pointers, thoughts or suggestions would be most welcomed.
+> I was wondering if it is possible to access the perl regex engine from a
+> C program. Is there a interface to it? Have people done it ? I
+> guess so, but where should I start searching ?
+It isn't the Perl regex engine, but libpcre (Perl Compatible Regular
+Expressions) is fairly close.
 
-Thnkx...
+Failing that, you'd probably need to either copy and paste chunks of
+the Perl source code, or use libperl and run the regexps from embedded
+Perl.
 
-J.
+Of course, if you just need regular expressions, and aren't bothered
+about the Perl-specific things, you could use the regex functions in
+libc (regcomp, regexec, regerror, and regfree).
 
+Steven Smith,
+sos22@cam.ac.uk.
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+iD8DBQE+TC5PO4S8/gLNrjcRAocsAJ4hpA+xa3iM6ohdKK9NZfAjRauOdgCdHPhT
+oCT5nm3IyKPZ7NBZuyLaAj4=
+=zSoP
+-----END PGP SIGNATURE-----
+
+--mP3DRpeJDSE+ciuQ--
