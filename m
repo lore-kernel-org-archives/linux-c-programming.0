@@ -1,50 +1,53 @@
-From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Subject: structure size
-Date: Wed, 5 Mar 2003 12:32:01 +0530 (IST)
+From: Helmut Djurkin <djh@tscheinig.com>
+Subject: Re: structure size
+Date: Wed, 05 Mar 2003 08:27:26 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.33.0303051227480.30291-100000@soochak.ncst.ernet.in>
+Message-ID: <3E65B4EE.8080803@tscheinig.com>
+References: <Pine.LNX.4.33.0303051227480.30291-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.33.0303051227480.30291-100000@soochak.ncst.ernet.in>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
+hi,
+it's the alignment.
 
-Hi,
-
-why the sizeof sturcture is alway greater than the collective sizes of all 
-the elements in it.
-
-eg
+with gcc and this:
 struct node {
-	int	a;
-	char	c;
-	int	b;
-};
+	/* member here */
+} __attribute__((packed));
 
-int main()
-{
-	printf ("%d\n", sizeof (struct node));
-	return 0;
-}
+you will get the your "collective sizes".
 
 
-it prints 12 in my case.
+Mohammed Khalid Ansari wrote:
+> Hi,
+> 
+> why the sizeof sturcture is alway greater than the collective sizes of all 
+> the elements in it.
+> 
+> eg
+> struct node {
+> 	int	a;
+> 	char	c;
+> 	int	b;
+> };
+> 
+> int main()
+> {
+> 	printf ("%d\n", sizeof (struct node));
+> 	return 0;
+> }
+> 
+> 
+> it prints 12 in my case.
+> 
+> where is the catch.
+> 
 
-where is the catch.
 
--- 
-
-**************************************************************************
-
-Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
-Assistant Manager II                          (off) : 0091-022-2024641
-National Centre for Software Technology   Fax       : 0091-022-2049573 
-8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in 	
-Mumbai 400021.
-
-Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
-
-**************************************************************************
 
