@@ -1,52 +1,44 @@
-From: ramzez <r4mz3z@yahoo.es>
-Subject: sockets -> MTU (Maximum Transfer Unit)
-Date: 24 Jul 2003 20:19:16 -0500
-Sender: linux-newbie-owner@vger.kernel.org
-Message-ID: <1059094069.974.4.camel@localhost.localdomain>
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: sockets -> MTU (Maximum Transfer Unit)
+Date: Fri, 25 Jul 2003 04:06:38 +0100
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <16160.40638.795275.541340@cerise.nosuchdomain.co.uk>
+References: <1059094069.974.4.camel@localhost.localdomain>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-j0TS5NRGgOAKakQ61gwS"
-Return-path: <linux-newbie-owner@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <1059094069.974.4.camel@localhost.localdomain>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-newbie <linux-newbie@vger.kernel.org>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: ramzez <r4mz3z@yahoo.es>
+Cc: linux-newbie <linux-newbie@vger.kernel.org>, linux-c-programming@vger.kernel.org
 
 
---=-j0TS5NRGgOAKakQ61gwS
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+ramzez wrote:
 
-Hi friends...
+>   In my C app, How do I can know the MTU (Maximum Transfer Unit) of my
+> net?
 
-  In my C app, How do I can know the MTU (Maximum Transfer Unit) of my
-net?
+You can obtain the MTU of an interface with ioctl(SIOCGIFMTU), e.g.
 
-thanks
+	const char if_name[] = "eth0";
+	struct ifreq ifr;
+	int fd;
 
---=20
-  Linux User Registered #232544
-        ICQ : 337889406
-  GnuPG-key : www.keyserver.net
- -------------------------------
-"Software is like sex,
-      it's better when it's free."
-                  [Linus Torvalds]
+	fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
 
---=-j0TS5NRGgOAKakQ61gwS
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: Esta parte del mensaje esta firmada digitalmente
+	strcpy(ifr.ifr_name, if_name);
+	ioctl(fd, SIOCGIFMTU, &ifr);
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
+	printf("MTU of %s is %d\n", if_name, ifr.ifr_mtu);
 
-iD8DBQA/IH40G3Fqyap52TERAhD6AKD312lx5mw6fTrREYqQmX8q14TuvgCcD9Xl
-oRiaY8ZgPlIyhhdiWgtYafM=
-=hYrr
------END PGP SIGNATURE-----
+Assuming that path MTU discovery is enabled, you can obtain the path
+MTU of an individual connection using getsockopt(SOL_IP, IP_MTU), e.g.
 
---=-j0TS5NRGgOAKakQ61gwS--
+	int mtu;
+	int mtulen = sizeof(mtu);
 
+	getsockopt(skt, SOL_IP, IP_MTU, &mtu, &mtulen);
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-Please read the FAQ at http://www.linux-learn.org/faqs
+-- 
+Glynn Clements <glynn.clements@virgin.net>
