@@ -1,18 +1,56 @@
-From: Llfrg@aol.com
-Subject: Monitoring a program
-Date: Mon, 01 Mar 2004 13:22:18 -0500
+From: "John T. Williams" <jowillia@vt.edu>
+Subject: Re: Monitoring a program
+Date: Mon, 1 Mar 2004 16:38:19 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4FEDBC17.643129B5.0000FADF@aol.com>
+Message-ID: <002f01c3ffd5$8379cb60$ed64a8c0@descartes>
+References: <4FEDBC17.643129B5.0000FADF@aol.com>
+Reply-To: "John T. Williams" <jtwilliams@vt.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Llfrg@aol.com, linux-c-programming@vger.kernel.org
 
-Hi,
+Let me see if I understand what you are trying to do.  Lets pretend the
+target program is ls.
+Whenever ls is run by any user you would like you daemon to store
+statistical information about the execution of ls.
 
-I would like to monitor a program execution. I intend to have a program (or daemon) that, whenever the target program (whose name is to be passed as a paramenter) starts (i.e when ps -C progname returns any process), gets statistics like cpu usage and store them on a file, finishing when the target program finishes. What would be an efficient way to do that?
+You might have to get this information from the kernels process table.
+While executing the information you want is available in the procfs, however
+when the process completes the information disappears.  It has been awhile
+since I took my OS class, so I'm not sure if the information is still
+available in the kernel's data structures or not.  I believe it would be
+until another process with the same pid runs, but there is a good chance
+that I'm wrong.
 
-Thanks,
-Leonardo.
+Depending on what you are trying to accomplish there may be better/easier
+ways to accomplish your goal.
+
+--
+John
+
+----- Original Message ----- 
+From: <Llfrg@aol.com>
+To: <linux-c-programming@vger.kernel.org>
+Sent: Monday, March 01, 2004 1:22 PM
+Subject: Monitoring a program
+
+
+> Hi,
+>
+> I would like to monitor a program execution. I intend to have a program
+(or daemon) that, whenever the target program (whose name is to be passed as
+a paramenter) starts (i.e when ps -C progname returns any process), gets
+statistics like cpu usage and store them on a file, finishing when the
+target program finishes. What would be an efficient way to do that?
+>
+> Thanks,
+> Leonardo.
+> -
+> To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
