@@ -1,47 +1,66 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: static or stuff like that
-Date: Wed, 1 May 2002 01:12:33 +0100
+From: Mehran Rezaei <mehran@cs.unt.edu>
+Subject: timing
+Date: Wed, 01 May 2002 11:51:22 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15567.13041.485353.845971@cerise.nosuchdomain.co.uk>
-References: <200204281856.43955.wrazlov@gmx.net>
-	<15564.28455.695486.899966@cerise.nosuchdomain.co.uk>
-	<20020429110933.19f3c1af.subscript@free.fr>
-	<15565.5881.728128.202346@cerise.nosuchdomain.co.uk>
-	<20020430232631.046def4f.subscript@free.fr>
+Message-ID: <aap6j9$9uv$2@main.gmane.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020430232631.046def4f.subscript@free.fr>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: wwp <subscript@free.fr>
-Cc: linux-c-programming@vger.kernel.org
+To: C news group <linux-c-programming@vger.kernel.org>, gcc news group <linux-gcc@vger.kernel.org>
 
+Hello dear all,
+For the sake of performance analysis of some programs, I am using
+clock() function call. I am running the programs on a linux box (Redhat
+7.2, and my machine is i686).
+However, I am not getting the correct results as I expected. Perhaps I
+miss something necessary for using timing function calls.
+Here is a code fragment that I am testing:
+/***************************************************************/
+#include <sys/types.h>
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
+#include <assert.h>
+#define TEST 8
+main(){
+    int i=1;
+    int size=5*8000;
+    void *pBreak,*newBreak;
+    time_t time1,time2;
+    clock_t start,finish,elapsed;
+    start=clock();
+    time(&time1);
+    sleep(10);
+    1 << i;
+    for(i=0;i<100;i++){
+        printf("%x %d\n",-TEST,(1 << i));
+        if (1 << i == 8192) break;
+    }
+    printf("%d \n",size >> i);
+    i=brk(pBreak);
+    assert(i == 0);
+    newBreak=sbrk(1024);
+    finish=clock();
+    elapsed=finish-start;
+    time(&time2);
+    printf("Exec Time from clock()    =
+%f\n,(double)(finish-start)/(double)CLOCKS_PER_SEC);
+    printf("Exec Time from difftime() = %lf\n",difftime(time2,time1));
+}
+/*****************************************************************************/
 
-wwp wrote:
+To my understanding both printfs should at least show 10 seconds
+(because of "sleep(10)"). But they do not.
+Note that I am not looking for so called Wall-Clock (total program
+execution), for which I can use system calls. I should stick to a
+function call that enables me to monitor the execution time of only some
+of the functions in my programs (for my specific purpose).
+Do you see any problem with my simple program? Is there anyway that I
+can get perhaps better resolution on CPU time or elapsed time?
+Your help and concern is appreciated.
+So long,
 
-> > > > > I want to control whether a process is already running or not,
-> > > > > and i don't know how without using some kind of lock-files
-> > > > 
-> > > > You can scan the files under /proc/<pid> to obtain details about
-> > > > which processes are running. E.g. /proc/<pid>/exe is a symlink to
-> > > > the program which process <pid> is executing.
-> > > 
-> > > Is /proc always available?
-> > 
-> > It's possible that /proc isn't mounted but, if it isn't, many OS
-> > features won't work (e.g. modprobe). Unless you're targeting a very
-> > minimal system (e.g. embedded systems), or writing code which will run
-> > early in the boot sequence, it's safe to assume that /proc will be
-> > available.
-> [snip]
-> 
-> Thanx for your answers.
-> I've also seen software using unix domain socket to prohibit duplicate
-> launch of a program on a POSIX system.
-> What do you think of this method, Glynn?
+Mehran
 
-I don't see that this is any different to using a lock file.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
