@@ -1,47 +1,29 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: <time.h>: gmtime keeps giving the same time ....
-Date: Thu, 8 May 2003 21:47:20 +0200 (CEST)
+From: wwp <subscript@free.fr>
+Subject: Re: First Post
+Date: Thu, 8 May 2003 23:31:05 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0305082139410.13103-100000@hestia>
-References: <20030507154442.GQ674@gre.ac.uk>
+Message-ID: <20030508233105.3f87ffb1.subscript@free.fr>
+References: <007601c3158d$b0dad7d0$592005d5@carlos>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030507154442.GQ674@gre.ac.uk>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <007601c3158d$b0dad7d0$592005d5@carlos>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: cosmos <nanakos@wired-net.gr>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello,
+Hi cosmos,
 
-Output from the date `command` in my terminal:
-Thu May  8 21:42:28 CEST 2003
 
-Output from my `problem'_program.c
-19
+On Thu, 8 May 2003 21:14:38 +0300 "cosmos" <nanakos@wired-net.gr> wrote:
 
-#include <stdio.h>
-#include <time.h>
+> Doesn't anyone post in this mailing list???
 
-int main(void) {
- struct tm *tm_ptr;
- time_t the_time;
+Yes, even if the flow is not so huge.
 
- (void)time(&the_time);
- tm_ptr = gmtime(&the_time);
 
- printf("tm_ptr->tm_hour = %d\n", tm_ptr->tm_hour);
+Regards,
 
- return 0;
-}
-
-No matter what I do, this C - code keeps giving me as output 19.
-
-Is my system messed up or my head ?
-
-Any thoughts are more than welcome
-
-Thnkx....
-
-J.
-
+-- 
+wwp
