@@ -1,79 +1,48 @@
-From: HIToC <hitoc_mail@yahoo.it>
-Subject: Host IP address
-Date: Tue, 22 Feb 2005 17:53:46 +0100
-Message-ID: <200502221751.44585.hitoc_mail@yahoo.it>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: clear the screen
+Date: Wed, 23 Feb 2005 00:16:52 +0000
+Message-ID: <16923.52084.408249.817998@gargle.gargle.HOWL>
+References: <1108969688.5088.12.camel@localhost.localdomain>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
+In-Reply-To: <1108969688.5088.12.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-
-Hello all!
-Sometimes is useful to know the IP address of the machine we are working on,
-for example when we connect a SMTP server and do the EHLO <domain> command.
-I have written a short C++ program that first prints the host name and the
-host IP address, then if arguments from command line are passed prints
-the IP address of each domain name.
-
-/*		IPadress.cpp
-		Author:	HIToC
-*/
-
-#include <iostream.h>
-#include <unistd.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/types.h>
-#include <string>
-#include <stdio.h>
-
-int main(int argc, char* argv[])
-{
-	hostent	*hh;
-	string	IP, my_name;
-	char*	host_name = new char[64];
-
-	gethostname(host_name, 64);
-	my_name = host_name;
-
-	cout <<"Host name:\t\t" <<my_name <<'\n';
-
-	hh = gethostbyname(host_name);
-	IP = inet_ntoa(*((struct in_addr *)hh->h_addr));
-	cout <<"My IP address:\t\t" <<IP <<"\n\n";
-
-	for(int i = 1; i<argc; i++) {
-		hh = gethostbyname(argv[i]);
-		if(hh == NULL) {
-			cerr <<"Error with \"" <<argv[i] <<"\" !\n";
-			continue;
-		}
-		IP = inet_ntoa(*((struct in_addr *)hh->h_addr));
-		cout <<"IP address of " <<argv[i] <<" :\t" <<IP <<'\n';
-	}
-
-	return 0;
-}
-
-If called without any parameter, the output is always:
-Host name:		linux
-My IP address:	127.0.0.2
-
-If like argument I pass localhost, thw output is:
-Host name:		linux
-My IP address:	127.0.0.2
-IP address of localhost:	127.0.0.1
+To: kaushal@rocsys.com
+Cc: linux-c <linux-c-programming@vger.kernel.org>
 
 
-My intent is to know my real IP address!
-Can anybody help me?
-Thaks for any suggestion.
+kaushal wrote:
+
+> 	Sorry for a very basic question.I would like to know how to clear the
+> screen from within a c program without using system("clear") or any of
+> the ncurses functions.Can we do this using printf?My program is in raw
+> mode so is there any feature available by which I can use the termios
+> structure for clearing the screen if it is not possible with printf.Long
+> ago when I used work in the dos platform I used conio.h and clrscr()
+> rourine.I guess I have to write that clrscr() routine's code itself.Im
+> working on a linux machine now.
+
+Unix systems don't have a "screen", they have terminals. Historically,
+these would be physical terminals (e.g. vt220s) connected via serial
+ports. The Linux kernel uses the keyboard and the graphics card's text
+mode to emulate a number of terminals, as well as supporting physical
+terminals connected to a serial port (either directly or via modems)
+and pseudo-terminals (used by programs which emulate terminals, e.g. 
+telnetd, xterm, screen etc).
+
+To clear the terminal's screen (assuming that it's a video terminal;
+hardcopy terminals don't have a screen), you have to send the
+appropriate control sequence. The exact sequence depends upon the type
+of terminal (which can be determined from the value of the TERM
+environment variable).
+
+To obtain the correct control sequence, use the terminfo library to
+obtain the sequence for the "clear" capability, then send that
+sequence to the terminal (i.e. stdout).
+
+See the manpage for setupterm() and tigetstr() for more information.
 
 -- 
-With regards,
-
-
-					HIToC
-					hitoc_mail@yahoo.it
+Glynn Clements <glynn@gclements.plus.com>
