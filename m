@@ -1,32 +1,33 @@
-From: p.boehm@d-trust.net
-Subject: RE: -EFAULT during freeing a pointer to a structure
-Date: Tue, 5 Oct 2004 17:43:25 +0200
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: C language(asm construct)
+Date: Wed, 6 Oct 2004 11:44:03 +0100 (BST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <OFA6DAB128.ACBA7070-ONC1256F24.0054FB89@bln.d-trust.de>
+Message-ID: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
-Cc: Eric Bambach <eric@cisu.net>
+To: linux prg <linux-c-programming@vger.kernel.org>
 
-hi,
-I've found the error. the problem occurs if MAXNUM or number of array to store pointers of another
-structure is odd.
-I know that malloc() always allocates memory as multiple of 4 but in my case it is so:
+hi
 
-     struct xy {
-          int id;        /* sizeof(int)=4 */
-          char *name;         /* sizeof(char *)=4 */
-     };
+i want to know if this is correct? i am a bit confused
+about linker...i am talking this topic when we have a
+asm construct in our code.
 
-     struct abc {
-          struct xy *next[7]; /* sizeof(struct xy *) * 7 = 4 * 7 = 28 */
-     };
+The compiler basically reads the .c program and
+converts it into assembly code.Now during this it
+neglects this assembler construct and leaves it for
+assembler.Assembler is the person which basically
+looks for this part of the code and changes it into
+machine code. 
 
-     => all in all 36 bytes, and that's even!
+thanks
 
-Can someone explain this? (I fears the solution is more than easy ...)
-pb
+ankit
 
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
