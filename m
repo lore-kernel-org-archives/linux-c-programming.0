@@ -1,80 +1,128 @@
-From: Micha Feigin <michf@post.tau.ac.il>
-Subject: Re: exit(42)
-Date: Sat, 25 Sep 2004 03:13:23 +0200
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: Re: Static memory allocation
+Date: Sat, 25 Sep 2004 10:14:01 +0100 (BST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040925011323.GD3825@luna.mooo.com>
-References: <20040924115759.6133.qmail@web52908.mail.yahoo.com>
+Message-ID: <20040925091401.39110.qmail@web52907.mail.yahoo.com>
+References: <20040924.145113.74752222.ppercot@free.fr>
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040924115759.6133.qmail@web52908.mail.yahoo.com>
+In-Reply-To: <20040924.145113.74752222.ppercot@free.fr>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: Patrick Percot <ppercot@free.fr>
+Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-On Fri, Sep 24, 2004 at 12:57:59PM +0100, Ankit Jain wrote:
-> well do any body know what does this mean?
-> 
-> exit(42)
-> 
+sorry boss but this also gives problem
 
-It means return value 42 as the exit value for the program. Every
-program returns an exit value (integer) when it exits. 0 means not
-error, anything else is an error value and the specific number can mean
-the type of error if its documented and the caller knows what to expect.
+[ankit@Ankit fft]$ cat try2.c
+#include <stdio.h>
+int main()
+{
+double a[1450][1450];
+ a[149][0]=3D999.999;
+ printf("%lf\n",a[149][0]);
+ return 0;
+}
+[ankit@Ankit fft]$ gcc try2.c
+[ankit@Ankit fft]$ ./a.out
+Segmentation fault
 
-> and also when we say exit(0) or exit(1) then there is
-> anyway to catch these values
-> 
+thanks
 
-From the caller you can catch this value, read the documentation for
-your shell about the return value. I think its $? under bash.
+ankit
+ --- Patrick Percot <ppercot@free.fr> wrote:=20
+> On Fri, 24 Sep 2004 11:57:08 +0100 (BST), Ankit Jain
+> <ankitjain1580@yahoo.com> wrote
+>=20
+> > hi
+>=20
+> Hi,
+>=20
+> >=20
+> > well i had tried to enquire about this problem
+> >=20
+> > i was not able to find the solution. i know it
+> workds
+> > when i declare the array globally. i know if i use
+> > malloc it will work and i am using the same in my
+> > program
+> >=20
+> > but this question is again in my mind that what
+> could
+> > be the reason that it dosent work here on my
+> system
+> > because last time when i asked this question on
+> some
+> > sytem it was able to run which they said that they
+> > have less emory then that of my system
+> >=20
+> > my system config.: redhat linux 9.0 +512 RAM
+> > this is what my terminal displays
+> >=20
+> > [ankit@Ankit fft]$ cat try2.c
+> > #include <stdio.h>
+> > int main()
+> > {
+> > double a[1450][1450];
+> >  a[1450][0]=3D999.999;
+>=20
+> You do not just have a stack  problem : The upper
+> bound is not 1450, but
+> 1449, because the first index is 0.=20
+>=20
+> So  a[1449][0] has  more chances  to  work
+> correctly,  but the  problems
+> generated  by  such a  fault  can be  insidious  and
+>  very difficult  to
+> discover, because the error can appear later in your
+> program.
+>=20
+> >  printf("%lf\n",a[1450][0]);
+> >  return 0;
+> > }
+> > [ankit@Ankit fft]$ gcc try2.c
+> > [ankit@Ankit fft]$ ./a.out
+> > Segmentation fault
+> > [ankit@Ankit fft]$
+> >=20
+> > i just want to know that if there is some problem
+> > related to stack how t oget rid of it
+> >=20
+> > thanks
+> >=20
+> > ANkit
+> >=20
+> >=20
+> >=20
+> >=20
+> >
+>
+_______________________________________________________________________=
+_
+> > Yahoo! Messenger - Communicate instantly..."Ping"=20
+> > your friends today! Download Messenger Now=20
+> > http://uk.messenger.yahoo.com/download/index.html
+> >=20
+>=20
+> =C0+
+> PP
+> --=20
+> Groupe Morbihannais d'Utilisateurs de Logiciels
+> Libres http://www.tuxbihan.org
+> GPG fingerprint =3D 1A4F E154 3D2C A20E E4CA  A543
+> 7951 C5C2 E44A A0B5
+>=20
+> Patrick Percot.
+> =20
 
-> also when we return from main fn then what is the
-> benfit?
-> 
-> does it have any utilisation?
-> 
-
-main is just another function almost like any other in your
-program. The system doesn't look for the function main to run, its just
-a convention used by c (in windows the main function is called winmain
-for example, don't remember what its called in pascal, but IIRC
-something different also).
-
-when you compile your program its linked with some assembler code that
-handles setting up you environment. The system looks for a symbol in
-your program called _start and start the execution from there. This
-function is responsible for setting everything up, including argc and
-argv (the command line arguments and environment variables) and possibly
-handling calling constructors of global classes in c++ (not sure about
-that though). It then calls your main function with the proper values
-of argc and argv.
-
-When you main function returns, or when you call exit, a function called
-exit is called which handles all the cleaning up of your program and
-then the function _exit is called to finish exiting the program. You
-are not supposed to call _exit directly since it bypasses cleaning up,
-calling it directly is only useful if you use vfork where you don't
-want any cleaning up done since it messes things up (you shouldn't use
-vfork for most things nowadays since fork has almost no more
-overhead. If you don't know you need it, then you don't).
-
-> thanks
-> 
-> ankit
-> 
-> ________________________________________________________________________
-> Yahoo! Messenger - Communicate instantly..."Ping" 
-> your friends today! Download Messenger Now 
-> http://uk.messenger.yahoo.com/download/index.html
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->  
->  +++++++++++++++++++++++++++++++++++++++++++
->  This Mail Was Scanned By Mail-seCure System
->  at the Tel-Aviv University CC.
-> 
+_______________________________________________________________________=
+_
+Yahoo! Messenger - Communicate instantly..."Ping"=20
+your friends today! Download Messenger Now=20
+http://uk.messenger.yahoo.com/download/index.html
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
