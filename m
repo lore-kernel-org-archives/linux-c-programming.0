@@ -1,29 +1,30 @@
-From: Fekete Gabor <feketga@delfin.unideb.hu>
-Subject: using the same port with two sockets
-Date: Thu, 25 Sep 2003 10:16:56 +0200 (DFT)
+From: Progga <abulfazl@juniv.edu>
+Subject: Re: section description
+Date: Wed, 24 Sep 2003 19:25:36 +0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.A41.4.20.0309251006170.140698-100000@delfin.unideb.hu>
+Message-ID: <20030924192536.B288@Imrashi.net.bd>
+References: <20030924111324.00004da9.cialdi@firenze.net>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20030924111324.00004da9.cialdi@firenze.net>; from cialdi@firenze.net on Wed, Sep 24, 2003 at 11:13:24AM +0200
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Massimiliano Cialdi <cialdi@firenze.net>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-hi
+On Wed, Sep 24, 2003 at 11:13:24AM +0200, Massimiliano Cialdi wrote:
 
-with SOCK_STREAM if the server accept()s a connection it creates
-another sokcet that can be used to handle that connection.
-I want to do the same but with SOCK_DGRAM.
-So what I want is to recvfrom() a "connection" request and then
-create another socket to handle that "connection", that is, the
-server would go back to recvfrom() requests without worrying about
-packets arriving from the previously "accepted" client which would
-send those packets to the socket created especially for it.
-Is it possible?
+> where can I find a detailed description of sections (like .text, .bss,
+> .rodata, .jcr, .tors, etc.)?
 
-Does SOCK_STREAM create a new port too with the new socket? 
+ The ELF specification has some info about these. But I have forgot the URL. If
+you can't find it with Google then I can send you a copy.
 
-thanks
 
+ Khoda Hafez
+ Progga
+
+** Filename is ELF11G.ZIP
 
