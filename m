@@ -1,8 +1,8 @@
 From: Codex <codex@telkom.net>
-Subject: Audio-Programming
-Date: Tue, 10 Sep 2002 18:32:17 +0700
+Subject: value assignment
+Date: Tue, 10 Sep 2002 23:58:56 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020910183217.44898d8d.codex@telkom.net>
+Message-ID: <20020910235856.25bd3fd3.codex@telkom.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -10,11 +10,15 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Linux-C-Programming <linux-c-programming@vger.kernel.org>
 
-I want to know how to Sound-Programming(wav, MP3, ..) oh yeah!, but
-errwhere to start learning it..? what doc..? where..? and how..? just
-where to start learning! it! i'm kinda robust(for newbie) here, is it
-fine..? or what to learn first..? (by offcourse not the C itself because
-i'm just graduated)
+Again, Newbie ask
+
+hey i never know what kind assignment is this in C, kindof strange i
+don't get it at all, i somehow know this when doing <termios.h>
+
+pterm.iflag &= ~(IGNBRK | INLCR)
+
+what the hell is '&=' and '~(...)', what does '(...)' does anyway..?,
+wasn't '|' means OR..?
 
 ---------------------------------------------------------------------------
  > Telepon anda sibuk, panggilan tidak bisa masuk.
