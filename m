@@ -1,37 +1,59 @@
-From: Jonas Appel <jonas.appel@jonas-appel.de>
-Subject: Calculating 64-Bit Values
-Date: Thu, 13 May 2004 15:49:41 +0200
+From: "Steven Smith" <sos22@cam.ac.uk>
+Subject: Re: Calculating 64-Bit Values
+Date: Thu, 13 May 2004 15:30:47 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1084456108.802075@slbhw0>
+Message-ID: <20040513143047.GA5370@archibold.chu.cam.ac.uk>
+References: <1084456108.802075@slbhw0>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <1084456108.802075@slbhw0>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Jonas Appel <jonas.appel@jonas-appel.de>
+Cc: linux-c-programming@vger.kernel.org, sos22@srcf.ucam.org
 
-I hope this is not a really stupid question, but Ive tried some ways
-and I'm still not satisfied with my current solution. I have to 
-calculate some 64 Bit values, like this:
 
-typedef unsigned long long int64;
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-int64 val = 0x7c95674beb4000;
+> typedef unsigned long long int64;
+>=20
+> int64 val =3D 0x7c95674beb4000;
+Try:
 
-the only working way to perform calculation was this:
+int64 val =3D 0x7c95674beb4000ll;
 
-unsigned int timestamp[2];
+gcc won't generate a long long constant unless you explictly tell it
+to; it tries to stuff the whole thing into 32 bits, which doesn't
+really work.
 
-timestamp[1] = (unsigned int)((int64)val+0x4324154));
-timestamp[0] = (int64)((int64)val+0x4324154)) >> 32;
+Incidentally, you might want to pick a different name for your typedef
+-- int64 is usually signed.
 
-And printing the value works like this:
+> And printing the value works like this:
+>=20
+> printf("Value: %8lx%8lx\n", timestamp[0], timestamp[1]);
+printf("Value: %llx", timestamp);
 
-printf("Value: %8lx%8lx\n", timestamp[0], timestamp[1]);
+should work.  You may need %qx instead of %llx on some really old
+systems, or conceivably %Lx.
 
-Does anyone know a better way to get along with these 64Bit-values?
+Steven Smith.
 
-Thanks in advance,
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-Jonas
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (FreeBSD)
 
+iD8DBQFAo4aXO4S8/gLNrjcRAisAAJ9JBrgdJMpXq5pfNwh8vJ2Si5lv5ACgofp8
+UbXD7v/bPhF8Ia0Q59h18hY=
+=/clK
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
