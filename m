@@ -1,41 +1,61 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Host IP address
-Date: Wed, 23 Feb 2005 00:26:08 +0000
-Message-ID: <16923.52640.306669.975526@gargle.gargle.HOWL>
-References: <200502221751.44585.hitoc_mail@yahoo.it>
+From: "J." <mailing-lists@xs4all.nl>
+Subject: obstack_alloc & _obstack_newchunk
+Date: Wed, 23 Feb 2005 13:45:35 +0100 (CET)
+Message-ID: <Pine.LNX.4.21.0502231316180.1636-100000@hestia>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-In-Reply-To: <200502221751.44585.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: HIToC <hitoc_mail@yahoo.it>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Wednesday, February 23
 
-HIToC wrote:
+Hello, I am looking into the GNU's obstack lib .
 
-> Sometimes is useful to know the IP address of the machine we are working on,
-> for example when we connect a SMTP server and do the EHLO <domain> command.
-> I have written a short C++ program that first prints the host name and the
-> host IP address, then if arguments from command line are passed prints
-> the IP address of each domain name.
+Unfortunatly it segfaults. According to a backtrace of the program stack
+it goes down at obstack_newchunk_ . To be honest I am kind a stuck here.
 
-> My intent is to know my real IP address!
+There is enough free memory available since I am able to write this
+message... The only thing I can come up with is that obstack_alloc trys
+to add new memory to the address of string_obstack, which isn't properly
+setup by moi.. ?
 
-A system may have any number of IP addresses, including zero. You
-can't assume that there is exactly one IP address.
+#include <stdio.h>
+#include <string.h>
+#include <obstack.h>
 
-Also, the results obtained from gethostname() and gethostbyname()
-aren't necessarily correct. That just tells you what your hostname
-resolves to using whatever name resolution method(s) your system is
-configured to use (e.g. /etc/hosts, DNS, NIS etc).
+struct obstack string_obstack;
 
-If you want to determine the IP addresses of any local interfaces,
-first obtain a list of interfaces by either calling ioctl(SIOCGIFCONF)
-or parsing /proc/net/dev. Then call ioctl(SIOCGIFADDR) for each
-interface to obtain its address. See the source code for "ifconfig"
-(from the net-tools package) for more details.
+char *copystring(char *string);
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+int main(void) {
+ char *orig = "to copy this string";
+ char *str = NULL;
+
+ str = copystring(orig);
+ printf("%s\n", str);
+
+ return 0;
+}
+
+char *copystring(char *string) {
+ size_t len = 0;
+ char *s = NULL;
+
+ len = strlen(string) + 1;
+
+ s = obstack_alloc(&string_obstack, len);
+ memcpy(s, string, len);
+
+ return s;
+}
+
+Thnkx..
+
+J.
+
+--
+http://www.rdrs.net/
+
