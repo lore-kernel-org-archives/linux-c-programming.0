@@ -1,145 +1,284 @@
-From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Subject: Graphs: Arbitrary Dijkstra's algorithm implementation
-Date: Tue, 16 Dec 2003 09:06:38 -0600 (CST)
+From: b klein <b_klein1@yahoo.com>
+Subject: Re: Graphs: Arbitrary Dijkstra's algorithm implementation
+Date: Tue, 16 Dec 2003 12:46:07 -0800 (PST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.44.0312151149040.15956-200000@ns.isi.ulatina.ac.cr>
+Message-ID: <20031216204607.11876.qmail@web41315.mail.yahoo.com>
+References: <Pine.LNX.4.44.0312151149040.15956-200000@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="1010017202-865173532-1071587198=:32518"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.44.0312151149040.15956-200000@ns.isi.ulatina.ac.cr>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Cc: linux-c-programming@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+hi
+im a beginner here so please say if i do something off
+topic.
+i tried to set=20
+#define     NODES   8
+and then(i hope this is right) i changed the
+constructor:
+grafo(void) //inicializa la matriz de costos y los
+> vectores temporales
+>   {
+>       //for (int i=3D1; i<=3D7; i++) was
+> 	 //for (int j=3D1; j<=3D7; j++)
+now=20
+       for (int i=3D1; i<=3DNODES; i++) was
+ 	for (int j=3D1; j<=3DNODES; j++)
+ 	  costos[i][j]=3D10000;
 
---1010017202-865173532-1071587198=:32518
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+>       costos[1][2]=3D200;
+>       costos[1][4]=3D150;
+>       costos[2][3]=3D100;
+>       costos[3][1]=3D50;
+>       costos[3][7]=3D25;
+>       costos[4][3]=3D500;
+>       costos[4][5]=3D200;
+>       costos[5][6]=3D175;
+>       costos[6][3]=3D250;
+>       costos[7][5]=3D300;
+>      // for (int i=3D1; i<=3D7; i++)
+        for (int i=3D1; i<=3DNODES; i++)
+>       {
+> 	 vertices[i]=3Di;
+> 	 vertices2[i]=3Di;
+>       }
+and then i founf=B4d that in the method=20
+int grafo::buscaminimo(void)//busca el vertice con
+// costo minimo de los no visitados
+ {
+ 	int minimo=3D10000, pos=3D10000;
+pos doesnt change, but it is returned. and the value
+is used as an index of vertices2[w] in the method=20
+dijkstra(void).
+vertices2[] has a size of NODES.
+so the index w=3D10000 is out of size.
 
-Hi.
+--- Fabio Miranda Hamburger
+<fabmirha@ns.isi.ulatina.ac.cr> wrote:
+> Hi.
+>=20
+> I am trying to code a small program in Ansi C++ that
+> somehow implements
+> the famous Dijkstra algorithm that looks for the
+> shortest path between 2
+> nodes in a dinamic bidirectional directed pointer
+> graph.
+>=20
+> Attached You will find the .cpp with both clases and
+> implementations.
+> The algorithm looks for the shortest path between 1
+> and a given node,
+> actually, the algorithm follow common graph
+> implementation and uses a
+> static biarray of "weights" (a distance between x ->
+> y), for example,
+> weight[2][5] =3D 10 means that there is a cost of 10
+> from 2 to 5 without a
+> scale in a other node of the same type.
+>=20
+> However, the algorithm is unable to use n > 6 nodes
+> and I dont understand
+> why, after a depuration and reading Tenenbaum's, I
+> found out a function
+> return "infinity" and afterwards an address memory
+> violation. The
+> algorithm should never return infinite because there
+> is always a pending
+> distance of the (latest-1 node ) !=3D infinite
+>=20
+> I would really appreciate any comments or help, my
+> goal is to code a
+> algorithm that takes a matrix of weigth and prints
+> out the nodes of the
+> shortest path of (1,x)
+>=20
+> best regards,
+>=20
+>=20
+> ---
+> Fabio Andres Miranda
+> Ingenieria de sistemas informaticos
+> Universidad Latina - Costa Rica
+>=20
+>=20
+> > #define     NODES   8
+> #define     INFINITY    10000 //the value
+> representing a not numerical result path
+> #define     costos  weight  // spanish -> english
+>=20
+> // problem =3D>  if nodes <=3D 8 the algorithm doesnt
+> work
+>=20
+> #include<iostream.h>
+> #include<conio.h>
+> #include<string.h>
+>=20
+> class grafo // es la clase donde esta la clase y los
+> algoritmos
+> {
+>   public:
+>   void dijkstra(void);
+>   void mascorto(void);
+>   void caminos(int i, int j);
+>   grafo(void) //inicializa la matriz de costos y los
+> vectores temporales
+>   {
+>       for (int i=3D1; i<=3D7; i++)
+> 	 for (int j=3D1; j<=3D7; j++)
+> 	  costos[i][j]=3D10000;
+>       costos[1][2]=3D200;
+>       costos[1][4]=3D150;
+>       costos[2][3]=3D100;
+>       costos[3][1]=3D50;
+>       costos[3][7]=3D25;
+>       costos[4][3]=3D500;
+>       costos[4][5]=3D200;
+>       costos[5][6]=3D175;
+>       costos[6][3]=3D250;
+>       costos[7][5]=3D300;
+>       for (int i=3D1; i<=3D7; i++)
+>       {
+> 	 vertices[i]=3Di;
+> 	 vertices2[i]=3Di;
+>       }
+>   }
+>   int D[NODES];//aqui van quedando los costos
+> minimos
+>   private:
+>      int vertices[NODES]; //se guardan los vertices
+>      int p[NODES][NODES];//se utiliza para sacar los
+> caminos
+>      int costos[NODES][NODES];//matriz donde estan
+> los costos de ir de un vertice a otro
+>      int vertices2[NODES];//aqui van quedando los
+> vertices visitados
+>      int w;//contiene el vertice visitado
+> actualmente
+>      int buscaminimo(void);
+>      int min(int x, int y);
+> };
+> void grafo::dijkstra(void) //calcula los caminos
+> minimos desde el vertice 1 hacia los demas
+> {
+>     int conjunto[NODES]; // aqui se van guardando
+> los vertices no visitados
+>     int posconjunto=3D1;
+>     vertices[posconjunto]=3D0;
+>     D[1]=3D0;
+>     for (int i=3D2; i<=3DNODES-1; i++)
+> 	D[i]=3Dcostos[1][i]; //inicializa el vector con los
+> costos de 1 a i
+>     for(int i=3D1; i<=3D NODES-2; i++)
+>     {
+>       w=3Dbuscaminimo();//deja en w el vertice no
+> visitado con el menor costo en ese momento
+>       posconjunto++;
+>       conjunto[posconjunto]=3Dw;//inserta al vertice
+> en los visitados
+>       vertices2[w]=3D0;//saca al vertice los no
+> visitados
+>       for (int v=3DNODES-1-posconjunto; v<=3D7; v++)
+> 	 D[v]=3Dmin(D[v],D[w]+costos[w][v]);//analiza si es
+> menor por este camino(w) o por el que esta en este
+> momento
+>     }
+> };
+> int grafo::buscaminimo(void)//busca el vertice con
+> costo minimo de los no visitados
+> {
+> 	int minimo=3D10000, pos=3D10000;
+> 	for(int i=3D1; i<=3DNODES-1; i++)
+> 	{
+> 	  if (vertices2[i] !=3D0)
+> 	     if (D[i] < minimo)
+> 	     {
+> 		minimo=3DD[i];
+> 		pos=3Di;
+> 	     }
+> 	}
+> 	return pos;
+> };
+> int grafo::min(int x, int y)//retorna el valor con
+> menor costo
+> {
+>   if (x < y)
+>      return x;
+>   else
+>       return y;
+> };
+> void grafo::mascorto(void)//saca la ruta de caminos
+> mas cortos entre los vertices
+> {
+>   int i,j,k;
+>   int a[NODES][NODES];
+>   for (i=3D1;i<=3DNODES-1;i++)
+>     for (j=3D1;j<=3DNODES-1;j++)
+>     {
+> 	a[i][j]=3Dcostos[i][j];
+> 	p[i][j]=3D0;
+>     }
+>   for (i=3D1;i<=3DNODES-1;i++)
+>       a[i][i]=3D0;
+>   for (k=3D1;k<=3DNODES-1;k++)
+>       for (i=3D1;i<=3DNODES-1;i++)
+> 	  for (j=3D1;j<=3DNODES-1;j++)
+> 	      if ((a[i][k]+a[k][j])<(a[i][j]))
+> 	      {
+> 		a[i][j]=3Da[i][k]+a[k][j];
+> 		p[i][j]=3Dk;
+> 	      }
+> };
+> void grafo::caminos(int i, int j)//imprime la ruta
+> mas corta desde el vertice i hasta el j
+> {
+>    int k;
+>    char c=3D' ';
+>    k=3Dp[i][j];
+>    if (k=3D=3D0)
+>       return;
+>    caminos(i,k);
+>    cout<<k;
+>    cout<<c;
+>    caminos(k,j);
+> }
+> void main (void)
+> {
+>  grafo g;
+>  g.dijkstra();
+>  g.mascorto();
+>  char c=3D' ';
+>  char s[20]=3D"Camino M=A1nimo: ";
+>  char s2[20]=3D"Costo: ";
+>  for (int i=3D1; i<=3DNODES-1; i++)//este ciclo imprime
+> los caminos minimos desde el vertice 1 hasta los
+> dem=A0s
+>  {
+>    cout << s;
+>    cout << 1;
+>    cout << c;
+>    g.caminos(1,i);
+>    cout << i;
+>    cout << c;
+>    cout << s2;
+>    cout << g.D[i]<<"\n";
+>  }
+>    getch();
+> }
+>=20
+>=20
+>=20
 
-I am trying to code a small program in Ansi C++ that somehow implements
-the famous Dijkstra algorithm that looks for the shortest path between 2
-nodes in a dinamic bidirectional directed pointer graph.
 
-Attached You will find the .cpp with both clases and implementations.
-The algorithm looks for the shortest path between 1 and a given node,
-actually, the algorithm follow common graph implementation and uses a
-static biarray of "weights" (a distance between x -> y), for example,
-weight[2][5] = 10 means that there is a cost of 10 from 2 to 5 without a
-scale in a other node of the same type.
-
-However, the algorithm is unable to use n > 6 nodes and I dont understand
-why, after a depuration and reading Tenenbaum's, I found out a function
-return "infinity" and afterwards an address memory violation. The
-algorithm should never return infinite because there is always a pending
-distance of the (latest-1 node ) != infinite
-
-I would really appreciate any comments or help, my goal is to code a
-algorithm that takes a matrix of weigth and prints out the nodes of the
-shortest path of (1,x)
-
-best regards,
-
-
----
-Fabio Andres Miranda
-Ingenieria de sistemas informaticos
-Universidad Latina - Costa Rica
-
-
-
---1010017202-865173532-1071587198=:32518
-Content-Type: TEXT/x-c++src; name="dijsktra.cpp"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.LNX.4.44.0312160906380.32518@ns.isi.ulatina.ac.cr>
-Content-Description: 
-Content-Disposition: attachment; filename="dijsktra.cpp"
-
-I2RlZmluZSAgICAgTk9ERVMgICA4DQ0KI2RlZmluZSAgICAgSU5GSU5JVFkg
-ICAgMTAwMDAgLy90aGUgdmFsdWUgcmVwcmVzZW50aW5nIGEgbm90IG51bWVy
-aWNhbCByZXN1bHQgcGF0aA0NCiNkZWZpbmUgICAgIGNvc3RvcyAgd2VpZ2h0
-ICAvLyBzcGFuaXNoIC0+IGVuZ2xpc2gNDQoNDQovLyBwcm9ibGVtID0+ICBp
-ZiBub2RlcyA8PSA4IHRoZSBhbGdvcml0aG0gZG9lc250IHdvcmsNDQoNDQoj
-aW5jbHVkZTxpb3N0cmVhbS5oPg0NCiNpbmNsdWRlPGNvbmlvLmg+DQ0KI2lu
-Y2x1ZGU8c3RyaW5nLmg+DQ0KDQ0KY2xhc3MgZ3JhZm8gLy8gZXMgbGEgY2xh
-c2UgZG9uZGUgZXN0YSBsYSBjbGFzZSB5IGxvcyBhbGdvcml0bW9zDQ0Kew0N
-CiAgcHVibGljOg0NCiAgdm9pZCBkaWprc3RyYSh2b2lkKTsNDQogIHZvaWQg
-bWFzY29ydG8odm9pZCk7DQ0KICB2b2lkIGNhbWlub3MoaW50IGksIGludCBq
-KTsNDQogIGdyYWZvKHZvaWQpIC8vaW5pY2lhbGl6YSBsYSBtYXRyaXogZGUg
-Y29zdG9zIHkgbG9zIHZlY3RvcmVzIHRlbXBvcmFsZXMNDQogIHsNDQogICAg
-ICBmb3IgKGludCBpPTE7IGk8PTc7IGkrKykNDQoJIGZvciAoaW50IGo9MTsg
-ajw9NzsgaisrKQ0NCgkgIGNvc3Rvc1tpXVtqXT0xMDAwMDsNDQogICAgICBj
-b3N0b3NbMV1bMl09MjAwOw0NCiAgICAgIGNvc3Rvc1sxXVs0XT0xNTA7DQ0K
-ICAgICAgY29zdG9zWzJdWzNdPTEwMDsNDQogICAgICBjb3N0b3NbM11bMV09
-NTA7DQ0KICAgICAgY29zdG9zWzNdWzddPTI1Ow0NCiAgICAgIGNvc3Rvc1s0
-XVszXT01MDA7DQ0KICAgICAgY29zdG9zWzRdWzVdPTIwMDsNDQogICAgICBj
-b3N0b3NbNV1bNl09MTc1Ow0NCiAgICAgIGNvc3Rvc1s2XVszXT0yNTA7DQ0K
-ICAgICAgY29zdG9zWzddWzVdPTMwMDsNDQogICAgICBmb3IgKGludCBpPTE7
-IGk8PTc7IGkrKykNDQogICAgICB7DQ0KCSB2ZXJ0aWNlc1tpXT1pOw0NCgkg
-dmVydGljZXMyW2ldPWk7DQ0KICAgICAgfQ0NCiAgfQ0NCiAgaW50IERbTk9E
-RVNdOy8vYXF1aSB2YW4gcXVlZGFuZG8gbG9zIGNvc3RvcyBtaW5pbW9zDQ0K
-ICBwcml2YXRlOg0NCiAgICAgaW50IHZlcnRpY2VzW05PREVTXTsgLy9zZSBn
-dWFyZGFuIGxvcyB2ZXJ0aWNlcw0NCiAgICAgaW50IHBbTk9ERVNdW05PREVT
-XTsvL3NlIHV0aWxpemEgcGFyYSBzYWNhciBsb3MgY2FtaW5vcw0NCiAgICAg
-aW50IGNvc3Rvc1tOT0RFU11bTk9ERVNdOy8vbWF0cml6IGRvbmRlIGVzdGFu
-IGxvcyBjb3N0b3MgZGUgaXIgZGUgdW4gdmVydGljZSBhIG90cm8NDQogICAg
-IGludCB2ZXJ0aWNlczJbTk9ERVNdOy8vYXF1aSB2YW4gcXVlZGFuZG8gbG9z
-IHZlcnRpY2VzIHZpc2l0YWRvcw0NCiAgICAgaW50IHc7Ly9jb250aWVuZSBl
-bCB2ZXJ0aWNlIHZpc2l0YWRvIGFjdHVhbG1lbnRlDQ0KICAgICBpbnQgYnVz
-Y2FtaW5pbW8odm9pZCk7DQ0KICAgICBpbnQgbWluKGludCB4LCBpbnQgeSk7
-DQ0KfTsNDQp2b2lkIGdyYWZvOjpkaWprc3RyYSh2b2lkKSAvL2NhbGN1bGEg
-bG9zIGNhbWlub3MgbWluaW1vcyBkZXNkZSBlbCB2ZXJ0aWNlIDEgaGFjaWEg
-bG9zIGRlbWFzDQ0Kew0NCiAgICBpbnQgY29uanVudG9bTk9ERVNdOyAvLyBh
-cXVpIHNlIHZhbiBndWFyZGFuZG8gbG9zIHZlcnRpY2VzIG5vIHZpc2l0YWRv
-cw0NCiAgICBpbnQgcG9zY29uanVudG89MTsNDQogICAgdmVydGljZXNbcG9z
-Y29uanVudG9dPTA7DQ0KICAgIERbMV09MDsNDQogICAgZm9yIChpbnQgaT0y
-OyBpPD1OT0RFUy0xOyBpKyspDQ0KCURbaV09Y29zdG9zWzFdW2ldOyAvL2lu
-aWNpYWxpemEgZWwgdmVjdG9yIGNvbiBsb3MgY29zdG9zIGRlIDEgYSBpDQ0K
-ICAgIGZvcihpbnQgaT0xOyBpPD0gTk9ERVMtMjsgaSsrKQ0NCiAgICB7DQ0K
-ICAgICAgdz1idXNjYW1pbmltbygpOy8vZGVqYSBlbiB3IGVsIHZlcnRpY2Ug
-bm8gdmlzaXRhZG8gY29uIGVsIG1lbm9yIGNvc3RvIGVuIGVzZSBtb21lbnRv
-DQ0KICAgICAgcG9zY29uanVudG8rKzsNDQogICAgICBjb25qdW50b1twb3Nj
-b25qdW50b109dzsvL2luc2VydGEgYWwgdmVydGljZSBlbiBsb3MgdmlzaXRh
-ZG9zDQ0KICAgICAgdmVydGljZXMyW3ddPTA7Ly9zYWNhIGFsIHZlcnRpY2Ug
-bG9zIG5vIHZpc2l0YWRvcw0NCiAgICAgIGZvciAoaW50IHY9Tk9ERVMtMS1w
-b3Njb25qdW50bzsgdjw9NzsgdisrKQ0NCgkgRFt2XT1taW4oRFt2XSxEW3dd
-K2Nvc3Rvc1t3XVt2XSk7Ly9hbmFsaXphIHNpIGVzIG1lbm9yIHBvciBlc3Rl
-IGNhbWlubyh3KSBvIHBvciBlbCBxdWUgZXN0YSBlbiBlc3RlIG1vbWVudG8N
-DQogICAgfQ0NCn07DQ0KaW50IGdyYWZvOjpidXNjYW1pbmltbyh2b2lkKS8v
-YnVzY2EgZWwgdmVydGljZSBjb24gY29zdG8gbWluaW1vIGRlIGxvcyBubyB2
-aXNpdGFkb3MNDQp7DQ0KCWludCBtaW5pbW89MTAwMDAsIHBvcz0xMDAwMDsN
-DQoJZm9yKGludCBpPTE7IGk8PU5PREVTLTE7IGkrKykNDQoJew0NCgkgIGlm
-ICh2ZXJ0aWNlczJbaV0gIT0wKQ0NCgkgICAgIGlmIChEW2ldIDwgbWluaW1v
-KQ0NCgkgICAgIHsNDQoJCW1pbmltbz1EW2ldOw0NCgkJcG9zPWk7DQ0KCSAg
-ICAgfQ0NCgl9DQ0KCXJldHVybiBwb3M7DQ0KfTsNDQppbnQgZ3JhZm86Om1p
-bihpbnQgeCwgaW50IHkpLy9yZXRvcm5hIGVsIHZhbG9yIGNvbiBtZW5vciBj
-b3N0bw0NCnsNDQogIGlmICh4IDwgeSkNDQogICAgIHJldHVybiB4Ow0NCiAg
-ZWxzZQ0NCiAgICAgIHJldHVybiB5Ow0NCn07DQ0Kdm9pZCBncmFmbzo6bWFz
-Y29ydG8odm9pZCkvL3NhY2EgbGEgcnV0YSBkZSBjYW1pbm9zIG1hcyBjb3J0
-b3MgZW50cmUgbG9zIHZlcnRpY2VzDQ0Kew0NCiAgaW50IGksaixrOw0NCiAg
-aW50IGFbTk9ERVNdW05PREVTXTsNDQogIGZvciAoaT0xO2k8PU5PREVTLTE7
-aSsrKQ0NCiAgICBmb3IgKGo9MTtqPD1OT0RFUy0xO2orKykNDQogICAgew0N
-CglhW2ldW2pdPWNvc3Rvc1tpXVtqXTsNDQoJcFtpXVtqXT0wOw0NCiAgICB9
-DQ0KICBmb3IgKGk9MTtpPD1OT0RFUy0xO2krKykNDQogICAgICBhW2ldW2ld
-PTA7DQ0KICBmb3IgKGs9MTtrPD1OT0RFUy0xO2srKykNDQogICAgICBmb3Ig
-KGk9MTtpPD1OT0RFUy0xO2krKykNDQoJICBmb3IgKGo9MTtqPD1OT0RFUy0x
-O2orKykNDQoJICAgICAgaWYgKChhW2ldW2tdK2Fba11bal0pPChhW2ldW2pd
-KSkNDQoJICAgICAgew0NCgkJYVtpXVtqXT1hW2ldW2tdK2Fba11bal07DQ0K
-CQlwW2ldW2pdPWs7DQ0KCSAgICAgIH0NDQp9Ow0NCnZvaWQgZ3JhZm86OmNh
-bWlub3MoaW50IGksIGludCBqKS8vaW1wcmltZSBsYSBydXRhIG1hcyBjb3J0
-YSBkZXNkZSBlbCB2ZXJ0aWNlIGkgaGFzdGEgZWwgag0NCnsNDQogICBpbnQg
-azsNDQogICBjaGFyIGM9JyAnOw0NCiAgIGs9cFtpXVtqXTsNDQogICBpZiAo
-az09MCkNDQogICAgICByZXR1cm47DQ0KICAgY2FtaW5vcyhpLGspOw0NCiAg
-IGNvdXQ8PGs7DQ0KICAgY291dDw8YzsNDQogICBjYW1pbm9zKGssaik7DQ0K
-fQ0NCnZvaWQgbWFpbiAodm9pZCkNDQp7DQ0KIGdyYWZvIGc7DQ0KIGcuZGlq
-a3N0cmEoKTsNDQogZy5tYXNjb3J0bygpOw0NCiBjaGFyIGM9JyAnOw0NCiBj
-aGFyIHNbMjBdPSJDYW1pbm8gTaFuaW1vOiAiOw0NCiBjaGFyIHMyWzIwXT0i
-Q29zdG86ICI7DQ0KIGZvciAoaW50IGk9MTsgaTw9Tk9ERVMtMTsgaSsrKS8v
-ZXN0ZSBjaWNsbyBpbXByaW1lIGxvcyBjYW1pbm9zIG1pbmltb3MgZGVzZGUg
-ZWwgdmVydGljZSAxIGhhc3RhIGxvcyBkZW2gcw0NCiB7DQ0KICAgY291dCA8
-PCBzOw0NCiAgIGNvdXQgPDwgMTsNDQogICBjb3V0IDw8IGM7DQ0KICAgZy5j
-YW1pbm9zKDEsaSk7DQ0KICAgY291dCA8PCBpOw0NCiAgIGNvdXQgPDwgYzsN
-DQogICBjb3V0IDw8IHMyOw0NCiAgIGNvdXQgPDwgZy5EW2ldPDwiXG4iOw0N
-CiB9DQ0KICAgZ2V0Y2goKTsNDQp9DQ0KDQ0KDQ0K
---1010017202-865173532-1071587198=:32518--
+__________________________________
+Do you Yahoo!?
+New Yahoo! Photos - easier uploading and sharing.
+http://photos.yahoo.com/
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programmi=
+ng" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
