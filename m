@@ -1,39 +1,39 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: RE: Into the Void
-Date: Wed, 2 Feb 2005 12:15:58 +0000
-Message-ID: <16896.50302.251490.680737@gargle.gargle.HOWL>
-References: <D2AA47A6FB2C1A48AF0526440C0F245CAA3634@monm207.nae.ds.army.mil>
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: when and where shall I encrypt dentry?
+Date: Wed,  2 Feb 2005 08:49:01 -0500 (EST)
+Message-ID: <20050202134901.9926C3E12@xprdmailfe6.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <D2AA47A6FB2C1A48AF0526440C0F245CAA3634@monm207.nae.ds.army.mil>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: linux-kernel@vger.kernel.org
+Cc: linux-c-programming@vger.kernel.org
 
 
-Huber, George K RDECOM CERDEC STCD SRI wrote:
+Hi all,
 
-> Well we have not put anything in that memory location yet, and
-> as I recall, under Linux any memory is zero-out when returned by malloc to
-> help prevent information leakage from one application to another.
 
-Memory contains zeroes when it is first given to the process by the
-kernel. Whether or not memory returned from malloc() contains zeroes
-depends upon whether that memory has been used previously by the
-current process.
 
-At the beginning of a process' life cycle (e.g. at the top of main()),
-memory returned from malloc() is likely to contain zeroes.
+I am trying to add some cryptographic functionality to ext2 file system for my masters project. I am working with kernel 2.4.21
 
-As time goes by, it becomes increasingly likely that memory returned
-from malloc() has previously been allocated, used, then free()d. In
-which case, the memory's contents will have been retained; neither
-malloc() nor free() themselves fill the memory with zeroes.
 
-If you need to ensure that memory contains zeroes, either use calloc()
-(which is defined to fill the memory with zeroes), or fill it yourself
-with memset().
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Along with regular files, I intend to encrypt directory contents too. For reading I guess the function ext2_get_page in fs/ext2/dir.c is used. Hence I can put my decryption routine in that function. Is that correct?
+
+
+
+I was trying to look for the routine which writes the dentry on disk, but was unable to find it. I found out that the function d_instantiate is used to fill in inode information for a dentry, but unable to see when it is written on disk. I suppose that I have to encrypt the dentry just before writing on to the disk, as if i encrypt it before, other functions using it wont be able to access until they decrypt. So please help me with this, that when and where shall I encrypt the directory contents.
+
+
+
+Thanks and regards,
+
+
+
+Vineet
+
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
