@@ -1,37 +1,27 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Elias Athanasopoulos <eathan@otenet.gr>
 Subject: Re: exploitable function
-Date: Wed, 26 Jun 2002 20:26:03 +0100
+Date: Wed, 26 Jun 2002 23:58:04 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15642.5451.365778.941333@cerise.nosuchdomain.co.uk>
-References: <20020625160221.A489@nietzsche>
-	<20020626004345.B2816@neutrino.particles.org>
-	<20020625163329.C27404@nietzsche>
-	<20020626164110.B1131@neutrino.particles.org>
+Message-ID: <20020626235804.A24256@neutrino.particles.org>
+References: <20020625160221.A489@nietzsche> <20020626004345.B2816@neutrino.particles.org> <20020625163329.C27404@nietzsche> <20020626164110.B1131@neutrino.particles.org> <15642.5451.365778.941333@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020626164110.B1131@neutrino.particles.org>
+Content-Disposition: inline
+In-Reply-To: <15642.5451.365778.941333@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Wed, Jun 26, 2002 at 08:26:03PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: linux-c-programming@vger.kernel.org
 
+On Wed, Jun 26, 2002 at 08:26:03PM +0100, Glynn Clements wrote:
+  
+> But note that strncpy() isn't much better, for two reasons:
+ 
+Yes. Better use strdup(). In binutils we use xstrdup() in most of
+the cases and str[n]cpy() carefully.
 
-Elias Athanasopoulos wrote:
-
-> > by the way, where can i find a exploitable function and try to
-> > code epxloit proof for education and practice?
-> 
-> strcpy() is the number-one danger.
-
-But note that strncpy() isn't much better, for two reasons:
-
-1. If the source is longer than the size of the buffer, there won't be
-a terminating NUL in the result.
-
-2. If a string is too long, simply truncating it to a fixed length is
-seldom the correct response, and may have security implications. It's
-usually preferable to treat this situation as a fatal error, and
-terminate the program.
+Elias
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
