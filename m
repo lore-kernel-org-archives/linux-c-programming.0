@@ -1,29 +1,39 @@
 From: "qhwang" <qhwang@ieeta.pt>
-Subject: out of memory
-Date: Wed, 8 Oct 2003 12:34:02 +0100
+Subject: Re: out of memory
+Date: Wed, 8 Oct 2003 13:36:16 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001f01c38d90$134b12c0$70ab88c1@ieeta.pt>
+Message-ID: <003e01c38d98$c45ed300$70ab88c1@ieeta.pt>
+References: <31E38B53D182D51195FA00508BE3A33402CE4C9B@zwnbc004.cala.nortel.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Sandro Dangui <sdangui@nortelnetworks.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi there,
 
-Can anyone help me out of the mess? My program runs of out memory and then
-is killed by the system. I use "top" to monitor its running and find out of
-both RAM and SWAP. The "SIZE" option of "top" reaches more than 260 MB and
-"RSS" more than 40 MB. Is this reasonable? The size of my program is just
-over 100 KB. And the memory of my computer is just 64 MB and the swap is 256
-MB. By the way, I find no memory leaks. Any suggestion will be greatly
-appreaciated.
 
-Bests,
+> Do you have recursive calls?
+> If you alloc all memory you need in the beginning, then the only problem
+> that I can figure is that you have an infinite recursive call... or a loop
+> between calls. It may be causing a stack overflow.
 
-QingHua.
+In my program there is a loop over 10k iteratives (image). In each loop
+there are some kind of statistical learning algorithm running. It is killed
+after it uses about 650 MB space (code + mainly data) with my laptop after
+out of memory and swap.  I believe the problem lies inside the loop but
+there should be no infinite loop because when I reduce the loop to over 1k
+iteratives the program runs well. In this case it uses more 100 MB space.
 
-P.S. I sent a post last night but I don't receive it this morning. So I post
-it again.
+I wonder where is this huge data space requirement coming from, since there
+is no memory allocation inside the loop?
+
+
+
+> BTW: You have problems with your e-mail:
+It's very strange.
+
+QingHua
+
 
