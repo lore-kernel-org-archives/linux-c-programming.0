@@ -1,51 +1,38 @@
-From: Antonio Tellez Flores <atellezf@yahoo.com.mx>
-Subject: Re: question about iostream.h
-Date: Sat, 16 Oct 2004 03:15:06 -0500
+From: Ranga Makireddy <ranga.makireddy@gmail.com>
+Subject: Re: #include problem
+Date: Mon, 18 Oct 2004 12:33:54 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1097914367.23096.2.camel@localhost>
-References: <1097907587.3872.21.camel@localhost.localdomain>
-	 <1097912468.22833.2.camel@localhost>
+Message-ID: <6eff2af00410180003383f9cfc@mail.gmail.com>
+References: <200410151648.i9FGmlqM026477@students.fct.unl.pt>
+Reply-To: Ranga Makireddy <ranga.makireddy@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1097912468.22833.2.camel@localhost>
+In-Reply-To: <200410151648.i9FGmlqM026477@students.fct.unl.pt>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Edward Parrilla <eparrilla@comcast.net>
-Cc: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: C-16 <pmr17184@students.fct.unl.pt>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi
-> =1B
-> > I am trying to use
-> > <iostream.h> or <iostream> but it keeps telling me that file is not
-> > found
-> > but I found file located at:
-> >=20
-> > /usr/include/g++-3/iostream.h
-> >=20
-> > if I type
-> > #include </usr/include/g++-3/iostream.h>
-> > it gives me the following error:
-> > /usr/include/g++-3/iostream:6:22: iostream.h: No such file or direc=
-tory
-> > linktest1.c:8:16: list: No such file or directory
->=20
-> add the next lines:=20
->=20
-> #include <iostream>
-> using namespace std;
+Define your headers as follows in xxx.h file
 
-and compile with g++ instead of gcc
+#ifndef MY_HEADER
+#define <my stuff>
+#endif
 
-bye
---=20
-Antonio T=E9llez Flores
-Ciencias de la Computaci=F3n
-=46acultad de Ciencias - UNAM
-Home Page: http://ada.fciencias.unam.mx/~atellez
+Cheers,
+Ranga
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+On Fri, 15 Oct 2004 17:48:47 +0100, C-16 <pmr17184@students.fct.unl.pt> wrote:
+> Howdy,
+> i have a file main.c in my program that needs to include four headers
+> aaa.h , bbb.h ,ccc.h and ddd.h . Each one of these headers need to
+> include another header xxx.h . With this implementation i get a
+> "redefinition" compilation error. How can i solve this problem ? Thanks
+> in advance.
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
