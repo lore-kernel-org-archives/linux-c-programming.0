@@ -1,62 +1,32 @@
-From: Eric Bambach <eric@cisu.net>
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
 Subject: Re: strace write/read output
-Date: Tue, 22 Mar 2005 13:05:32 -0600
-Message-ID: <200503221305.32606.eric@cisu.net>
+Date: Tue, 22 Mar 2005 12:16:55 -0600 (CST)
+Message-ID: <Pine.LNX.4.58.0503221215250.31636@ns.isi.ulatina.ac.cr>
 References: <Pine.LNX.4.58.0503221104060.30671@ns.isi.ulatina.ac.cr>
-Reply-To: eric@cisu.net
+ <200503221305.32606.eric@cisu.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-In-Reply-To: <Pine.LNX.4.58.0503221104060.30671@ns.isi.ulatina.ac.cr>
-Content-Disposition: inline
+In-Reply-To: <200503221305.32606.eric@cisu.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Eric Bambach <eric@cisu.net>
 Cc: linux-c-programming@vger.kernel.org
 
-On Tuesday 22 March 2005 11:05 am, Fabio Miranda Hamburger wrote:
-> hello,
->
-> I am debugging a tcpip app on linux, I would like to use strace to sh=
-ow me
-> *all* the data passed to read() and write() function to the sockets
-> stream.
->
-> thanks,
->
-      Does strace with the -e option do what you want? man strace. It s=
-eems to=20
-do read and write. Prepare for big logfiles ;)
-> ---
-> Fabio Andres Miranda
-> Ingenieria de sistemas informaticos
-> Universidad Latina - Costa Rica
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in the body of a message to majordomo@vger.kerne=
-l.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> On Tuesday 22 March 2005 11:05 am, Fabio Miranda Hamburger wrote:
+> > hello,
+> >
+> > I am debugging a tcpip app on linux, I would like to use strace to show me
+> > *all* the data passed to read() and write() function to the sockets
+> > stream.
+> >
+> > thanks,
+> >
+>       Does strace with the -e option do what you want? man strace. It seems to
+> do read and write. Prepare for big logfiles ;)
 
---=20
-----------------------------------------
---EB
+I was trying to figure out how to do it. Can you provide an example?
+Usually strace shows few characters and at the end, the total length of
+what was received. Well, I need the entire string of characters.
 
-> All is fine except that I can reliably "oops" it simply by trying to =
-read
-> from /proc/apm (e.g. cat /proc/apm).
-> oops output and ksymoops-2.3.4 output is attached.
-> Is there anything else I can contribute?
-
-The latitude and longtitude of the bios writers current position, and
-a ballistic missile.
-
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
-r 08,2000=20
-
-----------------------------------------
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Thanks.
