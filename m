@@ -1,126 +1,136 @@
-From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
-Subject: RE: filesystem in the kernel
-Date: Thu, 25 Nov 2004 17:46:24 +0530
-Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471EC@mtv01ex04.mindtree.com>
+From: Alphex Kaanoken <akaanoken@softminecorp.com>
+Subject: Re: deletion in singly linked list
+Date: Thu, 25 Nov 2004 13:11:42 +0300
+Message-ID: <20041125131142.652bdb95.akaanoken@softminecorp.com>
+References: <1101198249.3786.3.camel@myLinux>
+	<20041124154309.5588936e.akaanoken@softminecorp.com>
+	<1101354576.3795.1.camel@myLinux>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_13A87_01C4D316.AEAB0000"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
+In-Reply-To: <1101354576.3795.1.camel@myLinux>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: sumit kalra <i_am_sumit_kalra@yahoo.com>
+Content-Type: text/plain; charset="us-ascii"
+To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
 Cc: linux-c-programming@vger.kernel.org
 
-This is a multi-part message in MIME format.
+On Thu, 25 Nov 2004 09:19:37 +0530
+Jagadeesh Bhaskar P <jbhaskar@hclinsys.com> wrote:
+ok, you made some mistakes
+> 
+> 
+> /************* start of code ***********/
+> #include <stdio.h>
+> 
+> typedef struct _node{
+> 	int data;
+> 	struct _node *next;
+> }node;
+> 
+> void printList(node* head){ /*this is ok, but you make pointer to unsiged*/
+> 	node *temp;
+> 	temp = head;
+> 	while(temp){ /*! make for safetly while(tmep!=NULL)*/
+> 		printf("%d\n", temp->data);
+> 		temp = temp->next;
+> 	}
+> 	return;
+> }
+> 
+> int main(void){
+> 
+> 	node *a, *b, *c;
+> 	a = (node*)malloc(sizeof(node));
+> 	b = (node*)malloc(sizeof(node));
+> 	c = (node*)malloc(sizeof(node));
+> 	
+> 	a->data = 1;
+> 	a->next = b;
+> 
+> 	b->data = 2;
+> 	b->next = c;
+> 
+> 	c->data = 3;
+> 	c->next = NULL;
+/*it's can't be worked! I'm usually write a simple function for this and it's working*/
+> 	node *head;
+> 	head = a;
+> 	
+> 	printList(head); //prints 1, 2, 3 -- its OK
+> 
+> 	//deletion of b
+> 	printf("Attaching node with data = %d\n", (b->next)->data);
+> 	b = b->next;
+> 	free(b);
+/*it's not true way - use my function*/
+> 	
+> 	
+> 	printList(head); //prints 1, 2, 0 -- NOT OK -- still a->next points to the location of b, even if its freed!! And also making b = b->next and free(b) removes the link b->next pointing to c. So finally c->data is not obtained!!
+> 	return 0;
+> }
+> 
+> /********** end of code ************/
+> 
+> It is exactly in the same track as Kaanoken mentioned. But the linked list is broken.
+> 
+> Now how can this be fixed???
+> 
+So, I'm write a functions- for deletion from list ypu will see in my prevous message
+for add mamber to the end of list use something like this function:
+mylist * AddItem(mylist *ptr,void *data)
+{
+  mylist *lp=ptr;
+  int id=0;
+  if(ptr!=NULL){
+    ++id;
+    while(ptr->next!=NULL)
+      {
+        ptr=ptr->next;
+        ++id;
+      }
+    ptr->next=(app_list*) malloc(sizeof(app_list);
+    ptr=ptr->next;
+    ptr->next=NULL;
+    ptr->id=id;
+    ptr->data=data; /*see how you will be work with pointers*/
+    return lp;
+  }
+  else{
+    ptr=(app_list*) malloc(sizeof(app_list);
+    ptr->next=NULL;
+    ptr->id=id;
+    ptr->data=data;
+    return ptr;
+  }
+}
+it's worked with my singly linked list structure example in prevous message
+If you need to insert/add to start of list, just rewrite this function it's simple.
+In addition just imagenate you linked list structure in mind and understand that 
+is very simple
+in linked list you have "members" with pointer to the next member, 
+if you need to remove member in any place you must do following things
+ - find member to remove
+ - take a pointer of prev member and change him to the next member that following after removeing member
+ - free memory that malloced for removing member
+it's all
+also if you need to make addition to the end of list faster you can create 
+a pointer to the end of list, in this case you don;t need to go for the end of list when 
+you want to add the new member.
 
-------=_NextPart_000_13A87_01C4D316.AEAB0000
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Thanks.
-
-Regards
-Srinivas
-
------Original Message-----
-From: sumit kalra [mailto:i_am_sumit_kalra@yahoo.com]
-Sent: Thursday, November 25, 2004 5:45 PM
-To: Bakki Srinivas
-Cc: linux-c-programming@vger.kernel.org
-Subject: Re: filesystem in the kernel
-
-
-Hi,
-
-ext2_fs_type is declared using the macro
-DECLARE_FSTYPE_DEV. This macro eventually
-expands to declaring ext2_fs_type as an instance of
-struct file_system_type and initializes its members.
-
-Look at this macros in include/linux/fs.h
-
-Regards,
-Sumit
-
--------------------------------------=20
-
- --- Bakki Srinivas <bakki_srinivas@mindtree.com>
-wrote:=20
-> hi,
->     when a filesystem is registered with the kernel
-> eg.
-> register_filesystem(&ext2_fs_type);
->   where is the structure ext2_fs_type declared ?
->=20
-> Thanks with Regards
-> Srinivas Bakki
-> >
--------------------------------------------------------------------------=
-----
-------------------------------------------------
-> Disclaimer
->
--------------------------------------------------------------------------=
-----
-------------------------------------------------
->=20
-> "This message(including attachment if any)is
-> confidential and may be privileged.Before opening
-> attachments please check them
-> for viruses and defects.MindTree Consulting Private
-> Limited (MindTree)will not be responsible for any
-> viruses or defects or
-> any forwarded attachments emanating either from
-> within MindTree or outside.If you have received this
-> message by mistake please notify the sender by
-> return  e-mail and delete this message from your
-> system. Any unauthorized use or dissemination of
-> this message in whole or in part is strictly
-> prohibited.  Please note that e-mails are
-> susceptible to change and MindTree shall not be
-> liable for any improper, untimely or incomplete
-> transmission."
->=20
->
--------------------------------------------------------------------------=
-----
-------------------------------------------------=20
-
-
-	=09
-___________________________________________________________=20
-Moving house? Beach bar in Thailand? New Wardrobe? Win =A310k with =
-Yahoo! Mail
-to make your dream a reality.=20
-Get Yahoo! Mail www.yahoo.co.uk/10k
-
-------=_NextPart_000_13A87_01C4D316.AEAB0000
-Content-Type: text/plain;
-	name="disclaimer.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="disclaimer.txt"
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-Disclaimer
--------------------------------------------------------------------------=
-----------------------------------------------------
-
-"This message(including attachment if any)is confidential and may be =
-privileged.Before opening attachments please check them
-for viruses and defects.MindTree Consulting Private Limited =
-(MindTree)will not be responsible for any viruses or defects or
-any forwarded attachments emanating either from within MindTree or =
-outside.If you have received this message by mistake please notify the =
-sender by return  e-mail and delete this message from your system. Any =
-unauthorized use or dissemination of this message in whole or in part is =
-strictly prohibited.  Please note that e-mails are susceptible to change =
-and MindTree shall not be liable for any improper, untimely or =
-incomplete transmission."
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-------=_NextPart_000_13A87_01C4D316.AEAB0000--
+Best wishes
+> 
+> -- 
+> With regards,
+> 
+> Jagadeesh Bhaskar P
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+--
+System Developer of
+SoftMine Corp.
+Alphex Kaanoken
