@@ -1,32 +1,54 @@
-From: Jon Masters <jonmasters@gmail.com>
+From: mojtaba mahdavi <mahdavi110@gmail.com>
 Subject: Re: Line by Line debug in linux.
-Date: Sat, 2 Oct 2004 14:04:14 +0100
+Date: Sat, 2 Oct 2004 21:38:27 +0330
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <35fb2e5904100206042e42bb99@mail.gmail.com>
+Message-ID: <36a2bb3d041002110859a50c03@mail.gmail.com>
 References: <36a2bb3d0410012346468e9cdf@mail.gmail.com>
 	 <cjll76$ndp$1@sea.gmane.org>
-Reply-To: jonathan@jonmasters.org
+	 <35fb2e5904100206042e42bb99@mail.gmail.com>
+Reply-To: mojtaba mahdavi <mahdavi110@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <cjll76$ndp$1@sea.gmane.org>
+In-Reply-To: <35fb2e5904100206042e42bb99@mail.gmail.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Suciu Flavius <suciuflavius@tiscali.de>
+To: jonathan@jonmasters.org
 Cc: linux-c-programming@vger.kernel.org
 
-On Sat, 02 Oct 2004 09:36:33 -0700, Suciu Flavius
-<suciuflavius@tiscali.de> wrote:
+Thanks in advance. 
 
-> You can run ddd and gdb under cygwin as far I know.
+Best of regards. 
 
-There is a graphical version of gdb called insight, which is used by
-MS Windows gdb users.
+I will follow your guide lines. 
 
-http://sources.redhat.com/insight/
 
-Folks like the people at Xilinx use insight for their tools (which is
-what I'm pointing out in the sentence above by users of gdb on
-Windows) and it works quite nicely.
 
-Jon.
+On Sat, 2 Oct 2004 14:04:14 +0100, Jon Masters <jonmasters@gmail.com> wrote:
+> On Sat, 02 Oct 2004 09:36:33 -0700, Suciu Flavius
+> <suciuflavius@tiscali.de> wrote:
+> 
+> > You can run ddd and gdb under cygwin as far I know.
+> 
+> There is a graphical version of gdb called insight, which is used by
+> MS Windows gdb users.
+> 
+> http://sources.redhat.com/insight/
+> 
+> Folks like the people at Xilinx use insight for their tools (which is
+> what I'm pointing out in the sentence above by users of gdb on
+> Windows) and it works quite nicely.
+> 
+> Jon.
+> 
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+
+
+
+-- 
+(>:<)
