@@ -1,32 +1,55 @@
-From: "Carlos Fernandez Sanz" <cfernandez@myalert.com>
-Subject: Re: Begining C book
-Date: Fri, 10 May 2002 10:35:41 +0200
+From: "Daniel" <uval@rz.uni-karlsruhe.de>
+Subject: Re: global parameters
+Date: Fri, 10 May 2002 11:05:01 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <005401c1f7fd$b379b910$0b40440a@madcfernandez>
-References: <3CDB4A4B.1060204@adelphia.net>
+Message-ID: <001101c1f801$c662e430$544615ac@stud.unikarlsruhe.de>
+References: <463100409.20020419114801@com2com.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Mark Johnson <rmjohnson144@adelphia.net>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Forget about 'linux C', there's not such a thing. Learn standard C (there
-are many good books on the topic - I used to like Schildt's, but probably
-there are even better ones now), and one you know at least the basics you
-can get the usual masterpieces on UNIX programming.
 
 ----- Original Message -----
-From: "Mark Johnson" <rmjohnson144@adelphia.net>
-To: <linux-c-programming@vger.kernel.org>
-Sent: Friday, May 10, 2002 6:19 AM
-Subject: Begining C book
+From: "Eugene Vigovskiy" <vigov@com2com.ru>
+Newsgroups: ka.lists.linux.c.programming
+Sent: Friday, April 19, 2002 9:48 AM
+Subject: global parameters
 
 
-> I am new to linux and would like to learn how to program in C.  can
-> someone suggest a good beginners book that covers linux C.
+>   Hello All.
 >
-> -=Mark=-
+>   I'd like to ask one question.
+>
+>   I've got a programm, and i'd like to read configuration from file.
+>   I need in some data structure for it.
+>
+>   What is the best way to do it?
+>
+>   I see at least two ways.
+>
+>   The first is allocate a structure like this
+>   struct somestruct {
+>          param1;
+>          param2;
+>          .
+>          .
+>          paramn;
+>   }
+>   and create func what will fill and return pointer to it,  that I can use
+in any place.
+>
+>   The Second way is to
+>
+>   allocate some global variables and make them available through
+>   "extern" in other modules.
+>   Can anybody point me at advantages and disadvantages of this
+>   methods.
+>
+>
+> Eugene Vigovskiy
 >
 > -
 > To unsubscribe from this list: send the line "unsubscribe
@@ -34,4 +57,20 @@ linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
 >
+>
+>
+> --------------------------------------------------------------------------
+-----
+>    Achtung: diese Newsgruppe ist eine unidirektional gegatete
+Mailingliste.
+>      Antworten nur per Mail an die im Reply-To-Header angegebene Adresse.
+>                    Fragen zum Gateway -> newsmaster@inka.de.
+> --------------------------------------------------------------------------
+-----
+
+I think the first one is better.
+ (If you want to develope this program, you only let these modules see
+the declarations that realy need them)
+If it going to be small (~200 Lines) then it doesn't matter which one you
+use.
 
