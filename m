@@ -1,29 +1,43 @@
-From: Sascha Retzki <lantis@iqranet.info>
-Subject: Re: various doubts part 2
-Date: Tue, 10 Aug 2004 09:04:03 +0200
+From: joy <gracecott@sancharnet.in>
+Subject: Re: various doubts ......
+Date: Wed, 11 Aug 2004 08:21:55 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1092121443.1419.3.camel@linux.local>
-References: <41183899.9000203@sancharnet.in>
-Reply-To: lantis@iqranet.info
+Message-ID: <411989CB.3000304@sancharnet.in>
+References: <4117B259.1090500@sancharnet.in>
+Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <41183899.9000203@sancharnet.in>
+In-reply-to: <4117B259.1090500@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
+To: 
+Cc: linux-c-programming@vger.kernel.org
 
-Am Di, 2004-08-10 um 04.53 schrieb joy:
-> 	outfile = open(filename,O_WRONLY|O_CREAT,S_IRWXU|S_IRWXO);
-> 	while((bytes_read = read(STDIN_FILENO,buff,sizeof(buff))>0))
-> 	{
-> 		if((bytes_written = write(outfile , buff ,bytes_read))!=bytes_read)
-> 		{
-> 			fprintf(stderr,"write error");
-> 			exit(1);
-> 		}
-> 	}
+joy wrote:
 
-Why not reading from 'stdin' directly ? That FD is defined in stdio.h
-iirc... What is STDIN_FILENO anyway :) ?
+> Hello,
+> I  have a few , though unconnected doubts.
+>
+> 1) can a named pipe be locked using normal lockf()  or do I have to 
+> perform some voodoo?
+>
+Yes it can! I tried it out with two processes trying to write to the 
+pipe at the same time.One obtains the  lock
+and sleep()s for 10 seconds during which the other process is blocked.
+
+> 2) I need to transfer data (protocol not an issue, just raw data) from 
+> a usb peripheral(not HDD)
+>    to the host comp. can I do this without writing a usb driver 
+> myself, i.e , using some generic or user-space driver (like ppdev)
+>    the peripheral is a texas instruments tusb246b hub.
+>
+> Thanx in advance,
+> Joy.M.Monteiro
+> -
+> To unsubscribe from this list: send the line "unsubscribe 
+> linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
