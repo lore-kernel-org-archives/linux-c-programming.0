@@ -1,58 +1,61 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Let it die! (was: Email Verification Request)
-Date: Fri, 9 Jul 2004 11:32:43 +0200
+From: John Richard Moser <nigelenki@comcast.net>
+Subject: Garbage Collection and Swap
+Date: Fri, 09 Jul 2004 20:43:57 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040709093243.GM18841@lug-owl.de>
-References: <200407071535.i67FZrnG015691@www.web-geek.com> <40ECBC84.10706@hq.ntsp.nec.co.jp>
+Message-ID: <40EF3BCD.7080808@comcast.net>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="KhDKIZ8emI+Lr8f6"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <40ECBC84.10706@hq.ntsp.nec.co.jp>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-kernel@vger.kernel.org, linux-c-programming <linux-c-programming@vger.kernel.org>
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
---KhDKIZ8emI+Lr8f6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've been researching garbage collection.
 
-On Thu, 2004-07-08 11:16:20 +0800, Lejanson C. Go <lejanson@ntsp.nec.co.jp>
-wrote in message <40ECBC84.10706@hq.ntsp.nec.co.jp>:
-> linux-c-programming@vger.kernel.org wrote:
-> >
-> >Email-Verify-Code: 19O.46IpqZ5Rs
+Let me first get it out in the open that I *despise* the concept of
+garbage collection.  I worried when I first heard of a magical automatic
+free()/delete[] that it would do one or more of two things:
 
-Please, stop this bullshit. Either someone wants to get an answer, or
-she doesn't.
+~ - Create excessive overhead
+~ - Free up ram I'm still using
 
-If an email needs additional verification, that's a strong hint that
-they don't want to receive anything. Just put 'em into your respective
-killfile...
+I've learned that the first may or may not be true.  This means that
+they've won on some accounts with that one.
 
-MfG, JBG
+The second may or may not occur as well.  It worries me that it may in
+certain cases, due to the way GC works.  Most garbage collectors will
+look in the heap, maybe the stack, maybe other places, for what looks
+like pointers to allocated ram.  If they don't find any, they free the ram.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
+So, the first extremely obvious thing you'll notice is that GC may at
+times miss things, especially if you use the XOR linked list trick or
+use your own makeshift swap file (write pointers to disk, read back in).
 
---KhDKIZ8emI+Lr8f6
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+After a while, a big one hit me.
 
+THE GARBAGE COLLECTOR WANDERS AROUND IN THE ENTIRE HEAP, AND IN SOME
+CASES IN OTHER PARTS OF RAM, LOOKING FOR WHAT LOOKS LIKE POINTERS TO
+YOUR ALLOCATED DATA.
+
+Read that.  It's in all caps, so you should read it.  It has meaning.
+
+How about, everything is using Bohem GC.  Bohem wanders around in the
+heap concurrently.  So all of your applications are wandering around
+through their vm space everywhere, continuously.
+
+You get low on ram.  Let's say an app is using 500M of ram (Mozilla).
+What's going to happen?  Obvious.  It's going to yank shit out of swap.
+
+If we all linked against a GC, what kinds of swap hell do you think we'd
+encounter?
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
+Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
 
-iD8DBQFA7mY7Hb1edYOZ4bsRAs1dAJ9Z/tE9Jh3N8jdMm6ABIpKBShVpvwCfVDbx
-DGVmQnOYUFo5nIZdQ1Mfl6Y=
-=HY6U
+iD8DBQFA7zvMhDd4aOud5P8RAh8zAJ9zTAH2D+aJOpK60Gz2FiWfKE/iYQCfShG1
+GuXdbh0ZRJuwCX2fLleOBbw=
+=Glt1
 -----END PGP SIGNATURE-----
-
---KhDKIZ8emI+Lr8f6--
