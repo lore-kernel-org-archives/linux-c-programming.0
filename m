@@ -1,65 +1,121 @@
-From: Rafael <vergandash@ig.com.br>
+From: Eric Bambach <eric@cisu.net>
 Subject: Re: File I/O wrapper?
-Date: Tue, 25 Jan 2005 03:49:03 -0200
-Message-ID: <200501250349.03476.vergandash@ig.com.br>
-References: <1450f66c05012411557e328fa1@mail.gmail.com>
+Date: Tue, 25 Jan 2005 13:42:01 -0600
+Message-ID: <200501251342.01283.eric@cisu.net>
+References: <1450f66c05012411557e328fa1@mail.gmail.com> <200501241454.21502.eric@cisu.net> <1450f66c05012508457a3f123c@mail.gmail.com>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1450f66c05012411557e328fa1@mail.gmail.com>
+In-Reply-To: <1450f66c05012508457a3f123c@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Dan Gary <funkychunkymunky@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Some ideas...
+On Tuesday 25 January 2005 10:45 am, Dan Gary wrote:
+> I originally avoided fifos because I couldn't figure out how to tell
+> my program when to switch modes from read to write on the fifo.
+>
+> I need this to be able to dump data back out the "pipe" when a read i=
+s
+> done, to be able to use this as a dropin replacement for log files,
+> and potentially config files.
 
-Perhaps (i d't like this word but for discussion...) a wrapper I/O 100%  
-trustworthy one i dont see how without kmod.
+Maybe im misunderstanding you, but I have no clue as to the purpose of =
+what=20
+you're trying to accomplish. You are writing a program that can act as =
+a=20
+config file to be read by one program, while acting as a logfile to be=20
+written to by another?
 
-Multiple programs realizing I/O is hard,  because you need to know who 
-read/write what and the buffer size of that operation. And it make things 
-come more complex because i know you got look at programs stack, monitoring 
-calls by I/O opetarions  (eg libc routines - GDB). That is for monitoring 
-intentions. So a possible I/O reaction system based in logs it is another 
-history.
+Im not a programming guru, but I doubt this will work as a "drop in"=20
+replacement for programs as you cant get enough data from a read or a w=
+rite=20
+call to know what kind of data the program is expecting or what it will=
+ be=20
+writing. You either need the sending/receiving program to identify itse=
+lf to=20
+you (sockets, two-way pipe), or you need to snoop pretty hard on the=20
+reader/writer which is a trick in itself.=20
 
-There's a tool named fuser, look at the source for some ideas, gdb source code 
-too.
+You probably will need a kernel module, or an interesting new filesyste=
+m.
 
+Perhaps you can enlighten me further, as this sounds interesting, even =
+if its=20
+not feasable as a generic "drop in" replacement.
 
-> I'm working on a new logging system and came across the idea of using
-> a program through a symbolic link instead of a file for a log.
->
-> Basically I would write a program that logs to a variety of
-> configurable sources, and would act as a file when it comes to I/O,
-> doing whatever processing I want in between the "actual" file and the
-> calling program.
->
-> My only hang up so far is actually getting the program to emulate file
-> I/O without writing to the program file itself.
+> And I really didn't want the i/o blocking, and although I've heard
+> about ways to limit that I haven't seen a good example.
 >
 >
-> So in simple terms, I want a program to act like a file, and I'm stuck on
-> How.
+> I never thought about a char device though, might be the ticket.
 >
-> A FIFO isn't quite what I need, but close, although I need a single
-> point of reference to handle all I/O, exactly like a file.
->
-> And I can't/don't want to rewrite every potential calling program to
-> work with this.
->
-> I've been thinking I'm going to have to do a kernel module, but I was
-> hoping someone might know a way I can implement this w/o doing a kmod.
->
-> I've always been a higher level programmer, interfaces, DB
-> access/filtering, etc, so anything as low as throwing a hook into file
-> I/O is a little beyond my existing knowledge level, but I'm willing to
-> give it a shot.
->
-> Any help would be greatly appreciated.
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > What comes to my mind is a fifo also. Why do you say its not suitab=
+le?
+> > Perhaps you are looking at it wrong. Please explain why you can't d=
+ont
+> > want to use a FIFO and perhaps it will help us think of an alternat=
+ive.
+> >
+> > Anything you can do on a file you can do with a FIFO. Perhaps you d=
+ont
+> > want the SIGPIPE problem and blocking reads/writes?
+> >
+> > Sockets would be better but require the original program know about=
+ them.
+> >
+> > Perhaps registering a character device with the kernel and having t=
+he
+> > original program write on /dev/mylog and your program receiving it.
+> >
+> > Heres a neat link on an example device driver chardev.c Not sure if=
+ its
+> > for 2.4 or 2.6, but its a good place to start if you will actually =
+need
+> > to write a kernel module to shunt some data for you.
+> >
+> > http://www.faqs.org/docs/kernel/x571.html
+> >
+> > ----------------------------------------
+> > --EB
+> >
+> > > All is fine except that I can reliably "oops" it simply by trying=
+ to
+> > > read from /proc/apm (e.g. cat /proc/apm).
+> > > oops output and ksymoops-2.3.4 output is attached.
+> > > Is there anything else I can contribute?
+> >
+> > The latitude and longtitude of the bios writers current position, a=
+nd
+> > a ballistic missile.
+> >
+> >                 --Alan Cox LKML-December 08,2000
+> >
+> > ----------------------------------------
+
+--=20
+----------------------------------------
+--EB
+
+> All is fine except that I can reliably "oops" it simply by trying to =
+read
+> from /proc/apm (e.g. cat /proc/apm).
+> oops output and ksymoops-2.3.4 output is attached.
+> Is there anything else I can contribute?
+
+The latitude and longtitude of the bios writers current position, and
+a ballistic missile.
+
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
+r 08,2000=20
+
+----------------------------------------
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
