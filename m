@@ -1,54 +1,25 @@
-From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
-Subject: help
-Date: Thu, 25 Nov 2004 15:25:23 +0530
-Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E8@mtv01ex04.mindtree.com>
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: uint8_t  mean8[8] __attribute__ ((aligned (32))), *mp;
+Date: Fri, 26 Nov 2004 06:18:31 +0000 (GMT)
+Message-ID: <20041126061831.5905.qmail@web52903.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_E048_01C4D302.FBC518D0"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Linux C Programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux prg <linux-c-programming@vger.kernel.org>
 
-This is a multi-part message in MIME format.
+if somebody can tell me what attribute is aligned here
 
-------=_NextPart_000_E048_01C4D302.FBC518D0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ uint8_t  mean8[8] __attribute__ ((aligned (32))),
+*mp;
 
-hi,
-    whats the equivalent of sprintf in the kernel mode?
+thanks
 
-Thanks with Regards
-Srinivas Bakki
+ankit jain
 
-------=_NextPart_000_E048_01C4D302.FBC518D0
-Content-Type: text/plain;
-	name="disclaimer.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="disclaimer.txt"
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-Disclaimer
--------------------------------------------------------------------------=
-----------------------------------------------------
-
-"This message(including attachment if any)is confidential and may be =
-privileged.Before opening attachments please check them
-for viruses and defects.MindTree Consulting Private Limited =
-(MindTree)will not be responsible for any viruses or defects or
-any forwarded attachments emanating either from within MindTree or =
-outside.If you have received this message by mistake please notify the =
-sender by return  e-mail and delete this message from your system. Any =
-unauthorized use or dissemination of this message in whole or in part is =
-strictly prohibited.  Please note that e-mails are susceptible to change =
-and MindTree shall not be liable for any improper, untimely or =
-incomplete transmission."
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-------=_NextPart_000_E048_01C4D302.FBC518D0--
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
