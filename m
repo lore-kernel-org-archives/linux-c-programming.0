@@ -1,64 +1,36 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Viability of a New Allocator
-Date: Thu, 24 Jun 2004 15:10:27 +0100
+From: "Paul Gimpelj" <pgimpelj@sympatico.ca>
+Subject: compression heuristic algorithm
+Date: Fri, 25 Jun 2004 16:40:08 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16602.57555.663049.440769@cerise.nosuchdomain.co.uk>
-References: <40DA75DE.4020106@comcast.net>
+Message-ID: <004001c45af4$9b7da7c0$c901010a@zoom>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40DA75DE.4020106@comcast.net>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: John Richard Moser <nigelenki@comcast.net>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
+hi,
 
-John Richard Moser wrote:
+I am looking for an algorithm.
 
-> I have no idea how to implement this, although from what I gather it is
-> feasible.  I believe but can not guarantee that it will give the returns
-> I expect.  Is anyone interested in this at all?  I don't have the skill
-> to code it, but if someone could find someone to code it or at least
-> confirm that it should behave as expected, I'd be grateful.
+Can anyone help.
 
-glibc's malloc() already uses anonymous mmap() for blocks above a
-certain threshold (default is 128Kb, configurable via environment
-variables and mallopt()).
+Hypothesis:  There is a shift register system that will produce a repeatable
+and predictable sequence of values. This sequence can be totally defined
+with a starting value and the input parameters to the shift register system.
 
-However, there is a (kernel-imposed) limit on the number of such
-blocks, so you can't just mmap() a separate region for each block.
+In other words 700mb of file can be compacted to one byte and a matrix of
+parameters to input into the shift register system.
+And the file will be compacted by 99.9% or greater. So 10 cds can be
+distributed in 1.44 floppy format.
 
-The last time I checked, glibc won't attempt to map a large region
-then allocate multiple smaller blocks from it. In typical usage, there
-probably wouldn't be much point. It can't unmap the region so long as
-any portion of it is in use.
+The pratical aspect is to have an heuristic to determine the matrix of
+parameters, Time to compute is relatively unimportant since the file is to
+be archived.
 
-It could resize the region, moving the top downwards. OTOH, moving the
-bottom upwards would require moving the base of region and copying all
-used blocks, and that would be problematic in a multi-threaded
-process. The same issue applies to splitting a block which is used at
-both ends but empty in the middle.
+Thanks,
 
-The main thing in your proposal which doesn't make sense is:
+regards,
+Paul ( operations research graduate)
 
-> Any unused, allocated area of memory that touches or crosses a page
-> boundary is infinite in size under this scheme, and so can be expanded
-> and utilized, reducing the impact of heap fragmentation.
-
-While you could extend such regions using mremap(), they certainly
-aren't "infinite size". They can't be extended any further than the
-next memory location which is currently in use.
-
-Ultimately, on a 32-bit system, the problem tends to degenerate into
-one of allocating address space rather than memory. And that limits
-how much you can do with a malloc()-style interface, i.e. where the
-block has to remain at a fixed address throughout its lifespan.
-
-You would have a lot more flexibility using either x86 segmentation
-(which is x86-specific, and would require 48-bit pointers), or a
-mechansism similar to the Win16 API (LocalAlloc, LocalLock,
-LocalUnlock) where blocks can be moved around.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
