@@ -1,42 +1,31 @@
-From: Sascha Retzki <lantis@iqranet.info>
-Subject: Re: array size 1 ?
-Date: Sun, 08 Aug 2004 07:37:54 +0200
+From: authn <opacki@acn.waw.pl>
+Subject: LKM programming - problem with chars from user space (?)
+Date: Sun, 8 Aug 2004 23:06:15 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1091943474.1291.0.camel@linux.local>
-References: <40EF3BCD.7080808@comcast.net> <40F45DEF.8060307@techsource.com>
-	 <40F475FC.9090202@comcast.net>  <002601c46e79$3da5f100$d3113b80@Viper>
-Reply-To: lantis@iqranet.info
+Message-ID: <200408082306.15656.opacki@acn.waw.pl>
+Reply-To: opacki@acn.waw.pl
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <002601c46e79$3da5f100$d3113b80@Viper>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Am Di, 2004-07-20 um 18.47 schrieb Anshuman S. Rawat:
-> Hi,
-> What does an array of size 1 mean? or maybe I might be putting it wrong, so
-> here's the declaration -
-> 
-> struct option_state {
->     int refcnt;
->     int universe_count;
->     int site_universe;
->     int site_code_min;
->     VOIDPTR universes[1];
-> };
-> 
-> (code from ISC DHCP sources includes/dhcpd.h)
-> 
-> What does universes[1] mean here?
-> 
-> Thanks.
-> -Anshu
-> 
+Hello,
+I am coding a linux kernel module and have problem with some string from user 
+space (from execve system call). There is no problem with useing this string 
+as a one, for example printk(KERN_ALERT "%s", string) works fine. 
+Problem appears when i want to printk or compare single char, in first case it 
+is printked with some extra '<1>' and in second case, when i compare it with 
+other one, it doesnt fit to real char (it is "connected" with '<1>' in some 
+way ?). I tried to copy it to kmalloced buffer:
 
+if ((k_space=(char *)kmalloc(len, GFP_KERNEL))==NULL)
+                        return -1;
+memcpy_fromfs((void *)k_space, (void *)argv[argc], len); 
 
-Came across this:
-http://www.eskimo.com/~scs/C-faq/q2.6.html
+but then playing with k_space[i] was the same. Can anybody help me with this ?
 
-
+Regards, 
+apacz
