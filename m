@@ -1,34 +1,39 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: optimal exchange of data inbetween 2 processes
-Date: Mon, 10 May 2004 04:52:41 +0200 (CEST)
+From: joy <gracecott@sancharnet.in>
+Subject: Re: Serial revisited
+Date: Mon, 10 May 2004 20:51:08 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0405100438130.16456-100000@hestia>
+Message-ID: <409F9DE4.9000000@sancharnet.in>
 References: <409DAB41.1000608@sancharnet.in>
-Reply-To: linux-c-programming@vger.kernel.org
+Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <409DAB41.1000608@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Monday, May 10 04:38:13
+joy wrote:
 
-Hello, 
+> Hi again,
+>
+> I had a small doubt  about serial transmission,(AGAIN:-(  )
+> it's just this:
+> If I want to send an int through the port, which is stored as 32 bytes 
+> in any comp, but my target platform is an 8 bit one, how can I do
+> it without losing information(Eg:    opcodes for any 8 bit processor 
+> cross assembled on the PC)
 
-I have almost fininshed the code for a program which is split in to two
-processes. The only thing I have to do now is to connect them so that they
-can exchange data.
+figured it out. I just had to write the whole code into a char .looks 
+funny, but after all, its a binary file
 
-One process generates data, the other one reads it. The amount of data
-which needs to be transfered is fairly small, roughly 800 bytes a second.
+sorry for wasting  your time, thanx to all.
 
-What is the best way to implement this, with sockets or with pipes ?
-Are there any 'general' guidelines for what option to use and what not to
-use regarding the amount of data that needs to be transfered ?
+>
+> Thanx in advance,
+> Joy.M.M
+>
+>                          
 
-Thnkx a lot.. If you guys could give me some thoughts.. 
 
-J.
+
 
