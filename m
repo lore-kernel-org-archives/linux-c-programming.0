@@ -1,52 +1,28 @@
-From: "Steven Smith" <sos22@cam.ac.uk>
-Subject: Re: Implementing a file counter (like "ls | wc")
-Date: Tue, 13 Apr 2004 13:52:58 +0100
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: Can I increase size of Inodes?
+Date: Tue, 13 Apr 2004 14:01:46 -0400 (EDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040413125258.GA2565@archibold.chu.cam.ac.uk>
-References: <20040407183558.77510679.alphex@crew.org.ru> <4074148E.9060205@ig.com.br>
+Message-ID: <20040413180146.7A0051E514@xprdmailfe24.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="5mCyUwZo2JvN/JJP"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <4074148E.9060205@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
---5mCyUwZo2JvN/JJP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-> while ((pFile=readdir(pDir))!=NULL) {
->      sprintf(szBuf, "%s/%s", pPath, pFile->d_name);
->      stat(szBuf, &statFile);
->      if (S_ISDIR(statFile.st_mode))
->         continue;
-If the only reason you're statting the files is to check whether
-they're directories, then you can save yourself a system call per
-file:
+Hi all,
 
-while ((pFile=readdir(pDir))!=NULL) {
-     if (pFile->d_type == DT_DIR)
-        continue;
+Is it possible to increase size of ext2_inode struct ? If yes, does it have to be in multiples of something? (say 128 bytes?) What all things do I need to take care of / change; if I am changing the size of the inode? I suppose inode bitmap will be one of them...
 
-This'll probably be quite a bit quicker, and may also save you needing
-to call sprintf(), which can be somewhat expensive.
+Thanks and regards,
 
-Steven Smith.
+Vineet
 
---5mCyUwZo2JvN/JJP
-Content-Type: application/pgp-signature
-Content-Disposition: inline
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (FreeBSD)
 
-iD8DBQFAe+KqO4S8/gLNrjcRAgJRAJ9+ax08fJRtpGkbdOVBA4fg8qUdugCgji1J
-CCsdR7tjQ18NLTsOy9n4T+g=
-=rIPd
------END PGP SIGNATURE-----
-
---5mCyUwZo2JvN/JJP--
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
