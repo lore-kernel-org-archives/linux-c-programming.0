@@ -1,66 +1,79 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Question about X
-Date: Wed, 24 Nov 2004 13:12:39 +0100
-Message-ID: <20041124121239.GR2067@lug-owl.de>
-References: <20041124143656.264fc1ca.akaanoken@softminecorp.com>
+From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Subject: Re: deletion in singly linked list
+Date: Thu, 25 Nov 2004 09:19:37 +0530
+Message-ID: <1101354576.3795.1.camel@myLinux>
+References: <1101198249.3786.3.camel@myLinux>
+	 <20041124154309.5588936e.akaanoken@softminecorp.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="CPn8Wy5ME997YUMW"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20041124143656.264fc1ca.akaanoken@softminecorp.com>
+In-Reply-To: <20041124154309.5588936e.akaanoken@softminecorp.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Alphex Kaanoken <akaanoken@softminecorp.com>
+Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
 
 
---CPn8Wy5ME997YUMW
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2004-11-24 14:36:56 +0300, Alphex Kaanoken <akaanoken@softminecorp.=
-com>
-wrote in message <20041124143656.264fc1ca.akaanoken@softminecorp.com>:
-> Hi all,
-> I'm want to get the last inputed string in focused window - and
-> modify it if it's contain  errors.
-> I'm try to do it with sending key events to focused window (like
-> Shift+left|right arrows), and  see it and modify with this method
-> too, but it doesn't work ;-( or work very buggy =3D(
+/************* start of code ***********/
+#include <stdio.h>
 
-Source code for that?
+typedef struct _node{
+	int data;
+	struct _node *next;
+}node;
 
-> How I can do it with other method?
+void printList(node* head){
+	node *temp;
+	temp = head;
+	while(temp){
+		printf("%d\n", temp->data);
+		temp = temp->next;
+	}
+	return;
+}
 
-Well, I'd modify the application to check the values upon pressing the
-"OK" button. If the input format doesn't match your expectation, just
-mark all the field's contents and position the cursor somewhere in this
-input field.
+int main(void){
 
-MfG, JBG
+	node *a, *b, *c;
+	a = (node*)malloc(sizeof(node));
+	b = (node*)malloc(sizeof(node));
+	c = (node*)malloc(sizeof(node));
+	
+	a->data = 1;
+	a->next = b;
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+	b->data = 2;
+	b->next = c;
 
---CPn8Wy5ME997YUMW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+	c->data = 3;
+	c->next = NULL;
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
+	node *head;
+	head = a;
+	
+	printList(head); //prints 1, 2, 3 -- its OK
 
-iD8DBQFBpHq3Hb1edYOZ4bsRAlgCAJ9i1B1KIKW0BgLnX4VSCN5wL2mqCACeLt8q
-+TIMCuzp1aQw4rfvpDsiUf0=
-=Yhnu
------END PGP SIGNATURE-----
+	//deletion of b
+	printf("Attaching node with data = %d\n", (b->next)->data);
+	b = b->next;
+	free(b);
+	
+	
+	printList(head); //prints 1, 2, 0 -- NOT OK -- still a->next points to the location of b, even if its freed!! And also making b = b->next and free(b) removes the link b->next pointing to c. So finally c->data is not obtained!!
+	return 0;
+}
 
---CPn8Wy5ME997YUMW--
+/********** end of code ************/
+
+It is exactly in the same track as Kaanoken mentioned. But the linked list is broken.
+
+Now how can this be fixed???
+
+
+-- 
+With regards,
+
+Jagadeesh Bhaskar P
+
