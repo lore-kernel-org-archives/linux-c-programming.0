@@ -1,21 +1,26 @@
 From: "Joseph D. Wagner" <wagnerjd@prodigy.net>
-Subject: IntToChar template function
-Date: Sat, 28 Dec 2002 20:18:22 -0600
+Subject: IntToChar Template Function with Corrections
+Date: Sun, 29 Dec 2002 23:14:16 -0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001501c2aee0$908703f0$d02c3a41@joe>
+Message-ID: <000601c2afc2$4df0ad10$c80a3941@joe>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0016_01C2AEAE.45EC93F0"
+	boundary="----=_NextPart_000_0007_01C2AF90.03563D10"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
+Cc: redhat-devel-list@redhat.com
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_0016_01C2AEAE.45EC93F0
+------=_NextPart_000_0007_01C2AF90.03563D10
 Content-Type: text/plain;
 	charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+
+I've corrected a few quirks and bugs in my original file.
+
+Just to remind you in case you forgot:
 
 I created a template function that will convert an integer of any form
 (unsigned/signed, short/long) to its char array equivalent.
@@ -36,25 +41,28 @@ You pass to the function IntToChar an integer of any type and it will =
 return
 a pointer to a char array.
 
+For example:
+
+const char *myChar =3D IntToChar(myInt);
+
 I tested it, and it works.  It's fully operational, but I'm sure =
 somebody
-out there will find bugs and/or qwerks that can be tweaked.
+out there will find quirks that can be tweaked.
 
 Any such comments would be appreciated!
 
 TIA
 
-Joseph Wagner
+Joseph Wagner=20
 
-------=_NextPart_000_0016_01C2AEAE.45EC93F0
+------=_NextPart_000_0007_01C2AF90.03563D10
 Content-Type: text/plain;
 	name="IntToChar.hpp"
 Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
 	filename="IntToChar.hpp"
 
-// Class: IntToChar
-// Requires file(s): IntToChar.cpp
+// Template Function: IntToChar
 
 // Copyright =A9 2002 Joseph Wagner.  All rights reserved.
 // Email: wagnerjd@users.sourceforge.net
@@ -81,38 +89,6 @@ USA
 	typedef long long int __int64;
 #endif
 
-template<typename IntegerType>
-char *IntToChar(IntegerType number);
-------=_NextPart_000_0016_01C2AEAE.45EC93F0
-Content-Type: text/plain;
-	name="IntToChar.cpp"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="IntToChar.cpp"
-
-// Class: IntToChar
-// Requires file(s): IntToChar.hpp
-
-// Copyright =A9 2002 Joseph Wagner.  All rights reserved.
-// Email: wagnerjd@users.sourceforge.net
-//=20
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//=20
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//=20
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  =
-USA
-
-#include "IntToChar.hpp"
-
 #include <bitset>
 using std::bitset;
 #include <typeinfo>
@@ -120,7 +96,7 @@ using std::bitset;
 #include <cmath>
 
 template<typename IntegerType>
-char *IntToChar(IntegerType number) {
+const char *IntToChar(IntegerType number) {
 	// Supports 64-bit integers
 	const bitset<64> number64 =3D number;
 	char dataType[64] =3D {0};
@@ -135,7 +111,6 @@ than 20 digits
 	const unsigned short lastBit =3D sizeInBits - 1;
 
 	// Obtains type information
-	//const char *rawDataType =3D typeid(IntegerType).name();
 	strncpy(dataType, typeid(IntegerType).name(), 64);
 
 	// Determines if signed or unsigned
@@ -157,11 +132,12 @@ than 20 digits
     // Converts individual digits to characters
 	for(unsigned __int64 divisor =3D 10000000000000000000; divisor >=3D 1; =
 divisor /=3D 10) {
-		if(divisor < number) {
-			digitHolder =3D floor(number / divisor);
+		if(divisor <=3D number) {
+			digitHolder =3D static_cast<unsigned short>(floor(number / =
+static_cast<double>(divisor)));
 			character64[pointer] =3D static_cast<char>(digitHolder + =
 AsciiOffset);
-			number -=3D (digitHolder * divisor);
+			number -=3D static_cast<IntegerType>(digitHolder * divisor);
 			pointer++;
 		}
 	}
@@ -171,5 +147,6 @@ AsciiOffset);
 
 	return character64;
 }
-------=_NextPart_000_0016_01C2AEAE.45EC93F0--
+
+------=_NextPart_000_0007_01C2AF90.03563D10--
 
