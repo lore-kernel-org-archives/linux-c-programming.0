@@ -1,43 +1,63 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: "Charlie Gordon" <gmane@chqrlie.org>
 Subject: Re: value computed is not used ??
-Date: Tue, 1 Jun 2004 04:25:58 +0100
+Date: Tue, 1 Jun 2004 09:30:57 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16571.63302.688793.269892@cerise.nosuchdomain.co.uk>
-References: <Pine.LNX.4.21.0406010333220.1813-100000@hestia>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <c9hb7s$3o1$1@sea.gmane.org>
+References: <20040531193810.GE31833@opaque> <Pine.LNX.4.21.0406010333220.1813-100000@hestia>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.21.0406010333220.1813-100000@hestia>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+Let's do code review :
 
-J. wrote:
-
-> When I try to compile the listed program, with gcc version 2.95.4 20011002
-> and the command `gcc -Wall program.c -o program` It gives me a warning
-> message like: warning: value computed is not used
-> 
-> The program works perfectly fine, as far as I can judge the code isn't
-> wrong in any way ? And the value is certainly used.. Unfortunatly this
-> message shows to many times when I try to compile other code at my system.
-> 
-> Can anyone explain to me what the sense behind that warning is ? And what
-> to do about it ? e.g. what the ``better way`` of coding would be?
-> 
 > #include <stdio.h>
-> 
+>
 > int main(void) {
+this is not a the correct propotype for main.
+
 >  char *ptr = NULL;
+this initialization is useless.
+
 >  char str[] = "whats up";
-> 
+what a horrible thing to write : this effectively defines an automatic
+char array that gets initialized by copying the string "what's up".
+while this is fine for global data, it is very inefficient for automatic
+variables.
+a better way would be:
+const char *str = "whats up";
+const char *ptr;
+
+>
 >  for(ptr = str; *ptr; *ptr++) {
+*ptr++ is causing the warning "value computed not used"
+ptr++ suffices.
 
-	for(ptr = str; *ptr; ptr++) {
+>   printf("%c", *ptr);
+for completeness, let it be known that some snoddy compilers will complain
+that the result of printf is not used.
+why not write:
+putchar(*ptr);
 
-There is no point in dereferencing "ptr++", which is why you get the
-warning.
+>  }
+>
+>  printf("\n");
+same as above:
+putchar('\n');
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+>  return 0;
+> }
+
+rework needed on 7 out of 8 non empty lines.
+amazingly, there doesn't seem to be any algorithmic flaw in this simplistic
+program.
+
+Hope is helps.
+
+Chqrlie.
+
+
+
+
