@@ -1,87 +1,163 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: complex variable
-Date: Mon, 13 Sep 2004 23:57:42 +0200
+From: Eric Bambach <eric@cisu.net>
+Subject: Re: how to find the end of piped data?
+Date: Tue, 14 Sep 2004 01:06:08 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040913215742.GZ19967@lug-owl.de>
-References: <E3E30069B061524E90BCEE4417E30661138525@monm207.monmouth.army.mil> <chml6d$kri$1@sea.gmane.org> <20040908120658.GZ6985@lug-owl.de> <chnv2v$j6n$1@sea.gmane.org> <20040910200519.GJ19967@lug-owl.de> <ci4sid$kgu$1@sea.gmane.org>
+Message-ID: <200409140106.08674.eric@cisu.net>
+References: <41458643.7060907@sit.fraunhofer.de>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ZNveOOYjKturpEFp"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <41458643.7060907@sit.fraunhofer.de>
 Content-Disposition: inline
-In-Reply-To: <ci4sid$kgu$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Richard Sammet <richard.sammet@sit.fraunhofer.de>
+Cc: linux-c-programming@vger.kernel.org
 
+On Monday 13 September 2004 06:36 am, you wrote:
+> hey list,
+>
+> i wrote a small tool which gets data over a pipe from other tools (like:
+> cat stuff | mytool).
+>
+> how can i find the end of this data stream?
+>
+> at the moment im looking for a newline to see if the input is finished,
+> but thats not practicable.
+>
+> this is the rutine for getting the data:
+>
+>       75 void scanin()
+>       76 {
+>       77    int tmpcnt=0;
+>       78
+>       79    while(sizeof(tmpkey) && tmpkey[tmpcnt-1] != 10)
+>       80    {
+>       81       tmpkey[tmpcnt]=getchar();
+>       82       tmpcnt++;
+>       83    }
+>       84 }
+>
+> im looking for a flag like EOF but EndOfStream or something like this? ;)
+>
+> anybody any idea?
 
---ZNveOOYjKturpEFp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yea, heres a small program I wrote that works exactly the same way. WIth piped 
+data. It just scans STDIN to match to a pattern in the input stream. If it 
+finds it, it pipes to /dev/null, if not, it pipes to stdout. Notice the 
+read()/write() combo with a buffer. This is MUCH faster than getchar() 
+method. Hope it helps.
 
-On Mon, 2004-09-13 21:32:06 +0200, Charlie Gordon <gmane@chqrlie.org>
-wrote in message <ci4sid$kgu$1@sea.gmane.org>:
-> "Jan-Benedict Glaw" <jbglaw@lug-owl.de> wrote in message
-> news:20040910200519.GJ19967@lug-owl.de...
-[...]
-> > So you basically use creal() and cimag() to access the two numbers.
->=20
-> Well it is still too vague :
-> - what is the floating type of complex variable co ?
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
-Not specified, I guess GCC "assumes" something there. But that doesn't
-seem (from my reading) to match with C99 rules.
+#define EXIT_NOMATCH 0
+#define EXIT_MATCH 1
 
-> - You did not specify float, double or long double, so what is the defaul=
-t ?
+//Should be large enough to scan most mail messages in one or two passes.
+//Performance with 4K buffer is .8s for a 73M message.
+//Increasing to 32K only trims it to .6s with an unjustified increase in 
+memory use.
+//DO NOT SET THIS TOO SMALL. It probably won't catch the spam flag then since 
+it only scans the
+//first BUFFERSIZE characters read in then fast copies the rest to stdout.
+#define BUFFERSIZE 6144
 
-Hmmm. You're probably right. I've digget into C99, but to be honest, my
-reading is that a simple "complex" (without a real floating type) is
-just illegal...
+//What we are checking for. must be EXACT. Leave the newline in because it 
+protects the offchance that it is in the message body somewhere.
+//This way it will only match if its at the beginning of the line.
+#define CHECKSTRING "\nX-Spam-Flag: YES"
 
-> - Reading tens of pages from C99 leaves that question open (!)
+int main(void);
+int dump_full_message();
+int write_message(char *buffer,int len,int fd);
+int read_message(char *buffer);
+int scan_message(char *buffer,int len);
 
-Right. At least from my point of view :-)
+int main(void){
+  //Our faithful buffer
+  char buffer[BUFFERSIZE];
+  //What file should we write to if its spam.
+  const char *spampipe = "/dev/null";
+  int len,
+      fd = STDOUT_FILENO,
+      exit_status = EXIT_NOMATCH;
+  
+  //We only want to scan our message once. Its unlikely there are more than 
+4K(BUFFERSIZE)
+  //of headers. By scanning once, this lets us trash the rest of the output if 
+its spam. Also
+  //prevents scanning a huge non-matching mail-message-attachment.
+  len = read_message(buffer);
+	if (len){
+    if( scan_message(buffer,len) == EXIT_MATCH){
+      if( (fd = open(spampipe, O_WRONLY)) == -1){
+        perror("Cannot open spam pipe...will write to stdout");
+        fd = STDOUT_FILENO;
+      }
+      exit_status= EXIT_MATCH;
+    }
+  }
+ 	write_message(buffer,len,fd);
 
-> - The creal and cimag macros apply to all 3 complex types.
+  //Tight read/write for just piping the data. After the first BUFFERSIZE 
+characters
+  //we should already have what we need and just pass it on in the queue.
+  do{
+    len = read_message(buffer);
+  	if (len){
+	  	write_message(buffer,len,fd);
+    }
+	}while(len > 0);
+  close(fd);
+  return exit_status;
+}
 
-Well, there has been some type-conversion in between :-)
------------
-7.3.9.2 The cimag functions
-Sysnopsis
-	#include <complex.h>
-	double cimag(double complex z);
-	float cimagf(float complex z);
-	long double cimagl(long double complex z);
------------
+int scan_message(char * buffer,int len){
+  char *spamptr,*bufptr;
+  int count = 0;
+  const char *spamflag = CHECKSTRING;
+  spamptr = spamflag;
+  bufptr = buffer;
+  for(count =0 ; count<len ; count++,bufptr++){
+   //Test it
+   if (*bufptr != *spamptr)
+     spamptr = spamflag;
+   if (*bufptr == *spamptr)
+     spamptr++;
+   //We've hit a match
+   if (*spamptr == '\0'){
+    return EXIT_MATCH;
+   }
+  }
+ return EXIT_NOMATCH;
+}
 
-> PS: I have always hated floating point stuff ;-)
+int read_message(char *buffer){
+  int len;
+  len = read(STDIN_FILENO,buffer,BUFFERSIZE-1);
+  if (len < 0){
+    perror("Read Error");
+    exit(EXIT_NOMATCH);
+  }
+  return len;
+}
 
-/me too, but sometimes, it helps to achieve more correct numbers :-)
+//Works almost like write() except checks for errors.
+int write_message(char *buffer,int len,int fd){
+  int ret;
+  ret = write(fd,buffer,len);
+  if (ret < 0){
+    perror("Write Error");
+    exit(EXIT_NOMATCH);
+  }
+  return ret;
+}
 
-MfG, JBG
+-- 
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---ZNveOOYjKturpEFp
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBRhfWHb1edYOZ4bsRAsSUAJsG9PAjkXLeA5fjIp95DfI536d8SwCfV8Js
-eQuC3hGpQL2ME/cdzDqTlXo=
-=yE6z
------END PGP SIGNATURE-----
-
---ZNveOOYjKturpEFp--
+-EB
