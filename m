@@ -1,60 +1,38 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: logging console stdin
-Date: Tue, 25 May 2004 15:27:04 +0200
+From: "Paul Gimpelj" <pgimpelj@sympatico.ca>
+Subject: logging console input
+Date: Tue, 25 May 2004 09:54:02 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040525132704.GD1912@lug-owl.de>
-References: <006501c4425a$108a3780$3410fea9@zoom>
+Message-ID: <00b101c4425f$bcff70c0$3410fea9@zoom>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="uMGUQ2Rx3mZbwxtd"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <006501c4425a$108a3780$3410fea9@zoom>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Well,
 
---uMGUQ2Rx3mZbwxtd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Say I am typing all day and night into console and want a record of my input
+to review later.
+in case I forgot what i typed in hours ago.
 
-On Tue, 2004-05-25 09:13:25 -0400, Paul Gimpelj <pgimpelj@sympatico.ca>
-wrote in message <006501c4425a$108a3780$3410fea9@zoom>:
-> is there a way to fork the stdin, stderr and stdout of console  and xcons=
-ole
-> .
-> to  separate log files,
->  session based or otherwise.
->=20
-> It would be helpfull during installs to see if console input was interpre=
-ted
-> correctlly.
+Under windows one hooks into the journaling hook vector. by writing a
+program in c.
+This gives the keyboard input so it can be recorded into a file.
 
-To be honest, I think I haven't really understood what you try to
-achieve. Could you give a specific example?
+Is there a simple way to log the keyboard of the console, or does one need
+to write a module
+to hook the kernel.
 
-MfG, JBG
+thanks.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
 
---uMGUQ2Rx3mZbwxtd
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+Ps.
+I am using ms mail 6. and wouldn't it be nice if i could just click reply
+and it would send my response
+to the linux-c........
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
+rather than ....
 
-iD8DBQFAs0mnHb1edYOZ4bsRAvRDAJ9cEfVMv/P00BopXsr5tyz11ZeS2gCfZDSu
-bNR6ZZ2u7wUtjulCPopecl0=
-=wUDs
------END PGP SIGNATURE-----
+or is there a different email browser set up for this mail list?
 
---uMGUQ2Rx3mZbwxtd--
