@@ -1,82 +1,63 @@
-From: "Parvez Pathan" <parvezp@lycos.com>
-Subject: RE: Cannot capture SIGPIPE
-Date: Wed, 04 Feb 2004 16:47:16 +0530
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: Cannot capture SIGPIPE
+Date: Wed, 4 Feb 2004 13:15:43 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <CJMFDMPONIBKLFAA@mailcity.com>
-Reply-To: parvezp@lycos.com
+Message-ID: <16416.61567.185027.515162@cerise.nosuchdomain.co.uk>
+References: <MNIBOEAJBKPBGIAA@mailcity.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Language: en
+In-Reply-To: <MNIBOEAJBKPBGIAA@mailcity.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org, romesh sahu <r.sahu@zensar.com>
-Cc: parvezp@lycos.com
-
-Hi,
- Thanks for the reply. One question that has now started lingering my mind is that Is it correct to pass the kill signal to the process as kill  will always try to terminate the process, whereas I do not want to terminate the process.
-  Secondly, I did have some luck. Ater every write I check for 2 conditions, the return val after write and is errno is set to EPIPE. But still my handler does not get called. Strange!!
-
-Thanks 
-Parvez
---
-
---------- Original Message ---------
-
-DATE: Wed, 4 Feb 2004 14:43:16 
-From: "romesh sahu" <r.sahu@zensar.com>
-To: <linux-c-programming@vger.kernel.org>
-Cc: <parvezp@lycos.com>
-
->oh i m sorry for my earlier mail...
->i tried sending PIPE instead SIGPIPE...its the same thing happening...both SIGPIPE and PIPE work fine..the process is catching the signal and going to back_to_work and prints the "Not Quitting" message.
->
->Regards,
->Romesh
->
->-----Original Message-----
->From: linux-c-programming-owner@vger.kernel.org
->[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Parvez
->Pathan
->Sent: Wednesday, February 04, 2004 1:23 PM
->To: linux-c-programming@vger.kernel.org
->Subject: Cannot capture SIGPIPE
->
->
->Hi All,
->  I have  a server program which connect to clients c1 and c2. The server reads from c1 and writes to c2. Whenever c2 dies(or is killed) I get a SIGPIPE at the server. I have tried to capture the SIGPIPE but cant trap it. Some part of my code is as follows:
->
-><code>
->void cleanup (int x) { printf ("Quitting..."); exit(0); }
->void back_to_work (int x) { printf ("Not Quitting..."); return; }
->
->main ()
->{
->	signal (SIGINT, cleanup);
->	signal (SIGPIPE, back_to_work);
->
->	//rest of the program
->}
-></code>
->
->The server is in a infinite loop. The server cannot capture a SIGPIPE given to it by the kill command (kill -PIPE <server pid>) also. Am I missing out anything??
->Please help.
->
->Thanks,
->Parvez
->
->
->____________________________________________________________
->Get advanced SPAM filtering on Webmail or POP Mail ... Get Lycos Mail!
->http://login.mail.lycos.com/r/referral?aid=27005
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+To: parvezp@lycos.com
+Cc: linux-c-programming@vger.kernel.org
 
 
+Parvez Pathan wrote:
 
-____________________________________________________________
-Get advanced SPAM filtering on Webmail or POP Mail ... Get Lycos Mail!
-http://login.mail.lycos.com/r/referral?aid=27005
+> I have a server program which connect to clients c1 and c2. The server
+> reads from c1 and writes to c2. Whenever c2 dies(or is killed) I get a
+> SIGPIPE at the server. I have tried to capture the SIGPIPE but cant
+> trap it. Some part of my code is as follows:
+> 
+> <code>
+> void cleanup (int x) { printf ("Quitting..."); exit(0); }
+> void back_to_work (int x) { printf ("Not Quitting..."); return; }
+
+This won't print at the point that the signal is received if stdout is
+line buffered (which is the default). Add a newline or call fflush()
+to force the output to be written.
+
+However, printf() itself isn't necessarily safe to use within a signal
+handler. It would be better to use write(), e.g.
+
+	void back_to_work (int x) {
+		const char msg[] = "Not Quitting...\n";
+		write(STDOUT_FILENO, msg, strlen(msg));
+	}
+
+More generally, very few functions are safe to use within a signal
+handler.
+
+Where possible, a signal handler should just set a flag variable
+(which must be declared "volatile"), with the real work being
+performed outside of the handler when the flag is set, e.g.
+
+	static volatile int sigpipe;
+
+	void handle_sigpipe (int signo) { sigpipe = 1; }
+
+	...
+
+		for (;;)
+		{
+			if (sigpipe)
+			{
+				deal_with_sigpipe();
+				sigpipe = 0;
+			}
+			...
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
