@@ -1,22 +1,38 @@
-From: xlp <xlp@emtel.net.co>
-Subject: a 'wrapper'
-Date: Sat, 29 Jun 2002 05:25:02 -0500
+From: "Flavio de Ayra Mendes" <h4@locked.org>
+Subject: Re: Type conversion
+Date: Sat, 29 Jun 2002 08:09:30 -0300 (BRST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020629052348.A50622@nietzsche>
+Message-ID: <26155.200.158.237.216.1025348970.squirrel@webmail.locked.org>
+References: <200206290211.g5T2B1832183@cs.annauniv.edu>
+Reply-To: h4@locked.org
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <200206290211.g5T2B1832183@cs.annauniv.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-hi, i have been trying to let certain process working on a remote machine in this way:
-nohup ./a.out >> /dev/null &
-but when i log off, the process dies.
-Can i code a certain process that fork itself, call setsid() and run a.out with system() or exec() ?
-How can i deal with this situation? I want that the executable object a.out forget about terminal control and do its work without care about sdtin/stdout/stderr.
+> On Friday 28 June 2002 17:14, Adam Luchjenbroers wrote:
+>  > > If you weren't aware of type casts, you probably need to get a
+>  > >book on  C.
+>  >
+>  > Is there a good book you could recommend.
+>  >
+>
+> The  C Programming Language (or some other name)
+> by Brian W. Kernighan and Dennis M. Ritchie
+>
+> C++ (I don;t know the name)
+> by Bjarne Stoustrup
+(...)
 
-bye Unix friends.
+The C++ Programming Language
+by Bjarne Stroustrup
+
+
+
+flv
+http://h4.locked.org
 
 
