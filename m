@@ -1,56 +1,59 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Fri, 2 Jul 2004 23:32:19 +0100
+From: wwp <subscript@free.fr>
+Subject: Re: printf format type, precision...
+Date: Sat, 3 Jul 2004 01:10:40 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16613.57971.207623.58581@cerise.nosuchdomain.co.uk>
-References: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
+Message-ID: <20040703011040.17c21d51@tethys.solarsys.org>
+References: <Pine.LNX.4.21.0407030018090.1619-100000@hestia>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
+In-Reply-To: <Pine.LNX.4.21.0407030018090.1619-100000@hestia>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: =?iso-8859-1?q?Dinesh=20Ahuja?= <mdlinux7@yahoo.co.in>
-Cc: lucianolnx@ig.com.br, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+Hello J.,
 
 
-Dinesh Ahuja wrote:
+On Sat, 3 Jul 2004 00:32:27 +0200 (CEST) "J." <mailing-lists@xs4all.nl> wrote:
 
-> There is a concept of constant folding in C++.
-> Whenever you declare any data member of class as a
-> constant, the compiler should allocate the memory for
-> it in the object layout and compiler should know the
-> size of the variable in advance. Suppose, if I have a
-> class like below :
+> Saturday, July 03 00:18:09
 > 
-> class MyClass {
->    const int size;
->    int arrSize[size];
-> };
-> This will not compile because compiler can not do the
-> constant folding in above case as memory needs to be
-> allocated for the constant data member size.
+> Hello,
+> 
+> I am trying to convert an IP address to it's eq. in base10
+> [homework]. However the outcome from the formula listed below isn't giving
+> me the right results.  Is this because I'm using the wrong precision type
+> for the `result' variable ? If that's the case what other precision type
+> should I use instead ? Right now I can't see the format tree's trhu the
+> precision forrest anmore .. ehum.
+> 
+> #include <stdio.h>
+> 
+> int main(void) {
+>  int var1 = 192; 
+>  int var2 = 168;
+>  int var3 = 1;
+>  int var4 = 10;
+>  long int result = 0;
+> 
+>  result = var1 * (256 ^ 3) + var2 * (256 ^ 2) * var3 * 256 + var4; 
+>  printf("%ld\n", value);
+> 
+>  return 0;
+> }
+> 
+> Your comments and suggestions will be greatly appreciated..
 
-However, the title explicitly says:
+You meant:
+ printf("%ld\n", result);
+instead of:
+ printf("%ld\n", value);
 
-	STATIC const attribute in C++ (How to ?)
+What do you get, what do you expect?
 
-[Emphasis mine.]
 
-There is a difference.
-
-> The above problem can be resolved by using enums.
-> class MyClass {
->    enum {size = 100};
->    int arrSize[size];
-> };
-
-It can also be resolved using an initialised static const member:
-
-class MyClass {
-   static const int size = 100;
-   int arrSize[size];
-};
+Regards,
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+wwp
