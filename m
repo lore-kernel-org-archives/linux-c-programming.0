@@ -1,56 +1,46 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: huffman implementation
-Date: Fri, 17 Dec 2004 16:23:27 +0100
-Message-ID: <20041217152327.GD16958@lug-owl.de>
-References: <20041217105939.86833.qmail@web52910.mail.yahoo.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: The stickybit!!
+Date: Sat, 18 Dec 2004 00:25:34 +0000
+Message-ID: <16835.30974.291491.153681@cerise.gclements.plus.com>
+References: <1103265276.6880.8.camel@myLinux>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="KQtzXpABaZjuvfJ9"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20041217105939.86833.qmail@web52910.mail.yahoo.com>
+In-Reply-To: <1103265276.6880.8.camel@myLinux>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
 
 
---KQtzXpABaZjuvfJ9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Jagadeesh Bhaskar P wrote:
 
-On Fri, 2004-12-17 10:59:39 +0000, Ankit Jain <ankitjain1580@yahoo.com>
-wrote in message <20041217105939.86833.qmail@web52910.mail.yahoo.com>:
-> does any body have any kind of idea how to implement
-> huffman algo. i need soem help.
+> 	Though it is known that stickybit is obsolete, im just curious to see
+> the effect of setting a sticky bit on an executable file.
+> 
+> 	Is there a way to findout the data if residing in swap area after the
+> process is terminated, using a C program??
 
-The huffman compression is explained in hundreths of web pages. You'll
-also find sample source code in almost any programming language you ask
-for. Just ask Mr Google for it :)
+Read-only sections (e.g. text, rodata) of binaries (executables or
+libraries) will never end up in the swap file. Either they reside in
+RAM or they don't; if they don't, they will be read in from the binary
+as required.
 
-MfG, JBG
+The swap file is only used for storing mutable data (e.g. data or bss
+sections of binaries, memory allocated by brk() or anonymous mmap(),
+or writeable mmap()ed files using MAP_PRIVATE).
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+Immutable data is already stored in the mapped file, so there's no
+point in copying it to swap.
 
---KQtzXpABaZjuvfJ9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+As for the question which you presumably meant to ask, i.e. how to
+determine if a particular page of a file is currently stored in
+physical RAM, I don't have an answer.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
+Obviously, the kernel has this information, so you could always dig it
+out of /dev/kmem or /proc/kcore or similar. I don't know whether
+there's a better interface.
 
-iD8DBQFBwvnvHb1edYOZ4bsRAtX/AJ43E/QDeiVDSFqfGqmaZtNIGj1ifwCePlUn
-m+YL8K2e2k2Geb+tEkPwbdE=
-=6CyQ
------END PGP SIGNATURE-----
-
---KQtzXpABaZjuvfJ9--
+-- 
+Glynn Clements <glynn@gclements.plus.com>
