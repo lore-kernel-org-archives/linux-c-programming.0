@@ -1,97 +1,50 @@
-From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-Subject: Re: Use of htons function
-Date: Mon, 20 Sep 2004 13:41:22 -0300
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: Use of htons function
+Date: Mon, 20 Sep 2004 14:14:52 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <414F0832.9000106@ig.com.br>
-References: <20040920_160857_092073.r_zaca@ig.com.br>
+Message-ID: <E3E30069B061524E90BCEE4417E30661138531@monm207.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040920_160857_092073.r_zaca@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
-To: Ronaldo Zacarias Afonso <r_zaca@ig.com.br>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-PORTUGUES Version: Se voc=EA fala portugu=EAs posso te explicar novamen=
-te.
+Ronaldo wrote:
 
-ENGLISH Version:
-When you re transmiting data over network, you sometimes don't know the=
-=20
-application or hardware that are in the other side (peer).Thus, you nee=
-d=20
-establish a standard for your data format.
+>  Some one could tell me what the function "htons" realy does? Where can I 
+>  use it? I tryed to find its purpose in the "man htons", but it seems a
+little 
+>  bit confusing. 
 
-Of course, when the data are characters, you could think that you dont=20
-need format definition, because characters whould be easy to undertand=20
-from other side. But it inst true, because the characters can be=20
-codified in ASCII, EBCDIC or another way. Then, you need to establish a=
-=20
-standard for your data format.
+`htons' (host to network short) converts a short from the native byte-order
+for 
+platform to the "network byte-order".  The TCP/IP standard specifies 
+that the network byte-order will be big-endian (i.e. the most significant
+byte of
+a mult-byte value will be stored in the lowest memory addrss).  
 
-Well, when the data are binary, like as a 16 bits integer instead of 5=20
-number characters.... samples representations for the number "42076":
-a) Big-endian hardware this number will be: 0xA4 0x5C   (2 binary bytes=
-)
-b) Little-endian hardware this number will be: 0x5C 0xA4  (2 binary byt=
-es)
-c) Text ASCII this number will be: "42076" (5 ASCII text bytes)
+Based on this the overall effect of `htons' depends on the architecture of
+the 
+platform.  For example, if developing on an intel platform (which is
+little-endian) 
+then `htons' will convert to big-endian.  However, on a Sparc platform
+(which is
+big-endian) `htons' will do nothing.
 
-As you can see, you have 3 or more ways to format your number, but the =
-2=20
-first are smaller and less expensive for networks when the amoung of=20
-fields data be large (example: a lot of fields of 16 bits or 32 bits).
+You can use `htons' anywhere where you need a value in big-endian format.
+You should 
+use `htons' in any network related code when sending a short (say a port
+number) across 
+the network, regardless of the platform you are developing on - this aids
+portability 
+of your code.
 
-Well, TCP/IP allow you a standard for binary traffic for 16 and 32 bits=
-,=20
-and the funciton htons() is one of them, that convert a binary data of=20
-16 bits from host format to TCP/IP (network short) format. Thus, your=20
-peer needs to use nstoh() function to convert the 16 bits TCP/IP binary=
-=20
-data to host format.
+Finally, you should be aware of the following functions:
 
-Some about big and little-endian:
-- Intel is a Little-endian format
-- PowerPC, mainframes, and others processor usually from Motorola or IB=
-M=20
-are Big-endian.
-- TCP/IP use Big-endian format, then, the use of the funtions like=20
-htons() on PowerPC or mainfraimes are optional, but isnt right to ommit=
-=20
-them, because usually they arent functions, but MACROS defined by #defi=
-ne.
+htonl  -- host to network long
+ntohs  -- network to host short
+ntohl  -- network to host long
 
-Regards,
+George
 
-Luciano
-
-
-
-Ronaldo Zacarias Afonso wrote:
-
->  Hello all,=20
->
->  Some one could tell me what the function "htons" realy does? Where c=
-an I=20
->use it?=20
->  I tryed to find its purpose in the "man htons", but it seems a littl=
-e bit=20
->confusing.=20
->  Thanks.=20
->
->______________________________________________________________________=
-___________
->Quer mais velocidade?
->S=F3 com o acesso Aditivado iG, a velocidade que voc=EA quer na hora q=
-ue voc=EA precisa.
->Clique aqui: http://www.acessoaditivado.ig.com.br
->
-> =20
->
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
