@@ -1,71 +1,78 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: =?ISO-8859-1?Q?Mat=EDas_Aguirre?= <matiasaguirre@gmail.com>
 Subject: Re: Question about Malloc
-Date: Tue, 19 Oct 2004 15:27:38 +0200
+Date: Tue, 19 Oct 2004 10:52:12 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041019132738.GR5033@lug-owl.de>
-References: <1097386256.6100.16.camel@localhost.localdomain> <20041010111316.GD5033@lug-owl.de> <a3c4234104101905413e127d3e@mail.gmail.com>
+Message-ID: <a3c42341041019065236207a98@mail.gmail.com>
+References: <1097386256.6100.16.camel@localhost.localdomain>
+	 <20041010111316.GD5033@lug-owl.de>
+	 <a3c4234104101905413e127d3e@mail.gmail.com>
+	 <20041019132738.GR5033@lug-owl.de>
+Reply-To: =?ISO-8859-1?Q?Mat=EDas_Aguirre?= <matiasaguirre@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="Az0epPX+YORSTLVv"
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <a3c4234104101905413e127d3e@mail.gmail.com>
+In-Reply-To: <20041019132738.GR5033@lug-owl.de>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
 To: linux prg <linux-c-programming@vger.kernel.org>
 
+i agree with that, i didn't fix inside de malloc, i only suggested
+about the cast
 
---Az0epPX+YORSTLVv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+but my big error was speak about c++ and not about c, in c++ the
+compiler (g++ in this case) warn you about that conversion....
 
-On Tue, 2004-10-19 09:41:49 -0300, Mat=EDas Aguirre <matiasaguirre@gmail.co=
-m>
-wrote in message <a3c4234104101905413e127d3e@mail.gmail.com>:
-> It's not safer to make:
+sorry
+
+On Tue, 19 Oct 2004 15:27:38 +0200, Jan-Benedict Glaw <jbglaw@lug-owl.d=
+e> wrote:
+> On Tue, 2004-10-19 09:41:49 -0300, Mat=EDas Aguirre <matiasaguirre@gm=
+ail.com>
+> wrote in message <a3c4234104101905413e127d3e@mail.gmail.com>:
+> > It's not safer to make:
+> >
+> > Recpointer r;
+> > r=3D(Recpointer)malloc(Recpointer);
 >=20
-> Recpointer r;
-> r=3D(Recpointer)malloc(Recpointer);
+> malloc is void, while r isn't. So you don't need the cast here. Howev=
+er,
+> notice that your malloc call is actually wrong: the argument isn't a
+> number (or sizeof(something)), but only a type.
+>=20
+> General rule of thumb:
+>=20
+>         The "output" of malloc should be assigned to a variable whose
+>         type is a pointer to whatever you give to sizeof(xxx) as the
+>         malloc argument.
+>=20
+> or in short:
+>=20
+>         One star more on the left than on the right.
+>=20
+> Of course, if you play with types, this doesn't apply any longer...
+>=20
+>=20
+>=20
+> MfG, JBG
+>=20
+> --
+> Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481       =
+      _ O _
+> "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen K=
+rieg  _ _ O
+>  fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im =
+Irak!   O O O
+> ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM |=
+ TCPA));
+>=20
+>=20
+>=20
 
-malloc is void, while r isn't. So you don't need the cast here. However,
-notice that your malloc call is actually wrong: the argument isn't a
-number (or sizeof(something)), but only a type.
-
-General rule of thumb:
-
-	The "output" of malloc should be assigned to a variable whose
-	type is a pointer to whatever you give to sizeof(xxx) as the
-	malloc argument.
-
-or in short:
-
-	One star more on the left than on the right.
-
-Of course, if you play with types, this doesn't apply any longer...
-
-MfG, JBG
 
 --=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---Az0epPX+YORSTLVv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBdRZKHb1edYOZ4bsRAjDNAKCGWaR0aGdpFZtaF6eo1eptD9tRZgCffSq2
-545lEbFu0oYIQxCW8H3RsQg=
-=XKkI
------END PGP SIGNATURE-----
-
---Az0epPX+YORSTLVv--
+Mat=EDas Aguirre
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
