@@ -1,17 +1,24 @@
-From: Llfrg@aol.com
-Subject: Re: Monitoring a program
-Date: Tue, 02 Mar 2004 07:12:38 -0500
+From: Dark <dark@chello.hu>
+Subject: C and GTK programming
+Date: Thu, 04 Mar 2004 12:25:51 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <463BF7ED.4A8AE7D3.0000FADF@aol.com>
+Message-ID: <1078399551.29095.67.camel@gep.morknat.no-ip.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "\"John T. Williams\"" <jtwilliams@vt.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-By every part of the execution I mean the same kind of report the command <vmstat 1> does. I might even use vmstat, but how could I start it whenever a specific program starts? Is there a way to make vmstat work on intervals lower than one second?
+I need help with GTK programming in C. Im working on a small
+Enlightenment menu editor application, but I cannot figure out how to
+use the gtk_tree_view widget, that I need. Would someone please send a
+VERY simple example that only makes a tree list appear with some
+subtrees in a window? I need a really simple stuff probably with only
+one function, becouse I started C programming some days ago and I don't
+understand complicated sysntaxes yet.
 
-Thanks,
-Leonardo.
+thanks
+
+Dark
+
