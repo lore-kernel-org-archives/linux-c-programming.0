@@ -1,30 +1,23 @@
-From: Alexi Jordanov <alexi91@yahoo.com>
-Subject: Reading from pipe
-Date: Tue, 4 Feb 2003 07:31:58 -0800 (PST)
+From: "Jamie Risk" <jamie_risk@yahoo.ca>
+Subject: Disabling warnings inline ...
+Date: Tue, 4 Feb 2003 13:20:31 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030204153158.46580.qmail@web40606.mail.yahoo.com>
-References: <1043980862.1683.2.camel@hikaru>
-Mime-Version: 1.0
+Message-ID: <b1p055$4lf$1@main.gmane.org>
+Reply-To: "Jamie Risk" <jamie_risk@yahoo.ca>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1043980862.1683.2.camel@hikaru>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
+Cc: linux-gcc@vger.kernel.org
 
-Hello,
+How does one disable gcc warnings in a C/H file?
 
-I'm using pipes at this moment and I try decrease
-threads in my application. Therefore I need to know
-whether there is a way to check if there are any
-available bytes in pipe. I don't want to use blocking
-read operation. Just to check and if there are then to
-read them.
+Of course my code it is not the offending matter - it's the system header
+files.
 
-Regards, 
-Alex
+- Jamie
 
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
-http://mailplus.yahoo.com
+
+
