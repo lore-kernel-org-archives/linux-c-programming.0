@@ -1,60 +1,24 @@
-From: Gerald Waugh <gwaugh@frontstreetnetworks.com>
-Subject: Re: select: Interrupted system call
-Date: Sat, 27 Apr 2002 16:37:24 -0400
+From: Mark Johnson <rmjohnson144@adelphia.net>
+Subject: C module won't load
+Date: Sat, 27 Apr 2002 16:19:42 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200204272037.g3RKb1F18623@fsn3.frontstreetnetworks.com>
-References: <200204271503.g3RF3lF04667@fsn3.frontstreetnetworks.com> <200204271602.g3RG24F07174@fsn3.frontstreetnetworks.com> <15562.64140.625327.285565@cerise.nosuchdomain.co.uk>
+Message-ID: <3CCB320E.8030503@adelphia.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <15562.64140.625327.285565@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-On Saturday 27 April 2002 03:22 pm, Glynn Clements wrote:
-> Gerald Waugh wrote:
-> +	#include <errno.h>
->
->            rdsocks = select(hs+1, &socks, (fd_set *) 0,
->             (fd_set *) 0, &timeout);
->
-> -          if (rdsocks < 0) {
-> +          if (rdsocks < 0 && errno != EINTR) {
->
->                    perror("select");
->                    continue;
->                    //  exit(EXIT_FAILURE);
->            }
->
-> > I commented out the exit(EXIT_FAILURE); and added continue;
-> > but I still get   " select: Interrupted system call ", it keeps running
-> > and managing the connections...
-> > Seems like I should be able to find out whats causing it,
-> > Interrupted system call   Does not seem to tell me much.
-> You should handle this case rather than trying to prevent it.
->
-> Prevention is fragile; if the program is subsequently changed to catch
-> a new signal (possibly via a library function), the problem will
-> re-appear.
->
-> Handling this case will ensure that the program is robust. Terminating
-> due to transient errors isn't a good idea.
+Hello All,
 
-I was testing to see if I could keep it going, I did similar to your 
-suggestion:
-Only I did  if (rdsocks < 0 && rdsocks != EINTR)  {
-And I was still getting  a printout of  " select: Interrupted system call "
-Now I'll try 
-if (rdsocks < 0 && errno != EINTR) {
+     I am new to linux and C and I am having trouble loading in my new 
+network drivers.  I compile the module like the docs say, and everything 
+seems to be OK, but when I insmod it into memory I get an error: 
+unresolved symbol pci_drv_unregister and pci_drv_register.  I am 
+compiling rtl8139.c for my RealTec 8139 network card.  I use gcc version 
+2.96 and linux 2.4.9-31 under Red Hat and KDE desktop 2.2.2-2. Any help 
+would be appreciated.
 
-I would really like to know why select()
-gets that  Interrupted system call
+-=Mark=-
 
-
--- 
-Gerald Waugh : Registered Linux user # 255245
-http://www.frontstreetnetworks.com
-Front Street Networks LLC - ph. 203.785.0699
-229 Front Street, Ste. #C, New Haven, CT, United States of America
-4:32pm up 36 days, 23:59, 3 users, load average: 0.80, 1.14, 1.27
