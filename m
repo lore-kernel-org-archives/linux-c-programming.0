@@ -1,88 +1,51 @@
-From: =?ISO-8859-7?Q?Dari=27o_Mariani?= <dmarian@fi.uba.ar>
+From: Steven Shaw <steven_shaw@iprimus.com.au>
 Subject: Re: mixing C/C++
-Date: Mon, 24 Nov 2003 15:44:00 -0300
+Date: Tue, 25 Nov 2003 12:21:38 +1000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3FC25170.4050607@fi.uba.ar>
-References: <20031124111050.GI1819@pcmag.gr>
+Message-ID: <200311251221.39488.steven_shaw@iprimus.com.au>
+References: <20031124111050.GI1819@pcmag.gr> <200311242218.40158.steven_shaw@iprimus.com.au> <20031124175501.GA1022@velka.phys.uoa.gr>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20031124175501.GA1022@velka.phys.uoa.gr>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Elias Athanasopoulos <elathan@pcmag.gr>
+Content-Type: text/plain; charset="us-ascii"
+To: Elias Athanasopoulos <elathan@phys.uoa.gr>
 Cc: linux-c-programming@vger.kernel.org
 
-Hello:
-   I think that the problem is in
+On Tuesday 25 November 2003 03:55, Elias Athanasopoulos wrote:
+> On Mon, Nov 24, 2003 at 10:18:40PM +1000, Steven Shaw wrote:
+> > On Monday 24 November 2003 21:10, Elias Athanasopoulos wrote:
+> > > Now, I have a C program:
+> > >
+> > > int main(void)
+> > > {
+> > > 	struct Foo *f;
+> > >
+> > > 	f = wrap_foo_ctor();
+> > > 	wrap_foo_dump(f);
+> > > 	wrap_bar_dump2(f);
+> > > }
+> >
+> > Looks fine to me.
+>
+> Apparently it is fine. The problem occures when I am wrapping
+> a class which inherits from multiple classes with virtual
+> functions.
 
-extern "C"
-Foo * wrap_foo_ctor()
-{
-	return new Foo();
-}
+That should be fine too.
 
-In your C program you are using a C++ construct inside C, wich may work 
-but the C compiler doesn't understand virtual functions so it might be 
-confused there.
+> Any workarounds?
 
-Elias Athanasopoulos wrote:
-> Hello!
-> 
-> Consider:
-> 
-> class Bar {
-> public:
->   Bar();
->   ~Bar();
-> 
->   void dump2(void);
-> };
-> 
-> class Foo : public Bar {
-> public:
-> 	Foo();
-> 	~Foo();
-> 
-> 	void dump(void);
-> };
-> 
-> extern "C"
-> Foo * wrap_foo_ctor()
-> {
-> 	return new Foo();
-> }
-> 
-> extern "C"
-> void wrap_foo_dump(Foo *f)
-> {
-> 	f->dump();
-> }
-> 
-> extern "C"
-> void wrap_bar_dump2(Bar *b)
-> {
-> 	b->dump2();
-> }
-> 
-> Now, I have a C program:
-> 
-> int main(void)
-> {
-> 	struct Foo *f;
-> 
-> 	f = wrap_foo_ctor();
-> 	wrap_foo_dump(f);
-> 	wrap_bar_dump2(f);
-> }
-> 
-> which is working as -at least- I expect. Bar::dump2() is 
-> called since Foo inherits from Bar.
-> 
-> However is it correct? I have a larger C++ project, which I'm
-> creating wrappers for in C, and I get a segfault in a similar
-> case (i.e. when I call a method *deep* inside the inheritence tree of a 
-> class). 
-> 
-> Regards,
+Maybe you have C++ code with static members. If so you need to compile main() 
+with a C++ compiler. Here is an excellent resource:
 
+	http://www.parashift.com/c++-faq-lite/mixing-c-and-cpp.html
+
+Also the C++ FAQ Lite main page now has a Google-based sitesearch box:
+
+	http://www.parashift.com/c++-faq-lite/
+
+Steve.
 
