@@ -1,8 +1,8 @@
 From: Andrei Bunghez <andrei.bunghez@gmail.com>
 Subject: Re: constant in C
-Date: Fri, 24 Sep 2004 10:16:32 +0300
+Date: Fri, 24 Sep 2004 10:18:31 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <a7ed6e3304092400165ad53b8c@mail.gmail.com>
+Message-ID: <a7ed6e3304092400187377b2d6@mail.gmail.com>
 References: <20040924033646.62233.qmail@web52901.mail.yahoo.com>
 Reply-To: Andrei Bunghez <andrei.bunghez@gmail.com>
 Mime-Version: 1.0
@@ -14,23 +14,9 @@ Content-Type: text/plain; charset="us-ascii"
 To: Ankit Jain <ankitjain1580@yahoo.com>
 Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-Hi,
+Hmm.. actually you can use sizeof(const), and it returns 4, as
+123456789 is a unsigned int constant.
 
-Actually that 'const' has no size at all, it is not a variable, has no
-address. The preprocessor replaces  const in the source code with
-123456789, or whatever its definition is.
-
-For example:
-
-x = const +  3;
-
-will be preprocessed, and the compiler will see:
-x = 123456789 + 3;
-
-Therefore you cannot use sizeof(const),  &const etc.
-
-
-Regards,
 Andrei
 
 
