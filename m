@@ -1,64 +1,90 @@
-From: "Charlie Gordon" <gmane@chqrlie.org>
-Subject: Re: how to find the end of piped data?
-Date: Tue, 14 Sep 2004 11:03:18 +0200
+From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+Subject: Re:
+Date: Tue, 14 Sep 2004 23:26:03 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <ci6c3e$mra$1@sea.gmane.org>
-References: <41458643.7060907@sit.fraunhofer.de>
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Message-ID: <41470D8B.3040604@hq.ntsp.nec.co.jp>
+References: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Ankit Jain <ankitjain1580@yahoo.com>
+Cc: gcc <gcc-help@gcc.gnu.org>, linux prg <linux-c-programming@vger.kernel.org>
 
-Dear Richard,
+here 's an example of static and dynamic allocation...
+(my prev example was only about single dimensional arrays...)
 
-The C library I/O functions are agnostic about whether stdin data is coming
-from a file , a pipeor a character device.
-getchar() will return EOF upon end of file, closing of the pipe by the
-piping process, or end of stream.
+a 2dimensional array of  4450 x 4450
+(change the dimension to 1450 x 1450 if  u find the
+first size to be too big)
 
-Here is how you should write your scanner:
-
-void scanin()
+TEST.C
+#include <stdio.h>
+int main()
 {
-     int c;
-     char tmpkey[1024];  /* or whatever size you want */
-     int tmpcnt = 0;
+  double a[4450][4450];
 
-    while ((c = getchar()) != EOF) {
-        if (c == '\n') {
-            tmpkey[tmpcnt] = '\0';
-            /* perform whatever treatment you want on a line of input */
-            handle_one_line(tmpkey);
-            tmpcnt = 0;
-       } else {
-           if (tmpcnt < (int)sizeof(tmpkey) - 2) {
-               rmpkey[tmpcnt++] = c;
-           }
-       }
+  a[4449][0] = 999;
+  printf( "%lf\n", a[4449][0] );
+  return 1;
 }
 
-You can also use fgets() and check for NULL as the indication for end of
-stream, but you will get a slightly different behaviour on truncated lines.
 
-Cheers,
+TEST2.c
+#include <stdio.h>
+int main()
+{
+  double **a;
+  int i;
 
-Chqrlie.
+  a = (double**) calloc( 4450, sizeof(double*) );
+  for ( i=0; i <1450; i++ )
+  {
+    a[i] = (double*) calloc( 4450, sizeof(double) );
+  }
 
-main(){int
-y=0,x;while(y!=6){x=(y==0)?101:((y==1)?45:((y==2)?97:((y==3)?120:((y==4)?101
-:10))));putchar(x);y++;}}
-
-You can simplify this further : one liners should be less than 80
-characters!
-
-main(){int
-y=0;while(++y<7)putchar(y<2?101:y<3?45:y<4?97:y<5?120:y<6?101:10);}
-
-You can reduce this even further ;-)
-
-
+  a[4449][0]=999;
+  printf( "%lf\n", a[4449][0] );
+  return 1;
+}
 
 
+
+
+Ankit Jain wrote:
+
+>hi
+>
+>well i am fixed up in a new problem
+>
+>i am using a array of size 1024*1024
+>
+>it gives segmentation fault
+>
+>it works with 512*512
+>
+>my menory size is 128 mb and 512 swap
+>
+>i have enough memory space and using gcc 3.2 v
+>
+>may be i need to increase the memory size
+>
+>how to do that?
+>
+>ankit
+>
+>________________________________________________________________________
+>Yahoo! Messenger - Communicate instantly..."Ping" 
+>your friends today! Download Messenger Now 
+>http://uk.messenger.yahoo.com/download/index.html
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+>
+>  
+>
 
