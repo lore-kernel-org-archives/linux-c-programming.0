@@ -1,58 +1,36 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Alignment of variables in gcc
-Date: Sun, 24 Nov 2002 07:34:17 +0000
+From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+Subject: configure and make
+Date: Mon, 25 Nov 2002 11:42:31 +0530 (IST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15840.33017.726026.921775@cerise.nosuchdomain.co.uk>
-References: <20021123234207.35576.qmail@web14402.mail.yahoo.com>
-	<200211232351.gANNpO5K020868@grinch.txt.com>
+Message-ID: <Pine.LNX.4.33.0211251139480.27485-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200211232351.gANNpO5K020868@grinch.txt.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "Jason P. Winters" <jason@txt.com>
-Cc: Reinaldo Nolasco Sanches <r_linux@yahoo.com>, linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
 
-Jason P. Winters wrote:
+Hi
 
-> > i.e
-> > In a struct is I put 
-> > 
-> > typedef struct myStruct {
-> >   char variable1;
-> >   int variable2;
-> > } myStruct;
-> > 
-> > The sizeof() myStruct is 8, I read some documents and see with this not a bug, this occurs because
-> > "Alignment requeriments"...
-> 
-> Yep. This is not a bug... It has to do with the _hardware_
-> requirements of the CPU, and speed accessing memory...
-> 
-> With a 32 bit processor, all 'words' must be accessed on a 'word'
-> boundry for maximum speed... I.e., when the least significant two
-> bits of the address are 0.
+I used to write small programmes, just compile it and run that's it. But 
+now I am wroking on a big project which might require configure and make. 
+I am a newbie to these. Will anyone guide me where can I get the resources 
+to learn writing configure.in, Makefile.am, Makefile.in, Makefile etc.
 
-Actually, on many architectures, it isn't just a performance issue;
-words must be aligned otherwise either an exception occurs or you get
-the wrong data. x86 is one of the few architectures where the CPU
-allows unaligned accesses.
-
-> If you swap the int and char definitions, you'll probably end up
-> with what you think is the right size.. i.e.,
-> 
-> typedef struct myStruct {
->    int variable2;
->    char variable1;
-> } myStruct;
-> 
-> Will probably (but not *always*) yeild you sizeof = 5.
-
-No it won't. The size of a structure needs to be a multiple of the
-largest alignment of any of its members; otherwise you would have
-problems with arrays.
+with regards....
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+
+**************************************************************************
+
+Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
+Assistant Manager II                          (off) : 0091-022-2024641
+National Centre for Software Technology   Fax       : 0091-022-2049573 
+8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in 	
+Mumbai 400021.
+
+Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
+
+**************************************************************************
+
