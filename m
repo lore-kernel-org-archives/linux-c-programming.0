@@ -1,19 +1,26 @@
-From: szaffarano@banelco.com.ar
-Subject: Re: start learning gcc ... how to
-Date: Wed, 10 Apr 2002 13:00:04 -0300
+From: "William N. Zanatta" <william@veritel.com.br>
+Subject: Re: GCC and Memory Organization
+Date: Thu, 11 Apr 2002 09:48:13 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <03256B97.0057BEF6.00@nt1banelco.intranet.banelco.com.ar>
+Message-ID: <3CB5860D.9090805@veritel.com.br>
+References: <3CB3039C.4070404@veritel.com.br> <15539.26431.760192.203498@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
+
+Glynn Clements wrote:
+
+> This isn't a compiler issue. The different layouts would require
+> different source code. The former corresponds to a one-dimensional
+> array, while the latter corresponds to a two-dimensional array.
+> 
+
+Do you know any document on the web where I can study more about this issue?
 
 
-Setedit, is an excelent IDE! you can download it from
-http://setedit.sourceforge.net/
-
->is there any IDE like Borland Turbo C++ ?
-
+William
 
