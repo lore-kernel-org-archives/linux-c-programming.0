@@ -1,24 +1,19 @@
-From: Progga <abulfazl@juniv.edu>
+From: szaffarano@banelco.com.ar
 Subject: Re: start learning gcc ... how to
-Date: Wed, 10 Apr 2002 20:27:42 +0600
+Date: Wed, 10 Apr 2002 13:00:04 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200204101427.UAA04432@ju.juniv.edu>
+Message-ID: <03256B97.0057BEF6.00@nt1banelco.intranet.banelco.com.ar>
+Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: fox@sby.centrin.net.id
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+
+Setedit, is an excelent IDE! you can download it from
+http://setedit.sourceforge.net/
 
 >is there any IDE like Borland Turbo C++ ?
-
-   Rhide (2MB) .
-
- Khoda Hafez
- Progga.
-
-
 
 
