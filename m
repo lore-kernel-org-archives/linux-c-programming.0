@@ -1,74 +1,82 @@
-From: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: How to execute a process in background by exec functions?
-Date: Thu, 8 Apr 2004 18:31:55 +0900
+Date: Thu, 8 Apr 2004 09:56:43 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <004501c41d4c$5503f820$de01a8c0@qnessmphibiki>
-References: <3AA03342E913FA4BA6D8BD0732BFC74B05530BA8@pdsmsx402.pd.intel.com>
+Message-ID: <16501.5067.740319.286901@cerise.nosuchdomain.co.uk>
+References: <002001c41d2c$18e27f80$de01a8c0@qnessmphibiki>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <002001c41d2c$18e27f80$de01a8c0@qnessmphibiki>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: "Zhang, Yanmin" <yanmin.zhang@intel.com>, linux-c-programming@vger.kernel.org
-
-Hi,
-Thanks a lot for your help.
-Yes, I have tired this way. The daemon started, but I hope its PPID
-is 1. We can do it by calling system("/home/wen/daemon &").
-How can I do it by fork&exec way?
-
-Best regards,
-
---Wen
-
------ Original Message -----=20
-=46rom: "Zhang, Yanmin" <yanmin.zhang@intel.com>
-To: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>;
-<linux-c-programming@vger.kernel.org>
-Sent: Thursday, April 08, 2004 3:00 PM
-Subject: RE: How to execute a process in background by exec functions?
+Content-Type: text/plain; charset="us-ascii"
+To: Wen Guangcheng <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
+Cc: linux-c-programming@vger.kernel.org
 
 
-> It doesn't work in this approach. Try this:
->
-> pid=3Dfork();
-> if(pid =3D=3D 0) {
-> execv("/home/wen/daemon", NULL);
-> exit(-1);
-> }
->
-> ... do parent process.
->
-> Yanmin
->
->
-> >-----Original Message-----
-> >From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
-> >programming-owner@vger.kernel.org] On Behalf Of Wen Guangcheng
-> >Sent: 2004=C3=84=C3=AA4=C3=94=C3=828=C3=88=C4=A0 13:41
-> >To: linux-c-programming@vger.kernel.org
-> >Subject: How to execute a process in background by exec functions?
-> >
-> >Hello All,
-> >I am trying to execute a process in background by exec functions.
-> >But it failed when I call the function of execv by
-> >execv("/home/wen/daemon &", NULL);
-> >The error is ENOENT(No such file or directory).
-> >Would anyone tell me how to do it?
-> >Thanks in advance.
-> >
-> >Best regards,
-> >
-> >--Wen
-> >-
-> >To unsubscribe from this list: send the line "unsubscribe linux-c-
-> >programming" in
-> >the body of a message to majordomo@vger.kernel.org
-> >More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+Wen Guangcheng wrote:
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> I am trying to execute a process in background by exec functions.
+> But it failed when I call the function of execv by
+> execv("/home/wen/daemon &", NULL);
+> The error is ENOENT(No such file or directory).  
+
+That's because you don't have an executable called "daemon &" in
+/home/wen.
+
+> Would anyone tell me how to do it?
+
+For the record, system() works roughly like this:
+
+	int system(const char *command)
+	{
+		pid_t pid;
+		int status;
+	
+		pid = fork();
+	
+		if (pid < 0)
+			return -1;
+	
+		if (pid == 0)
+		{
+			execl("/bin/sh", "sh", "-c", command, 0);
+			_exit(127);
+		}
+	
+		if (waitpid(pid, &status, 0) < 0)
+			return -1;
+	
+		return status;
+	}
+
+[The actual system() function also changes the signal handling and
+checks for errors; for simplicity, these have been omitted from the
+above code.]
+
+First, it calls fork() to create a new process. The child process
+calls one of the exec*() functions to execute the shell, with the
+command as an argument (note: the various exec*() functions shouldn't
+return; if they succeed, the specified program is run in place of your
+program). The parent process calls one of the wait*() functions to
+wait for the child process to terminate.
+
+If you want to run a specific program directly (rather than via the
+shell), you would just run that program in place of /bin/sh, e.g.:
+
+	execl("/home/wen/daemon", "daemon", NULL);
+
+Note that you have to specify argv[0] explicitly.
+
+If you want that program to run in the background, the solution is
+simply to omit the call to wait (or waitpid, etc) from the parent.
+
+Also, note that features such as command pipelines, redirection, use
+of the "~" syntax for the home directory etc are all provided by the
+shell. You can't use shell syntax (e.g. "prog1 | prog2",
+"prog <infile >outfile", "prog ~/file" etc) in the strings which are
+passed to the exec*() functions unless you are actually executing the
+shell (as system() does).
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
