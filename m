@@ -1,97 +1,79 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: r_zaca <r_zaca@ig.com.br>
 Subject: Re: Byte Order
-Date: Wed, 12 Jan 2005 18:34:57 +0100
-Message-ID: <20050112173457.GS25737@lug-owl.de>
-References: <20050112_170357_014648.r_zaca@ig.com.br>
+Date: Thu, 13 Jan 2005 08:05:57 -0200
+Message-ID: <20050113_100557_072441.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="jo46wx5DSA4a/gWG"
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1105610757"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20050112_170357_014648.r_zaca@ig.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
---jo46wx5DSA4a/gWG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--Message-Boundary-by-Mail-Sender-1105610757
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
 
-On Wed, 2005-01-12 15:03:57 -0200, r_zaca <r_zaca@ig.com.br>
-wrote in message <20050112_170357_014648.r_zaca@ig.com.br>:
-Content-Description: Mail message body
->   How can I say if the machine where I am working uses "Host Byte Order" =
-or=20
-> "Network Byte Order"?=20
-
-Something like this should do the job:
-
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-int
-main (int argc, char *argv[])
-{
-        uint32_t i =3D 0x44332211;
-        unsigned char *c;
-
-        c =3D (unsigned char *) &i;
-
-        if (c[0] =3D=3D 0x11 && c[1] =3D=3D 0x22 && c[2] =3D=3D 0x33 && c[3=
-] =3D=3D 0x44)
-                printf ("This is a little-endian host\n");
-        else if (c[0] =3D=3D 0x44 && c[1] =3D=3D 0x33 && c[2] =3D=3D 0x22 &=
-& c[3] =3D=3D 0x11)
-                printf ("This is a big-endian host\n");
-        else if (c[0] =3D=3D 0x33 && c[1] =3D=3D 0x44 && c[2] =3D=3D 0x11 &=
-& c[3] =3D=3D 0x22)
-                printf ("This is a pdp-endian host\n");
-        else {
-                printf ("This host is broken:-)\n");
-                return EXIT_FAILURE;
-        }
-
-        return EXIT_SUCCESS;
-}
+  Thanks a lot, that is what I was looking for. A simple test that I can do, 
+using some C conde, to find out if the machine where the program is running 
+on uses Big or Little endian "memory organization". 
 
 
->   Is it an obvius question? I mean, all hosts (machines) uses "Host Byte=
-=20
-> Order" and when it needs to send data through the network it uses "Networ=
-k=20
-> Byte Order".=20
+On Wed, 2005-01-12 15:03:57 -0200, r_zaca <r_zaca@ig.com.br> 
+wrote in message <20050112_170357_014648.r_zaca@ig.com.br>: 
+Content-Description: Mail message body 
+>   How can I say if the machine where I am working uses "Host Byte 
+Order" or 
+> "Network Byte Order"? 
 
-The rule is easy: Just *always* either use htonl/htons/ntohl/ntohs or
-transmit the number in readable format. The nice thing is that any sane
-libc will implement those as macros, so if your host already works in
-network byte order, the conversion will get optimized away.
+Something like this should do the job: 
 
-MfG, JBG
+#include <stdint.h> 
+#include <stdio.h> 
+#include <stdlib.h> 
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+int 
+main (int argc, char *argv[]) 
+{ 
+        uint32_t i = 0x44332211; 
+        unsigned char *c; 
 
---jo46wx5DSA4a/gWG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+        c = (unsigned char *) &i; 
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
+        if (c[0] == 0x11 && c[1] == 0x22 && c[2] == 0x33 && c[3] == 0x44) 
+                printf ("This is a little-endian host\n"); 
+        else if (c[0] == 0x44 && c[1] == 0x33 && c[2] == 0x22 && c[3] == 
+0x11) 
+                printf ("This is a big-endian host\n"); 
+        else if (c[0] == 0x33 && c[1] == 0x44 && c[2] == 0x11 && c[3] == 
+0x22) 
+                printf ("This is a pdp-endian host\n"); 
+        else { 
+                printf ("This host is broken:-)\n"); 
+                return EXIT_FAILURE; 
+        } 
 
-iD8DBQFB5V/BHb1edYOZ4bsRAg3yAJ9I/A2d3L77b0laZb/RbpFVT5GXlACeMQXx
-hbIaV9BmWJV7RFMKdnAGH/s=
-=KJrW
------END PGP SIGNATURE-----
+        return EXIT_SUCCESS; 
+} 
 
---jo46wx5DSA4a/gWG--
+
+>   Is it an obvius question? I mean, all hosts (machines) uses "Host 
+Byte 
+> Order" and when it needs to send data through the network it uses 
+"Network 
+> Byte Order". 
+
+The rule is easy: Just *always* either use htonl/htons/ntohl/ntohs or 
+transmit the number in readable format. The nice thing is that any sane 
+libc will implement those as macros, so if your host already works in 
+network byte order, the conversion will get optimized away. 
+
+MfG, JBG 
+
+--Message-Boundary-by-Mail-Sender-1105610757--
+
