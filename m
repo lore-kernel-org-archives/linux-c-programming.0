@@ -1,67 +1,30 @@
-From: Bubulac Tatiana <bubulac@unidec.ro>
-Subject: Signal and wait question
-Date: Tue, 21 May 2002 18:20:39 +0300
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: mcrypt ?
+Date: Tue, 21 May 2002 15:28:01 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CEA65C6.D0473BEB@unidec.ro>
+Message-ID: <15594.22897.778388.25242@cerise.nosuchdomain.co.uk>
+References: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org, redhat-list@redhat.com
-
-Hi ,
-
-I have a parent that catch the SIGTERM and SIGALRM signals.
-...
- signal (SIGTERM, die);
- signal (SIGALRM, dummy);
-...
-for (min = 0; min < 15 && not_done; min++)
-    {
-      alarm ((unsigned int) 60); /* wait for 1 minute */
-      pid = wait (&status);    /* Wait for a process to end */
-      alarm ((unsigned int) 0); /* Reset alarm */
-....
-}
-
-and a child that use the same signal catch function.
-...
-signal (SIGTERM, die);
-...
+To: James Stevenson <mistral@stev.org>
+Cc: linux-c-programming@vger.kernel.org
 
 
-Here is the die fucntion.
-#include......
-void die();
+James Stevenson wrote:
 
-void die ()
-{
-  signal (SIGTERM, (void (*)())die);
-  printf("child receives SIGTERM signal\n");
-  return;
-}
+> is there such a function in a linux c libary
+> for the md5 crypt the same as crypt() but
+> for the more modern shadow passwords
+> 
+> if so.
+> which libary ?
 
-void s_down();
+The "crypt" add-on for glibc 2.x supports MD5 password hashes, as well
+as DES. The details are in the "libc" Info file (search for "crypt").
 
-void s_down ()
-{
-  extern BOOLEAN l_down;
-
-  signal (SIGALRM, (void (*)())s_down);
-  l_down = TRUE;
-  printf("child receive SIGALRM signal\n");
-  return;
-}
-
-When I send a sigterm signal only the parent display
-"parent receives SIGTERM signal" and stack here.
-If I give a kill -9 child pid the parent displays "Normal
-Termination"and than Killed.
-
-Why the parent stack in wait() and child do not receive any signal?
-
-TIA.
-
-Bubulac Tatiana.
-
+-- 
+Glynn Clements <glynn.clements@virgin.net>
