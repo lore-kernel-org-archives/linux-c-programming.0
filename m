@@ -1,62 +1,51 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: newby.-interpreting C
-Date: Thu, 30 Dec 2004 12:40:11 +0100
-Message-ID: <20041230114011.GA2460@lug-owl.de>
-References: <cq77vi$1ej$1@sea.gmane.org> <20041220211709.GD2460@lug-owl.de> <16851.58832.659413.893211@gargle.gargle.HOWL>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: anything to do with pointer to functions maybe?
+Date: Thu, 30 Dec 2004 11:26:12 +0000
+Message-ID: <16851.58836.918096.548317@gargle.gargle.HOWL>
+References: <cqe6ed$ldf$1@sea.gmane.org>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="NEAn2rYUJijllS+S"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <16851.58832.659413.893211@gargle.gargle.HOWL>
+In-Reply-To: <cqe6ed$ldf$1@sea.gmane.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: soraberri <421246@posta.unizar.es>
+Cc: linux-c-programming@vger.kernel.org
 
 
---NEAn2rYUJijllS+S
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+soraberri wrote:
 
-On Thu, 2004-12-30 11:26:08 +0000, Glynn Clements <glynn@gclements.plus.com>
-wrote in message <16851.58832.659413.893211@gargle.gargle.HOWL>:
-> Jan-Benedict Glaw wrote:
->=20
-> > General rule: if you don't *need* this for a good reason, or if you even
-> > don't know what it does, you don't need it, since it also introduces a
-> > performance penalty: CPUs tend to be fast at naturally aligned memory
-> > accesses, but quite slow on non-aligned accesses.
->=20
-> On most processor types, unaligned accesses will fail (either generate
-> an exception or return bogus data). The x86 family is the exception,
-> in that unaligned access merely reduces performance.
+> I'm having troubles understanding code:
+> 
+> what type is __sighandler_t if it is defined this way:?
+> typedef void (*__sighandler_t) (int);
 
-As is the VAX :)
+Pointer to function taking an int argument and returning void.
 
-MfG, JBG
+C's type syntax uses the same grammatical structure as expressions, so
+the above is interpreted as saying that the expression:
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+	(*__sighandler_t) (int)
 
---NEAn2rYUJijllS+S
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
+has type "void".
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
+The syntax <expr>(<args>) indicates a function call where the function
+is <expr> and the arguments are <args>, so:
 
-iD8DBQFB0+kbHb1edYOZ4bsRAlKjAJ95xUtj3c8wTQXhtQ0393WuSsWIyACfXYyp
-TUQlemMztr4Vnojio14FInY=
-=LSu3
------END PGP SIGNATURE-----
+	(*__sighandler_t) (int)
 
---NEAn2rYUJijllS+S--
+is a function call where (*__sighandler_t) is the function and the
+arguments consist of a single integer. Coupled with the knowledge that
+the overall type is "void", the expression:
+
+	(*__sighandler_t)
+
+must be a function taking an integer argument and returning void.
+
+If an expression *P has type T then the type of P is "pointer to T",
+so __sighandler_t must be a pointer to a function taking an integer
+argument and returning void.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
