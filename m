@@ -1,20 +1,54 @@
-From: "QingHua Wang" <qhwang@ieeta.pt>
-Subject: Re: strange segmentation fault in malloc()
-Date: Wed, 8 Jan 2003 13:40:31 -0000
+From: Shanks <mshanks79@yahoo.co.in>
+Subject: strange gcc warning
+Date: Mon, 13 Jan 2003 09:57:55 -0800 (PST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <006101c2b71b$83869330$d0ab88c1@NOTEBOOK>
-References: <Pine.LNX.4.33.0301071646230.5493-100000@soochak.ncst.ernet.in><15899.2594.867274.281756@cerise.nosuchdomain.co.uk><012c01c2b6a6$9778d4e0$70ab88c1@ieeta.pt> <15899.29426.273829.766576@cerise.nosuchdomain.co.uk>
+Message-ID: <20030113175755.71066.qmail@web8001.mail.in.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Glynn Clements <glynn.clements@virgin.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hi,
 
-Thanks. I found the problem by set MALLOC_CHECK_. It's a kind of pointer
-corruption in the couple of malloc/free. Thanks again.
+Sample program: b.c
+#include <stdio.h>
+#include <errno.h>
 
-qhwang
+void
+my_print(int errno)
+{
+    printf("ERRNO: %d\n", errno);
+}
 
+int
+main()
+{
+    int a = 10;
+    errno = 0;
+    my_print(a);
+}
+
+On compiling this code i get the warning:
+b.c: In function `main':
+b.c:15: warning: passing arg 1 of `my_print' makes pointer from integer without
+a cast
+
+On running the code i get a seg. fault. So i did some gdb'ing and got
+(gdb) run 
+Starting program: ./b
+Breakpoint 1, my_print (__errno_location=0x19) <<<<<<<<
+    at b.c, line...
+(gdb)
+
+From above i see that instead of getting a plain int its go the address.
+But i would like it if someone explained it to me better.
+
+Thanks in advance.
+-S
+
+__________________________________________________
+Do you Yahoo!?
+Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
+http://mailplus.yahoo.com
