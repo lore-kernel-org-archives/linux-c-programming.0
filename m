@@ -1,53 +1,23 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: memory capacity
-Date: Tue, 9 Dec 2003 01:35:53 +0000
+From: "John T. Williams" <jowillia@vt.edu>
+Subject: viewing machine code
+Date: Wed, 10 Dec 2003 16:30:31 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16341.9977.646069.322209@cerise.nosuchdomain.co.uk>
-References: <3FD454BB.7050005@hq.ntsp.nec.co.jp>
+Message-ID: <000d01c3bf64$d94e0670$ed64a8c0@descartes>
+Reply-To: "John T. Williams" <jtwilliams@vt.edu>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3FD454BB.7050005@hq.ntsp.nec.co.jp>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ronkhu@ntsp.nec.co.jp
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+is there anyway to get gdb to display the hex code being exicuted?
+
+ie prentend that 0xF8 is the command for add, and I am exicuting the code
+
+addl 04,
+is there a way to get gdb to type
+0xF804 when exicuting that command.  sort of a step through the program at
+the machine code level?
 
 
-ronkhu wrote:
-
-> Can anyone help me in increasing the maximum allowable memory usage for 
-> an application in HP/UX?
-
-This is a Linux list. You might get some useful replies regarding
-generic Unix memory management, but you are less likely to get
-anything regarding HP/UX-specific features.
-
-> My superior instructed me to create an array of at least 7,140,000 
-> elements(statically)... that would be able to
-> store 8 bytes per index..
-> 
-> What compile option could i use to enhance the memory model (from small 
-> to huge?)
-
-Unix isn't MS-DOS. The concept of "small", "huge" etc memory models
-was a hack for dealing with the 16-bit limitations on the 8086; it
-isn't applicable to Unix.
-
-> or increase the memory limit for an application?
-
-If you have bash, try "ulimit -aS" and "ulimit -aH". Those will report
-the soft and hard per-process memory limits respectively. Similarly,
-csh and zsh have the "limit" command.
-
-If the soft limits are too low, you can just use "ulimit -d ...",
-"ulimit -v ..." etc in the shell to increase them. Or use setrlimit()
-in the application.
-
-If the hard limits are too low, the administrator (i.e. root) will
-have to increase them; the precise mechanism is platform-specific
-(e.g. RedHat uses the pam_limits PAM module; I have no idea what HP/UX
-does).
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
