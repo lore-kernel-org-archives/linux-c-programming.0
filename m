@@ -1,58 +1,91 @@
-From: "John T. Williams" <jtwilliams@vt.edu>
-Subject: Re: socket send and recv
-Date: Thu, 7 Aug 2003 18:03:35 -0400
+From: Eric <eric@cisu.net>
+Subject: Newbie Trouble with pointers and structures.
+Date: Sat, 9 Aug 2003 13:16:34 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001f01c35d2f$d48ca8e0$ed64a8c0@descartes>
-References: <3F322DFA.2030509@hq.ntsp.nec.co.jp> <20030807114057.GA19378@lsd.di.uminho.pt>
+Message-ID: <200308091316.34217.eric@cisu.net>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: jtwlliams@vt.edu
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Hello:
+	I am a newbie who is trying to teach himself C programming and I am having 
+trouble modifying structure contents. I want the function setoption() to take 
+a pointer to a pointer in a structure and modify it without needing to return 
+a value (although currently it does). The function works correctly and GDB 
+shows that *Option has been set to *String. However, when the function 
+returns the pointer in the structure has not been modified. Here are the 
+relevant code pieces.
 
-I common delimiter used by many protocols is either a single \n\r for
-messages which are known to me less then on line (ie have not \n in them) or
-a \n\r.\n\r for messages that could have multiple lines
+in file vpn.c (where main() is)
 
+structure definition (declared global in vpn.c):
+struct {
+	/* Structure to hold configuration parameters. The options are set to
+	their defaults below. The options that need to be built will be set in
+	detdefaultconfig(). The defaults here are mainly to initilize the
+	pointers and any changes will be overridden by setdefaultconfig(); */
+	// General Options
+ 	char *PPPDevice;
+	char *VPNHost;
+	char *LocalIP;
+	char *RemoteIP;
+	char *PPPDOptions;
+	int Delay;
+	//SSH Specific
+	char *SSHCipher;
+	char *SSHLogin;
+	char *SSHOptions;
+	int SSHPort;
+	char *SSHIdentityFilename;
+	//Files
+	char *VPNPIDFilename;
+	FILE *VPNPIDFile;
+	char *LogFilename;
+	FILE *LogFile;
+} ConfigOptions = { NULL, NULL, NULL, NULL, NULL, 0,\
+		    NULL,NULL,NULL,0, NULL,NULL, NULL,NULL,NULL};
 
+extern char *setoption(char *Option,const char *String);
 
+setoption is called like this from vpn.c: 
+setoption(ConfigOptions.LogFilename,"/var/log/vpn.log");
 
------ Original Message ----- 
-From: "Luciano Miguel Ferreira Rocha" <luciano@lsd.di.uminho.pt>
-To: "ronkhu" <ronkhu@ntsp.nec.co.jp>
-Cc: "Earl Lapus" <lapuz.rl@mp.ncos.nec.co.jp>; "Lejanson C. Go"
-<g_l-go@tmg99.ntes.nec.co.jp>; <linux-c-programming@vger.kernel.org>
-Sent: Thursday, August 07, 2003 7:40 AM
-Subject: Re: socket send and recv
+in file helpers.c:
+char *setoption(char *Option,const char *String){
+	int achar = sizeof(char);
+	/* This function takes a pointer to a structure element and sets it to
+	the given string. Takes care of memory allocation with free and malloc. We
+	can just give it the option and the string and let it play. Saves time. */
+	if (Option != NULL){
+		free(Option);
+	}
+	Option = (char *)malloc(achar * strlen(String));
+	if (Option == NULL){
+		fprintf(stderr,"Error Allocating Memory in setoption");
+	}
+	//Copy the new string.
+	strcpy(Option,String);
+}
 
+After the function returns. GDB print ConfigOptions.LogFilename shows 0x0 
+address (NULL).Obviously this is what it has been initialized to in the 
+beginning. I know that
+ConfigOptions.LogFilename = \ 
+setoption(ConfigOptions.LogFilename,"/var/log/vpn.log");
+will work....but thats not quite how I want to do it. And besides, its longer 
+and kinda clunky compared to giving it the pointer only once.
 
-> On Thu, Aug 07, 2003 at 06:46:18PM +0800, ronkhu wrote:
-> > i have a client program which sends a sequence of bytes everytime
-> > anything(plus carriage return)  is inputted into STDIN...
-> >
-> > but the problem lies in the receiving end of the socket connection...
-> > with a single call of the recv() function, multiple messages sent by the
-> > client are concatenated into one stream..
-> Yes, STREAM sockets have no knowledge of messages, but DGRAM do (but
-> are unreliable).
->
-> So you need to have a way to know what is a single message, either by
-> using delimiters (like \n) or by using headers, with the length of the
-message.
-> (Or use DGRAM sockets.)
->
-> Also, you can use the TCP_NODELAY socket(7) option to force the data to
-> be sent immediately, but there's no gaurantee it won't be buffered at the
-> receiver.
->
-> Regards,
-> Luciano Rocha
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+According to my knowledge I should be modifying the Pointer in the structure, 
+but according to gdb It seems that I am missing something.
 
+Any help would be greatly appreciated. 
+
+----------------------
+Eric Bambach   
+Eric (at) CISU (dot) net 
+----------------------
