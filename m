@@ -1,32 +1,62 @@
-From: Graydon Smith <smithg@cogeco.ca>
-Subject: Re: Type conversion
-Date: Sat, 29 Jun 2002 09:30:10 -0400
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: a 'wrapper'
+Date: Sat, 29 Jun 2002 16:49:08 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3D1DB662.B2BF744B@cogeco.ca>
+Message-ID: <20020629144908.GU17216@lug-owl.de>
+References: <20020629052348.A50622@nietzsche>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="XSEVMyPRvc8xgDhM"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20020629052348.A50622@nietzsche>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Suriya Narayanan M S wrote:
->
->C++ (I don;t know the name)
->by Bjarne Stoustrup
->
 
-Surprisingly enough, it too is called:
+--XSEVMyPRvc8xgDhM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The C++ Programming Language
-by Bjarne Stroustrup.
+On Sat, 2002-06-29 05:25:02 -0500, xlp <xlp@emtel.net.co>
+wrote in message <20020629052348.A50622@nietzsche>:
+> hi, i have been trying to let certain process working on a remote machine=
+ in this way:
+> nohup ./a.out >> /dev/null &
+> but when i log off, the process dies.
+> Can i code a certain process that fork itself, call setsid() and run a.ou=
+t with system() or exec() ?
+> How can i deal with this situation? I want that the executable object a.o=
+ut forget about terminal control and do its work without care about sdtin/s=
+tdout/stderr.
 
-and I do believe the latest is the 3rd edition, but there maybe more.
+You should never ever use system(), is's insecure. Use exec*(). However,
+you won't need that - try this:
 
---
-Graydon Smith
+	nohup ./a.out > /dev/null 2>&1 < /dev/null &
 
-"I never let my schooling interfere with my education."
-- Mark Twain
+It probably dies because of a SIGPIPE if it attempts to read something
+from stdin or if it tries to write to stdout. You break this file
+descriptors in the moment you log off...
 
+MfG, JBG
 
+--=20
+Jan-Benedict Glaw   .   jbglaw@lug-owl.de   .   +49-172-7608481
+	 -- New APT-Proxy written in shell script --
+	   http://lug-owl.de/~jbglaw/software/ap2/
+
+--XSEVMyPRvc8xgDhM
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+iD8DBQE9HciKHb1edYOZ4bsRAu0OAJ4+SoopRK63Opca+RxguymTMYH72wCfeieM
+9tNxX1ClBeuB1ds/xolkTww=
+=RqAg
+-----END PGP SIGNATURE-----
+
+--XSEVMyPRvc8xgDhM--
