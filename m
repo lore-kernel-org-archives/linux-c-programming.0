@@ -1,20 +1,21 @@
-From: kaushal <kaushal@rocsys.com>
-Subject: Re:buggy_double_use_of_scanf
-Date: Wed, 03 Nov 2004 15:44:03 +0530
-Message-ID: <1099476843.8716.26.camel@Kaushal>
+From: zhc <zhenghongchao@hotmail.com>
+Subject: How to open a large file
+Date: Tue, 02 Nov 2004 10:07:21 +0800
+Message-ID: <cm6pue$p7n$1@sea.gmane.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-C-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-hi
-  the following code should solve the scanf issue.
+How to open and creat a big file over 2 GB in linux with c language. I 
+have tried open() with O_LARGEFILE option in it, but the program 
+couldn't be compiled successfully. Are there other ways to solve the 
+problem?
 
-	char s;
-	scanf("\n%c",&s);
-cheers-
-kaushal
+Thanks
+
+Zhenghongchao
 
