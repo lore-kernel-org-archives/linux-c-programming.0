@@ -1,55 +1,76 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: connecting to a hoast
-Date: Mon, 13 Sep 2004 12:09:21 -0400
+From: "Charlie Gordon" <gmane@chqrlie.org>
+Subject: Re: complex variable
+Date: Mon, 13 Sep 2004 21:32:06 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E3E30069B061524E90BCEE4417E30661138528@monm207.monmouth.army.mil>
-Mime-Version: 1.0
+Message-ID: <ci4sid$kgu$1@sea.gmane.org>
+References: <E3E30069B061524E90BCEE4417E30661138525@monm207.monmouth.army.mil> <chml6d$kri$1@sea.gmane.org> <20040908120658.GZ6985@lug-owl.de> <chnv2v$j6n$1@sea.gmane.org> <20040910200519.GJ19967@lug-owl.de>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+"Jan-Benedict Glaw" <jbglaw@lug-owl.de> wrote in message
+news:20040910200519.GJ19967@lug-owl.de...
 
->Hi all.
->I was wondering, where is a step by step instructions to connect to a
-hoast?
->The documentation seems very cryptic, and doesn't give directions.
+> Right, too. Here's how it ought to work:
 
-There are several online tutorial for network programming (beej for
-example),
-however if you intend to do a lot of network programming, I would recommend
-reading one or more of the following books:
+-----------------------------------------------------------
+#include <complex.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-1. Unix Network Programming vol 1 and 2 by W. Richard Stevens
+int
+main (int argc, char *argv[])
+{
+ complex co;
 
-   N.B. - volume one was recently updated by Bill Fenner and Andrew M Rudoff
+ co = 1.3 + I * 2.9;
+ printf ("%lf %lf\n", creal (co), cimag (co));
 
-          after Stevens death.
+ return EXIT_SUCCESS;
+}
+-----------------------------------------------------------
 
-   volumn 1 covers Sockets and XTI programming.  Lots of examples and
-details 
-   volume 2 covers interprocess communications
+> So you basically use creal() and cimag() to access the two numbers.
 
-2. Internetworking with TCP/IP vol 1 -3 by Douglas Comer and David Stevens
+Well it is still too vague :
+- what is the floating type of complex variable co ?
+- You did not specify float, double or long double, so what is the default ?
+- Reading tens of pages from C99 leaves that question open (!)
+- The creal and cimag macros apply to all 3 complex types.
+- if it is float, then real and imaginary parts will be converted to double
+when passed to printf.
+- If it is long double, they will be passed as such, but the format
+specifier will be incorrect.
+- Why do you use %lf ? %lf means double in fscanf, it is meaningless in
+printf.
+- If you meant long double, you should specify %Lf.
 
-   volume 1 covers the protocols and architecture
-   volume 2 covers the implementation of the network stack and protocols
-   volume 3 covers client-server programming.  There are seperate volumes 
-            for most of the popular operating systems.
+Consequently, I think it should read:
 
-3. TCP/IP Illustrated, vol 1 - 3 by W. Richard Stevens
-   volume 1 is a detailed coverage of the protocols and how they work
-   volume 2 is a line by line code walkthrough for the TCP stack of 4.4BSD
-   volume 3 covers transaction based communications and UNIX domain
-protocols
+double complex co; ...
+printf ("%f %f\n", creal(co), cimag(co));
 
-3. Linux Socket Programming by Sean Walton
+or
 
-4. Effective TCP/IP Programming: 44 Tips to Improve Your Programming,
-   Jon C. Snader
+complex co;
+printf ("%f %f\n", (double)creal(co), (double)cimag(co));
 
-   Lots of useful tips to improve you code.
+just to be safe.
 
-George
+C is not very user friendly for floating point stuff.  A lot of confusion
+arises from historical lack of consistency in the libraries.  A lot of
+newbie C programmers will naturally use the float type instead of double.
+Yet it is both less precise than even 32 bit ints, less efficient because of
+the extra conversions, and slower on today's processors...  Aside from hard
+core SIMD and 3D afficionados, that will hand code their stuff in assembly,
+'float' is pretty much obsolete.
+
+Chqrlie.
+
+PS: I have always hated floating point stuff ;-)
+
+
 
