@@ -1,67 +1,54 @@
-From: Rafael Santos <rafael@thinkfreak.com.br>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: struct passwd usage
-Date: Wed, 30 Apr 2003 23:10:26 -0300
+Date: Thu, 1 May 2003 01:55:41 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <FEUT6Z4ECRPPLPLKEA7253UTBAWU74.3eb08212@rafaelnote.ns1.lhost.com.br>
-Reply-To: rafael@thinkfreak.com.br
+Message-ID: <16048.28813.203668.916383@cerise.nosuchdomain.co.uk>
+References: <Pine.LNX.4.44.0304301445001.29006-100000@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.44.0304301445001.29006-100000@ns.isi.ulatina.ac.cr>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
 To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Cc: linux-c-programming@vger.kernel.org
 
-A complete functional program solving your problem:
 
-#include <pwd.h>
-#include <sys/types.h>
+Fabio Miranda Hamburger wrote:
 
-#include <stdio.h> //stdin
+> what is wrong with this code:
+> 
+> main(){
+> struct passwd *pwd;
+> char *user;
+> puts("username:");
+> pwd=getpwnam(user);
 
-#define MAX_LOGIN_SIZE 100
+The variable "user" points to a random memory location at this point. 
+getpwnam() expects its argument to point at a valid string, which is
+the username for which to retrieve the passwd entry.
+
+> puts(pwd->pw_name);
+> }
+
+If you meant to prompt for the username, you need to do something like
+this:
 
 int main(void)
 {
-        char name[MAX_LOGIN_SIZE+1];
-        struct passwd* pwd;
+	struct passwd *pwd;
+	char user[64];
 
-        printf("Digite o Username: ");
+	puts("username:");
+	gets(user);
+	pwd=getpwnam(user);
+	puts(pwd->pw_name);
 
-        // Gets "Username" from the keyboard
-        fgets(name,MAX_LOGIN_SIZE,stdin);
-
-        // Exchanges the character '\n' for '\0'
-        name[strlen(name) - 1] =3D '\0';
-
-        printf("\n");
-
-        // Reads from /etc/passwd
-        if( (pwd =3D getpwnam(name)) !=3D NULL )
-        {
-                printf("Username:%s\n", pwd->pw_name);
-                printf("Passwrod:%s\n", pwd->pw_passwd);
-                printf("Real Name:%s\n", pwd->pw_gecos);
-                printf("Directory:%s\n", pwd->pw_dir);
-                printf("Shell:%s\n",pwd->pw_shell);
-                printf("UserID:%d\n",pwd->pw_uid);
-        }
-        else
-                printf("The user was not found on the system.\n");
+	return 0;
 }
 
+Except that you should add error checking, use fgets() instead of
+gets() etc.
 
-Rafael Costa dos Santos
-ThinkFreak Com=E9rcio e Solu=E7=F5es em Hardware e Software
-Rio de Janeiro / RJ / Brazil
-rafael@thinkfreak.com.br
-+ 55 21 9432-9266
-
-
-
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-programmi=
-ng" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Glynn Clements <glynn.clements@virgin.net>
