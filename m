@@ -1,55 +1,32 @@
-From: Heinrich du Toit <hdutoit@tlabs.ac.za>
-Subject: Re: How does malloc tell the kernel to allocate more memory?
-Date: Mon, 09 Dec 2002 08:55:27 +0200
-Sender: linux-newbie-owner@vger.kernel.org
-Message-ID: <3DF43E5F.8050707@tlabs.ac.za>
-References: <000301c29eea$3107dd10$032a1c43@joe>
-Reply-To: hdutoit@tlabs.ac.za
+From: Elias Athanasopoulos <eathan@otenet.gr>
+Subject: Re: Basic mp3 player
+Date: Mon, 9 Dec 2002 12:20:53 +0200
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <20021209122053.B1147@neutrino.particles.org>
+References: <1039374511.3df398af75963@correo>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Return-path: <linux-newbie-owner@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <1039374511.3df398af75963@correo>; from fabmirha@ns.isi.ulatina.ac.cr on Sun, Dec 08, 2002 at 01:08:31PM -0600
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"
-To: "Joseph D. Wagner" <wagnerjd@prodigy.net>
-Cc: Linux C Programming <linux-c-programming@vger.kernel.org>, Linux Newbie <linux-newbie@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: fabmirha@ns.isi.ulatina.ac.cr
+Cc: linux-c-programming@vger.kernel.org
 
-Joseph D. Wagner wrote:
+On Sun, Dec 08, 2002 at 01:08:31PM -0600, fabmirha@ns.isi.ulatina.ac.cr wrote:
+> Hi, I am interested in coding a very thin, basic, small mp3 play in C for dos 
+> and linux.
 
->I'm trying to write a tracer on memory allocation, and I'm having a little
->trouble figuring this out.
->
->At some point, malloc has to call the kernel to tell it to allocate more
->memory for this user process, right?  I can't figure out which function
->malloc calls, or where in the code (line number) it's called.
->
->I'm looking at glib-2.3.1 to try and find my answers.  After all, that's
->where malloc is defined, right?
->
->TIA.
->
->Joseph Wagner
->
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->  
->
-I don't have the answer. But look at something that already does this.
-electric-fence detects illegal memory access (great for debugging)
-ccmalloc is also a memory debugging library. It detects memory leaks and 
-stuff like that.
+If you want to do it from scratch, i.e. you are interested in the algorithmic
+part of the project, then you have to learn the MP3 encoding. It's not
+trivial.
 
-Maybe after you checked this out you can rather work on improving these 
-library's or extending them to do exactly what you want rather than 
-reinventing the weel :-)
+I have no resources to suggest but you can find lots of via Google. Just
+search for lossy compression, MP3 encoding/decoding, etc.
 
-Good luck
--Heinrich
+Ciao!
+ Elias
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-Please read the FAQ at http://www.linux-learn.org/faqs
+-- 
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
