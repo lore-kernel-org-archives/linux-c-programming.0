@@ -1,34 +1,69 @@
-From: Jon Masters <jonmasters@gmail.com>
-Subject: Re: exit(42)
-Date: Mon, 27 Sep 2004 14:54:35 +0100
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: parse error
+Date: Mon, 27 Sep 2004 11:58:38 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <35fb2e5904092706547163c3fd@mail.gmail.com>
-References: <20040924115759.6133.qmail@web52908.mail.yahoo.com>
-	 <4154122D.3030403@hq.ntsp.nec.co.jp>
-	 <200409271446.04427.pankajd@myrealbox.com>
-	 <20040927123955.GB7486@luna.mooo.com>
-Reply-To: jonathan@jonmasters.org
+Message-ID: <E3E30069B061524E90BCEE4417E30661138538@monm207.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040927123955.GB7486@luna.mooo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: 'Ankit Jain' <ankitjain1580@yahoo.com>, linux prg <linux-c-programming@vger.kernel.org>
 
-On Mon, 27 Sep 2004 14:39:55 +0200, Micha Feigin <michf@post.tau.ac.il> wrote:
-> On Mon, Sep 27, 2004 at 02:46:03PM +0530, Pankaj wrote:
-> > hi,
-> > I guess the value is stored in a global var called "errno".
+Ankit wrote:
 
-> If this is about the return value, it is not stored in errno.
+>i could not understand why compiler has put semi colon
+>before else due t owhich this parse error comes....
 
-Indeed. It's stored in exit_code within the process task_struct, along
-with other useful data about the terminated process and is the reason
-that process descriptors remain around.
+>#define exch(x,y) { int tmp; tmp=x; x=y; y=tmp; }
 
-When you call wait4 or one of the wait functions, then this gets cleaned up.
+Remember that macro expansion occures early in the compilation process 
+(it occures in step 4 if I remember correctly).  In this case a simple
+text replacement is performed.
 
-Cheers,
+>However that wouldn't work in some cases. The following code is 
+>meant to be an if-statement with two branches:
 
-Jon.
+  if(x>y)
+    exch(x,y);          // Branch 1
+  else  
+    do_something();     // Branch 2
+
+As written, assuming exch() is a function you would have a two branch
+if statement.  However, because exch is a macro, this is what is passed
+from the c preprocessor to the compiler (because exch(..) is replaced with
+the body of the defination:
+
+if(x>y)
+  { int tmp; tmp=x; x=y; y=tmp;};
+else
+  do_something();
+
+and you have a one-brance if statement along with a parse error of an 
+unassociated elst statement.  There are two fixes to this problem.  The 
+first is to remove the semi-colon after the if statement:
+
+if(x>y)
+  exch(x,y)
+else
+  do_something();
+
+This will expand to what you expect.  This is probably the least 
+satisfactory fix.  The better fix would be to wrap the entire macro in a 
+do-while loop, leaving the semicolon in place (i.e. this construct allows 
+a macro call to be treated like a function).
+
+#define exch(x,y)  do{int tmp; tmp=x; x=y; y=tmp;}while(0)
+
+if(x>y)
+  do{int tmp; tmp=x; x=y; y=tmp;}while(0);
+else
+ ...
+
+
+You should be aware that while macros are powerful, they can be tricky to 
+use.  As an example, consifer what would happen with this statement
+
+exch(a, b+4)
+
+George
