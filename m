@@ -1,42 +1,49 @@
 From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: what is libcurl
-Date: Fri, 26 Nov 2004 21:30:40 +0100
-Message-ID: <20041126203040.GZ2067@lug-owl.de>
-References: <20041126090510.860.qmail@web53008.mail.yahoo.com>
+Subject: Re: gcc and threads
+Date: Fri, 26 Nov 2004 21:26:07 +0100
+Message-ID: <20041126202607.GY2067@lug-owl.de>
+References: <B0004146823@hermes.imsd.uni-mainz.de>
 Mime-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="70fLfmUGd5x0AJTB"
+	protocol="application/pgp-signature"; boundary="R9qb+eAX/AZDW6n0"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20041126090510.860.qmail@web53008.mail.yahoo.com>
+In-Reply-To: <B0004146823@hermes.imsd.uni-mainz.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Vger Kernel <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
 
---70fLfmUGd5x0AJTB
+--R9qb+eAX/AZDW6n0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2004-11-26 01:05:10 -0800, rinku rathore <rinku_ques@yahoo.com>
-wrote in message <20041126090510.860.qmail@web53008.mail.yahoo.com>:
->  Hello,
-> > Can you give me some more information about this
-> > libcurl
-> I wanted to ftp through C program without user
-> intervention,Is this libcurl help if yes in what way.
+On Thu, 2004-11-25 17:25:54 +0100, Christian Stalp <stalp@imbei.uni-mainz.d=
+e>
+wrote in message <B0004146823@hermes.imsd.uni-mainz.de>:
+> Hello everybody,
+> does anyone know, how to enable the thread-support for gcc ?
 
-I am not sure if libcurl implements all features FTP offers (eg.
-password-authenticated upload, FTP with TLS/SSL, ...), but a good
-starting point is probably libcurl's documentation that comes with the
-sources.
+There are several parts that need proper configury to actually reach a
+multi-threaded application:
 
-libcurl's homepage is at http://curl.haxx.se/ ,  which is also the first
-match for a Google search for "libcurl". The features libcurl offers
-(http://curl.haxx.se/docs/features.html ,  linked from libcurl's home
-page mentioned above) sound quite promising (for your application as
-described by you).
+	- a thread library (typically linuxthreads or NPTL) is needed
+	- GCC needs to make use out of that
+	- your application must use it (pthread_create() et al.) and of
+	  course link agains it (-lpthread)
+
+If you're a typical Linux user on a mainstream platform (ie. you can
+install your distribution's libc and gcc), then you can just start
+hacking a thread-using application.
+
+If you're working on the embedded border, you've probably to first build
+a cross compiler. This is a major task, you may want to look at
+"crosstool", a number of scripts to aid the user in this task, written
+by Dan Kegel.
+
+However, your question isn't specific in any way, so you may want to ask
+another question not that broad :-)
 
 MfG, JBG
 
@@ -50,7 +57,7 @@ _ _ O
 ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
 );
 
---70fLfmUGd5x0AJTB
+--R9qb+eAX/AZDW6n0
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 Content-Disposition: inline
@@ -58,9 +65,9 @@ Content-Disposition: inline
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.5 (GNU/Linux)
 
-iD8DBQFBp5JwHb1edYOZ4bsRAqa+AJ9qjaW7eb5cKAFvHRwggXg9BfU/ogCeOsdk
-yyeZVFccEYSfEAshhQcoVHQ=
-=CzA+
+iD8DBQFBp5FeHb1edYOZ4bsRAvonAKCAsWaBejgjpt6lo5T7WDyQj1m/rACdFvfc
+Wv41OULJQq9MmZje1YeH9vE=
+=4R/c
 -----END PGP SIGNATURE-----
 
---70fLfmUGd5x0AJTB--
+--R9qb+eAX/AZDW6n0--
