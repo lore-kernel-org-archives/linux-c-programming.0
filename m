@@ -1,66 +1,75 @@
-From: =?iso-8859-1?q?szonyi=20calin?= <caszonyi@yahoo.com>
+From: Tabris <tabris@tabris.net>
 Subject: Re: Multithreaded /sbin.init? Is it possible?
-Date: Mon, 15 Sep 2003 12:29:29 +0200 (CEST)
+Date: Mon, 15 Sep 2003 12:49:27 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030915102929.8156.qmail@web40605.mail.yahoo.com>
+Message-ID: <200309151249.29525.tabris@tabris.net>
 References: <200309141240.55800.eric@cisu.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <200309141240.55800.eric@cisu.net>
+Content-Description: clearsigned data
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: Text/Plain; charset="us-ascii"
 To: eric@cisu.net, linux-newbie@vger.kernel.org, linux-c-programming@vger.kernel.org
+Cc: rei_0000@arklinux.org
 
- --- Eric <eric@cisu.net> a =E9crit=A0:=20
-> 	Wouldn't the Linux Boot process be speeded up if the init
-> program was=20
-> multithreaded?=20
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-No
-Boot scripts _must_ be executed in a predefined order.
-I was playing a liitle with this and i can give you the=20
-following advice:
-
-1. Bash is the most executed program in the init scripts
-to speed up boot process you must speedup bash.
-Some people suggest to make statically linked. This is=20
-my sugestion too. Loading every shared library takes time.
-
-2. Use a script to start your daemons not 20.=20
-I use Slackware which has one script for each runlevel.=20
-Believe me. There _is_ a difference compared to Mandrake=20
-for example.=20
-
-3. The disk load has an impact on speed also.
-If you start 5 processes in parralel they will start slower
-than 5 scripts sequentially because of the loading of every
-script in the same time.
-
-4. A bigger processor cache also helps a lot :-)
-
-just my 2 cents.
-
-Sorry for the off-topic answer in linux-c-programming
-
+On Sunday 14 September 2003 01:40 pm, Eric wrote:
+> Hello,
+> 	I have an interesting theory. I have beginning programming expereice
+> and would like the input of those that have more expereince than me.
+> Please don't flame if this is a waste of time. Rather I would like an
+> open discussion on the why's and why nots of this.
+> 	Wouldn't the Linux Boot process be speeded up if the init program was
+> multithreaded? I know a little about threads.. and I think there might
+> be some complication of PPID assignment coming from the threads which
+> would probably terminate instead of having a PPID of 1 which is init
+> and will never terminate. (i think?). Should init scripts have a parent
+> PID of 1? Does this even matter?
+> 	If I am correct, whenever a programs parent dies, its parent becomes
+> init anyways. So when the thread finishes execution of the script, then
+> its parent would become init just as if it had started sequentially and
+> directly from init.
+> 	The script links in /etc/rc.d/x.d/ would be grouped according to their
+> S and K numbers. That is, if you have 5 scripts that are S5, each would
+> be given to a thread to execute and there would be 5 threads. The init
+> process would wait for each thread to clean up before proceeding to the
+> next group. I know this would happen in an undefined order, but if you
+> want, for example, DHCPD to start after network then you would assing
+> S5network and S6dhcpd. There would still be a defined order for
+> differently numbered scripts, just the bootup process wouldnt have to
+> wait for each script to terminate sequentially. Each group would only
+> take as long and the slowest script instead of the sum of the execution
+> time of the scripts. The init would start with the S1 scripts and maybe
+> fork 3 times, wait for each to finish...., then fork maybe twice for
+> the S2 group if there are two scripts, wait for them to
+> finish...etc....
+> 	Is this even possible?
 > ----------------------
-> Eric Bambach  =20
-> Eric (at) CISU (dot) net=20
+> Eric Bambach
+> Eric (at) CISU (dot) net
 > ----------------------
+Fwiw, there is a project ongoing with this very concept in arklinux, and 
+it HAS shown some improvements in boot speed. I don't know exactly how 
+much, but the goal is to boot (get to a login screen) in under 30 seconds 
+on a desktop type system.
 
-Calin
+cc:d to the current project maintainer.
 
-=3D=3D=3D=3D=3D
---
-A mouse is a device used to point at=20
-the xterm you want to type in.
-Kim Alm on a.s.r.
+- --
+tabris
+- -- 
+Space tells matter how to move and matter tells space how to curve.
+		-- Wheeler
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (GNU/Linux)
 
-___________________________________________________________
-Do You Yahoo!? -- Une adresse @yahoo.fr gratuite et en fran=E7ais !
-Yahoo! Mail : http://fr.mail.yahoo.com
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+iD8DBQE/Ze2YtTgrITXtL+8RAiKdAJ9+3AnkmMdbRiWIwUIP6EYxzAymVACbBAkQ
+KWUtU3Gu9+cjcc5jg668pAs=
+=gRe5
+-----END PGP SIGNATURE-----
+
