@@ -1,119 +1,98 @@
-From: Mat Harris <mat.harris@genestate.com>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: writing logfile
-Date: Wed, 26 Feb 2003 09:25:02 +0000
+Date: Wed, 26 Feb 2003 11:09:15 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030226092502.A12697@genestate.com>
-References: <20030225105740.A31033@genestate.com> <20030225133810.C28473@neutrino.particles.org> <20030225124937.B31033@genestate.com> <15964.5048.368429.404765@cerise.nosuchdomain.co.uk>
+Message-ID: <20030226100914.GO7826@lug-owl.de>
+References: <20030225105740.A31033@genestate.com> <20030225133810.C28473@neutrino.particles.org> <20030225124937.B31033@genestate.com> <15964.5048.368429.404765@cerise.nosuchdomain.co.uk> <20030226092502.A12697@genestate.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-md5;
-	protocol="application/pgp-signature"; boundary="dkEUBIird37B8yKS"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="r3kyNWDticIiPTcQ"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <15964.5048.368429.404765@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Wed, Feb 26, 2003 at 01:09:12 +0000
+In-Reply-To: <20030226092502.A12697@genestate.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Glynn Clements <glynn.clements@virgin.net>
-Cc: Elias Athanasopoulos <elathan@phys.uoa.gr>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
---dkEUBIird37B8yKS
-Content-Type: multipart/mixed; boundary="FkmkrVfFsRoUs1wW"
-Content-Disposition: inline
-
-
---FkmkrVfFsRoUs1wW
-Content-Type: text/plain; charset=us-ascii
+--r3kyNWDticIiPTcQ
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-ok i have modified it to use open, write, and close> Now tho I am getting
-garbage written to the logfile. Evidently i have made an error with types
-or there is confusion between writing a text string and writing raw bits.
+On Wed, 2003-02-26 09:25:02 +0000, Mat Harris <mat.harris@genestate.com>
+wrote in message <20030226092502.A12697@genestate.com>:
+> ok i have modified it to use open, write, and close> Now tho I am getting
+> garbage written to the logfile. Evidently i have made an error with types
+> or there is confusion between writing a text string and writing raw bits.
 
-i have attached the modified code.
+Despite some other shortages, try it this way:
 
-Thanks for all your help so far people :)
+> On Wed, Feb 26, 2003 at 01:09:12 +0000, Glynn Clements wrote:
+> int open_log()
+> {
+>   char logfile[4096];
+>   int loghandle;
+>=20
+>   strcpy(logfile, WEBROOT);
+>   strcat(logfile, "/logs/access.log");
 
-On Wed, Feb 26, 2003 at 01:09:12 +0000, Glynn Clements wrote:
+logfile *may* be too short. This is asking for trouble!
+
+>   loghandle =3D open(logfile, O_WRONLY | O_CREAT | O_APPEND | O_SYNC, 060=
+0);
 >=20
-> Mat Harris wrote:
+>   if (loghandle < 0)
+>     {
+>       fprintf(stderr, "Couldn't open logfile: %s\n", logfile);
+>       exit(1);
+>     }
+>   else
+>     {
+>       return loghandle;
+>     }
+> }
 >=20
-> >   loghandle =3D open(logfile, O_CREAT);
+> void close_log(int loghandle)
+> {
+>   close(loghandle);
+> }
 >=20
-> This should probably be:
->=20
->    loghandle =3D open(logfile, O_WRONLY | O_CREAT | O_APPEND, 0600);
->=20
-> You may also wish to use the O_SYNC flag, to force data to be written
-> to disk immediately (so that it isn't lost if the system crashes or
-> the power fails).
->=20
-> As William pointed out, if you open the file with open(), you need to
-> use write() to write data to the file. Alternatively, you could use
-> fopen() and fputs(), but fopen() doesn't give you as much control
-> (e.g. you can't set the permissions or the O_SYNC flag on creation).
->=20
-> Also, you can create an ANSI stream (a "FILE *") from a descriptor
-> using fdopen(), and you can get the descriptor for an ANSI stream
-> using fileno(). But you need to be careful about accessing a file
-> using both methods (which basically means that you need to understand
-> how the two relate to each other).
->=20
-> --=20
-> Glynn Clements <glynn.clements@virgin.net>
+> void write_log(int loghandle, char string[1024])
+
+void
+write_log(int loghandle, char *string)
+
+> {
+
+if(!string)
+	return;
+
+>   printf("requested file: %s\n", string);
+>   write(loghandle, string, sizeof(string));
+	write(loghandle, string, strlen(string));
+	write(loghandle, "\n", strlen("\n"));
+> }
+
+MfG, JBG
 
 --=20
-Mat Harris			OpenGPG Public Key ID: C37D57D9
-mat.harris@genestate.com	www.genestate.com=09
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+       ret =3D do_actions((curr | FREE_SPEECH) && ~(IRAQ_WAR_2 | DRM | TCPA=
+);
 
---FkmkrVfFsRoUs1wW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="log.h"
-
-int open_log()
-{
-  char logfile[4096];
-  int loghandle;
-
-  strcpy(logfile, WEBROOT);
-  strcat(logfile, "/logs/access.log");
-
-  loghandle = open(logfile, O_WRONLY | O_CREAT | O_APPEND | O_SYNC, 0600);
-
-  if (loghandle < 0)
-    {
-      fprintf(stderr, "Couldn't open logfile: %s\n", logfile);
-      exit(1);
-    }
-  else
-    {
-      return loghandle;
-    }
-}
-
-void close_log(int loghandle)
-{
-  close(loghandle);
-}
-
-void write_log(int loghandle, char string[1024])
-{
-  printf("requested file: %s\n", string);
-  write(loghandle, string, sizeof(string));
-}
-
---FkmkrVfFsRoUs1wW--
-
---dkEUBIird37B8yKS
+--r3kyNWDticIiPTcQ
 Content-Type: application/pgp-signature
 Content-Disposition: inline
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.6 (GNU/Linux)
-Comment: For info see http://www.gnupg.org
+Version: GnuPG v1.2.1 (GNU/Linux)
 
-iD8DBQE+XIfuEsYvZsN9V9kRAjJJAJ9RlUtwvNjOH6lih+1xbfY6aYJwIQCeJctN
-eRWPRnGlftNcT9qlC6oRKv0=
-=DCXk
+iD8DBQE+XJJKHb1edYOZ4bsRAriVAJ9gb2hpD3LuzDqjTAzHeX9q9xwX8ACfdJs7
+5acbCr3tbVkrBr++lLh+OIs=
+=hrJN
 -----END PGP SIGNATURE-----
 
---dkEUBIird37B8yKS--
+--r3kyNWDticIiPTcQ--
