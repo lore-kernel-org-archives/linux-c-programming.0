@@ -1,33 +1,44 @@
-From: Ankit Jain <ankitjain1580@yahoo.com>
-Subject: C language(asm construct)
-Date: Wed, 6 Oct 2004 11:44:03 +0100 (BST)
+From: Edward Parrilla <eparrilla@comcast.net>
+Subject: passing host name from a structure.
+Date: 06 Oct 2004 16:47:27 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
+Message-ID: <1097099245.4086.421.camel@localhost.localdomain>
+References: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux prg <linux-c-programming@vger.kernel.org>
 
-hi
+Hi Experts,
+here a question for you, I have defined the following
 
-i want to know if this is correct? i am a bit confused
-about linker...i am talking this topic when we have a
-asm construct in our code.
 
-The compiler basically reads the .c program and
-converts it into assembly code.Now during this it
-neglects this assembler construct and leaves it for
-assembler.Assembler is the person which basically
-looks for this part of the code and changes it into
-machine code. 
+#define bcopy(a,b,c) strncpy(b,a,c)
 
-thanks
 
-ankit
+   struct sockaddr_in  sa;  /* socket addr. structure           */
+   struct hostent * hp;     /* host entry                       */
+   char *hostname;
 
-________________________________________________________________________
-Yahoo! Messenger - Communicate instantly..."Ping" 
-your friends today! Download Messenger Now 
-http://uk.messenger.yahoo.com/download/index.html
+hostname=argv[3];
+
+hp=gethostbyname(hostname);  <-- get this error " warning: assignment
+makes pointer from integer without a cast
+"
+
+
+bcopy((char *)hp->h_addr, (char *)&sa.sin_addr, hp->h_length);  <--
+getting  dereferencing pointer to incomplete type
+
+Any idea?
+thanks in advance
+Edward
+
+
+
+
+
+
