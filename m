@@ -1,23 +1,61 @@
-From: "Chris" <nanakos@wired-net.gr>
-Subject: Array Empty Slots
-Date: Mon, 4 Apr 2005 17:32:40 +0300
-Message-ID: <001301c53923$2804a9c0$0101010a@dioxide>
-References: <Pine.LNX.4.58.0503221104060.30671@ns.isi.ulatina.ac.cr> <200503221305.32606.eric@cisu.net> <Pine.LNX.4.58.0503221215250.31636@ns.isi.ulatina.ac.cr>
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: Adding a field to ext2_dir_entry_2
+Date: Mon,  4 Apr 2005 18:54:42 -0400 (EDT)
+Message-ID: <20050404225442.52A7AB730@xprdmailfe18.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-Sender: linux-c-programming-owner@vger.kernel.org
-List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-
-Hi all,
-Lets assume we have a very very big array with sequential integer numbers
-from 1-30000, but we have some slots that are empty.
-Which is the faster way(algorithm maybe) that we can track those empty
-slots???
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner+glk-linux-kernel=40m.gmane.org-S261463AbVDDW4s@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+List-Id: <linux-c-programming.vger.kernel.org>
+To: linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
 
 
-Best regards,
-Chris.
 
+
+Hi All,
+
+
+
+I working with linux kernel 2.4.28. I want to add 1 more field to ext2_dir_entry_2 - the new version of directory entry for ext2fs.
+
+
+
+I did add the __u32 field to the struct ext2_dir_entry_2 defined in  ext2_fs.h I also modified the EXT2_DIR_REC_LEN macro to:
+
+
+
+(((name_len) + 12 + EXT2_DIR_ROUND) & ~EXT2_DIR_ROUND)
+
+
+
+(+12 instead of +8) to incorporate newly added 4 bytes field.
+
+
+
+I made the similar changes to the mke2fs utility also.
+
+
+
+When I try to copy a file on that file system, I am getting the following error:
+
+
+
+"ext2-fs error (device fd(2,0)): ext2_check_page: bad entry in directory #2: unaligned directory entry - offset=0, inode=2, rec_len=46, name_len=0"
+
+
+
+Can someone please tell me where am I going wrong or what other changes do I need to do to add the field I want?
+
+
+
+Thanks and regards,
+
+
+
+Vineet Joglekar
+
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
