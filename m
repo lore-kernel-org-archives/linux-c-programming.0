@@ -1,63 +1,57 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: Raw Sockets
-Date: Sun, 19 Dec 2004 19:07:54 +0800
-Message-ID: <41C5610A.7030207@hq.ntsp.nec.co.jp>
-References: <200412191119.14034.ingvarrr@hotbox.ru>
+From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Subject: help for using setjmp and longjmp functions
+Date: Mon, 20 Dec 2004 12:38:11 +0530
+Message-ID: <1103526490.4005.3.camel@myLinux>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200412191119.14034.ingvarrr@hotbox.ru>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: "Igor A. Deruga" <ingvarrr@hotbox.ru>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Linux C Programming <linux-c-programming@vger.kernel.org>
 
-i dont know how to use raw sockets....
-but u could try using "ifconfig" (located usually in the /sbin directory)
-to get the mach address...
+Hi,
+	I tried writing a simple program to findout usage of setjmp and
+longjmp() functions. The program ran in an infinite loop showing some
+warnings. What is the problem? Can someone help me depicting the
+behaviour of the setjmp and longjmp functions
 
-*the mach address(or hwaddr is usually shown on the first line
-of the output)
+/******** beginning of code *************/
 
-hope this helps.
+#include <setjmp.h>
+jmp_buf jmpbuffer;
 
+void bar(void)
+{
+	printf("inside bar\n");
+	longjmp(jmpbuffer, 1);
+}
 
-Igor A. Deruga wrote:
+void foo(void)
+{
+	printf("before calling bar()\n");
+	bar();
+	printf("after calling bar()\n");
+}
+int
+main(void)
+{
+	printf("before calling foo()\n");
+	if(setjmp(jmpbuffer)!=0)
+		perror("error setting");
+	foo();
+	printf("after foo()\n");
 
->Greetings, fellows!
->
->Hope you'll be able to help me with your useful advice...
->I need to establish a connection using a Raw socket. That's what I'm doing:
->
->int sock = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
-> sockaddr_ll addr;
->        addr.sll_family = AF_PACKET;
->        addr.sll_protocol = 0;
->        addr.sll_ifindex = 0;
->        addr.sll_hatype = 0;
->        addr.sll_pkttype = 0;
->        addr.sll_halen = 0;
->
->But where can I get a value for addr.sll_addr? And what is it? "man 7 packet" 
->sais it's a Physical layer address, which is MAC, i guess... so, how do I 
->retreive it?
->
->If it's possible, could anybody send me an example that uses sockaddr_ll to 
->SEND packets via RAW SOCKET? That'd be great!
->
->Sincerely 
->        Igor	
->
->
->P.S.: I've set the encoding to iso-8859-5. Hope this time it goes through...
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
+	return 0;
+}
+/**************** end of code ***********/
 
+Hoping for help
+
+TIA..
+
+-- 
+With regards,
+
+Jagadeesh Bhaskar P
 
