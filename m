@@ -1,38 +1,67 @@
-From: xlp <xlp@emtel.net.co>
-Subject: Re: Offtopic.
-Date: Mon, 29 Jul 2002 12:43:28 -0500
+From: ibraheem umaru-mohammed <iumarumo@eidosnet.co.uk>
+Subject: Re: Telnet issues
+Date: Mon, 29 Jul 2002 19:07:26 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020729124328.B3013@nietzsche.metrotel.net.co>
-References: <20020729082601.C896@nietzsche.metrotel.net.co>
-    <3D456E49.3050303@fi.uba.ar>
+Message-ID: <20020729180725.GA1595@micromuse.com>
+References: <20020726114341.GC9971@micromuse.com> <200207271513.g6RFDLnW001345@grinch.txt.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3D456E49.3050303@fi.uba.ar>; from dmarian@fi.uba.ar on Mon,
-    Jul 29, 2002 at 01:33:13PM -0300
 Content-Disposition: inline
+In-Reply-To: <200207271513.g6RFDLnW001345@grinch.txt.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: =?iso-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
+Content-Transfer-Encoding: 7bit
+To: "Jason P. Winters" <jason@txt.com>
 Cc: linux-c-programming@vger.kernel.org
 
-> > Hi, I am writting document in spanish about UNIX programming because I have
-> > found that south american universities are focused on Windows, The students
-> > and teachers think the computer science is Windows, they dont know others
-> > OSes, They dont motivate students to understand OSes internals, I dont
-> > understand Why the degree is "system engienering" if they dont know about
-> > memory manipulation, threads, procress, IO, debuggers, etc.
-> > Why study 5 year of engineering if they will work doing clicks and running
-> > 'wizards' ? Where are the south american researcher?, Where is the curiosity?.
-> 
->    Universidad de Buenos Aires (www.uba.ar) and it's not the only south 
-> american university.
+[Jason P. Winters wrote...]
+-|  
+-| > This is a shot in the dark...am having some *solaris* issues and was
+-| > just hoping someone might spot something that i am missing...
+-| > ...
+-| > execl("/bin/sh", "sh", "-c", "xterm -e /bin/sh -c 'telnet springfield'", (char *)0);
+-| 
+-| Hmm... Well, one thing I can see is.. why invoke a shell in xterm to
+-| invoke telnet?  Here's what I just tried, and it seems to work (sparc:solaris 8):
+-| 
+-| execl("/bin/sh", "sh", "-c", "/usr/openwin/bin/xterm -e telnet www", (char *)0);
+-| execl("/bin/sh", "sh", "-c", "/usr/openwin/bin/xterm -e telnet (ipnumber)", (char *)0);
+-| execl("/bin/sh", "sh", "-c", "xterm -e telnet (ipnumber)", (char *)0);
+-| 
+-| and it all works for both the name and an ip number...  
+-| 
+-| So possibly your problem is the extra shell you're invoking.
+-| 
+-| Ciao!
+-| 
+-| Jason
+-| 
 
-I dont want to start a pointless debate, however, The south america engineering
-is focused on configuration and administration of foreign technology; Yeah,
-I can find a couple of 'unix gurus' at Argentina, but What for? There is no
-a school of research and the average engineer is not well structured.
+Thanks for responding. Problem was very weird and interesting.
 
-bye.
+Firstly, the reason why we were invoking a shell in xterm had to do with some of
+the environment variables we were passing through, such as the location
+of xterm, the telnet host etc.
 
+Initially, I thought it was some sort of name resolving issue (NIS or
+something)...having played around with some message catalogs , I found 
+I could get the telnet to fork successfully if I didn't open all the
+message catalogs. I couldn't figure it out  - was it a name resolving
+issue or a locale problem? Hmmn...
 
+Hours later, a colleague later found that I was forking without closing copied file 
+descriptors...we added a for loop to close all open file descriptors in the 
+range 0  - MAX_INT...and it worked. No issues at all now strangely enough.
+
+Any one have any ideas why this should be platform (solaris) specific
+issue, and why i didn't get some sort of proper error? Even so, it seems
+strange that that should be the solution to the problem.
+
+Kindest regards,
+
+			--ibs.
+
+-- 
+			ibraheem umaru-mohammed
+			   www.micromuse.com
+			         --0--
