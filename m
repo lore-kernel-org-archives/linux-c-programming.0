@@ -1,24 +1,28 @@
-From: Mark Johnson <rmjohnson144@adelphia.net>
-Subject: C module won't load
-Date: Sat, 27 Apr 2002 16:19:42 -0700
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: select: Interrupted system call
+Date: Sun, 28 Apr 2002 00:20:16 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3CCB320E.8030503@adelphia.net>
+Message-ID: <15563.12848.736860.137599@cerise.nosuchdomain.co.uk>
+References: <200204271503.g3RF3lF04667@fsn3.frontstreetnetworks.com>
+	<200204271602.g3RG24F07174@fsn3.frontstreetnetworks.com>
+	<15562.64140.625327.285565@cerise.nosuchdomain.co.uk>
+	<200204272037.g3RKb1F18623@fsn3.frontstreetnetworks.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <200204272037.g3RKb1F18623@fsn3.frontstreetnetworks.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Gerald Waugh <gwaugh@frontstreetnetworks.com>
+Cc: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-Hello All,
 
-     I am new to linux and C and I am having trouble loading in my new 
-network drivers.  I compile the module like the docs say, and everything 
-seems to be OK, but when I insmod it into memory I get an error: 
-unresolved symbol pci_drv_unregister and pci_drv_register.  I am 
-compiling rtl8139.c for my RealTec 8139 network card.  I use gcc version 
-2.96 and linux 2.4.9-31 under Red Hat and KDE desktop 2.2.2-2. Any help 
-would be appreciated.
+Gerald Waugh wrote:
 
--=Mark=-
+> I would really like to know why select()
+> gets that  Interrupted system call
 
+If you have "strace", that should show which signal is being caught.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
