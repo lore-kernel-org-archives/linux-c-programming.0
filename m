@@ -1,63 +1,30 @@
-From: Shanks <mshanks79@yahoo.co.in>
-Subject: gcc -S option
-Date: Fri, 14 Mar 2003 10:40:46 -0800 (PST)
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: gcc -S option
+Date: Fri, 14 Mar 2003 20:56:04 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030314184046.85169.qmail@web8006.mail.in.yahoo.com>
+Message-ID: <20030314205604.T1234@neutrino.particles.org>
+References: <20030314184046.85169.qmail@web8006.mail.in.yahoo.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20030314184046.85169.qmail@web8006.mail.in.yahoo.com>; from mshanks79@yahoo.co.in on Fri, Mar 14, 2003 at 10:40:46AM -0800
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: Shanks <mshanks79@yahoo.co.in>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+On Fri, Mar 14, 2003 at 10:40:46AM -0800, Shanks wrote:
+> Can someone tell me if i need to pass some extra options
+> while compiling using gcc to get the desired data.
 
-Assume hypothetical C code below
-int
-main()
-{
-        int t;
+I think you can't. You can use objdump with '-dS' to dump a mixture
+of asm and C code, when that is possible.
 
-        t += 1;
-        return 0;
-}
+Elias
 
-When i compile this code using -S option on a *solaris* box using
-the *solaris* compiler, i get following .s file
-! File a.c:
-!    1  int
-!    2  main()
-!    3  {
-!    4          int t;
-!    5
-!    6          t += 1;
+-- 
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
 
-        add     %i5,1,%i5
-
-!    7          return 0;
-
-        mov     %g0,%i0
-        jmp     %i7+8
-        restore
-
-As you can see above, the .s file generated is of following
-format:
-- C code block
-- Corresponding Assembly code
-
-However when i do the same thing using gcc i get *only* the
-assembly code and not the corresponding C code also.
-
-Can someone tell me if i need to pass some extra options
-while compiling using gcc to get the desired data.
-
-Right now i am generating .s as follows
-$ gcc -S a.c
-
-Thanks in advance,
-Shanks
-
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Web Hosting - establish your business online
-http://webhosting.yahoo.com
+	
