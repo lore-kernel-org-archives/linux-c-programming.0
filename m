@@ -1,43 +1,55 @@
-From: HIToC <hitoc_mail@yahoo.it>
-Subject: Re: Bitfields
-Date: Wed, 1 Dec 2004 20:44:38 +0100
-Message-ID: <200412012042.09952.hitoc_mail@yahoo.it>
-References: <1101875142.7423.2.camel@myLinux>
+From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
+Subject: Type casting
+Date: Fri, 10 Dec 2004 09:53:59 +0530
+Message-ID: <5959EA4638D8734599AB75EAAFBB6FEF0228AA72@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_21522_01C4DE9E.2C0EE830"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1101875142.7423.2.camel@myLinux>
+Content-Class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Cc: Linux C programming <linux-c-programming@vger.kernel.org>
+To: Linux C programming <linux-c-programming@vger.kernel.org>
 
-On Wednesday 01 December 2004 05:25, Jagadeesh Bhaskar P wrote:
-> Hi all,
-> 	What is a bitfield? How is it used in C??
->
-> TIA
+This is a multi-part message in MIME format.
 
+------=_NextPart_000_21522_01C4DE9E.2C0EE830
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-It is possible to use several of bit variables like fields within a struct.
-You have to indicate first the name of the field, then the number of bits
-that the field occupies. Also you have to put double points ":" between
-the filed's name and its bit-size.
-For example, you want to save the current date; you can define a
-struct Date (YYYY/MM/DD) like this
+can any body explain what is the type of x in :=20
 
-struct Date {                              // Date format: YYYY/MM/DD
-	unsigned	year    : 7;         // 0-127 (2000-2127)   [7 bits size]
-	unsigned	month  : 4;		// 1-12                       [4 bits size]
-	unsigned	day      : 5;        // 1-31                       [5 bits size]
-};
+    x =3D (int) (float) x;
 
-In this case we have the complete date in a 16 bit variable (7+4+5=16 bit)!
+Thanks with regards
+Srinivas Bakki
 
--- 
+------=_NextPart_000_21522_01C4DE9E.2C0EE830
+Content-Type: text/plain;
+	name="disclaimer.txt"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="disclaimer.txt"
 
-With regards,
-				HIToC 
-				hitoc_mail@yahoo.it
+-------------------------------------------------------------------------=
+----------------------------------------------------
+Disclaimer
+-------------------------------------------------------------------------=
+----------------------------------------------------
 
+"This message(including attachment if any)is confidential and may be =
+privileged.Before opening attachments please check them
+for viruses and defects.MindTree Consulting Private Limited =
+(MindTree)will not be responsible for any viruses or defects or
+any forwarded attachments emanating either from within MindTree or =
+outside.If you have received this message by mistake please notify the =
+sender by return  e-mail and delete this message from your system. Any =
+unauthorized use or dissemination of this message in whole or in part is =
+strictly prohibited.  Please note that e-mails are susceptible to change =
+and MindTree shall not be liable for any improper, untimely or =
+incomplete transmission."
+
+-------------------------------------------------------------------------=
+----------------------------------------------------
+------=_NextPart_000_21522_01C4DE9E.2C0EE830--
