@@ -1,46 +1,45 @@
-From: canbaby <canbaby@21cn.com>
-Subject: Re: 'C' source analyzer.
-Date: Fri, 03 Sep 2004 15:01:52 +0800
+From: Flemming Greve Skovengaard <dsl58893@vip.cybercity.dk>
+Subject: Re: Boot screen
+Date: Fri, 03 Sep 2004 12:55:29 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <413816E0.4040702@21cn.com>
-References: <05ac01c48b8e$b9abfdd0$c901010a@zoom>
+Message-ID: <41384DA1.9080104@vip.cybercity.dk>
+References: <7F11C0CADA50AF4690BF42F715ABFBF864692F@battaexch22.mol.hu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <05ac01c48b8e$b9abfdd0$c901010a@zoom>
+In-Reply-To: <7F11C0CADA50AF4690BF42F715ABFBF864692F@battaexch22.mol.hu>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Paul Gimpelj <pgimpelj@sympatico.ca>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
+Cc: =?ISO-8859-15?Q?=22Nagy_Imre_=28Vecs=E9s=29=22?= <ImreNagy@mol.hu>
 
-Paul Gimpelj wrote:
+Nagy Imre (Vecs=E9s) wrote:
+> Hi!
+>=20
+> I would like the screen would be total blank until login. Can I disab=
+le all
+> messages?
+>=20
+> Imre from Hungary=20
+>=20
+>=20
 
->Hi,
->
->I was wondering if anyone can recommend a 'C' source analyzer.
->Cross references of functions, and call linkages would be nice. dependances
->, h files,
->and output to a sql db and or graphical connected node diagram. with
->direction.
->
->This would help me in understanding the code quicker.
->
->Thanks
->Paul
->mailto:quadbox2003@yahoo.ca
->or
->mailto:pgimpelj@sympatico.ca
->
->
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
+This is the wrong list for that kind for question.
+Try linux-newbie@vger.kernel.org instead. Subscribe as you did with thi=
+s list.
 
-There are a commerce software named Source InSight, it's very good
-Redhat had a soft Source Navigater, but it's slower and bigger, also not 
-very beautiful like Source Insight.
+--=20
+=46lemming Greve Skovengaard            The killer's breed or the Demon=
+'s seed,
+a.k.a Greven, TuxPower                The glamour, the fortune, the pai=
+n,
+<dsl58893@vip.cybercity.dk>           Go to war again, blood is freedom=
+'s stain,
+4112.38 BogoMIPS                      Don't you pray for my soul anymor=
+e.
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
