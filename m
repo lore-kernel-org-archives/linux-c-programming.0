@@ -1,89 +1,53 @@
-From: "Ranga Reddy M - CTD ,Chennai." <rangareddym@ctd.hcltech.com>
-Subject: RE: <time.h>: gmtime keeps giving the same time ....
-Date: Fri, 9 May 2003 08:26:57 +0530
+From: "J." <mailing-lists@xs4all.nl>
+Subject: RE: <time.h>: solved thank you ....
+Date: Fri, 9 May 2003 21:46:48 +0200 (CEST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <EF836A380096D511AD9000B0D021B52701317B4A@narmada.techmas.hcltech.com>
+Message-ID: <Pine.LNX.4.21.0305092142410.13952-100000@hestia>
+References: <EF836A380096D511AD9000B0D021B52701317B4A@narmada.techmas.hcltech.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <EF836A380096D511AD9000B0D021B52701317B4A@narmada.techmas.hcltech.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: "J." <mailing-lists@xs4all.nl>, linux-c-programming@vger.kernel.org
-
-
-Hi,
-
-Here you are comparing the gmtime() output to The "date" command.
-
-see the man pages of gmtime().This will give you the time in UTC format.
-use localtime(). Gives same as your "date" output.
-
-I have modified your code .Know it gives the 
-The code below.
-
-#include <stdio.h>
-#include <time.h>
-
-int main(void) {
- struct tm *tm_ptr;
- time_t the_time;
-
- (void)time(&the_time);
- tm_ptr = localtime(&the_time);
-
- printf("tm_ptr->tm_hour = %d\n", tm_ptr->tm_hour);
-
- return 0;
-}
-
-
-Cheers
---------
-Ranga Reddy M
-
-
------Original Message-----
-From: J. [mailto:mailing-lists@xs4all.nl]
-Sent: Friday, May 09, 2003 1:17 AM
 To: linux-c-programming@vger.kernel.org
-Subject: <time.h>: gmtime keeps giving the same time ....
 
+On Fri, 9 May 2003, Ranga Reddy M - CTD ,Chennai. wrote:
+> 
+> Hi,
+> 
+> Here you are comparing the gmtime() output to The "date" command.
+> 
+> see the man pages of gmtime().This will give you the time in UTC format.
+> use localtime(). Gives same as your "date" output.
+> 
+> I have modified your code .Know it gives the 
+> The code below.
+> 
+> #include <stdio.h>
+> #include <time.h>
+> 
+> int main(void) {
+>  struct tm *tm_ptr;
+>  time_t the_time;
+> 
+>  (void)time(&the_time);
+>  tm_ptr = localtime(&the_time);
+> 
+>  printf("tm_ptr->tm_hour = %d\n", tm_ptr->tm_hour);
+> 
+>  return 0;
+> }
+> 
+> Cheers
+> --------
+> Ranga Reddy M
 
-Hello,
+Thank you for the complete reply ! 
 
-Output from the date `command` in my terminal:
-Thu May  8 21:42:28 CEST 2003
+I understand what I did wrong, and how to do it better next time.
 
-Output from my `problem'_program.c
-19
-
-#include <stdio.h>
-#include <time.h>
-
-int main(void) {
- struct tm *tm_ptr;
- time_t the_time;
-
- (void)time(&the_time);
- tm_ptr = gmtime(&the_time);
-
- printf("tm_ptr->tm_hour = %d\n", tm_ptr->tm_hour);
-
- return 0;
-}
-
-No matter what I do, this C - code keeps giving me as output 19.
-
-Is my system messed up or my head ?
-
-Any thoughts are more than welcome
-
-Thnkx....
+Merci....
 
 J.
 
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
