@@ -1,52 +1,35 @@
 From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: problem with const in structure
-Date: Mon, 6 Jan 2003 15:48:47 +0000
+Subject: Re: Curses and key-up information
+Date: Mon, 6 Jan 2003 16:00:39 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15897.42335.617357.58154@cerise.nosuchdomain.co.uk>
-References: <Pine.LNX.4.33.0301061759250.14169-100000@soochak.ncst.ernet.in>
+Message-ID: <15897.43047.454804.466506@cerise.nosuchdomain.co.uk>
+References: <4DB84F6A7711D511A5020002A550C8B778710B@BELL>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0301061759250.14169-100000@soochak.ncst.ernet.in>
+In-Reply-To: <4DB84F6A7711D511A5020002A550C8B778710B@BELL>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+To: Steve Goodwin <SteveG@bitscorp.com>
+Cc: linux-c-programming@vger.kernel.org
 
 
-Mohammed Khalid Ansari wrote:
+Steve Goodwin wrote:
 
-> consider the following code.
-> 
-> ####
-> #include <stdio.h>
-> 
-> struct node {
-> 	const int x;
-> 	char name[20];
-> 	struct node *next;
-> };
-> 
-> int main()
-> {
-> 	struct node newnode;
-> 		
-> 	newnode.x = 10;
-> 	newnode.x = 12;
-> 	printf ("x = %d\n", newnode.x);
-> 	return 0;
-> }
-> ####
-> 
-> Now, you can see that even though I have defined x to be const int, I can 
-> assign it values. When I compiled the program, it gives the warning that 
-> assignment of read-only member x but when I ran the program, it worked 
-> fine. Where is the catch. How do I define a structure variable to be 
-> const?
+> I'm writing to write a little curses maze game that involves a lot of key
+> handling, and the most obvious way to handle the control is with a
+> IsKeyDown(char key) type-function. Alas, curses doesn't appear to have one
+> and was wondering is anyone else has found a way around this problem (either
+> within curses, or using ioctl/poll or similar).
 
-In C, the "const" keyword only has a defined meaning when applied to
-arrays or pointers. Even then, it isn't required that the compiler
-prohibits modification.
+It can't be done. The process only receives notification of key
+presses; there is no way to discover when a key is released.
+
+Bear in mind that Unix terminal I/O was designed for terminals (vt100
+etc) rather than a keyboard which is attached directly. Terminals
+(whether hardware terminals such as the vt100, emulators such as
+xterm, the linux console, telnet etc) simply don't send anything when
+a key is released, so there's no way to detect it.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
