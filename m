@@ -1,93 +1,64 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: getopt() library function options
-Date: Fri, 4 Mar 2005 10:42:19 -0500
-Message-ID: <D2AA47A6FB2C1A48AF0526440C0F245CAA3657@monm207.nae.ds.army.mil>
+From: Rechberger Markus <mrechberger@gmail.com>
+Subject: Re: ioctl.h
+Date: Fri, 4 Mar 2005 22:55:41 +0100
+Message-ID: <d9def9db0503041355660768a0@mail.gmail.com>
+References: <4228B3B8.7020507@valdosta.edu>
+Reply-To: Rechberger Markus <mrechberger@gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+In-Reply-To: <4228B3B8.7020507@valdosta.edu>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: michael young <mhyoung@valdosta.edu>
+Cc: linux-c-programming@vger.kernel.org
 
-Fabio wrote:
+hey Michael,
 
->I am coding a small utility for system administrator. The following command line options will be accepted:
+here just an example:
+
+this small tool opens the cd tray
+
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <linux/cdrom.h>
+
+int main(){
+    int cdrom;
+    if ((cdrom = open("/dev/cdrom",O_RDONLY | O_NONBLOCK)) < 0) {
+            perror("open");
+            exit(1);
+    }
+    if (ioctl(cdrom,CDROMEJECT,0)<0) {
+            perror("ioctl");
+            exit(1);
+    }
+    close(cdrom);
+    return(0);
+}
+
+simply build it with gcc tray.c -o tray
+
+look at cdrom.h for more defined operations, you will also find
+CDROMEJECT in there, 0 is an argument see the manpage (man ioctl) for
+more infos..
+
+Markus
+
+On Fri, 04 Mar 2005 14:15:04 -0500, michael young <mhyoung@valdosta.edu> wrote:
+> Hi,
+> how do you use the ioctl.h?
+> there seems to be little info on it
+> on the web or in print. If you know
+> of anything on the web please let me
+> know.
+> 
+> thank you,
+> Mike
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 >
->$apstat 
->$apstat -t 1
->$apstat -n 1
->$apstat -t 2 -n 2
->$apstat -v
->$apstat -t 1 -v
->$apstat -v -t 1 -n 2
-
->unaccepted command line options:
-
->$apstat -t
->$apstat -n 
->$apstat -t <<non integer value>>
->$apstat -n <<non integer value>>
-
-with the getopt function, a colon after a flag will designate that an argument is required.  For example,
-
-while(-1 != (choice = getopt(argc, argv, "t:n:vh")))
-{
-   ... stuff
-}
-
-would require that t and n require and argument while v and h do not.  This means that the following 
-command lines would be accepted:
-
-apstat
-apstat -t 1
-apstat -t a
-
-while the line apstat -t would not be accepted.  If getopt encounters an option not in the list, or if 
-a required argument is missing then the character `?' is returned.  The argument is returned in the 
-buffer `optarg'.  So in your case I would do this:
-
-while(-1 != (choice = getopt(argc, argv, "t:n:vh")))
-{
-    switch(choice)
-    {
-        case 't':
-            if(IsInteger(optarg))
-                  _t = atoi(optarg);
-            else
-	         printf("Argument of t flag must be an integer");
-     
-            break;
-
-        case 'n':
-            if(IsInteger(optarg))
-                  _n = atoi(optarg);
-            else
-	         printf("Argument of n flag must be an integer");
-     
-            break 
-
-        case 'v':
-            // Print version information??
-            break;
-
-        case '?':
-        case 'h':
-            // display help information
-            break;
-     }
-}
-
-In the above, I assume the existance of an IsInteger function with the signature, 
-bool IsInteger(const char*);
-Because I do most of my programming using C++ my implementation of IsInteger is:
-
-bool IsInteger(const char* cp)
-{
-    const char* ep = cp + strlen(cp);
-    return(std::find_if(cp, ep, std::not1(std::ptr_fun(isdigit))) == ep);
-}
-
-but the idea is the same in C - check to see if each element on optarg is an integer
-and return true if its is.
-
-George
