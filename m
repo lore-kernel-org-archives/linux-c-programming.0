@@ -1,31 +1,31 @@
 From: Elias Athanasopoulos <elathan@phys.uoa.gr>
 Subject: Re: writing logfile
-Date: Tue, 25 Feb 2003 16:10:10 +0200
+Date: Tue, 25 Feb 2003 16:18:25 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030225161010.D28473@neutrino.particles.org>
-References: <20030225105740.A31033@genestate.com> <20030225133810.C28473@neutrino.particles.org> <20030225124937.B31033@genestate.com> <3E5B6B11.3020001@veritel.com.br>
+Message-ID: <20030225161825.E28473@neutrino.particles.org>
+References: <20030225105740.A31033@genestate.com> <20030225133810.C28473@neutrino.particles.org> <20030225124937.B31033@genestate.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <3E5B6B11.3020001@veritel.com.br>; from william@veritel.com.br on Tue, Feb 25, 2003 at 10:09:37AM -0300
+In-Reply-To: <20030225124937.B31033@genestate.com>; from mat.harris@genestate.com on Tue, Feb 25, 2003 at 12:49:37PM +0000
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: "William N. Zanatta" <william@veritel.com.br>
-Cc: Mat Harris <mat.harris@genestate.com>, linux-c-programming@vger.kernel.org
+To: Mat Harris <mat.harris@genestate.com>
+Cc: linux-c-programming@vger.kernel.org
 
-On Tue, Feb 25, 2003 at 10:09:37AM -0300, William N. Zanatta wrote:
->    ">   loghandle = open(logfile, O_CREAT);"
-> 
->    Maybe I'm wrong, but I think this previous call just creates a file 
-> and doesn't make it available for reading/writing in any way. Is that 
-> right brothers???
+On Tue, Feb 25, 2003 at 12:49:37PM +0000, Mat Harris wrote:
+> void write_log(int loghandle, char string[1024])
+> {
+>   fputs(string, loghandle);
+> }
 
-I think it will create it and open it in read-only mode, since O_RDONLY
-is defined as 0 and thus O_RDONLY | O_CREAT equals to O_CREAT.
+You should compiling with -Wall. This will save you a lot and help you
+find out your errors. 
 
-It is quite missleading, though, so feeding open() explicitly with the
-flags it asks is the right thing to do, IMHO.
+Remember: a warning is a virtual error, which can break the balance 
+conservation of the application for a small period of time, allowed by 
+the uncertainty principle, enough to make the application segfault. :-)
 
 Elias
 
