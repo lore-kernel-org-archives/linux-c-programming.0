@@ -1,25 +1,37 @@
-From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Subject: Reading BIOS
-Date: Thu, 25 Nov 2004 14:04:32 +0530
-Message-ID: <1101371672.3795.36.camel@myLinux>
+From: Christian Stalp <stalp@imbei.uni-mainz.de>
+Subject: gcc and threads
+Date: Thu, 25 Nov 2004 17:25:54 +0100
+Message-ID: <B0004146823@hermes.imsd.uni-mainz.de>
+Reply-To: stalp@imbei.uni-mainz.de
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Linux C Programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: linux-c-programming@vger.kernel.org
 
-Hi,
-Is it possible to probe for, say, ide controllers from the BIOS, CMOS
-information with a C program? Is there any documentation available
-regarding the same??
--- 
-With regards,
+Hello everybody,
+does anyone know, how to enable the thread-support for gcc ?
 
-Jagadeesh Bhaskar P
-R&D Engineer
-HCL Infosystems Ltd
-Pondicherry
-INDIA
+Thank you...
 
+Gruss Christian Stalp
+
+
+--=20
+Christian Stalp
+
+Institut f=FCr Medizinische Biometrie, Epidemiologie und Informatik (IM=
+BEI)
+Obere Zahlbacher Stra=DFe 69
+55131 Mainz
+Tel.: 06131/ 17-6852
+
+E-Mail: stalp@imbei.uni-mainz.de
+Internet: www.imbei.de
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
