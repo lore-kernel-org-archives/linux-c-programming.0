@@ -1,54 +1,59 @@
-From: Timothy Miller <miller@techsource.com>
+From: "IVAN DE JESUS DERAS TABORA" <i.deras@unitec.edu>
 Subject: Re: Garbage Collection and Swap
-Date: Tue, 13 Jul 2004 18:10:55 -0400
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <40F45DEF.8060307@techsource.com>
-References: <40EF3BCD.7080808@comcast.net>
+Date: Wed, 14 Jul 2004 04:20:34 -0600
+Sender: linux-kernel-owner@vger.kernel.org
+Message-ID: <40F508F2.5090005@unitec.edu>
+References: <40EF3BCD.7080808@comcast.net> <40F45DEF.8060307@techsource.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40EF3BCD.7080808@comcast.net>
+Return-path: <linux-kernel-owner+linux-kernel=40quimby.gnus.org-S267176AbUGMWYc@vger.kernel.org>
+In-Reply-To: <40F45DEF.8060307@techsource.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: John Richard Moser <nigelenki@comcast.net>
-Cc: linux-kernel@vger.kernel.org, linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Timothy Miller <miller@techsource.com>
+Cc: John Richard Moser <nigelenki@comcast.net>, linux-kernel@vger.kernel.org, linux-c-programming <linux-c-programming@vger.kernel.org>
 
+Timothy Miller wrote:
 
+>
+>
+> John Richard Moser wrote:
+>
+>>
+>> THE GARBAGE COLLECTOR WANDERS AROUND IN THE ENTIRE HEAP, AND IN SOME
+>> CASES IN OTHER PARTS OF RAM, LOOKING FOR WHAT LOOKS LIKE POINTERS TO
+>> YOUR ALLOCATED DATA.
+>>
+>
+> Whose GC does this?
+>
+> I get the impression that the Java VM, for instance, knows what 
+> variables are pointers (well, references) and only considers those.  
+> It also knows every object that has even been allocated.  It scans 
+> over every pointer it knows about (the "mark" phase), and then it 
+> scans over every dynamically allocated memory block (the "sweep" 
+> phase) and removes all that have no references.
+>
+> There is anecdotal evidence that this approach sometimes can improve 
+> performance over "manual" freeing because freeing can be done in bulk.
+>
+> Java GC works very well, and it's a huge improvement over the "manual" 
+> method, because it almost completely eliminates memory leaks (if you 
+> really want a memory leak, you can find a way to make it happen).
+>
+> Now, if you're talking about trying to apply GC to C code, it's an 
+> entirely different matter.  C wasn't designed with GC in mind.  The 
+> very fact that you can do MATH on pointers in C makes reliable GC 
+> nearly impossible, although any reasonable attempt would certainly be 
+> better than your assumption that something would "go scanning through 
+> memory looking for things that look like pointers."  That would be 
+> horribly stupid.  Better would be to have the compiler emit code that 
+> registers pointers with something that keeps track of them, but that's 
+> still a huge can of worms when you consider someone malloc'ing N 
+> bytes, storing a (void *), and then later assigning that value to a 
+> struct pointer.
+>
+> No, I don't think GC in C is feasible.
 
-John Richard Moser wrote:
-
-> 
-> THE GARBAGE COLLECTOR WANDERS AROUND IN THE ENTIRE HEAP, AND IN SOME
-> CASES IN OTHER PARTS OF RAM, LOOKING FOR WHAT LOOKS LIKE POINTERS TO
-> YOUR ALLOCATED DATA.
-> 
-
-Whose GC does this?
-
-I get the impression that the Java VM, for instance, knows what 
-variables are pointers (well, references) and only considers those.  It 
-also knows every object that has even been allocated.  It scans over 
-every pointer it knows about (the "mark" phase), and then it scans over 
-every dynamically allocated memory block (the "sweep" phase) and removes 
-all that have no references.
-
-There is anecdotal evidence that this approach sometimes can improve 
-performance over "manual" freeing because freeing can be done in bulk.
-
-Java GC works very well, and it's a huge improvement over the "manual" 
-method, because it almost completely eliminates memory leaks (if you 
-really want a memory leak, you can find a way to make it happen).
-
-Now, if you're talking about trying to apply GC to C code, it's an 
-entirely different matter.  C wasn't designed with GC in mind.  The very 
-fact that you can do MATH on pointers in C makes reliable GC nearly 
-impossible, although any reasonable attempt would certainly be better 
-than your assumption that something would "go scanning through memory 
-looking for things that look like pointers."  That would be horribly 
-stupid.  Better would be to have the compiler emit code that registers 
-pointers with something that keeps track of them, but that's still a 
-huge can of worms when you consider someone malloc'ing N bytes, storing 
-a (void *), and then later assigning that value to a struct pointer.
-
-No, I don't think GC in C is feasible.
-
+A garbage collector for C and C++
+http://www.hpl.hp.com/personal/Hans_Boehm/gc/
