@@ -1,40 +1,21 @@
-From: fabio <fabio@crearium.com>
+From: list@intensivesystems.com
 Subject: Re: Hi
-Date: Wed, 26 Jan 2005 11:24:42 -0600
-Message-ID: <41F7D25A.2050501@crearium.com>
-References: <47691.200.195.25.194.1106744374.squirrel@200.195.25.194> <20050126163857.GA2245@jehuty.server01.org>
+Date: Wed, 26 Jan 2005 12:57:11 -0500 (EST)
+Message-ID: <16163.200.195.25.194.1106762231.squirrel@200.195.25.194>
+References: <47691.200.195.25.194.1106744374.squirrel@200.195.25.194>
+    <20050126163857.GA2245@jehuty.server01.org>
+    <41F7D25A.2050501@crearium.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050126163857.GA2245@jehuty.server01.org>
+In-Reply-To: <41F7D25A.2050501@crearium.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
-To: Ricardo Catalinas Jimenez <th1nk3r@server01.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-Ricardo Catalinas Jimenez wrote:
+No spam, I hate spam...  :)
 
->0n Wed, Jan 26, 2005 at 07:59:34AM -0500, list@intensivesystems.com wr=
-ote:
-> =20
->
->>Hi
->>
->>I=B4m new to this list, hope I=B4ll enjoy  :D
->>
->>Fraginsk
->>   =20
->>
->
->You're welcome :-)
-> =20
->
-I thought that was spam.
+===== ORIGINAL MESSAGE =====
+> I thought that was spam.
 
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
