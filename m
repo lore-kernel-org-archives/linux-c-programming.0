@@ -1,145 +1,102 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: "Charlie Gordon" <gmane@chqrlie.org>
 Subject: Re: Some question about one method.
-Date: Mon, 24 May 2004 19:30:18 +0200
+Date: Tue, 25 May 2004 01:24:49 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040524173017.GW1912@lug-owl.de>
-References: <1085135081.21344.21.camel@relay.localnet> <20040521211714.GP1912@lug-owl.de> <c8sab1$biq$1@sea.gmane.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ACGiE8uuT6i9JzJt"
+Message-ID: <c8u049$b00$1@sea.gmane.org>
+References: <1085135081.21344.21.camel@relay.localnet> <20040521211714.GP1912@lug-owl.de> <c8sab1$biq$1@sea.gmane.org> <20040524173017.GW1912@lug-owl.de>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <c8sab1$biq$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+Hi JBG,
 
---ACGiE8uuT6i9JzJt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> There are sane uses of sprintf()...
 
-On Mon, 2004-05-24 10:06:51 +0200, Charlie Gordon <gmane@chqrlie.org>
-wrote in message <c8sab1$biq$1@sea.gmane.org>:
-> On Fri, 2004-05-21 14:24:41 +0400, Alphex Kaanoken <alphex@crew.org.ru>
-> wrote in message <1085135081.21344.21.camel@relay.localnet>:
-> > Hi guys,
-> > I'm have a some question
-> > how I can change the:
-> > sprintf(tmp,"%s%c",tmp,sym);
-> > where - char *tmp;int sym;
-> > may I use strcat or another method.
-> > I need a fast and better method for do it.
->=20
-> Jan-Benedict Glaw commented:
-> > That's perfectly good in C. Why do you want to change that? It the
-> > length of ths ASCIIZ string pointed to by temp is known, there's a good
-> > chance to optimize it. However, that's against readability, so I'd
-> > advise against it...
->=20
-> I must disagree : this piece of code is NOT perfectly good in C.
->=20
-> 1) sprintf is a nest of buffer overflow bugs waiting to bite.  The issue =
-is
-> of course the size of the tmp buffer. If it is known, the code can be
-> optimized and that will not make it less readable, conversely, if it is n=
-ot
-> known, then we have a real bug in front of us, as extending the string by
-> one character will likely overwrite whatever is next in memory.
-> Don't use sprintf !  use snprintf.  If you cannot use snprintf, then you =
-are
-> in trouble.
+There is almost no overhead to using snprintf.  And it is so difficult to
+prove that a given sprintf format cannot overflow...  Just try this one:
+what if ints are 64 bits now, is the buffer large enough to accomodate all
+these digits ?
+Yet there is much worse function : strncpy.  This sucker does NOT do what
+you think it does. Pull the man page, read it, read it again... unbelievable
+isn't it ? Test it, grep any source files for this buddy, I bet you'll find
+subtle bugs stuck to it like fly paper.
 
-There are sane uses of sprintf(). C is (and always was) by experts for
-experts. So you've to do proper allocation anyways:)
+> C is (and always was) by experts for experts.
+> C's syntax is quite simple, but only people who really
+> understand C's pointer and allocation concepts should use it.
 
-> 2) assuming you can use the destination buffer as an argument to sprintf =
-is
-> asking for trouble !  Obviously it would almost certainly fail if not used
-> as the first argument for a format string starting with %s : a very
+I agree completely on this, programming in C is like riding down
+the guardrail, except it's more like a razor blade.
+It's just so hard to always keep a sharp eye for all the pitfalls one
+comes across in even the simplest one liners.
 
-Argh, you're right on this one. I didn't catch it :-(
+I urge you to get a look at http://www.joelonsoftware.com/
+I especially like his "Guerrilla Guide to Interviewing"
+(http://www.joelonsoftware.com/articles/fog0000000073.html) :
+"I've discovered that understanding pointers in C is not a skill, it's an
+aptitude. For some reason most people seem to be born without the part of
+the brain that understands pointers. This is an aptitude thing, not a skill
+thing - it requires a complex form of doubly-indirected thinking that some
+people just can't do."
 
-> restrictive case.  ISO-C is very clear about such an abuse: 7.19.6.6
-> Description "...If copying takes place between objects that overlap, the
-> behavior is undefined."  A C library that would not support it and modify
-> tmp before it is used as the source for %s would not be incorrect.  The
-> unsuspecting C newbie (and the vast majority of his elders) would not
-> understand why sprintf(tmp,"%s%c",tmp,sym); would "work" and
-> sprintf(tmp,"%c%s",sym,tmp); would "fail".
-> Do not encourage such ugly code.
+>> - what is wrong with : enum BOOL { FALSE=0, TRUE=1 };
+> (I don't think there's something technically wrong with the enum
+> BOOL, but you shouldn't use it except with other enum BOOL
+> xxx variables ...)
 
-I don't - I'm totally against it now that I've seen that. I never ever
-came to the idea of using a source string for destination...
+Well you are going to love this one!
+defining BOOLeans TRUE and FALSE as an enum makes them available for
+symbolic debugging, but you should still #define them to avoid nasty
+surprises with the preprocessor:
 
-[code fragments]
+#if TRUE
+// if you don't, this code will never compile
+#endif
 
-> Lastly, if you do not understand the above code snipplets, you are lacking
-> some fundamental C concepts esp. pointers and should not undertake any
-> significant programming project in C.  This is just friendly advice, as
-> debugging it will be horribly frustrating.
+> char *a;
+> short *b;
+> int *c;
+> long *d;
+> long long *e;
+>
+> --> What's the difference between a++ and e++?
+it makes them point to the next element in the arrays of respective types,
+and as such increments the binary value by a different amount.
 
-I second that. C's syntax is quite simple, but only people who really
-understand C's pointer and allocation concepts should use it.
+More interestingly what is the difference between e[5] and 5[e] ?
 
-> JBG's concern about readability would be best addressed with a utility
-> function, possibly implemented inline such as:
->=20
-> char *strncat1(char *buf, int bufsize, int c);
+> struct {
+>  char first;
+>  char second;
+> } s1;
+> struct {
+>  char both[2];
+> } s2;
+> what's the difference ?
+On most architectures, not much.  But C makes no guaranties as to the actual
+layout of structures.
+In particular (&s1.second - &s1.first) may be different than 1.
+Similarly sizeof(s1) can be different from sizeof(s2).
 
-Right:)
+Glad you found my quiz useful.
 
-> - what is -1 ?
-> - what is wrong with : enum BOOL { FALSE=3D0, TRUE=3D1 };
-> - what is the difference between : i << 2  and i * 4
-> - same question for : i >> 2  and  i / 4
+Chqrlie.
 
-That's mostly sign problems/questions. (I don't think there's something
-technically wrong with the enum BOOL, but you shouldn't use it except
-with other enum BOOL xxx variables ...). But more interestingly:
+PS:) did you know about this new C library extension : imprecations
+you can pass extra information to some of the C runtime APIs, thus
+preventing some of the most annoying problems in C.
+for example, memory allocation issues are finally solved :
 
-char *a;
-short *b;
-int *c;
-long *d;
-long long *e;
+p = malloc(n), "nofail";
+free(p), "pack";
+p = realloc(p, newsize), "nomove";
 
---> What's the difference between a++ and e++?
+best of all, your compiler most likely already supports imprecations ;-)
 
-struct {
-	char first;
-	char second;
-} s1;
-struct {
-	char both[2];
-} s2;
 
-What's the difference:)
 
-But to come to an end, I haven't seen the abous of tmp in the given
-example...
 
-MfG, JBG
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
-
---ACGiE8uuT6i9JzJt
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-
-iD8DBQFAsjEpHb1edYOZ4bsRAptIAKCFkf/dmfplZtYv+vR1Z12FFW8dVwCfZdUD
-VNQm+acLsqkgs7o9+ppnJ94=
-=hdub
------END PGP SIGNATURE-----
-
---ACGiE8uuT6i9JzJt--
