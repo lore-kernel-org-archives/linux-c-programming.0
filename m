@@ -1,66 +1,54 @@
 From: Suciu Flavius <suciuflavius@tiscali.de>
-Subject: Re: C language(asm construct)
-Date: Fri, 08 Oct 2004 08:02:18 -0700
+Subject: Re: -EFAULT during freeing a pointer to a structure
+Date: Fri, 08 Oct 2004 08:36:12 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <ck59si$qsf$1@sea.gmane.org>
-References: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
+Message-ID: <ck5bs3$uis$1@sea.gmane.org>
+References: <OFA6DAB128.ACBA7070-ONC1256F24.0054FB89@bln.d-trust.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
+In-Reply-To: <OFA6DAB128.ACBA7070-ONC1256F24.0054FB89@bln.d-trust.de>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
 Hi,
 
-Steps:
+your problem is with the vector limit:
+struct abc mystruct[7];
 
-1) write hello_world.c
-2) the preprocesor parse you hello_world.c file, process every # 
-starting commands (like #include #define #ifdef ...) and generate a 
-temporary file
-3) the compiler start it's job reading the c file, parsing it, checking 
-it for errors, optimizing it and generating an assembler file
-4) the assembler generate than the obj files
-5) the linker solve the libraries, global variables referencing, etc and 
-generate the executable which of course, is in machine code and platform 
-dependent.
+mystruct[7].bla = "bla bla bla" IS SEGMENTATION FAULT !!!!!
 
-Retain that step 4 can be optional, the compiler can generate object 
-files without an assembler, it depending on the compilers ;)
+the valid range is 0 - 6, so the last one is mystruct[6].bla = "bla";
 
-So, to move your compiler on another platform, you need a new assembler 
-and linker, the compiler can be the same. Look for example at GNU 
-Compiler family ;)
+The multiply by 4 is another stuff, the 32 bits and more processors 
+loves to read from 4n addresses, that's why compilers generate structs 
+with sizeof == 4n
 
-For more info read
-Aho, Sethi, Ullman - Compilers Principles, Techinques, And Tools
+But, anyway, your problem here is the vector limit, read the manual ;)
 
 
 
-Ankit Jain wrote:
-> hi
+p.boehm@d-trust.net wrote:
+> hi,
+> I've found the error. the problem occurs if MAXNUM or number of array to store pointers of another
+> structure is odd.
+> I know that malloc() always allocates memory as multiple of 4 but in my case it is so:
 > 
-> i want to know if this is correct? i am a bit confused
-> about linker...i am talking this topic when we have a
-> asm construct in our code.
+>      struct xy {
+>           int id;        /* sizeof(int)=4 */
+>           char *name;         /* sizeof(char *)=4 */
+>      };
 > 
-> The compiler basically reads the .c program and
-> converts it into assembly code.Now during this it
-> neglects this assembler construct and leaves it for
-> assembler.Assembler is the person which basically
-> looks for this part of the code and changes it into
-> machine code. 
+>      struct abc {
+>           struct xy *next[7]; /* sizeof(struct xy *) * 7 = 4 * 7 = 28 */
+>      };
 > 
-> thanks
+>      => all in all 36 bytes, and that's even!
 > 
-> ankit
+> Can someone explain this? (I fears the solution is more than easy ...)
+> pb
 > 
-> ________________________________________________________________________
-> Yahoo! Messenger - Communicate instantly..."Ping" 
-> your friends today! Download Messenger Now 
-> http://uk.messenger.yahoo.com/download/index.html
 > -
 > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
