@@ -1,29 +1,21 @@
-From: r_zaca <r_zaca@ig.com.br>
-Subject: tcp reset
-Date: Thu, 17 Mar 2005 17:44:17 -0300
-Message-ID: <20050317_204417_014454.r_zaca@ig.com.br>
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: tcp reset
+Date: Thu, 17 Mar 2005 17:05:33 -0500
+Message-ID: <D2AA47A6FB2C1A48AF0526440C0F245CAA366D@monm207.nae.ds.army.mil>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="Message-Boundary-by-Mail-Sender-1111092257"
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: 'r_zaca ' <r_zaca@ig.com.br>, "'linux-c-programming@vger.kernel.org '" <linux-c-programming@vger.kernel.org>
 
-This message is in MIME format. Since your mail reader does not understand
-this format, some or all of this message may not be legible.
 
---Message-Boundary-by-Mail-Sender-1111092257
-Content-type: text/plain; charset=ISO-8859-1
-Content-description: Mail message body
-Content-transfer-encoding: 8bit
-Content-disposition: inline
+r_zaca worte:
 
-  Hi all, 
+>  I need to send a TCP segment with the bit RST set. 
+>  So is it possible thought the setsockopt? if not how can I do that? 
 
-  I need to send a TCP segment with the bit RST set. 
-  So is it possible thought the setsockopt? if not how can I do that? 
+I beleive that you need to do this through raw sockets.  At least, that 
+is how I have always do this.
 
-  Thanks. 
-
---Message-Boundary-by-Mail-Sender-1111092257--
-
+George
