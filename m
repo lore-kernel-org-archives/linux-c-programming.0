@@ -1,35 +1,80 @@
-From: James Stevenson <james@stev.org>
-Subject: Re: getting ebp from another process ?
-Date: 30 Sep 2002 21:38:43 +0100
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1033418323.1854.7.camel@god.stev.org>
-References: <20020930195953.DB7C54001@sitemail.everyone.net>
+From: =?iso-8859-1?q?will=20fitzgerald?= <linux_learning@yahoo.co.uk>
+Subject: expanding on t these functions do!
+Date: Tue, 1 Oct 2002 20:30:14 +0100 (BST)
+Sender: linux-kernel-owner@vger.kernel.org
+Message-ID: <20021001193014.6899.qmail@web13107.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020930195953.DB7C54001@sitemail.everyone.net>
+Content-Transfer-Encoding: 7BIT
+Return-path: <linux-kernel-owner+linux-kernel=40quimby.gnus.org@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: xjnfx@doityourself.com
-Cc: sos22@cam.ac.uk, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Mon, 2002-09-30 at 20:59, jnf wrote:
-> im a little confused by what you mean from another process, meaning like - im not sure if you want it from a third process, or just mean another process from the debuggers point of view, but wouldnt
-> unsigned long foo(void) { __asm__("movl %ebp, %eax"); }
-> work?
+hi all,
 
-its a little more complicated than that.
-i am actually debugging kernel things in
-http://user-mode-linux.sf.net/
 
-which has a confusing method of working with
-debuggers and does not keep a good copy of ebp around
-but the process is already attached by a so called
-debugger but really a system call interceptor.
+ i was hoping someone could explain what is it exactly
+that each of these functions actually do.i have
+supplied what i think they do under each of them.i'm
+using kernel 2.4.14 (old i know!!!!)
 
-its does not matter anymore i dont seem to need it now.
-if i do in the future i will add a kernel patch to give it out in
-/proc/<pid>/ebp or something.
+skb_bond() in dev.c
+net_rx_action() calls it, it returns and then
+net_rx_action calls ip_rcv() but what is skb_bond
+doing?
 
-	James
+ skb_shared() in skbuff.h
+  ip_rcv() calls it befoe doing a NF_HOOK to call
+ip_rcv_finish() again i'm not sure of what it does.
 
+skb_cloned() in skbuff.h
+it seems to be linked to skb_shared() according to the
+comments.  ip_forwad() calls  calling
+rt_tos2priority() and skb_cow() and skb_cow calls
+skb_cloned().
+what is skb cloned used for?
+
+rt_tos2priority in route.h
+  does it give security priority information? even
+though i don't have a firewall set on my linux router
+(experimenting with networks, hobbie) , it gets called
+  as i have inserted printk's to test if it gets
+called.
+
+ip_decrease_ttl() in net/ip.h
+ whats the purpose of this?
+
+ip_send() in net/ip.h
+ip_forward_finish() calls this function. what does
+this line "skb->len > skb->dst->pmtu" do in order to
+make the decision of calling one of two functions?
+
+neigh_resolve_output() in neighbour.c
+this calls the next two functions below. its called
+from ip_finish_output2(). does this lookup fib tables
+or cahces etc?
+
+neigh_event_send() in neighbour.h
+
+what does this function check in order to call the
+next function:   __neigh_event_send(neigh, skb)
+   
+__neigh_event_send() in neighbour.c
+what exactly is going on here? after the above
+function has returned its result this one gets
+executed.
+
+
+thank you for your time,
+regards.
+
+
+
+
+
+
+__________________________________________________
+Do You Yahoo!?
+Everything you'll ever need on one web page
+from News and Sport to Email and Music Charts
+http://uk.my.yahoo.com
