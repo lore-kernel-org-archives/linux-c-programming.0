@@ -1,32 +1,21 @@
-From: blitzkrieg <blitzkrieg@sitoverde.com>
-Subject: Re: how do i get a packets contents from using printks
-Date: Mon, 13 May 2002 20:32:15 +0200
+From: "praveenjohri" <praveenjohri@indiatimes.com>
+Subject: recompile kernel without tc/ip stack
+Date: Thu, 16 May 2002 13:47:41 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020513203215.A572@slackware.alcatrazz.org>
-References: <44D8933CAE839984FA29FC69B9F24B15@william.fitzgerald3.beer.com>
-Mime-Version: 1.0
+Message-ID: <200205160820.NAA09968@WS0005.indiatimes.com>
+Reply-To: "praveenjohri" <praveenjohri@indiatimes.com>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <44D8933CAE839984FA29FC69B9F24B15@william.fitzgerald3.beer.com>; from william.fitzgerald3@beer.com on Mon, May 13, 2002 at 03:03:17PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: william fitzgerald <william.fitzgerald3@beer.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Mon, May 13, 2002 at 03:03:17PM +0100, william fitzgerald wrote:
-> printk(KERN_DEBUG"ip_forwrd(sk_buff %P)-> entry
-> point",skb);
-> 
-> but how do i extract the packets headers etc from
-> the sk_buff?
+can anybody tell me how to recompile kernel without tcp/ip stack
 
-Check the definition of struct sk_buff in linux/skbuff.h, check also 
-linux/ip.h, linux/tcp.h and so on... depends which headers you want to 
-know.
+cheers
+praveen
+Get Your Private, Free E-mail from Indiatimes at http://email.indiatimes.com
 
-bye bye
--b
+ Buy Music, Video, CD-ROM, Audio-Books and Music Accessories from http://www.planetm.co.in
 
--- 
-head --lines=4 $HOME/.signature
