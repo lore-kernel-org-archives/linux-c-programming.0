@@ -1,72 +1,42 @@
 From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: value computed is not used ??
-Date: Tue, 1 Jun 2004 22:44:39 +0100
+Date: Tue, 1 Jun 2004 22:58:14 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16572.63687.904616.93775@cerise.nosuchdomain.co.uk>
-References: <E3E30069B061524E90BCEE4417E30661138500@monm207.monmouth.army.mil>
-	<16572.54376.258083.671154@cerise.nosuchdomain.co.uk>
-	<c9iqhv$akj$1@sea.gmane.org>
+Message-ID: <16572.64502.651803.95029@cerise.nosuchdomain.co.uk>
+References: <20040531193810.GE31833@opaque>
+	<Pine.LNX.4.21.0406010333220.1813-100000@hestia>
+	<c9hb7s$3o1$1@sea.gmane.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <c9iqhv$akj$1@sea.gmane.org>
+In-Reply-To: <c9hb7s$3o1$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Charlie Gordon <gmane@chqrlie.org>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
 Charlie Gordon wrote:
 
-> All right, you win.
-> It just strikes me as a bad habit to declare main without at least argc and
-> argv.
-> Proof reading is about idioms, the more you part from proven practices, the
-> easier it is to write bug ridden code, and the more tedious it becomes to
-> verify said code at code review level.
-> For example, for loops written with the <= operator are quite likely to
-> contain off by one errors.  It catches my eye instantly, and I tend to be
-> rewarded often !  Same remark with casual do/while loops.
-> int main(void);  strikes me as 'beginners C code' and trips me off.
-> 
-> So there is nothing wrong with the prototype,
+> >  char *ptr = NULL;
+> this initialization is useless.
 
-Ultimately, prototypes exist so that function calls can be
-type-checked. As nothing[1] actually calls main(), the prototype is
-irrelevant; a K&R-style definition[2] would suffice.
+Or possibly worse than useless.
 
-[1] Other than the runtime, which has already been compiled, and so
-cannot make use of any prototype.
+Without the initialisation, if you tried to use it before it was
+initialised, the compiler may generate a warning. The above
+initialisation would eliminate the warning, and instead result in a
+segfault (or, on an architecture which doesn't have an MMU, just
+incorrect behaviour) at run time.
 
-[2] I.e.:
+Responding to warnings by just "shutting the compiler up" is a common
+programming flaw.
 
-	int main()
-		int argc;
-		char **argv;
-	{ /* ... */ }
-
-In a K&R-style definition, the argument declarations exist solely so
-that the function body can refer to the arguments by name. If the
-function doesn't actually use the arguments, there is no point in
-declaring them.
-
-> just like there was nothing wrong with rest on the small program :
-> it compiles, and performs correctly,
-
-That's a matter of opinion. As you pointed out, initialising an
-automatic array is less than ideal; while it will work, it is seldom
-the right approach.
-
-But, more generally, the original program clearly wasn't intended to
-be a practical utility, but an example. In which case (and coupled
-with the fact that it was posted to this list), whether or not it
-ultimately "works" is arguably less relevant than whether it was
-written "correctly" (in an entirely subjective sense).
-
-> but you will all admit that my other remarks were still making valid
-> points.
-
-Yes.
+Probably the most common situation where this is dangerous is "fixing"
+int/long mismatches using a type cast. You can get away with this if
+sizeof(int) == sizeof(long) (e.g. i386). But on a system where
+sizeof(int) != sizeof(long), the typecast may not work (or, at least,
+not correctly), and eliminating the warnings will make it harder to
+find (and actually fix) the problems.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
