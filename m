@@ -1,58 +1,79 @@
 From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: Newbie question on malloc()
-Date: Fri, 4 Jun 2004 03:11:50 +0100
+Date: Fri, 4 Jun 2004 03:35:02 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16575.55910.854396.740084@cerise.nosuchdomain.co.uk>
+Message-ID: <16575.57302.614704.450323@cerise.nosuchdomain.co.uk>
 References: <002d01c44897$78ae58d0$de01a8c0@qnessmphibiki>
-	<1086196092.29970.2.camel@localhost>
-	<16574.4399.288522.256729@cerise.nosuchdomain.co.uk>
-	<1086198752.29988.21.camel@localhost>
-	<16574.54829.111750.764395@cerise.nosuchdomain.co.uk>
-	<20040603113241.GH2562@luna.mooo.com>
+	<20040603012832.GC2562@luna.mooo.com>
+	<16574.55886.797709.765778@cerise.nosuchdomain.co.uk>
+	<1086301555.22497.0.camel@localhost>
+	<001501c449c1$efc075e0$3410fea9@zoom>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040603113241.GH2562@luna.mooo.com>
+In-Reply-To: <001501c449c1$efc075e0$3410fea9@zoom>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Micha Feigin <michf@post.tau.ac.il>
+To: Paul Gimpelj <pgimpelj@sympatico.ca>
 Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
-Micha Feigin wrote:
+Paul Gimpelj wrote:
 
-> > Note that free() doesn't generally return memory to the OS; it usually
-> > just records the fact that the specified region of memory is available
-> > for re-use by subsequent calls to malloc() etc.
+> pardon me for patching to this thread,
 > 
-> That would depend on the memory block size. Small memory blocks are
-> held as malloc allocates whole pages at a time, large memory blocks are
-> returned. Depending on size the OS may then also store them on caches
-> in case a memory block of the same size is requested again.
+> but, following this conversation,
+> if files are left open at exit, does the operating system (linux) flush the
+> i/o buffers to disk before closing files?
 
-That's what I meant by "generally".
+It depends upon what you mean by "buffers" and "disk".
 
-Some implementations *may* return freed memory to the OS. GNU libc 2.x
-does so for blocks above a certain size (the default is 128kb,
-configurable via environment variables and mallopt()).
+The OS (kernel) doesn't know anything about user-space buffers (as
+used by the ANSI stdio functions), so it won't flush those.
 
-However, there may also be a limit on the number of such blocks (due
-to kernel limits on the number of memory mappings), so you can't
-drastically reduce the threshold.
+However, the exit() function will flush any user-space buffers (to the
+kernel's buffer cache). Also, returning from main() performs an
+implicit call to exit(), so the same applies there. To exit without
+flushing any buffers, you need to call _exit() instead.
 
-Other implementations may or may not provide such a feature.
+Needless to say, if a program terminates abnormally (due to a fatal
+signal), buffers aren't flushed.
 
-Also, kernel patches are available which disable this feature. Memory
-which is obtained from anonymous mmap() (rather than brk()) isn't
-restricted by setrlimit(RLIMIT_DATA), which makes it difficult to
-enforce resource limits.
+OTOH, the kernel does know about the kernel buffer cache, which is
+where write() etc store their data. This is often inadvertently
+referred to as "disk", on the assumption that write() etc actually
+write directly to disk (which was true for e.g. MS-DOS).
 
-> Otherwise in a long running program that allocates a lot of memory on
-> the start and then frees most of it would still be hogging all that
-> memory.
+The buffer cache is shared between processes, and is flushed to disk
+as and when the kernel deems it appropriate, or if a process uses
+sync/fsync.
 
-That may still happen if the memory is allocated in many small chunks
-rather than one large chunk.
+However, once a process has sent the data to the kernel (i.e. the
+buffer cache), it doesn't make any difference what the process does
+(call exit(), call _exit(), crash, or whatever). The kernel ensures
+that the buffer cache will eventually be flushed to disk
+(notwithstanding exceptional circumstances, e.g. hardware or power
+failure).
+
+> This is not the case with windows 95/98  and dos.
+
+ANSI C dictates that both exit() and returning from main() will flush
+any buffers. Ultimately, it's up to the C library which you use to
+implement this correctly, but I don't recall any problems with either
+Borland or Watcom under DOS, or either Watcom or MSVC under Windows.
+
+Terminating by other means (e.g. TerminateProcess()) may or may not
+flush buffers.
+
+Sometimes, it's necessary to terminate a process immediately, without
+any unwanted side-effects. E.g. if you catch SIGSEGV or SIGBUS,
+there's a good chance that user-space memory has become corrupted. Any
+attempt to call functions which access that memory (e.g. fflush()) may
+result in further exceptions.
+
+> OR, does the _exit() function in the c runtime do it.
+
+_exit() specifically does not flush the stdio buffers.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
