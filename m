@@ -1,36 +1,48 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
 Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Tue, 29 Jun 2004 18:43:23 +0100
+Date: Tue, 29 Jun 2004 16:10:15 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16609.43579.336662.194984@cerise.nosuchdomain.co.uk>
-References: <40E09FC4.50800@ig.com.br>
-	<16608.44836.384260.844173@cerise.nosuchdomain.co.uk>
-	<20040629143238.GD6335@luna.mooo.com>
+Message-ID: <40E1BE97.1090209@ig.com.br>
+References: <40E09FC4.50800@ig.com.br>	<16608.44836.384260.844173@cerise.nosuchdomain.co.uk>	<40E17D0A.2030206@ig.com.br> <20040629192621.1a99c86c.henry.margies@gmx.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040629143238.GD6335@luna.mooo.com>
+In-Reply-To: <20040629192621.1a99c86c.henry.margies@gmx.de>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Micha Feigin <michf@post.tau.ac.il>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: 
+Cc: linux-c-programming@vger.kernel.org
 
+Because, the compiler doesn't know the value of the symbol DEFSIZE when 
+it is used for a array declaration, like as:
+char myArray[MYCLASS::DEFSIZE];
 
-Micha Feigin wrote:
+Then, we have the conclusion that the value atribution should be in 
+header file (.h) - for that case. But, I tried the use of "enum", and 
+now it's working well.
 
-> > It appears that you are allowed to initialise constant static members
-> > within the declaration, so you can do this:
+Luciano
 
-> > This compiles with "g++ -ansi -pedantic", so it's probably standard
-> > ISO C++.
-> 
-> Does this also work when put in a header or only when put directly in
-> the cpp file?
+Henry Margies wrote:
 
-It doesn't matter. A #include directive simply inserts the contents of
-the header file directly into the source code which is fed to the
-compiler. The compiler doesn't care which file a given piece of code
-comes from.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+>Just put the definition in the cpp file.
+>
+>Header File:
+>class Foo
+>{
+>	public:
+>		static const int DEFSIZE;
+>};
+>
+>in CPP-File:
+>
+>const int Foo::DEFSIZE=100
+>
+>
+>Why does this not work for you?
+>
+>
+>Henry
+>
+>  
+>
