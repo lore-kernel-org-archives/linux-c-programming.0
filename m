@@ -1,40 +1,29 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: file deletion
-Date: Thu, 30 Dec 2004 11:26:21 +0000
-Message-ID: <16851.58845.416665.971234@gargle.gargle.HOWL>
-References: <84bd26ef04122305146c8f8a89@mail.gmail.com>
-	<003f01c4e9ba$7679d020$316c4ed5@j0s6l8>
+Subject: Re: newby.-interpreting C
+Date: Thu, 30 Dec 2004 11:26:08 +0000
+Message-ID: <16851.58832.659413.893211@gargle.gargle.HOWL>
+References: <cq77vi$1ej$1@sea.gmane.org>
+	<20041220211709.GD2460@lug-owl.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <003f01c4e9ba$7679d020$316c4ed5@j0s6l8>
+In-Reply-To: <20041220211709.GD2460@lug-owl.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Andy <andy_webb@onetel.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-Andy wrote:
+Jan-Benedict Glaw wrote:
 
-> Does anybody know of any useful code or c commands that
-> you can use to search for duplicate files within a linux/unix directory and
-> its subdirectories and remove them?
+> General rule: if you don't *need* this for a good reason, or if you even
+> don't know what it does, you don't need it, since it also introduces a
+> performance penalty: CPUs tend to be fast at naturally aligned memory
+> accesses, but quite slow on non-aligned accesses.
 
-First, you have to define "duplicate". Also, once you've decided that
-two or more files are duplicates, you have to decide which one you
-wish to keep and which ones are to be deleted.
-
-If you consider any files with identical MD5 hashes as duplicates, and
-don't care about which one is kept, you could use something like:
-
-find . -type f -exec md5sum {} \; | sort | uniq -w32 -d | cut -b 35- | \
-	while read file ; do rm -- "$file" ; done
-
-However, if you have 3 or more copies of a given file, the above will
-only delete one of them ("uniq -d ..." only prints one instance of
-each duplicate line; "uniq -D ..." prints all instances, which would
-result in all copies being removed; there isn't an all-but-one option).
+On most processor types, unaligned accesses will fail (either generate
+an exception or return bogus data). The x86 family is the exception,
+in that unaligned access merely reduces performance.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
