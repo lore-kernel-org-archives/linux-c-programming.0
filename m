@@ -1,76 +1,52 @@
-From: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
-Subject: Re: Can i use dev_queue_xmit()
-Date: Mon, 12 Apr 2004 16:32:48 +0530 (IST)
+From: "Steven Smith" <sos22@cam.ac.uk>
+Subject: Re: Implementing a file counter (like "ls | wc")
+Date: Tue, 13 Apr 2004 13:52:58 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.44.0404121616450.11451-100000@csews110.cse.iitk.ac.in>
-References: <407A5773.1020603@iitk.ac.in>
+Message-ID: <20040413125258.GA2565@archibold.chu.cam.ac.uk>
+References: <20040407183558.77510679.alphex@crew.org.ru> <4074148E.9060205@ig.com.br>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="5mCyUwZo2JvN/JJP"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <407A5773.1020603@iitk.ac.in>
+Content-Disposition: inline
+In-Reply-To: <4074148E.9060205@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Anupam <anupamg@iitk.ac.in>
+To: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi,
 
-  Sorry, we did not put our question in correct way. 
-  We came to know that whenever qdisc is full some flag is set and
-it will be unset only when qdisc is completely empty once again.
-  Because of this we are unable to enque packets in the qdisc even when 
-some space is available. What i want is to enqueue packets as soon as 
-qdisc has space for atleast one packet.
-  Even if i am increasing the qdisc length, then also after some time
-again the qdisc is getting full and packets are getting dropped.
+--5mCyUwZo2JvN/JJP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- Note: I am using gigabit ethernet cards.
+> while ((pFile=readdir(pDir))!=NULL) {
+>      sprintf(szBuf, "%s/%s", pPath, pFile->d_name);
+>      stat(szBuf, &statFile);
+>      if (S_ISDIR(statFile.st_mode))
+>         continue;
+If the only reason you're statting the files is to check whether
+they're directories, then you can save yourself a system call per
+file:
 
- Please help me in this matter.
+while ((pFile=readdir(pDir))!=NULL) {
+     if (pFile->d_type == DT_DIR)
+        continue;
 
-Thanks in advance,
-Regards,
-Ananth.
+This'll probably be quite a bit quicker, and may also save you needing
+to call sprintf(), which can be somewhat expensive.
 
+Steven Smith.
 
-On Mon, 12 Apr 2004, Anupam wrote:
+--5mCyUwZo2JvN/JJP
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-> Date: Mon, 12 Apr 2004 14:16:43 +0530
-> From: Anupam <anupamg@iitk.ac.in>
-> To: K.Anantha Kiran <ananth@cse.iitk.ac.in>
-> Subject: Re: Can i use dev_queue_xmit()
-> 
-> K.Anantha Kiran wrote:
-> >  	The problem is that " is there any flag that tell the queue is 
-> >  full and once it is full it will not take any pkts in and drops all 
-> >  till the queue is empty". If so can u plz suggest a solution to this 
-> >  problem.
-> 
-> 
-> Hi Anantha,
-> 
->  From above description of yours, I presume that you're trying something 
-> that is called "Flush Queue", i.e., when a queue is overloaded, there is 
->   option to drop all packets in queue. This means that all the adaptive 
-> flow should back-off. However it is quite inefficient since all the 
-> backed-off flows will startup again.
-> 
-> Anyways, I didn't get the chance to dig up the code myself, but my guess 
-> is that solution for you lies in: linux/net/sched/cls_api.c.
-> 
-> 
-> >  thanks,
-> >  Ananth.
-> 
-> 
-> Please do let me know how things go.
-> 
-> Regards,
-> 
-> Anupam Gupta, Ph.D.
-> mailto:anupamg@iitk.ac.in
-> Deptt. of EE,
-> Res. E1-315, Hall-4
-> IIT Kanpur.
-> 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (FreeBSD)
 
+iD8DBQFAe+KqO4S8/gLNrjcRAgJRAJ9+ax08fJRtpGkbdOVBA4fg8qUdugCgji1J
+CCsdR7tjQ18NLTsOy9n4T+g=
+=rIPd
+-----END PGP SIGNATURE-----
+
+--5mCyUwZo2JvN/JJP--
