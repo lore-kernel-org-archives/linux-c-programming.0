@@ -1,33 +1,65 @@
-From: =?iso-8859-1?q?Dinesh=20Ahuja?= <mdlinux7@yahoo.co.in>
-Subject: Re: Email Verification Request
-Date: Fri, 2 Jul 2004 11:29:59 +0100 (BST)
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: TCP/IP Stack Programming in Linux
+Date: Fri, 2 Jul 2004 14:03:44 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040702102959.97615.qmail@web8308.mail.in.yahoo.com>
-References: <200407021408.i62E8Ao6013562@www.web-geek.com>
+Message-ID: <20040702120344.GF18841@lug-owl.de>
+References: <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="gneEPciiIl/aKvOT"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200407021408.i62E8Ao6013562@www.web-geek.com>
+Content-Disposition: inline
+In-Reply-To: <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Dinesh Ahuja <mdlinux7@yahoo.co.in>
+Cc: linux-c-programming@vger.kernel.org
 
-19h6apjUxhTh
---- linux-c-programming@vger.kernel.org wrote: >
-Recently you sent an email message to 
-> linux-c-programming@vger.kernel.org with the subject
-> Re: Email Verification Request.
-> 
-> To verify that this is from a really person and not
-> a spammer. All you need 
-> to do is simply reply to this message. And any
-> further emails should simply go
-> straight through.
-> 
-> Thank you for helping stop spam.
-> 
-> Email-Verify-Code: 19h6apjUxhTh. 
 
-________________________________________________________________________
-Yahoo! India Careers: Over 50,000 jobs online
-Go to: http://yahoo.naukri.com/
+--gneEPciiIl/aKvOT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, 2004-07-02 11:23:29 +0100, Dinesh Ahuja <mdlinux7@yahoo.co.in>
+wrote in message <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>:
+> Hi Everybody,
+>=20
+> I have started making familiar myself with TCP/IP
+> Programming in Linux. I am interested in learing
+> TCP/IP Stack Programming in Linux and how could I
+
+I suggest you go over to your book dealer and ask him for "Stevens,
+W. Richard: Unix Network Programming, Volume 1: Networking APIs: Sockets
+and XTI".
+
+> modify a TCP/IP stack to meet my requirements.
+
+Most probably, that's not needed at all.
+
+> Could anyone suggest me a book on TCP/IP Stack
+> Programming in C/C++ ?
+
+MfG, JBG
+
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
+PA));
+
+--gneEPciiIl/aKvOT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+
+iD8DBQFA5U8fHb1edYOZ4bsRAr24AJ4pWQ0QVE4cr250vVGAkAzkI7l7BwCfX5b+
+X/GKw4I38YLE6ZjwNBb065o=
+=imKf
+-----END PGP SIGNATURE-----
+
+--gneEPciiIl/aKvOT--
