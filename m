@@ -1,49 +1,50 @@
 From: Ankit Jain <ankitjain1580@yahoo.com>
-Subject: soft real-time scheduling
-Date: Sun, 26 Sep 2004 15:08:31 +0100 (BST)
-Sender: gcc-help-owner@gcc.gnu.org
-Message-ID: <20040926140831.62007.qmail@web52901.mail.yahoo.com>
+Subject: parse error
+Date: Sun, 26 Sep 2004 15:32:52 +0100 (BST)
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <20040926143252.39003.qmail@web52902.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Return-path: <gcc-help-return-18041-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
-List-Post: <mailto:gcc-help@gcc.gnu.org>
-List-Help: <mailto:gcc-help-help@gcc.gnu.org>
+Content-Transfer-Encoding: 7BIT
+Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux prg <linux-c-programming@vger.kernel.org>
-Cc: gcc <gcc-help@gcc.gnu.org>
 
 hi
 
- /* soft realtime scheduling variable */
-   struct sched_param *p;
-
-
- /* set soft real-time scheduling */
-   sched_getparam(0,p);
-   p->sched_priority = 50;
-   if (sched_setscheduler(0,SCHED_FIFO,p))
-     fprintf(stderr,"Could not change scheduler
-settings\n");
-
-if anyone knows about this then i need some help
-
-p is a pointer to the structure sched_param which is
-defined in sched.h
-
-this structure has a variable __sched_priority where i
-have to set the priority of the process
-
-p->sched_priority =50 this line gives a segmentation
-fault. 
-how t oaccess this variable (__sched_priority) of the
-header file
+i could not understand why compiler has put semi colon
+before else due t owhich this parse error comes....
 
 thanks
 
-ankit
+  
+#define exch(x,y) { int tmp; tmp=x; x=y; y=tmp; }
+
+However that wouldn't work in some cases. The
+following code is meant to be an if-statement with two
+branches:
+
+  if(x>y)
+    exch(x,y);          // Branch 1
+  else  
+    do_something();     // Branch 2
+
+But it would be interpreted as an if-statement with
+only one branch:
+
+  if(x>y) {                     // Single-branch
+if-statement!!!
+    int tmp;            // The one and only branch
+consists
+    tmp = x;            // of the block.
+    x = y;
+    y = tmp;
+  }
+  ;                             // empty statement
+  else                  // ERROR!!! "parse error
+before else"
+    do_something();
+
 
 ________________________________________________________________________
 Yahoo! Messenger - Communicate instantly..."Ping" 
