@@ -1,98 +1,74 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: ioctl fails....
-Date: Sun, 16 May 2004 11:18:24 +0200
+From: Saurabh Agarwal <saurabhagarwal@linux.net>
+Subject: RE: where can i find linux kernel 2.6 documentation.
+Date: Mon, 17 May 2004 02:07:52 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040516091823.GG1912@lug-owl.de>
-References: <40A6F876.50405@sancharnet.in>
+Message-ID: <20040517090753.4E9BE3964@sitemail.everyone.net>
+Reply-To: saurabhagarwal@linux.net
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="yJGMwzir+WFaxbyA"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <40A6F876.50405@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: "Sanjay Kumar, Noida" <sanjayku@noida.hcltech.com>, saurabhagarwal@linux.net, linux-c-programming@vger.kernel.org
+
+
+Hi ,
+Thanks but cant i find any such thing like Linux Kernel Internals 2.4 for kernel 2.6 version.
+I also want to know what differences are there in writing device drivres  for kernel 2.6.
+Thanks & Regards 
+Saurabh
+
+--- "Sanjay Kumar, Noida" <sanjayku@noida.hcltech.com> wrote:
+hi 
+if you have linux kernel 2.6 source with you, 
+then linux/Documentation folder is the best place to look for the
+documnetation
+regards
+sanjay
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Saurabh
+Agarwal
+Sent: Saturday, May 15, 2004 4:37 PM
 To: linux-c-programming@vger.kernel.org
+Subject: where can i find linux kernel 2.6 documentation.
 
 
---yJGMwzir+WFaxbyA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi All,
+I want to download linix kernel 2.6 documentation,
+specially relating to Device Drivers where can i find it.
+Thanks 
+Saurabh
 
-On Sun, 2004-05-16 10:43:26 +0530, joy <gracecott@sancharnet.in>
-wrote in message <40A6F876.50405@sancharnet.in>:
-> #include<linux/ppdev.h>
-> #include<stdlib.h>
-> #include<unistd.h>
-> #include<linux/parport.h>
 
-parport.h shouldn't be needed.
+_____________________________________________________________
+Linux.Net -->Open Source to everyone
+Powered by Linare Corporation
+http://www.linare.com/
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-> #include<time.h>
-> #include<sys/types.h>
-> #include<sys/stat.h>
-> #include<fcntl.h>
-> #include<linux/ioctl.h>
 
-For a small program I wrote, these headers were sufficient:
+Disclaimer: 
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <linux/ppdev.h>
+This message and any attachment(s) contained here are information that is
+confidential,proprietary to HCL Technologies and its customers, privileged
+or otherwise protected by law.The information is solely intended for the
+individual or the entity it is addressed to. If you are not the intended
+recipient of this message, you are not authorized to read, forward,
+print,retain, copy or disseminate this message or any part of it. If you
+have received this e-mail in error, please notify the sender immediately by
+return e-mail and delete it from your computer.
 
-Generally, try to keep the number of needed OS dependand headers small.
-That keeps you informed about that needs to be ported if you ever need
-to go to another OS.
 
-> main()
-> {
-> 	int filedes;
-> 	char data=3D0xff;
-> 	struct timespec time;
-> 	filedes=3Dopen("/dev/par0",O_RDWR);
-> 	if(ioctl(filedes,PPCLAIM)=3D=3D-1)
-> 		perror("OPEN");
-> =09
-> 	if(ioctl(filedes, PPWDATA, &data)=3D=3D-1)
-> 		perror("Hi");
-> 	time.tv_sec=3D1;
-> 	time.tv_nsec=3D1000;
-> 	nanosleep(&time,NULL);
-> 	close(filedes);
-> 	return;
-> }
 
-The code itself looks okay technically (well, early exit on failure
-would be nice:), but I suspect that you're using a wrong device. Is your
-device /dev/par0 a char-dev with major=3D99 and minor=3D0? Is the ppdev
-driver loaded?
 
-MfG, JBG
-
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
-
---yJGMwzir+WFaxbyA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-
-iD8DBQFApzHfHb1edYOZ4bsRAvrqAJ4tde8ELQ1OnIH7Mg7DmPC0UkEanQCeOjYQ
-LJpzU6B7CO50VxVXzUkEzMY=
-=69tF
------END PGP SIGNATURE-----
-
---yJGMwzir+WFaxbyA--
+_____________________________________________________________
+Linux.Net -->Open Source to everyone
+Powered by Linare Corporation
+http://www.linare.com/
