@@ -1,32 +1,55 @@
-From: Edward Parrilla <eparrilla@comcast.net>
-Subject: question about iostream.h
-Date: 16 Oct 2004 01:19:51 -0500
+From: Antonio Tellez Flores <atellezf@yahoo.com.mx>
+Subject: Re: question about iostream.h
+Date: Sat, 16 Oct 2004 02:41:09 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1097907587.3872.21.camel@localhost.localdomain>
+Message-ID: <1097912468.22833.2.camel@localhost>
+References: <1097907587.3872.21.camel@localhost.localdomain>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <1097907587.3872.21.camel@localhost.localdomain>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: Edward Parrilla <eparrilla@comcast.net>
+Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-Hi all,
-I am trying to use
-<iostream.h> or <iostream> but it keeps telling me that file is not
-found
-but I found file located at:
+Hi!
+=1B
 
-/usr/include/g++-3/iostream.h
+> Hi all,
+> I am trying to use
+> <iostream.h> or <iostream> but it keeps telling me that file is not
+> found
+> but I found file located at:
+>=20
+> /usr/include/g++-3/iostream.h
+>=20
+> if I type
+> #include </usr/include/g++-3/iostream.h>
+> it gives me the following error:
+> /usr/include/g++-3/iostream:6:22: iostream.h: No such file or directo=
+ry
+> linktest1.c:8:16: list: No such file or directory
+>=20
+> which is the mistake?
+> Thanks in advance for your assistance.
 
-if I type
-#include </usr/include/g++-3/iostream.h>
-it gives me the following error:
-/usr/include/g++-3/iostream:6:22: iostream.h: No such file or directory
-linktest1.c:8:16: list: No such file or directory
 
-which is the mistake?
-Thanks in advance for your assistance.
-Best regards
-Ed
+add the next lines:=20
 
+#include <iostream>
+using namespace std;
 
+bye
+
+--=20
+Antonio T=E9llez Flores
+Ciencias de la Computaci=F3n
+=46acultad de Ciencias - UNAM
+Home Page: http://ada.fciencias.unam.mx/~atellez
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
