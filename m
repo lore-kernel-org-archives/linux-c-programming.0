@@ -1,29 +1,39 @@
-From: "James Stevenson" <mistral@stev.org>
-Subject: Re: mcrypt ?
-Date: Thu, 23 May 2002 10:48:30 +0100
+From: =?iso-8859-1?Q?Dar=EDo?= Mariani <dmarian@fi.uba.ar>
+Subject: Re: Regural expressions
+Date: Thu, 23 May 2002 13:18:45 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <00a901c2023f$00bac2f0$0cfea8c0@ezdsp.com>
-References: <012101c200c6$94f7fd40$0cfea8c0@ezdsp.com> <15594.22897.778388.25242@cerise.nosuchdomain.co.uk> <003901c2018d$388b6070$0cfea8c0@ezdsp.com> <20020522090851.A3571@marta>
+Message-ID: <3CED1665.FE39F046@fi.uba.ar>
+References: <1508270952.20020523110302@mail.ru>
+Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Kurt Wall <kwall@kurtwerks.com>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Tver Mit <Vukdev@mail.ru>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi
+  The Boost libraries (www.boost.org) has a library for regular
+expressions (www.boost.org/libs/regex/index.htm).
 
-thanks all for your help i seemed to have now
-solved my problem.
-
-    James
-> > > > is there such a function in a linux c libary
-> > > > for the md5 crypt the same as crypt() but
-> > > > for the more modern shadow passwords
-> > > >
-> > > > if so.
-> > > > which libary ?
-> > >
-> > > The "crypt" add-on for glibc 2.x supports MD5 password
+	Dar=EDo
 
 
+Tver Mit wrote:
+>=20
+> Hi all.
+> I need to use regural expressions in C++ programm. Is there standart
+> methods/libraries to do this?
+>=20
+> Best wishes,
+>  Tver                          mailto:Vukdev@mail.ru
+>=20
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
+gramming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
