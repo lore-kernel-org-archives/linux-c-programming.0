@@ -1,60 +1,94 @@
-From: Robert Schiele <rschiele@uni-mannheim.de>
+From: joy <gracecott@sancharnet.in>
 Subject: Re: Segmentation fault from free()
-Date: Tue, 24 Aug 2004 23:49:59 +0200
-Sender: linux-gcc-owner@vger.kernel.org
-Message-ID: <20040824214959.GC25368@schiele.dyndns.org>
-References: <412BA650.6050305@nec-labs.com> <20040824211236.GB25368@schiele.dyndns.org> <412BB233.3020400@nec-labs.com>
-Reply-To: Robert Schiele <rschiele@uni-mannheim.de>
+Date: Wed, 25 Aug 2004 08:35:45 +0530
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <412C0209.8070805@sancharnet.in>
+References: <412BA650.6050305@nec-labs.com>
+Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="UPT3ojh+0CqEDtpF"
-Return-path: <linux-gcc-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <412BB233.3020400@nec-labs.com>
+Content-Transfer-Encoding: 7BIT
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-reply-to: <412BA650.6050305@nec-labs.com>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
 To: Lei Yang <leiyang@nec-labs.com>
 Cc: linux-c-programming@vger.kernel.org, linux-gcc@vger.kernel.org
 
+As already said, not much to ay w/o the full source.
+However, you have allocated  a 4Kb buffer. possibly
+you are reading beyond that limit into some memory space
+not belonging to your program and when you try to free it,
+you get a segfault. A wild guess, but is possible since you say this is
+happening only for large files.
 
---UPT3ojh+0CqEDtpF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+regards,
+Joy.M.Monteiro
 
-On Tue, Aug 24, 2004 at 05:25:07PM -0400, Lei Yang wrote:
-> Do you mean that something 'free' needs has been destroyed?
+Lei Yang wrote:
 
-Free memory has is managed by the heap data structure. If you free an addre=
-ss
-twice or free an adress that was never allocated, the data structure will g=
-et
-corrupted. Often this does occur silently, but in a later state a malloc or
-free call with this corrupted data structure might crash your application.
-
-> Why this wouldn't happen with small files?
-
-I don't know your application and thus I am not even sure that this is the
-source of your problem. This was just a wild guess as it is a typical error=
- in
-such situations.
-
-Robert
-
---=20
-Robert Schiele			Tel.: +49-621-181-2517
-Dipl.-Wirtsch.informatiker	mailto:rschiele@uni-mannheim.de
-
---UPT3ojh+0CqEDtpF
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-
-iD8DBQFBK7gHxcDFxyGNGNcRAjVzAKDjvmqq24vftLG8AjM/ASH1PJY/zgCfQdIk
-u5sOrAnhPuAr1CTCj3upxWI=
-=Uan+
------END PGP SIGNATURE-----
-
---UPT3ojh+0CqEDtpF--
+> Hi friends,
+>
+> I am writing a c code and have been bugged by this segmentation fault 
+> for a while.
+>
+> What I did is simply like:
+>
+> ----------------------------------------------------------------------------------------------------- 
+>
+> .........
+> unsigned long blocksize = 2048;
+> char *in_buffer
+> char *out_buffer;
+> if(( in_buffer= malloc(blocksize)) == NULL)
+> {
+> fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
+> return NULL;
+> }
+>
+> if(( out_buffer= malloc(2*blocksize)) == NULL)
+> {
+> fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
+> free(in_buffer);
+> return NULL;
+> }
+>
+> loop: until all the data are read from file
+> {
+> //read a block of data from a file to in_buffer
+> // do some data processing with in_buffer
+> //write the result to out_buffer
+> //memcpy out_buffer to list
+> }
+>
+> free(in_buffer);
+> free(out_buffer);
+>
+> return list;
+> ......
+> ----------------------------------------------------------------------------------------------------------------- 
+>
+>
+> I've debugged with gdb to see where the segmentation fault happens, it 
+> is at free(in_buffer).
+> I've verified that the value for in_buffer after malloc() and before 
+> free() is the same. Or in other words, in_buffer is a valid pointer 
+> allocated by malloc.
+>
+> And the SF only happens when the file is large, although block size 
+> could be small.
+> Means that for both small (2KB) and large(5MB) files, block size are 
+> the same. However, only large files could cause SF.
+>
+> Could anyone please point me out what could possibly be the reason?
+> BTW, pls cc me when you reply, since I am not able to receive emails 
+> from this list. Thanks a lot!
+>
+> TIA!
+> Lei
+> -
+> To unsubscribe from this list: send the line "unsubscribe 
+> linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
