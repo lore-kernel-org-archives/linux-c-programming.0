@@ -1,61 +1,120 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Creating an NSS module
-Date: Tue, 29 Apr 2003 00:09:33 +0100
+From: Martin Buchan <M.J.Buchan@gre.ac.uk>
+Subject: Returning pointer to array of structures
+Date: Tue, 29 Apr 2003 09:31:22 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16045.46253.955065.525478@cerise.nosuchdomain.co.uk>
-References: <3EAD78F1.9050408@fi.uba.ar>
+Message-ID: <20030429083122.GA22282@gre.ac.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3EAD78F1.9050408@fi.uba.ar>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+
+Hi,
+
+I am trying to populate an array of structures with data read in from an
+xml file (using libxml2). I have a few methods which parse separate chunks
+of the xml file, populate the array, call the next method passing it
+whatever is in the array so far, and then returning the array back to the
+original caller.I am not getting any errors but the array is never
+populated when i return it to the calling function ( and most
+importantly main() ).
+
+Here is my struct and some of my code.
+  
+struct menuentry  
+{
+	char *appsection;
+	char *appsubmenu;
+};
+
+typedef struct menuentry menuentry;
+
+menuentry parseSubmenu (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr, int i)
+{
+	xmlChar *uri;
+	cur = cur->xmlChildrenNode;
+	printf("I: %d. SECOND SECTION: %s\n", i,  mePtr[i].appsection);
+	while (cur != NULL) 
+	  {
+		  if ((!xmlStrcmp(cur->name, (const xmlChar *)"submenu")))
+			 {
+				 uri = xmlGetProp(cur, "name");
+				 xmlFree(uri);
+				 mePtr[i].appsubmenu = uri;
+				 printf("  SUBMENU: %s\n", mePtr[i].appsubmenu);
+			 }
+		  cur = cur->next;
+	  }
+	return *mePtr;
+}
+
+menuentry parseSection (xmlDocPtr doc, xmlNodePtr cur, menuentry *mePtr)
+{
+	int i=0;
+	xmlChar *uri;
+	cur = cur->xmlChildrenNode;
+	while (cur != NULL) 
+	  {
+		  if ((!xmlStrcmp(cur->name, (const xmlChar *)"section")))
+			 {
+				   uri = xmlGetProp(cur, "name");
+				   mePtr[i].appsection = uri;
+				   xmlFree(uri);
+				   printf("SECTION: %s\n", mePtr[i].appsection); /*prints out correct */
+				   *mePtr = parseSubmenu(doc, cur, mePtr, i);
+				   printf("SECOND SUBMENU: %s\n", mePtr[i].appsubmenu); /* empty */
+				   i++;
+			 }
+		  cur = cur->next;
+	  }
+	return *mePtr;
+}
+
+menuentry parseDoc(char *docname, menuentry *mePtr)
+{
+	xmlDocPtr doc;
+	xmlNodePtr cur;
+	doc = xmlParseFile(docname);
+	
+	/* snipped all error checking code */
+	
+	cur = xmlDocGetRootElement(doc);
+	
+	while (cur != NULL) 
+	  {
+		  if ((!xmlStrcmp(cur->name, (const xmlChar *)"root")))
+			 {
+				 printf ("happened once\n");
+				 *mePtr = parseSection (doc, cur, mePtr);
+			 }
+		  cur = cur->next;
+	  }
+	xmlFreeDoc(doc);
+	return *mePtr;
+}
+
+int main(int argc, char **argv) 
+{
+	int n = countElements("menuconfig");
+	menuentry *mePtr = malloc( n * sizeof (*mePtr) ); /* Gets size of array */
+	printf ("number of apps: %d\n", n);
+	
+	*mePtr = parseDoc("menuconfig", mePtr); /* calls method to populate me */
+	printf("SECTION: %s\n", mePtr[0].appsection); /* Always empty */
+	return EXIT_SUCCESS;
+}
 
 
-Dar=EDo Mariani wrote:
+The printf statements in the methods print out the stuff i expect it
+to except for the one that prints out "SECOND SUBMENU:" and also
+the final printf statement in main() shows the array always being
+empty. This tells me i am not returning my pointer properly but i
+cant see what im doing wrong. Can anyone see what i am trying to do
+and/or where the error lies?
 
->   I'm creating an NSS module for the passwd and group databases. I=20
-> implemented the following functions:
+Thanks for any help.
 
-[snip]
+Martin
 
-> The libc functions getgrent(), getgrnam(), getgrgid() and the finger=20
-> command work, but the groups command doesn't and also the chgrp doesn=
-'t=20
-> work for an user other than root. Any ideas on what happens? Am I=20
-> missing some function?
-
-I suspect that the problem is that you haven't logged in using the new
-groups.
-
-The "id" command (used by the "groups" script) lists the supplementary
-GIDs of the current process. Similarly, the chgrp program uses the
-chown() system call to change a file's group; this insists that the
-new group is among the process' supplementary GIDs.
-
-The supplementary GID's are set upon login (usually via the
-initgroups() libc function), and are inherited by child processes. The
-initgroups() function uses the setgroups() system call to set the
-process' supplementary GIDs as defined in the groups database. The
-setgroups() system call requires root privilege, so ordinary programs
-can't use it.
-
-Changing the groups database (whether you change the data directly or,
-as in this case, change the mechanism by which it is obtained) will
-not affect the supplementary GIDs of any existing process. You will
-have to "log in" (whether via login, telnetd/sshd, xdm etc) in order
-for any changes in the groups database to take effect for
-authentication purposes.
-
-OTOH, programs which use the groups database directly (i.e. the
-getgr*() functions) will reflect any changes immediately.
-
---=20
-Glynn Clements <glynn.clements@virgin.net>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
