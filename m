@@ -1,187 +1,52 @@
-From: "John T. Williams" <jowillia@vt.edu>
-Subject: Nevermind, I'm stupid:  Memory Overright problem.
-Date: Wed, 02 Jun 2004 00:18:26 -0400
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: kmalloc
+Date: Wed, 2 Jun 2004 08:12:33 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1086149906.23026.2.camel@localhost>
-Reply-To: jtwilliams@vt.edu
+Message-ID: <20040602061233.GI20632@lug-owl.de>
+References: <8158840804060115534de05277@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="TMJUm4hsTn/F+xXF"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <8158840804060115534de05277@mail.gmail.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
-
-Anyone who wondering, for some reason (probably blind habit) I was using the 
-sizeof() function in my malloc call, when I shouldn't have been, consiquently i was
-makeing a bunch of arrays 4 bytes long
-
->>shakes head, hits self on forhead
+To: linux-c-programming@vger.kernel.org
 
 
-While trying to write a function to parse a http url, I ran accross a
-strange problem, which is that when I malloc some memory, suddenly some
-memory already allocated changes its contents.  I can't figure out where
-the problem is so I was hoping someone might point me at it.  
+--TMJUm4hsTn/F+xXF
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm including the code here, and as an attachment 
+On Wed, 2004-06-02 04:23:32 +0530, venkata ramana <uvramana@gmail.com>
+wrote in message <8158840804060115534de05277@mail.gmail.com>:
+> Will the kmalloc system call fail to allocate more than 131072 bytes
+> of memory? If so, Is there anyway to change this limit?
 
+Just handle it's return code properly.
 
-The problem line is pointed out with at 
+MfG, JBG
 
-***************here********************
-***************end here ***************
-and its affecting the memory pointed at by http_addr->abspath
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
+PA));
 
-#####################################################
-#include <string.h>
+--TMJUm4hsTn/F+xXF
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
-#ifndef NULL
-#define NULL (void*) 0
-#endif
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
 
+iD8DBQFAvW/RHb1edYOZ4bsRAjAOAJ9i6OgHzGj2xC8nDJdgTpex8GQtrACfQgJB
+3TPiaWRzG+xOtfGdyiQlLIo=
+=b55s
+-----END PGP SIGNATURE-----
 
-typedef struct _http {
-  char* query;	// query string
-  int  port;	// port number if other then 80
-  char* abspath;// absolute path of file on serve
-  char* host; 	// domain ex: www.something.com
-
-} http_url;
-
-int parsehttp( http_url*, char* );
-int initurl(http_url*);
-int cleanurl(http_url*);
-
-int
-initurl( http_url* url)
-{
-  if( !url ) return -1;
-  url->host = NULL;
-  url->query = NULL;
-  url->abspath = NULL;
-  url->port = 80;
-}
-
-int cleanurl(http_url* url) {
-  if( !url ) return -1;
-  if(url->host) {
-    free(url->host);
-    url->host = NULL;
-  }
-  if(url->query) {
-    free(url->query);
-    url->query = NULL;
-  }
-  if(url->abspath) {
-    free(url->abspath);
-    url->abspath = NULL;
-  }
-  url->port = 80;
-}
-
-int
-parsehttp( http_url* http_addr, char* urlstr )
-{
-  char* host_ptr;
-  char* abspath_ptr;
-  char* port_ptr;
-  char* query_ptr;
-
-  int host_len,
-    abspath_len,
-    port_len,
-    query_len,
-    total_len;
-
-
-  //check for null parameters:
-  if( !http_addr || !urlstr ) {
-    perror("error called parsehttp with NULL\n");
-    return -1;
-  }
-
-  //check for http:// head
-  if( strncmp(urlstr, "http://", 7) ) {
-    perror("url not propperly formatted: %s\n", urlstr);
-    return -2;
-  }
-
-  // find the starting point for each string
-  // if there indicating character is missing *ptr == NULL;
-  port_ptr = abspath_ptr = query_ptr = host_ptr = &urlstr[7];
-  while(port_ptr && *port_ptr != ':') port_ptr++; //search for ':'
-indicating
-  //					      		a port in this url
-  while(abspath_ptr && *abspath_ptr != '/') abspath_ptr++;
-  //					     	search for a '/' indicating
-  //						a absolute path listed
-  while(query_ptr && *query_ptr != '?') query_ptr++;
-  //						search for a '?' indicating
-  //						a query is listed
-
-  // Parse out the query if any and record its length
-  if(*query_ptr) {
-    query_len = strlen(query_ptr);
-    http_addr->query = (char*) malloc( sizeof( query_len + 128 ) );
-    strncpy(http_addr->query, &query_ptr[1], query_len - 1 );
-    http_addr->query[query_len - 1] = '\0';
-  } else query_len = 0;
-
-  // Parse out the abspath if any and record its length
-  if(*abspath_ptr) {
-    abspath_len = strlen(abspath_ptr) - query_len;
-    http_addr->abspath = (char*) malloc( sizeof( abspath_len + 128 ) );
-    strncpy(http_addr->abspath, abspath_ptr, abspath_len);
-    http_addr->abspath[abspath_len] = '\0';
-  } else abspath_len = 0;
-
-  // Parse out the port number if any
-  if(*port_ptr) {  // if a port was found
-    port_len = strlen( port_ptr) - abspath_len - query_len;
-    port_ptr++; //move past ':'
-    http_addr->port = atoi(port_ptr);
-  } else port_len = 0;
-  printf("port length: %i\n", port_len);
-
-  // Parse out the host str if any
-  if(*host_ptr) {
-    host_len = strlen(host_ptr) - port_len - abspath_len - query_len;
-
-/***************here********************/
-    http_addr->host = (char*) malloc( sizeof( host_len + 128 ) );
-/***************end here ***************/
-
-    strncpy(http_addr->host, host_ptr, host_len );
-    http_addr->host[host_len] = '\0';
-  }
-
-
-  return 0;
-}
-
-
-int
-main(int argC, char** argV, char** envp)
-{
-  http_url  url;
-
-  initurl( &url );
-  parsehttp( &url,
-"http://www.vt.edu:23/users/jowillia/index.html?t=12");
-
-
-  printf("http://");
-  //  if(url.host) printf("%s", url.host);
-  if(url.port != 80) printf(":%i", url.port);
-  if(url.abspath) printf("%s", url.abspath);
-  if(url.query) printf("?%s", url.query);
-  printf("\n");
-
-  cleanurl( &url );
-
-
-  return 0;
-}
-
-
-
+--TMJUm4hsTn/F+xXF--
