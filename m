@@ -1,74 +1,62 @@
-From: "Sandro Dangui" <sdangui@nortelnetworks.com>
-Subject: RE: constant variable
-Date: Thu, 11 Mar 2004 10:28:16 -0300
+From: "Steven Smith" <sos22@cam.ac.uk>
+Subject: Re: constant variable
+Date: Thu, 11 Mar 2004 13:42:15 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <31E38B53D182D51195FA00508BE3A334036058A1@zwnbc004.cala.nortel.com>
+Message-ID: <20040311134215.GA4714@archibold.chu.cam.ac.uk>
+References: <200403111819.00752.nasir@orbisindonesia.com>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Q68bSM7Ycu6FN28Q"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <200403111819.00752.nasir@orbisindonesia.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: nasir@orbisindonesia.com, linux-c-programming@vger.kernel.org
+To: Nasir Simbolon <nasir@orbisindonesia.com>
+Cc: linux-c-programming@vger.kernel.org
 
 
-If you look at the generated assembly you will notice that the compiler uses
-(in the call printf("value of i = %d\n",i);) the value 9 instead of the
-contents of i. I mean, the assembly pushes directly the value 9 to the
-stack... It assumes that if you declared a constant it will not be changed.
+--Q68bSM7Ycu6FN28Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[]'s
+>  	const int i=3D9;
+>      	int* j=3DNULL;
+> 	 j =3D (int*) &i;
+>  	*j =3D 3;
 
-Sandro.
+> when I compile using gcc version 3.3.2 (Debian) and run, I have the resul=
+t :
+>=20
+> value of i =3D 9
+> value of *j =3D 3
+>=20
+> Now, I notice  that j point to address of i BUT they do not  have the sam=
+e=20
+> value.
 
+Probably because of compiler optimisations.  If you've specified that
+something is const, then the compiler is perfectly at liberty to
+assume that it is.  This means that it can assume the initial value of
+i still applies, and so, rather than going to memory for i, it can
+just substitute the constant 9 in.  This is likely to be much quicker
+at run time.
 
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Nasir
-Simbolon
-Sent: Thursday, March 11, 2004 8:19 AM
-To: linux-c-programming@vger.kernel.org
-Subject: constant variable
+I can only reproduce this behaviour if I have compiler optimisations
+turned on, which adds some more weight to the explanation.
 
+Steven.
 
-Hi All, 
-I just curious. I have the following codes
+--Q68bSM7Ycu6FN28Q
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-main()
-{
- 	const int i=9;          //declare constant  integer variable and
-initialize
-       	int* j=NULL;   		     //declare a pointer to integer
-	 j = (int*) &i;         //j point to address of memory i 
- 	*j = 3;		     //modify value  of  j point to 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (FreeBSD)
 
-	//Now print the result
-	 printf("value of i = %d\n",i);
-  	 printf("value of j = %d\n",*j);
-	 printf("Address of i = %x\n",&i);
- 	 printf("Address of j = %x\n",j);
-}
-when I compile using gcc version 3.3.2 (Debian) and run, I have the result :
+iD8DBQFAUGy3O4S8/gLNrjcRAlM9AJ49tNMj77UGWyY1sZxTxUjAPcaJ9QCfWUcB
+0UH8NsVi4Qwb+x9Kb8oIvGU=
+=wub/
+-----END PGP SIGNATURE-----
 
-value of i = 9
-value of *j = 3
-Address of i = bffff8a4
-Address of j = bffff8a4
-
-Now, I notice  that j point to address of i BUT they do not  have the same 
-value.
-
-Anybody have an explanation?
-
-
-Regards,
-
-Nasir 
-
-
--- 
-"timor Domini principium scientia (Prov 1:7)"
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+--Q68bSM7Ycu6FN28Q--
