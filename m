@@ -1,53 +1,70 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: sequence of steps that goes from compilation to execution
-Date: Mon, 23 Aug 2004 11:50:45 -0400
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E3E30069B061524E90BCEE4417E3066113851F@monm207.monmouth.army.mil>
+From: Lei Yang <leiyang@nec-labs.com>
+Subject: Segmentation fault from free()
+Date: Tue, 24 Aug 2004 16:34:24 -0400
+Sender: linux-gcc-owner@vger.kernel.org
+Message-ID: <412BA650.6050305@nec-labs.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: 'Sudheer Vutukuru' <sudheer.vutukuru@gmail.com>, linux-c-programming@vger.kernel.org
+Return-path: <linux-gcc-owner@vger.kernel.org>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org, linux-gcc@vger.kernel.org
+Cc: Lei Yang <leiyang@nec-labs.com>
 
->    Why a program which is compiled on linux does not execute on windows.. 
->(though the machine architecture is same)..
+Hi friends,
 
-Different file formats.  Windows uses PE (portable executable) as its file
-format with the first two bytes being `MZ' (or possibly `ZM') that 
-designates it as a windows executable.  Linux uses ELF (executible linkable 
-format) as its file format with the second, third and fourth bytes of the 
-file being `ELF'.
+I am writing a c code and have been bugged by this segmentation fault 
+for a while.
 
-> Also   Can u please suggest me references or help me in knowing the
->details of what goes on, from compilation to execution (i.e how
->loading,linking libraries is done.. how addresses
->are known dynamically etc.. ).
+What I did is simply like:
 
-One of the best (only?) books on the subject "Linkers and Loaders" by John 
-Levine.  It covers various file formats (from simple (i.e. DOS) up through
-complex (PE and ELF)) and uses these formats to address all of the questions
-that you ask.  In addition, the book is availble from the authors website:
+-----------------------------------------------------------------------------------------------------
+.........
+unsigned long blocksize = 2048;
+char *in_buffer
+char *out_buffer;
+if(( in_buffer= malloc(blocksize)) == NULL)
+{
+fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
+return NULL;
+}
 
-http://www.iecc.com/linker/
+if(( out_buffer= malloc(2*blocksize)) == NULL)
+{
+fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
+free(in_buffer);
+return NULL;
+}
 
-as well as in printed format.
+loop: until all the data are read from file
+{
+//read a block of data from a file to in_buffer
+// do some data processing with in_buffer
+//write the result to out_buffer
+//memcpy out_buffer to list
+}
 
-> for string literals whether memory is allocated in heap or in code
->segment only..
->i.e char* ptr = "Hello World";
->  the ptr points into code segement or heap..
+free(in_buffer);
+free(out_buffer);
 
-In this case, I beleive that the C standard specifies that the string
-literal 
-will be a constant, and as such space will be reserved in a read-only
-section 
-of memory.  This is why a statement such as:
+return list;
+......
+-----------------------------------------------------------------------------------------------------------------
 
-ptr[5]='i';
+I've debugged with gdb to see where the segmentation fault happens, it 
+is at free(in_buffer).
+I've verified that the value for in_buffer after malloc() and before 
+free() is the same. Or in other words, in_buffer is a valid pointer 
+allocated by malloc.
 
-will fail.  Note however, that some compiles do not enforce this while
-others
-have flags that make string literals mutable.
+And the SF only happens when the file is large, although block size 
+could be small.
+Means that for both small (2KB) and large(5MB) files, block size are the 
+same. However, only large files could cause SF.
 
-George 
+Could anyone please point me out what could possibly be the reason?
+BTW, pls cc me when you reply, since I am not able to receive emails 
+from this list. Thanks a lot!
+
+TIA!
+Lei
