@@ -1,33 +1,49 @@
-From: rinku rathore <rinku_ques@yahoo.com>
-Subject: corrected:what is fcntl function
-Date: Mon, 4 Oct 2004 01:38:39 -0700 (PDT)
+From: p.boehm@d-trust.net
+Subject: different access to structs
+Date: Mon, 4 Oct 2004 12:15:59 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041004083839.61843.qmail@web53008.mail.yahoo.com>
+Message-ID: <OF3FF607B8.2DEFEA3E-ONC1256F23.0035E913@bln.d-trust.de>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Vger Kernel <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Hello,
-Actually,I wanted specifically about the following
-fcntl functions,listed below,here fd is file
-descriptor
+Hi,
+in last time I played a little bit with structures. There are two types of access to it and I want
+to know where are the differences.
+Or better: when it makes sense to use type one and when type two ?
 
-fcntl (fd, F_SETOWN, getpid());
+struct xy {
+     int id;
+     char *name;
+};
 
-fcntl (fd, F_SETFL,fcntl (fd, F_GETFL, NULL) |
-O_ASYNC));
+struct abc {
+     int id;
+     char *name;
+     struct xy st_name;            /* <-- type 1 ( ...via name(=address) ) */
+     struct xy *st_ptr;            /* <-- type 2 ( ...via pointer(=address) ) */
+};
 
-Rinku
+void init_abc(struct abc *pt) {          /* pt points to ptr ... */
+     pt->id=0;
+     pt->name="test";
 
+     pt->st_name.id=0;             /* <-- type 1 (access via name of variable) */
+     pt->st_name.name="test";
 
-		
+     pt->st_ptr->id=0;             /* <-- type 2 (access via pointer) */
+     pt->st_ptr->name="test";
+}
 
+void main(void) {
+     struct abc ptr;               /* name of struct = ptr */
 
-		
-__________________________________
-Do you Yahoo!?
-Yahoo! Mail is new and improved - Check it out!
-http://promotions.yahoo.com/new_mail
+     init_abc(&ptr);               /* call init_abc(<address of ptr>) */
+}
+
+thanks in advance!
+pb
+
