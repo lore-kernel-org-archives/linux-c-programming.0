@@ -1,35 +1,72 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: #include problem
-Date: Fri, 15 Oct 2004 12:55:04 -0400
+From: Eric Bambach <eric@cisu.net>
+Subject: Re: #include problem
+Date: Fri, 15 Oct 2004 12:04:17 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E3E30069B061524E90BCEE4417E30661138543@monm207.monmouth.army.mil>
+Message-ID: <200410151204.17172.eric@cisu.net>
+References: <200410151648.i9FGmlqM026477@students.fct.unl.pt>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <200410151648.i9FGmlqM026477@students.fct.unl.pt>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: C-16  <pmr17184@students.fct.unl.pt>
+Cc: linux-c-programming@vger.kernel.org
 
+On Friday 15 October 2004 11:48 am, C-16 wrote:
+> Howdy,
+> i have a file main.c in my program that needs to include four headers
+> aaa.h , bbb.h ,ccc.h and ddd.h . Each one of these headers need to
+> include another header xxx.h . With this implementation i get a
+> "redefinition" compilation error. How can i solve this problem ? Thanks
+> in advance.
+> -
+> To unsubscribe from this list: send the line "unsubscribe
+> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
->Howdy,
->i have a file main.c in my program that needs to include four headers
->aaa.h , bbb.h ,ccc.h and ddd.h . Each one of these headers need to
->include another header xxx.h . With this implementation i get a
->"redefinition" compilation error. How can i solve this problem ? Thanks
->in advance.
+You want to use whats called header guards.
 
-each header file should have the form:
+-----------------aaa.h----------
 
-#ifndef <some symbol>
-#define <some symbol>
+#ifndef AAA_H
+#define AAA_H
 
-... rest of header file code
+#include "xxx.h"
+
+...some code
 
 #endif
+----------------end aaa.h---------
+----------------xxx.h--------------
 
-where <some symbol> is a unique name across your project.  I tend to use
-the form: _<filename>_h_.  The way this works is that the first time the
-header is included the symbol is not defined so the header is processed, on 
-subsequent inclusions the symbol is defined ad the header is not processed.
+#ifndef XXX_H
+#define XXX_H
 
-George
+.....some code
+
+#endif
+----------------end xxx.h----------
+
+Notice that the endif must be the very last line of the file or you defeat the 
+whole purpose of header guards. Others may or may not actually call them 
+header guards, but thats the phrase I was taught. Its good practice to 
+*always* use these in your header files. It solves many simple double 
+inclusion and inclusion loop problems.
+
+----------------------------------------
+EB
+
+> All is fine except that I can reliably "oops" it simply by trying to read
+> from /proc/apm (e.g. cat /proc/apm).
+> oops output and ksymoops-2.3.4 output is attached.
+> Is there anything else I can contribute?
+
+The latitude and longtitude of the bios writers current position, and
+a ballistic missile.
+
+		--Alan Cox 2000-12-08 
+
+----------------------------------------
