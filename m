@@ -1,68 +1,55 @@
 From: "Joseph D. Wagner" <wagnerjd@prodigy.net>
-Subject: IntToChar Template Function with Corrections
-Date: Sun, 29 Dec 2002 23:14:16 -0600
+Subject: IntToChar now NumberToString
+Date: Mon, 30 Dec 2002 18:10:36 -0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000601c2afc2$4df0ad10$c80a3941@joe>
+Message-ID: <001201c2b061$0c46ad70$0d75d73f@joe>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0007_01C2AF90.03563D10"
+	boundary="----=_NextPart_000_0013_01C2B02E.C1AC3D70"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
-Cc: redhat-devel-list@redhat.com
+Cc: redhat-devel-list@redhat.com, kb9mnx@fourway.net
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_0007_01C2AF90.03563D10
+------=_NextPart_000_0013_01C2B02E.C1AC3D70
 Content-Type: text/plain;
 	charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-I've corrected a few quirks and bugs in my original file.
+Special thanks to J. Apple Muncy [kb9mnx@fourway.net] I was able to =
+reduce
+my original code from 60 lines to 3 lines.  (Oh, my original code was
+pathetic, wasn't it?)
 
-Just to remind you in case you forgot:
+This new and improved template function will convert any number of any =
+kind
+(signed, unsigned, int, double, short, long, float, etc.) to its string
+equivalent.
 
-I created a template function that will convert an integer of any form
-(unsigned/signed, short/long) to its char array equivalent.
+For example:
 
-For example,
+int myInt =3D 923746;
 
-int myInt =3D 768;
+becomes
 
-is converted into
-
-char myChar[] =3D {"768"};
+string myString("923746");
 
 This isn't exactly how it works but I wrote that little bit just to =
 complete
 your mental picture.
 
-You pass to the function IntToChar an integer of any type and it will =
-return
-a pointer to a char array.
+Joseph Wagner
 
-For example:
-
-const char *myChar =3D IntToChar(myInt);
-
-I tested it, and it works.  It's fully operational, but I'm sure =
-somebody
-out there will find quirks that can be tweaked.
-
-Any such comments would be appreciated!
-
-TIA
-
-Joseph Wagner=20
-
-------=_NextPart_000_0007_01C2AF90.03563D10
+------=_NextPart_000_0013_01C2B02E.C1AC3D70
 Content-Type: text/plain;
-	name="IntToChar.hpp"
+	name="NumberToString.hpp"
 Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
-	filename="IntToChar.hpp"
+	filename="NumberToString.hpp"
 
-// Template Function: IntToChar
+// Template Function: NumberToString
 
 // Copyright =A9 2002 Joseph Wagner.  All rights reserved.
 // Email: wagnerjd@users.sourceforge.net
@@ -84,69 +71,20 @@ USA
 
 #pragma once
 
-// Allows Ports to Non-Windows
-#if !defined(_WIN32) && !defined(_WIN64)
-	typedef long long int __int64;
-#endif
+#include <sstream>
+using std::ostringstream;
 
-#include <bitset>
-using std::bitset;
-#include <typeinfo>
-#include <cstring>
-#include <cmath>
+template<typename NumberType>
+const string NumberToString(const NumberType number) {
+	// Declares variable used as a medium in conversion
+	ostringstream numberStream;
 
-template<typename IntegerType>
-const char *IntToChar(IntegerType number) {
-	// Supports 64-bit integers
-	const bitset<64> number64 =3D number;
-	char dataType[64] =3D {0};
-	static char character64[22] =3D {0};	// 64-bit numbers never have more =
-than 20 digits
-	unsigned short pointer =3D 0;
-	unsigned short digitHolder =3D 0;
-	const unsigned short AsciiOffset =3D 48;
-   =20
-	// Determines size in bits
-    const unsigned short sizeInBits =3D sizeof(IntegerType) * 8;
-	const unsigned short lastBit =3D sizeInBits - 1;
+	// Converts number into output string stream
+	numberStream << number;
 
-	// Obtains type information
-	strncpy(dataType, typeid(IntegerType).name(), 64);
-
-	// Determines if signed or unsigned
-	bool isUnsigned =3D false;
-	char *tokenDataType =3D strtok(dataType, " ");
-	while(tokenDataType !=3D NULL) {
-		if(strcmp(tokenDataType, "unsigned")) {
-			isUnsigned =3D true;
-		}
-		tokenDataType =3D strtok(NULL, " ");
-	}
-
-	// Deals with sign
-	if(!isUnsigned && number64[lastBit] =3D=3D 1) {
-        character64[pointer] =3D '-';
-        pointer++;
-	}
-
-    // Converts individual digits to characters
-	for(unsigned __int64 divisor =3D 10000000000000000000; divisor >=3D 1; =
-divisor /=3D 10) {
-		if(divisor <=3D number) {
-			digitHolder =3D static_cast<unsigned short>(floor(number / =
-static_cast<double>(divisor)));
-			character64[pointer] =3D static_cast<char>(digitHolder + =
-AsciiOffset);
-			number -=3D static_cast<IntegerType>(digitHolder * divisor);
-			pointer++;
-		}
-	}
-
-	// Finishes up with terminating null character
-	character64[pointer] =3D '\0';
-
-	return character64;
+	// Converts output string stream to string, and returns a copy
+	return numberStream.str();
 }
 
-------=_NextPart_000_0007_01C2AF90.03563D10--
+------=_NextPart_000_0013_01C2B02E.C1AC3D70--
 
