@@ -1,61 +1,35 @@
 From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: re: memory problem
-Date: Mon, 13 Sep 2004 19:51:20 +0800
+Subject: Re: connecting to a hoast
+Date: Mon, 13 Sep 2004 16:03:54 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <414589B8.6040805@hq.ntsp.nec.co.jp>
-References: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
+Message-ID: <4145546A.6030509@hq.ntsp.nec.co.jp>
+References: <Pine.LNX.4.61.0409121703550.2066@debian>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
+In-Reply-To: <Pine.LNX.4.61.0409121703550.2066@debian>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Ankit Jain <ankitjain1580@yahoo.com>, linux prg <linux-c-programming@vger.kernel.org>, gcc-help@gcc.gnu.org
+To: Ameer Armaly <ameer@charter.net>
+Cc: linux-c-programming@vger.kernel.org
 
-what method did u use to allocate memory??
+you can try reading the "beej guide" at 
+www.ecst.csuchico.edu/~beej/guide/net
+it covers some of the basics of C sockets programming
+=)
 
-static:
- char array[1024*1024] ;
+Ameer Armaly wrote:
 
-dynamic
- char *array = (char*)calloc(  1024*1024, sizeof(char) );
-
-and why r u allocating such huge chunks for an array?
-
-
-
-Ankit Jain wrote:
-
->hi
+> Hi all.
+> I was wondering, where is a step by step instructions to connect to a 
+> hoast?
+> The documentation seems very cryptic, and doesn't give directions.
 >
->well i am fixed up in a new problem
+> -
+> To unsubscribe from this list: send the line "unsubscribe 
+> linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 >
->i am using a array of size 1024*1024
->
->it gives segmentation fault
->
->it works with 512*512
->
->my menory size is 128 mb and 512 swap
->
->i have enough memory space and using gcc 3.2 v
->
->may be i need to increase the memory size
->
->how to do that?
->
->ankit
->
->________________________________________________________________________
->Yahoo! Messenger - Communicate instantly..."Ping" 
->your friends today! Download Messenger Now 
->http://uk.messenger.yahoo.com/download/index.html
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
 >
 
