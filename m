@@ -1,38 +1,33 @@
-From: wwp <subscript@free.fr>
-Subject: Re: error programming
-Date: Thu, 13 Jan 2005 20:57:42 +0100
-Message-ID: <20050113205742.0a1610ce@tethys.mollux.org>
-References: <20050113_192122_098065.r_zaca@ig.com.br>
+From: r_zaca <r_zaca@ig.com.br>
+Subject: error programming
+Date: Thu, 13 Jan 2005 17:21:22 -0200
+Message-ID: <20050113_192122_098065.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1105644082"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050113_192122_098065.r_zaca@ig.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hello r_zaca,
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
+--Message-Boundary-by-Mail-Sender-1105644082
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
 
-On Thu, 13 Jan 2005 17:21:22 -0200 r_zaca <r_zaca@ig.com.br> wrote:
+  Hi all, 
 
->   Hi all, 
-> 
->   Can anybody sugest me a good documentation about how all the functions 
-> related to "error treatment" on linux work? 
->   I know there is a "variable" called errno that is set when a error about 
-> something happens and that I can read this value through perror, (at least I 
-> think it works that way) but how it really works I have no idea. So any tip 
-> on this subject will be nice. 
+  Can anybody sugest me a good documentation about how all the functions 
+related to "error treatment" on linux work? 
+  I know there is a "variable" called errno that is set when a error about 
+something happens and that I can read this value through perror, (at least I 
+think it works that way) but how it really works I have no idea. So any tip 
+on this subject will be nice. 
+  Thanks again. 
 
-Ever asked to man?
-$ man errno
+--Message-Boundary-by-Mail-Sender-1105644082--
 
-My 2ct.
-
-
-Regards,
-
--- 
-wwp
