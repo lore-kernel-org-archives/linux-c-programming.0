@@ -1,41 +1,49 @@
-From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Subject: Re: usage of WIN_SMART
-Date: Thu, 25 Nov 2004 09:57:03 +0530
-Message-ID: <1101356823.3795.9.camel@myLinux>
-References: <1101293397.3787.34.camel@myLinux>
-	 <20041124121036.GQ2067@lug-owl.de>
+From: Vadiraj <vadiraj.cs@gmail.com>
+Subject: Re: deletion in singly linked list--pls resend replies
+Date: Thu, 25 Nov 2004 12:42:35 +0530
+Message-ID: <6eee1c40411242312610a6734@mail.gmail.com>
+References: <5959EA4638D8734599AB75EAAFBB6FEFA471DD@mtv01ex04.mindtree.com>
+	 <1101203754.3786.54.camel@myLinux> <1101268688.3786.50.camel@myLinux>
+Reply-To: Vadiraj <vadiraj.cs@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041124121036.GQ2067@lug-owl.de>
+In-Reply-To: <1101268688.3786.50.camel@myLinux>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-I meant how to use WIN_SMART in the code? Not its uses or advantages!!
+On Wed, 24 Nov 2004 09:28:08 +0530, Jagadeesh Bhaskar P
+<jbhaskar@hclinsys.com> wrote:
+> On Tue, 2004-11-23 at 15:05, Bakki Srinivas wrote:
+> > Until and unless u free the memory obtained by malloc,the address space is
+> > still in the process address space.
 
-Can someone help me with that??
+ I guess the address space is still in our process address space with
+in the free pool.
+Further request to malloc() with <= freed size is picked up from the
+free pool rather from the system...
 
-On Wed, 2004-11-24 at 17:40, Jan-Benedict Glaw wrote:
-> On Wed, 2004-11-24 16:19:57 +0530, Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-> wrote in message <1101293397.3787.34.camel@myLinux>:
-> > Can someone help me with an explanation for the usage of WIN_SMART
-> > directive declared in hdreg.h in ioctl() function?
+ Please, correct me if I'm wrong
+
 > 
-> Just look at some users of WIN_SMART. Found these with Google:
+> Even if i do free it, where will the address A->next point to. Since it
+> is not inside the process address space, wont that segfault??
+ 
+> NB: My mail server was down yesterday :-(. If anyone of u had sent any
+> replies, pls do resend it.
 > 
-> Function ataReadSmartValues() in
-> http://cvs.sourceforge.net/viewcvs.py/smartmontools/sm5/atacmds.c?rev=1.2
+> --
+> Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
 > 
-> Function smart_read_values() in
-> http://www.linux-ide.org/smart/ide-smart.c
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 > 
-> There are other examples, too.  Of course, you can only use code out of
-> these if your software is going to be available under GNU GPL ...
-> 
-> MfG, JBG
+
+
 -- 
-Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-
+cheers,
+Vadi
