@@ -1,61 +1,46 @@
-From: "John T. Williams" <jtwilliams@vt.edu>
-Subject: mid file deletion
-Date: Wed, 2 Jul 2003 16:45:42 -0700
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: quotactl
+Date: Wed, 2 Jul 2003 22:45:09 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000701c340f4$225660f0$ed64a8c0@descartes>
-References: <Pine.LNX.4.44.0307021454080.20193-100000@gpu.utcc>
+Message-ID: <16131.21093.151750.179494@cerise.nosuchdomain.co.uk>
+References: <Pine.LNX.4.44.0307021401270.20193-100000@gpu.utcc>
+	<3F03225D.30601@fi.uba.ar>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <3F03225D.30601@fi.uba.ar>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
 To: linux-c-programming@vger.kernel.org
+Cc: Francis Lau <fkwlau@utcc.utoronto.ca>, =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
 
 
+Dar=EDo Mariani wrote:
 
+>    If you did not recompile the kernel, it has quota support. Has the=
+ FS=20
+> you are quering been mounted with the usrquota option?
 
+The mount(8) manpage says (in regard of ext2):
 
-What is the best way to remove data from the middle of a file. Here is =
-the
-Scenario: I have a file that is 20MB in size, about =BC th way through =
-it is a
-1 line I want to remove. I can use lseek to bring me to the beginning o=
-f the
-section I want to remove, and then lseek again to bring me to the end o=
-f
-that section. The only thing I can think to do is load everything from =
-the
-file after the point I want to delete into memory, remove the part I do=
-n't
-want from what is stored in memory (or simply don't load it), truncate =
-the
-file at the point where the part I wanted to delete began, and re-write=
- the
-rest of the file. The alternative (since 20MB is rather big for loading=
- into
-memory on a multi-User multi-Media machine) is to load the bits I want =
-to
-keep into a temporary file, rather into memory. However, I was thinking=
- that
-for removing 20bytes of information, reading and writing 15MB to 30MB i=
-s a
-lot of work. Is there a better way?
+       grpquota / noquota / quota / usrquota
+              These options are accepted but ignored.
 
+Examination of the kernel source code (fs/ext2/super.c) confirms this:
 
+		/* Silently ignore the quota options */
+		else if (!strcmp (this_char, "grpquota")
+		         || !strcmp (this_char, "noquota")
+		         || !strcmp (this_char, "quota")
+		         || !strcmp (this_char, "usrquota"))
+			/* Don't do anything ;-) */ ;
 
+Also, if quota support is disabled (i.e. "!defined(CONFIG_QUOTA)"),
+quotactl() will fail with ENOSYS rather than EINVAL (at least in
+2.4.x).
 
-To give this more of a real world perspective. I'm downloading e-mails =
-into
-a mbox file and I'm trying to figure out how to delete 1 email from a m=
-box
-file that could potentially store 1,000's of e-mails an any given time.
-
-
-
-
-
-
-
+--=20
+Glynn Clements <glynn.clements@virgin.net>
 -
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
