@@ -1,76 +1,32 @@
-From: simon <simon.guinot@laposte.net>
-Subject: Re: open() and read() a file from sysfs
-Date: Tue, 01 Mar 2005 02:17:54 +0100
-Message-ID: <4223C2C2.9070101@laposte.net>
-References: <2ab8d39a050228061825dda7fe@mail.gmail.com>
+From: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
+Subject: Check if a process exists?
+Date: Tue, 1 Mar 2005 02:17:04 -0600
+Message-ID: <7728232c050301001710a2787@mail.gmail.com>
+Reply-To: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <2ab8d39a050228061825dda7fe@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: krzaq <krzakers@gmail.com>, linux-C-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-hello
+Hi,
 
-krzaq wrote:
-> Hi all!
-> 
-> I have a basic question with file opening.
-> I would like to make use of the data accessed from i2c sensors through sysfs.
-> 
-> Here's the code:
-> 
-> fd = open(/sys/bus/i2c/.../temp2_input,O_RDONLY);
-> 
-> while(1) {
->   char[64] buf;
->   read(fd,buf,siezof(buf));
->   ...
->   do_something
->   ...
->   sleep(5);
-> }
-> 
-> The thing is I always get the same reading in each read() :(.
-> When I do:
-> # cat /sys/bus/i2c.../temp2_input
-> I see that the temperature is changing, but my code still displays the
-> same reading.
-ok... i suggest you to read the return value of read...
-in your code, you can't see if an error append...
-reinit your buffer with memset can be a good idea...
-in your programm, we can imagine a first correct read, a second who 
-return an error... you don't detect it... and you read an unchanged 
-buffer...
-ok that's not your only problem...
+Can a process check if a given PID exists or not? In other words can a
+process check if an unrelated process is alive? Is there any system
+call that does this?
 
-try something like that :
+I can think of a (few) work arounds to this:
 
-char buf[SIZE];
-int fd;
+1. open("/proc/pid_in_question") will return true if the process with
+pid = pid_in_question is alive.
 
-if ((fd = open(/sys/bus/i2c/.../temp2_input,O_RDONLY)) == -1)
-{
-	perror ("open ()");
-	return (-1);
-}
-while (1)
-{
-	memset (buf, 0, SIZE);
-	if (read (fd, buf, SIZE) != SIZE)
-	{
-		fprintf (stderr, "bad read size... bla bla\n");
-		return (-1);
-	}
-	...
-	do what you want
-	...
-	lseek (buf, 0, SEEK_SET);
-}
+2. lock a file called ``pid_in_question". Test the lock from the other
+process.  If the process is dead then there is no lock on the file
+``pid_in_question".
 
-lseek is possible as files in /sys are specials... open, read and write 
-methods are directly handle by drivers...
-don't expect to do that with classic files
+Any ideas/comments?
 
-simon
+Thanks,
+
+Hareesh
