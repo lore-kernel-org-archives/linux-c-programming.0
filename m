@@ -1,26 +1,16 @@
-From: "Singh, Umesh K (MED)" <Umesh.Singh@geind.ge.com>
-Subject: RE: error in system call
-Date: Fri, 14 Jun 2002 10:37:41 +0530
+From: "Earl R. Lapus" <elapus@ntsp.nec.co.jp>
+Subject: error in system call
+Date: Fri, 14 Jun 2002 13:51:23 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1C82B8CC4567D51197A600508B62C130065BD0DB@ban04xbindge.geind.ge.com>
+Message-ID: <LFEIJFMKHCJIHBFOGINPGELPCBAA.elapus@ntsp.nec.co.jp>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
-Cc: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+To: linux-c-prog <linux-c-programming@vger.kernel.org>
 
-simply depends upon the requirement.
--us
-
------Original Message-----
-From: Mohammed Khalid Ansari [mailto:khalid@ncst.ernet.in]
-Sent: Friday, June 14, 2002 10:37 AM
-To: linux c programming mailing list
-Subject: error in system call
-
-
+Mohammed Khalid Ansari wrote:
 
 Hi,
 
@@ -51,35 +41,21 @@ in this case it will keep on trying to fork till it succeeds. Is that a
 true piece of code?
 
 regards...
+======================================================
 
--- 
+::I think:: there is a limit to the number 
+of child processes for each process.
+if this limit is reached then the fork() call
+would return an error. Therefore the code:
 
-**************************************************************************
+while ( (pid = fork()) < 0 );
 
-Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
-Assistant Manager II                          (off) : 0091-022-2024641
-National Centre for Software Technology   Fax       : 0091-022-2049573 
-8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in
+would result to an infinite loop if 
+such limit is reached.
 
-Mumbai 400021.
+>>I COULD BE WRONG WITH THIS<<
 
-Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
-
-**************************************************************************
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-"THIS E-MAIL MESSAGE ALONG WITH ANY ATTACHMENTS IS INTENDED ONLY FOR THE
-ADDRESSEE and may contain confidential and privileged information.
-If the reader of this message is not the intended recipient,
-you are notified that any dissemination, distribution or copy of this 
-communication is strictly Prohibited. 
-If you have received this message by error, please notify us 
-immediately, return the original mail to the sender and delete the 
-message from your system."
-
+=========================
+ ...what i want and what i need
+ IS and WILL always be FREE...
+=========================
