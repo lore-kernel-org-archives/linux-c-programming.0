@@ -1,65 +1,62 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Micha Feigin <michf@post.tau.ac.il>
 Subject: Re: dereferencing pointer to incomplete type
-Date: Wed, 16 Jun 2004 22:04:17 +0100
+Date: Thu, 17 Jun 2004 01:01:59 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16592.46545.902693.855705@cerise.nosuchdomain.co.uk>
+Message-ID: <20040616220159.GB16146@luna.mooo.com>
 References: <016001c453dc$08d6ec70$d3113b80@yoursgz3xpngo4>
-	<20040616201413.GG6157@opaque>
-	<01b501c453de$74bb17c0$d3113b80@yoursgz3xpngo4>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <01b501c453de$74bb17c0$d3113b80@yoursgz3xpngo4>
+Content-Disposition: inline
+In-Reply-To: <016001c453dc$08d6ec70$d3113b80@yoursgz3xpngo4>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Anshuman S. Rawat" <asr@cs.columbia.edu>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+On Wed, Jun 16, 2004 at 03:56:37PM -0400, Anshuman S. Rawat wrote:
+> Hi,
+> I got the following error while compiling some module -
+>  
+> Arping.xs:153: dereferencing pointer to incomplete type
+>  make: *** [Arping.o] Error 1
+>  
+>  
+>  Now line 153 in the source is - 
+>  
+>  memcpy(enet_src, src_mac->ether_addr_octet,6);
+>  
+>  where
+>  
+>  u_char enet_src[6] = {0x00, 0x00, 0x00, 0x00, 0x00,0x00};
+>  
+>  struct ether_addr *src_mac;
+>  
+>  
+>  struct ether_addr
+>  {
+>      u_char  ether_addr_octet[6];
+>  };
+>  
+>  are the definitions.
+>  
+>  I haven't been able to figure out what the problem is.
+> Any help will be appreciated.
+>  
 
-Anshuman S. Rawat wrote:
+Try as a test to add the struct definition just before the call to
+memcpy and see if that resolves the error. Could be that for some
+reason things aren't included properly.
 
-> > > Arping.xs:153: dereferencing pointer to incomplete type
-
-In the absence of any other errors, this usually means that you are
-dereferencing a pointer to a structure or union type, but the compiler
-doesn't have the definition of the structure.
-
-This is normally only relevant to struct/union types, as it is
-possible to refer to undefined struct/union types without a syntax
-error, i.e.
-
-	struct foo *p;
-	union bar *q;
-
-Attempting to use any other unknown type, e.g.
-
-	foo *p;
-
-would result in a syntax error (e.g. "parse error before '*' token").
-
-However, any operation which requires the actual definition of those
-structures (i.e. accessing fields with -> or performing pointer
-arithmetic) will generate the above "incomplete type" error unless the
-definitions are known.
-
-> > >  make: *** [Arping.o] Error 1
-> > >  
-> > >  memcpy(enet_src, src_mac->ether_addr_octet,6);
-> > ...
-> > >  struct ether_addr
-> > >  {
-> > >      u_char  ether_addr_octet[6];
-> > >  };
-> > 
-> > Hi, I think you should define that struct _before_ you use it. This
-> > error is exactly what you get when you define it later.
+>  Thanks.
+> Anshuman
+>  
 > 
-> The struct is defined before it is used through a header file.
-
-The error message indicates that the compiler doesn't know the
-definition of "struct ether_addr", which suggests that it hasn't
-actually been defined (e.g. because the relevant header file
-(net/ethernet.h) hasn't been included).
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>  
+>  +++++++++++++++++++++++++++++++++++++++++++
+>  This Mail Was Scanned By Mail-seCure System
+>  at the Tel-Aviv University CC.
+> 
