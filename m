@@ -1,19 +1,19 @@
 From: Tabris <tabris@tabris.net>
-Subject: Re: Multithreaded /sbin.init? Is it possible?
-Date: Mon, 15 Sep 2003 12:49:27 -0400
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200309151249.29525.tabris@tabris.net>
+Subject: [resend] Re: Multithreaded /sbin.init? Is it possible?
+Date: Mon, 15 Sep 2003 14:13:55 -0400
+Sender: linux-newbie-owner@vger.kernel.org
+Message-ID: <200309151413.57198.tabris@tabris.net>
 References: <200309141240.55800.eric@cisu.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-newbie-owner@vger.kernel.org>
 In-Reply-To: <200309141240.55800.eric@cisu.net>
 Content-Description: clearsigned data
 Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: Text/Plain; charset="us-ascii"
 To: eric@cisu.net, linux-newbie@vger.kernel.org, linux-c-programming@vger.kernel.org
-Cc: rei_0000@arklinux.org
+Cc: greeneg@student.gvsu.edu
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
@@ -53,23 +53,29 @@ On Sunday 14 September 2003 01:40 pm, Eric wrote:
 > Eric Bambach
 > Eric (at) CISU (dot) net
 > ----------------------
-Fwiw, there is a project ongoing with this very concept in arklinux, and 
-it HAS shown some improvements in boot speed. I don't know exactly how 
-much, but the goal is to boot (get to a login screen) in under 30 seconds 
+Fwiw, there is a project ongoing with this very concept in arklinux, and
+it HAS shown some improvements in boot speed. I don't know exactly how
+much, but the goal is to boot (get to a login screen) in under 30 seconds
 on a desktop type system.
 
 cc:d to the current project maintainer.
 
 - --
 tabris
-- -- 
+- --
 Space tells matter how to move and matter tells space how to curve.
 		-- Wheeler
+
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.2 (GNU/Linux)
 
-iD8DBQE/Ze2YtTgrITXtL+8RAiKdAJ9+3AnkmMdbRiWIwUIP6EYxzAymVACbBAkQ
-KWUtU3Gu9+cjcc5jg668pAs=
-=gRe5
+iD8DBQE/ZgFjtTgrITXtL+8RAjkcAJ44kZWsPjze6CJaw6NeJrbgSX82cQCglZ76
+O4wmF1xgOMiBYKYfxtUlOxc=
+=oqzs
 -----END PGP SIGNATURE-----
 
+-
+To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Please read the FAQ at http://www.linux-learn.org/faqs
