@@ -1,57 +1,48 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: James Stevenson <james@stev.org>
 Subject: Re: bitfield array
-Date: Mon, 12 Jan 2004 21:06:58 +0000
+Date: Tue, 13 Jan 2004 01:02:19 +0000 (GMT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16387.3186.943352.155205@cerise.nosuchdomain.co.uk>
-References: <20040112111016.000072cf.cialdi@firenze.net>
+Message-ID: <Pine.LNX.4.44.0401130054200.1358-100000@jlap.stev.org>
+References: <20040112115643.0000382e.cialdi@firenze.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040112111016.000072cf.cialdi@firenze.net>
+In-Reply-To: <20040112115643.0000382e.cialdi@firenze.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: Massimiliano Cialdi <cialdi@firenze.net>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>, wwp <subscript@free.fr>
 
 
-Massimiliano Cialdi wrote:
+> > IOW, if you use a 1-bit bitfield, it will still be require an amount
+> > of memory counted in bytes. That's partly why bitfields are not so
+> > used for optimization, 'cause following the compiler you don't gaim
+> > memory space not cpu time.
+> I work with a (very) limited memory embedded system. I need to save
+> memory, no matter in cpu time.
 
-> Is it possible to declare a bitfield array?
 
-No.
+if this is the case you could create a macro / function to access 
+the individtual bits.
 
-> I also tried with
-> 
-> typedef struct
-> {
->   u8_t busy:1;
-> }dummy;
-> dummy a[10];
-> 
-> but then a is as large as 10 bytes.
+It is slow but you dont have a problem with that
+something like
 
-Structures which contain bitfields will be padded to an integral
-number of bytes.
+int grab_bit(u8 *bits, int bit) {
+	return ((bits[bit >> 3] & (1 << (bit >> 3) & 255)) >> bit);
+}
 
-> > AFAIK, bitfields are stored in memory block which can only be
-> > allocated with 1-byte minimum.. Try to allocate 1 bit in memory,
-> > sounds not possible :-).
-> 
-> I know but I don't want to allocate a single bit. Since I need an array
-> of binary flag, I thought that the compiler could help me. 10 bits could
-> be placed in 2 bytes. Else I need 10 bytes (80% of space lost).
+void set_bit(u8 *bits, int bit) {
+	bits[bit >> 3] |= 1 << ((bit >> 3) & 255);
+}
 
-Declare a 16-bit field and set of macros to access the individual
-bits, e.g.
+I am pritty sure the above is wrong but you should get the rought idea
+you have an array of 8bits and you access by dividing by 8 then using the
+reminder value as the mask to access the individtual bits.
 
-	typedef struct
-	{
-		uint16_t bits;
-	} dummy;
-	
-	#define get_flag(s, i) (((s).bits >> (i)) & 1)
-	#define set_flag(s, i) ((s).bits |= 1 << (i))
-	#define clear_flag(s, i) ((s).bits &= ~(1 << (i)))
+It should be possible todo it with shifts so you dont loose soo much 
+speed. Then just use the functions with a declared array of bits.
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+
+	James
+
