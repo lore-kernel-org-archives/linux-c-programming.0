@@ -1,80 +1,147 @@
-From: "William N. Zanatta" <william@veritel.com.br>
-Subject: Re: ncurses help
-Date: Wed, 10 Sep 2003 12:32:11 -0300 (BRT)
+From: "Steven" <sos22@cam.ac.uk>
+Subject: Re: Need to implement
+Date: Wed, 10 Sep 2003 21:53:29 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.56.0309101206290.3269@halley.i-veritel.com.br>
-References: <20030910122511.GC15788@3d-computers.co.uk>
+Message-ID: <20030910205329.GA46661@archibold.chu.cam.ac.uk>
+References: <8EA11405E59BD611BA7100104B93C260020B2777@exdel01.del.mgsl.com>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="PNTmBPCT7hxwcZjr"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030910122511.GC15788@3d-computers.co.uk>
+Content-Disposition: inline
+In-Reply-To: <8EA11405E59BD611BA7100104B93C260020B2777@exdel01.del.mgsl.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Matthew Harrison <matth@3d-computers.co.uk>
+To: Harmeet Uppal <Harmeet_Uppal@KeaneIndia.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-  Try changing getstr() to wgetstr(). When doing window manipulation you
-must use the functions with support to WINDOW pointers. If you don't,
-you'll get the results you're experiencing, because getstr() comes into
-action when it is reached while wgetstr() only comes into action after the
-wrefresh().
+--PNTmBPCT7hxwcZjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Also, it showed some problems with placement of the stuff.
+> Any clues how to implement a Read-Write lock on Linux using write
+> preference.
+=46rom memory, the standard implementation on top of mutexes and
+condition variables goes a bit like this:
 
-  You have set login_window to (login_win.startx, login_win.starty) from
-0,0 of the mainscreen. But, when you write stuff into that new window, you
-must set the (x,y) from the login_window. iE, here I had:
+struct biassed_lock {
+	mutex lock;                 /* Lock to protect the other
+				       fields of this structure. */
+	int num_writers_waiting;
+	int num_readers_waiting;
+	int num_readers_active;
+	int num_writers_active;
+	pthread_cond_t event_object;
+};
 
-  login_win.starty -> 7
-  login_win.startx -> 25
+void write_lock(struct biassed_lock *bl)
+{
+	lock(bl->lock);
+	bl->num_writers_waiting++;
+	while (bl->num_readers_active || bl->num_writers_active)
+		pthread_cond_wait(bl->event_object, bl->lock);
+	bl->num_writers_waiting--;
+	bl->num_writers_active++;
+	unlock(bl->lock);
+}
 
-  thus, after creating the window, (25,7)-terminal turns to
-(0,0)-login_window.
+void read_lock(struct biassed_lock *bl)
+{
+	lock(bl->lock);
+	bl->num_readers_waiting++;
+	while (bl->num_writers_active || bl->num_writers_waiting)
+		pthread_cond_wait(bl->event_object, bl->lock);
+	bl->num_readers_active++;
+	bl->num_readers_waiting--;
+	unlock(bl->lock);
+}
 
-  That's it you're working with absolute values when you should work with
-relative.
+void upgrade_lock(struct biassed_lock *bl)
+{
+	lock(bl->lock);
+	bl->num_writers_waiting++;
+	assert(bl->num_writers_active =3D=3D 0);
+	while (bl->num_readers_active > 1)
+		pthread_cond_wait(bl->event_object, bl->lock);
+	assert(bl->num_writers_active =3D=3D 0);
+	bl->num_writers_active++;
+	bl->num_readers_active--;
+	bl->num_readers_waiting--;
+	unlock(bl->lock);
+}
 
-  After all your code turned to...
+void write_unlock(struct biassed_lock *bl)
+{
+	lock(bl->lock);
+	bl->num_writers_active--;
+	pthread_cond_broadcast(bl->event_object);
+	unlock(bl->lock);
+}
 
-<inventory.c>
-   was
-        attron(COLOR_PAIR(1));
-        mvwprintw(login_window, ..., ..., "Username: ");
-        mvwprintw(login_window, ..., ..., "Password: ");
-        attroff(COLOR_PAIR(1));
+void read_unlock(struct biassed_lock *bl)
+{
+	lock(bl->lock);
+	bl->num_readers_active--;
+	pthread_cond_broadcast(bl->event_object);
+	unlock(bl->lock);
+}
 
-   changed to
+Internally, the behaviour is roughly this:
 
-        wattron(login_window, COLOR_PAIR(1));
-        mvwprintw(login_window, 1, 1, "Username: ");
-        mvwprintw(login_window, 2, 1, "Password: ");
-        wattroff(login_window, COLOR_PAIR(1));
+1) Unless bl->lock is held:
+   a) bl->num_readers_active is the number of threads currently
+   holding a read lock on bl.
+   b) bl->num_readers_waiting is the number of threads currently
+   waiting for a read lock on bl.
+   c) bl->num_writers_active is the number of threads currently
+   holding a write lock on bl (either 0 or 1).
+   d) bl->num_writers_waiting is the number of threads currently
+   waiting for a write lock on bl.
+2) num_{readers,writers}_{active,waiting} are only ever modified with
+   the lock held.
+3) event_object is signalled whenever bl->num_writers_active or
+   bl->num_readers_active decreases.
 
-   --------
+Externally, a biassed_lock behaves like this:
 
-   was
-        echo();
-        wmove(login_window, ..., ...);
-        getstr(username);
-        wmove(login_window, ..., ...);
-        getstr(password);
-        noecho();
+4) If a thread enters write_lock while a read lock is in place,
+   it will block until the read lock is removed.
+5) If a thread enters write_lock while a write lock is in place,
+   it will block until the write lock is removed.
+6) If a thread enters read_lock while a write lock is in place or
+   while another thread is waiting for a write lock, it will
+   block until those write locks have been acquired and released.
+7) If a thread enters write_unlock with other threads blocked
+   trying to acquire a write lock, it will unblock precisely one
+   of those.  Otherwise, if there are threads trying to acquire
+   a read lock, it will unblock all of those.  Otherwise, it
+   just marks the lock as available.
+8) If a thread enters read_unlock with other threads blocked
+   trying to acquire a write lock, and it is the last thread to
+   hold a read lock, it will unblock precisely one of the threads
+   trying to get the write lock.
+9) If a thread holds a read lock, then calling upgrade_lock(bl) is
+   equivalent to calling read_unlock(bl); write_lock(bl);, except
+   that it is atomic.
 
-   changed to
 
-        echo();
-        wmove(login_window, 1, 11);
-        wgetstr(login_window,username);
-        wmove(login_window, 2, 11);
-        wgetstr(login_window,password);
-        noecho();
+It's been a while since I've needed to do anything like this, though,
+so test thoroughly...
 
-</inventory.c>
+Steven Smith,
+sos22@cam.ac.uk.
 
-  Hope I've helped... =]
+--PNTmBPCT7hxwcZjr
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-  Just a note, you should use wgetnstr() to limit the length of input
-data.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.3 (FreeBSD)
 
-  william
+iD8DBQE/X49JO4S8/gLNrjcRApzLAJ9eIYC1Cdt2Z2G20/doZ5CcvlwOwACeIBG7
+GoBgIReAteISe7ZIHa4Uhcw=
+=e5fK
+-----END PGP SIGNATURE-----
+
+--PNTmBPCT7hxwcZjr--
