@@ -1,74 +1,86 @@
-From: Tony Clarke <sam@palamon.ie>
-Subject: Re: Can't understand how to get needed pointer.
-Date: Thu, 24 Oct 2002 17:32:08 +0100
+From: "Theo. Sean Schulze" <tschulze@teamfinders.org>
+Subject: undefined sqrt()
+Date: Thu, 24 Oct 2002 22:06:24 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3DB82088.1070603@palamon.ie>
-References: <14296984741.20021024193527@wr.miee.ru>
+Message-ID: <20021024200624.GA1057@teamfinders.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: "Ruslan U. Zakirov" <cubic@wr.miee.ru>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+Cc: tschulze@teamfinders.org
 
-Try changing the lines
+Hello,
 
-char inbuf[MAX_SIZE];
-char *inptr = inbuf;
-
-to
-
-const char inbuf[MAX_SIZE];
-const char * inptr = inbuf;
-
-The warning should go away then, i think...
-
-Tony
-
->Hello.
->I've wrote function that convert in_str from charset to UTF-8.
->It uses libiconv.
->int convert_str(char *in_str,const char *charset,char *out_str)
->{
->        char *wrptr = (char *) out_str;
->        char inbuf[MAX_SIZE];
->        char *inptr = inbuf;
->        size_t insize = strlen(in_str)+1;
->        size_t avail = MAX_SIZE;
->        size_t nconv;
->
->        iconv_t cd;
->        sprintf (inbuf,"%s",in_str);
->        cd=iconv_open ("UTF-8",charset);
->        nconv = iconv (cd, &inptr, &insize, &wrptr, &avail);
->        iconv (cd, NULL, NULL, &wrptr, &avail);
->        iconv_close(cd);
->        return 0;
->}
->But I'v not understood how to get "const char* * inbuf" without
->manipulations that I've done in code above. This code works fine, but
->when I was compiling it gcc prints warning:
->       gd_ft_test.c: In function `convert_str':
->       gd_ft_test.c:83: warning: passing arg 2 of `iconv' from incompatible pointer type
->I don't understand what I have to do with "char *in_str" to pass it to
->iconv?
->Here is declaration of function iconv:
->size_t iconv (iconv_t cd,
->                     const char* * inbuf, size_t * inbytesleft,
->                     char* * outbuf, size_t * outbytesleft);
->
->Thanks beforehead.
->_________________________________________________________________________
->Sorry for my English.
->
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->  
->
+This is a real newbie type question.  Usually my problems with C involve pointers, but this one is a problem with the function sqrt().  I had a math problem I needed to solve, and having forgotten my high school algebra about 25 years ago, I thought I could quickly write a C program to get an approximate answer by brute force.  This program is supposed to figure out one of the sides of a right triangle using the other side and the hypotenuse.  The hypotenuse has a fixed relationship to the side of unknown lenght.  Anyway, here is the code, such as it is:
 
 
+//
+// Filename: glide.c
+// Version: 0.0.1     Date: 24 October, 2002
+//
+// Author: T. Sean Schulze
+// System: i386-slackware-linux-gnu
+//
+// Purpose: The purpose of this script is to use brute force to find out
+// how long the long side and the hypotenuse of a right triangle are 
+// when the short side of the triangle is 35 feet long.  This will, of 
+// course, vary depending on the angle between the two unknown sides.
+//
+// Limitations: Down and dirty.  Not useful for much else than this brute
+// attempt.
 
+#include <stdio.h>
+#include <math.h>
+#include <float.h>
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+
+double a ;
+double b ;
+double c ;
+double GLIDE ;
+
+int
+main(void) /*(int argc, char **argv)*/
+{
+	GLIDE = 0.012 ;
+	a = 0.0 ;
+
+	while( b < 35.0 ) 
+	{
+		a++ ;
+		c = a * (1 + GLIDE) ;
+		b = sqrt((c * c) - (a * a)) ;
+
+	}
+	
+	printf("Glide = %f\n", GLIDE);
+	printf("a = %f\n", a) ;
+	printf("b = %f\n", b) ;
+	printf("c = %f\n", c) ;
+
+	exit(0);
+
+}
+
+When I try to compile it, I get these messages:
+
+dragoon:/home/tschulze/bin # gcc -Wall -o glide glide.c
+/tmp/ccXahjXY.o: In function `main':
+/tmp/ccXahjXY.o(.text+0x98): undefined reference to `sqrt'
+collect2: ld returned 1 exit status
+
+Could someone please give me a hint why this doesn't work?
+
+TIA,
+Sean
+
+-- 
+Theo. Sean Schulze
+tschulze@teamfinders.org
