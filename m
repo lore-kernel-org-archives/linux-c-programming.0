@@ -1,51 +1,32 @@
-From: Chuck Winters <chuckw@ieee.org>
+From: <vadiraj@mail.cyberneme.com>
 Subject: Re: processing arguments
-Date: Fri, 23 Apr 2004 19:40:51 -0500
+Date: Sat, 24 Apr 2004 10:36:45 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1082767251.3606.2.camel@whatever.local>
+Message-ID: <003a01c429b9$f0bca540$4401a8c0@otl068>
 References: <Pine.LNX.4.58.0404231743080.1006@debian>
-Reply-To: chuckw@ieee.org
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.58.0404231743080.1006@debian>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: ameer armaly <ameer@charter.net>, linux-c-programming@vger.kernel.org
 
-Ameer,
-  Your if stmt:
-    if(argv[1] == "hello")
-  is only comparing the pointer values in memory.  You need
-  to use strncmp(3) to do comparison on strings.
+Hi,
 
-Chuck
+> When I try that, and I type:
+> ./a.out hello
+>
+> It doesn't give me any output.
+> Can someone explain how to process args properly?
+> Thanks,
 
-On Fri, 2004-04-23 at 16:44, ameer armaly wrote:
-     Hi all.
-     Let's say that I have the following c++ code:
-     #include <iostream>
-     int main(int argc, char *argv[])
-     {
-     if(argv[1]=="hello")
-     cout <<"Hello World!";
-     return 0;
-     }
+  args are no special data type, they are just two dimenstional char array,
+all the strings functions apply to them. Like the others mentioned
+string compare should be done either charecter by charecter or use the
+lib function on strings.
 
 
-     When I try that, and I type:
-     ./a.out hello
+cheers,
+Vadi.
 
-     It doesn't give me any output.
-     Can someone explain how to process args properly?
-     Thanks,
-
-
-     Ameer
-
-     -
-     To unsubscribe from this list: send the line "unsubscribe linux-c-
-     programming" in
-     the body of a message to majordomo@vger.kernel.org
-     More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
