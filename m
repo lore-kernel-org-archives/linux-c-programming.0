@@ -1,60 +1,85 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: sigaction() handler question
-Date: Sat, 1 Mar 2003 16:34:43 +0100
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: sigaction() handler question
+Date: Sat, 1 Mar 2003 19:42:57 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030301153443.GB27794@lug-owl.de>
+Message-ID: <15969.3393.564727.128046@cerise.nosuchdomain.co.uk>
+References: <20030301153443.GB27794@lug-owl.de>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="JYK4vJDZwFMowpUq"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <20030301153443.GB27794@lug-owl.de>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Cc: linux-c-programming@vger.kernel.org
 
 
---JYK4vJDZwFMowpUq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Jan-Benedict Glaw wrote:
 
-Hi!
+> I've added a handler function for a SEGSEGV signal. I'm now that far
+> that I do know where (from the third void * parameter to the handling
+> function) to find the entry to the stack. So, for i386, I now can climb
+> down the stack printing out the stack trace.
+> 
+> Unfortunately, the void * (it is mentioned to be a (ucontext_t *) in
+> reality...) isn't *that* big help. The stack (with "stack" I here mean
+> that pointer which points to some stack frame's next stack pointer) is
+> (on i386) 11*sizeof(long) away.
 
-I've added a handler function for a SEGSEGV signal. I'm now that far
-that I do know where (from the third void * parameter to the handling
-function) to find the entry to the stack. So, for i386, I now can climb
-down the stack printing out the stack trace.
+11? Looking at sys/ucontext.h, that would be:
 
-Unfortunately, the void * (it is mentioned to be a (ucontext_t *) in
-reality...) isn't *that* big help. The stack (with "stack" I here mean
-that pointer which points to some stack frame's next stack pointer) is
-(on i386) 11*sizeof(long) away. To the worse, I've not really found
-helpful manpages or example sources on how to "really" walk down the
-stack (from a segsegv handler function). I think this could really help
-in debugging for production applications esp. on slow, small
-memory-sized system where you otherwise can't shoot down some really
-rarely SEGViolations which (of course:-) you can't reproduce in the labs
-and (because of it being a multi-threaded application) you won't even
-get a core from it...
+	((ucontext_t *)ptr)->uc_mcontext.gregs[ESP];
 
-MfG, JBG
+whereas you probably want:
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+	((ucontext_t *)ptr)->uc_mcontext.gregs[EBP];
 
---JYK4vJDZwFMowpUq
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+which is the previous entry, i.e. ((int *)ptr)[10].
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
+> To the worse, I've not really found
+> helpful manpages or example sources on how to "really" walk down the
+> stack (from a segsegv handler function).
 
-iD8DBQE+YNMTHb1edYOZ4bsRAo2sAKCAeGvDCL0Wm1C1r21KPhCL7ya0EwCcDPAz
-qal4i9QaGATy3ys5IyPYnJw=
-=IcfX
------END PGP SIGNATURE-----
+Each stack frame is of the form:
 
---JYK4vJDZwFMowpUq--
+	...
+	<local variables>
+EBP->	saved EBP
+	saved EIP
+	<arguments>
+	...
+
+where memory addresses increase downwards.
+
+The saved EBP for the topmost stack frame is NULL.
+
+So, walking the linked list of stack frames should be a matter of:
+
+static void handler(int sig, siginfo_t *si, void *ptr)
+{
+	ucontext_t *uc = ptr;
+	void **ebp;
+	for (ebp = (void **) uc->uc_mcontext.gregs[EBP]; ebp; ebp = ebp[0])
+	{
+		void *saved_eip = ebp[1];
+		/* arguments are at &ebp[2] and above */
+		/* local variables are below ebp */
+	}
+	...
+}
+
+A couple of caveats:
+
+1. If any of the functions in the call chain were compiled with
+-fomit-frame-pointer, it won't generate usable stack frames, and the
+above code will probably crash. To prevent this, you would need to
+"validate" each stack frame by checking that the saved EBP and EIP
+values are plausible.
+
+2. If SIGSEGV is raised, arbitrary portions of the process' memory
+could be trashed. Don't expect that library functions will work
+correctly (or at all), or that static variables will contain correct
+values.
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
