@@ -1,52 +1,57 @@
-From: "Sandro Dangui" <sdangui@nortelnetworks.com>
-Subject: RE: C++ class inheritance
-Date: Thu, 2 Oct 2003 09:27:51 -0300
+From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
+Subject: Re: C++ class inheritance
+Date: Fri, 03 Oct 2003 13:19:29 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <31E38B53D182D51195FA00508BE3A33402C89DFB@zwnbc004.cala.nortel.com>
+Message-ID: <3F7DA191.9040706@fi.uba.ar>
+References: <200310020400.13292.rafael@thinkfreak.com.br> <3F7BD40E.3050100@mscc.huji.ac.il> <200310031257.14155.rafael@thinkfreak.com.br>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: rafael@thinkfreak.com.br, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: rafael@thinkfreak.com.br
+Cc: linux-c-programming@vger.kernel.org
+
+   You better get a C++ book or tutorial, I can recommend you "The C++ 
+Programming Language" by Bjarne Stroustrup, 3rd Edition.
+   With templates you can parameterize types used in C++ constructs like 
+classes, structs or functions.
+
+Rafael Costa dos Santos wrote:
+> Ok, but as I am C ANSI programmer it is a bit dificult to underestand.
+> 
+> Are you saying that "RasPDU" is a general class that depends on the template 
+> (in this case "H225_RegistrationRequest") that is informed ?
+> 
+> Is it similar to create a specific class like:
+> 
+> class RasPDU : public H225_RegistrationRequest
+> {
+> } ;
+> 
+> and inherit from it ?
+> 
+> class RegistrationRequestPDU : public RasPDU
+> {
+> } ;
+> 
+> On Thursday 02 October 2003 07:30, Voicu Liviu wrote:
+> 
+>>Rafael Costa dos Santos wrote:
+>>
+>>>Can anyone explain me what does < > means ?
+>>>Example:
+>>>
+>>>class RegistrationRequestPDU : public RasPDU<H225_RegistrationRequest>
+>>>{
+>>>} ;
+>>>
+>>>Is "RegistrationRequestPDU" inheriting from RasPDU,
+>>>H225_RegistrationRequest or both ?
+>>
+>>RegistrationRequestPDU  inherits from RasPDU using template
+>>H225_RegistrationRequest ?
+> 
+> 
 
 
-RasPDU is a template.
-If you look at its .h file you will see something like this:
-
-template <class T> 
-class RasPDU
-{
-  ...
-};
-
-In your case, "T" will be replaced (compiler) by H225_RegistrationRequest.
-In my opinion, tamplates are the most powerful feature of C++.
-
-
-
-
------Original Message-----
-From: Rafael Costa dos Santos [mailto:rafael@thinkfreak.com.br] 
-Sent: quinta-feira, 2 de outubro de 2003 01:00
-To: linux-c-programming@vger.kernel.org
-Subject: C++ class inheritance
-
-
-
-Can anyone explain me what does < > means ? 
-Example:
-
-class RegistrationRequestPDU : public RasPDU<H225_RegistrationRequest> { } ;
-
-Is "RegistrationRequestPDU" inheriting from RasPDU, H225_RegistrationRequest
-
-or both ?
-
--- 
-Rafael Costa dos Santos
-rafael@thinkfreak.com.br
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
