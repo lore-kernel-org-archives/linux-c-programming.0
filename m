@@ -1,79 +1,49 @@
-From: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
+From: joy <gracecott@sancharnet.in>
 Subject: Re: array size 1 ? 	All headers
-Date: Tue, 20 Jul 2004 23:57:13 -0300
+Date: Wed, 21 Jul 2004 08:47:11 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040720235713.4cb83b20.lcapitulino@terra.com.br>
+Message-ID: <40FDE037.6080309@sancharnet.in>
 References: <20040721015338.M80608@sni.ph>
+ <20040720235713.4cb83b20.lcapitulino@terra.com.br>
+Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040721015338.M80608@sni.ph>
+In-reply-to: <20040720235713.4cb83b20.lcapitulino@terra.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Gre Taguran <gtaguran@sni.ph>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
+Luiz Fernando N. Capitulino wrote:
 
- Hi Gre,
+> The program:
+>
+> char tst[1];
+> tst[0]='g';
+> tst[1]='r';
+>
+> printf("%c %c\n", tst[0], tst[1]);
+>
+> compiles and works here! but to be honest, I don't why. I can prove it is
+>an odd case, becase this also works (here):
+>
+>  
+>
+correct me if I'm wrong, but I feel that the code you have written is 
+the classic case of a buffer overflow.
+C , (I think) , does not check for array boundaries and leaves this work 
+to be done by the programmer.
+this is the basis of all those nasty worms running free!
 
-Em Wed, 21 Jul 2004 10:27:35 +0800
-"Gre Taguran" <gtaguran@sni.ph> screveu:
+> char tst[1];
+> tst[0]='g';
+> tst[1]='r';
+> tst[2]='z';
+>
+> printf("%c %c %c\n", tst[0], tst[1], tst[2]);
+>
+>PS: GCC compiled.
+>
+>  
+>
 
-| i think its not array of 1 but instead array of 2 which is 0 and 1 index.
-
- Wrong.
-
- K&R defines array as: array[lenght]
-
- So, if you defines an array as:
-
- int luiz[10]
-
- You will have 10 memory cells for it, and if you do:
-
- int luiz[1]
-
- You will have one memory cell.
-
- But, the _access_ is made from 0, so for the first example, we have:
-
- luiz[0], luiz[1], luiz[2]... luiz[9].
-
- For the second, just:
-
- luiz[0].
-
-| maybe 
-| it is because u were thinking that the last array index (in this case is 1) is 
-| null, but it is only applicable when handling string because string needs a 
-| terminated string. ex.
-| 
-| char tst[1];
-| tst[0]='g';
-| tst[1]='r';
-| printf("%s",tst); //this would print gr<and more chars here because it is not 
-| terminated
-| printf("%c=%c"); //this will print gr meaning tst[1] is alocated by 'r'
-
- The program:
-
- char tst[1];
- tst[0]='g';
- tst[1]='r';
-
- printf("%c %c\n", tst[0], tst[1]);
-
- compiles and works here! but to be honest, I don't why. I can prove it is
-an odd case, becase this also works (here):
-
- char tst[1];
- tst[0]='g';
- tst[1]='r';
- tst[2]='z';
-
- printf("%c %c %c\n", tst[0], tst[1], tst[2]);
-
-PS: GCC compiled.
-
--- 
-Luiz Fernando
