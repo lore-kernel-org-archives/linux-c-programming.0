@@ -1,61 +1,27 @@
-From: Jad Saklawi <Jad@Saklawi.info>
-Subject: Re: realloc array of structures
-Date: Sun, 25 Apr 2004 20:28:48 +0300
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: Can I allocate few bytes in a file to store info about that file; not visible to user?
+Date: Mon, 26 Apr 2004 10:32:41 -0400 (EDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1082914128.408bf55066a5a@webmail.namezero.com>
+Message-ID: <20040426143241.376E2197372@xprdmailfe3.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "J." <mailing-lists@xs4all.nl>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Quoting "J." <mailing-lists@xs4all.nl>:
 
-> Sunday, April 25 18:08:29
-> 
-> Hello, 
-> 
-> I am trying to put incomming data into an array of structures. For example
-> everytime a new line arrives, grow the array by one, and copy the line
-> into the newly allocated mem structure. 
-> 
-> Unfortunatly I am a bit lost in the pointer world. Could someone give me
-> some hints what to what goes wrong in the small example code below ?
+Hi all,
 
-Here is a fixed version of your code :
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+In ext2fs, while creating a file, can I allocate a number of bytes for that file in advance, such that those bytes are not seen by the user? that is,
 
-struct node {
-  char *str;
-};
+suppose I am creating a new file temp, then allocate 50 bytes immediately after creating the file. I want to use those bytes to store the file related info; accessible only to kernel. Whatever data user wants to add, will be added after the these 50 bytes. If user does lseek(fd,0,SEEK_SET), then the file pointer should point to the 51st byte. The 1st 50 bytes shouldnt be visible to user. I dont care if the file size is shown as userdata+50. Is it possible to achieve? If yes, how?
 
-int main(void) {
-  struct node **strarray = NULL;
-  int i = 0, count = 0;
-  char line[1024];
+Thanks and regards,
 
-  while(fgets(line, 1024, stdin) != NULL) {
-    /* grow the array with one element */
-    strarray = (struct node **)realloc(strarray, (count + 1) * sizeof(struct
-node *));
-    strarray[count] = (struct node *)malloc(sizeof(struct node));
-    /* copy the line to member str of the new element (structure) */
-    strarray[count]->str =  strdup(line);
-    count++;
-  }
+Vineet
 
-  for(i = 0; i < count; i++)
-    printf("[%d].str: %s", i, strarray[i]->str);
-
-  return 0;
-}
-
-  You needed to allocate memory for each struct, and you should use -> when
-using struct pointers instead of .
-
-Greets,
-Jad Saklawi
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
