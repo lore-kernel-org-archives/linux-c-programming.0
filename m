@@ -1,74 +1,52 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: RE: dynamic allocation of array of structures
-Date: Sat, 22 Mar 2003 21:48:12 +0100 (CET)
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: retriving a dhcp assigned ip
+Date: Sat, 22 Mar 2003 21:46:22 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0303222141500.5852-100000@hestia>
-References: <20030322202720.267284000B9@mwinf0501.wanadoo.fr>
+Message-ID: <20030322204622.GK22528@lug-owl.de>
+References: <20030322214216.45bc5681.cialdi@firenze.net>
 Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Rex5+51txc1ort/q"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030322202720.267284000B9@mwinf0501.wanadoo.fr>
+Content-Disposition: inline
+In-Reply-To: <20030322214216.45bc5681.cialdi@firenze.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-On Sat, 22 Mar 2003, Anthony Nguyen wrote:
 
-> typedef struct Apeople { 
-> char *name;
->  int telnr;
-> } Tpeople;
-> 
-> ...
-> 
-> Tpeople *toto;
-> 
-> toto = (Tpeople *)(malloc (sizeof Tpeople) * <the number of elements you
-> want to allocate>);
-> 
-> But I think that you were searching a "proper way" to implement it, isn't it
-> :?
-> 
-> A.N.
+--Rex5+51txc1ort/q
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Lol :) euh ... to be honest .. actually yes ..
+On Sat, 2003-03-22 21:42:16 +0100, Massimiliano Cialdi <cialdi@firenze.net>
+wrote in message <20030322214216.45bc5681.cialdi@firenze.net>:
+> How can I retrive the ip address assigned to my host by a dhcp server?
+> I think I need to use ioctl with SIOCGIFADDR parameter, but I don't know
+> where the address is saved.
 
-Of course before I decided to send a message to this list I have tried
-something like you described above, but it doesn't work quitte as I
-expected or better said, like I want it to work.
+Look for a sample program that does the job. For example, "ifconfig"
+from the net-tools package fetches the IP address...
 
-Maybe some of you could give a hunch what goes wrong. 
-(Code compiles without Complaining)
+MfG, JBG
 
-#include <stdio.h>
-#include <stdlib.h>
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
 
-typedef struct {
- char initial;
- int roomnr;
-} record;
+--Rex5+51txc1ort/q
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-int main(void) {
- int i = 0;
- record *ptr;
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.1 (GNU/Linux)
 
- if((ptr = (record *)malloc(10 * sizeof(record))) == NULL) {
-  fprintf(stderr, "Error: failed malloc\n");
-  return 1;
- }
+iD8DBQE+fMueHb1edYOZ4bsRAgwaAJ9LvrxjxgmjpHF8chTmv1TEgg8b7QCcDiX0
+q1E4YiwSEahrrJg9bOwVGtg=
+=6RpL
+-----END PGP SIGNATURE-----
 
- for(i = 0; i < 10; i++, ptr++) {
-  ptr->initial = 'A' + i;
-  ptr->roomnr = i;
- }
-
- for(i = 0; i < 10; i++, ptr++) {
-  printf("ptr->initial = %c, ", ptr->initial);
-  printf("ptr->roomnr = %d\n", ptr->roomnr);
- }
-
- return 0;
-}
-
-Thnkx.. J.
-
+--Rex5+51txc1ort/q--
