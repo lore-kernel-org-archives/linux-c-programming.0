@@ -1,37 +1,26 @@
-From: Stephen Satchell <list@fluent2.pyramid.net>
-Subject: Re: using 'int char' with #define's variables.
-Date: Sun, 01 Sep 2002 18:16:14 -0700
+From: jnf <xjnfx@doityourself.com>
+Subject: linux kernel question
+Date: Tue, 3 Sep 2002 11:49:51 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <5.1.0.14.0.20020901181431.00aa0b80@fluent2.pyramid.net>
-References: <20020901153529.A16903@namodn.com>
+Message-ID: <20020903184952.20B893940@sitemail.everyone.net>
+Reply-To: xjnfx@doityourself.com
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020901153529.A16903@namodn.com>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
 Content-Transfer-Encoding: 7bit
-To: Nick Jennings <nkj@namodn.com>, linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-At 03:35 PM 9/1/02 -0700, Nick Jennings wrote:
->char * strrchr( char * str, int ch );
->
->   It takes a character as an int in that second param.
->
->   I am having trouble using it with a #define's VAR.
->
->---
->#define DIRMARK "/"
->
->...
->
->char * filename = strrchr(path, DIRMARK);
+If I wanted to hook into the kernel, particularly the icmp functions, and alter the way that it works (read replies to icmp packets), where would I start looking? I originally thought the sys call table, but that doesnt seem correct to me, so i am open to whatever suggestions everyone has.
 
-Your #define is of type array of char, not a plain chiar. If you were to 
-define it as
 
-#define DIRMARK '/'
+thank you
+j
 
-it would work better.
 
-(note single-quote instead of double-quote)
+_____________________________________________________________
+Sign up for FREE email from DoItYourself.com at http://doityourself.com
 
+_____________________________________________________________
+Promote your group and strengthen ties to your members with email@yourgroup.org by Everyone.net  http://www.everyone.net/?btn=tag
