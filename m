@@ -1,57 +1,46 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: intercepting alt key and arrows
-Date: Mon, 6 Sep 2004 18:11:50 +0200
+From: =?iso-8859-1?q?Ankit=20Jain?= <ankitjain1580@yahoo.com>
+Subject: Re: complex variable
+Date: Mon, 6 Sep 2004 17:25:32 +0100 (BST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040906161150.GB6985@lug-owl.de>
-References: <003101c49428$31be1500$0200a8c0@haneyhbmu5pv2g>
+Message-ID: <20040906162532.22345.qmail@web52904.mail.yahoo.com>
+References: <20040906134525.33692.qmail@web52908.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="UXdImcDs+Jp8Skh3"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <003101c49428$31be1500$0200a8c0@haneyhbmu5pv2g>
+In-Reply-To: <20040906134525.33692.qmail@web52908.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Ameer Armaly <ameer@charter.net>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
+ 
+>       1 #include<stdlib.h>
+>       2 #include<complex.h>
+>       3 #include<stdio.h>
+>       4
+>       5 int main()
+>       6 {
+>       7         FILE *fp;
+>       8         fp=fopen("test_data.dat","rb");
+>       9         int N=32,i=0;
+>      10         complex x,*in;
+>      11         in=malloc(sizeof(complex)*N);
+>      12         if (fread(in,16,32,fp) != 32)
+>      13          printf("error in reading from file
+> failed\n");
+>      14         else{
+>      15         for(i=0;i<N;i++)
+>      16           printf("%lf\t",*(in+i+0));
+>      17         }
+>      18         return 0;
+>      19 }
+> 
+> i am sorry but this code also gives the same error
+> 
+> error in reading from file failed
+> 
+> ankit
 
---UXdImcDs+Jp8Skh3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, 2004-09-06 11:43:02 -0400, Ameer Armaly <ameer@charter.net>
-wrote in message <003101c49428$31be1500$0200a8c0@haneyhbmu5pv2g>:
-> Hi all.
-> What is the best way to intercept the alt key as well as the arrow keys? =
-as
-> far as I know they don't have ascii values.
-
-Enable raw mode and interpret the input stream on your own.
-
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---UXdImcDs+Jp8Skh3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBPIxGHb1edYOZ4bsRAuI4AJ42EfmPa29RZWaaN+BP9JAhd7QJMACeL9Nh
-FKw4cABvEwSVFEOoKYi3cwQ=
-=G9Ol
------END PGP SIGNATURE-----
-
---UXdImcDs+Jp8Skh3--
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
