@@ -1,33 +1,19 @@
-From: Heinrich du Toit <hdutoit@tlabs.ac.za>
-Subject: wait_queue's
-Date: Tue, 03 Dec 2002 10:01:58 +0200
+From: "Paresh Sawant" <p.Sawant@zensar.com>
+Subject: struct to be passed to ioctl call for commanf HDIO_DRIVE_CMD
+Date: Wed, 4 Dec 2002 14:38:18 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3DEC64F6.4050003@tlabs.ac.za>
-Reply-To: hdutoit@tlabs.ac.za
+Message-ID: <54670264D99F034EA23CBB7D7A45AE7E5ECD@zenmail1.ind.zensar.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"
-To: linux-c-programming mailing list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Majordomo@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, "linux-ide@vger.kernel.org" <linux-idel@vger.kernel.org>, linux-c-programming@vger.kernel.org
 
-Hello
+Hi!
+        I want to send ATA command to IDE hard disk driver using ioctl with comand "HDIO_DRIVE_CMD", to do raw write to hard disk. Which Struct i should pass to ioctl call as a third argument ?
 
-I'm busy writing a device driver.
-This device driver exports one char device.
-
-Now the problem it that when 2 programs try to write to this device at 
-the same time...
-Well it works but they don't get queue fairly.
-
-Both processes write's get blocked.. But for a long time in a row only 
-one seem to write and the otherone stays block.
-I think the problem is that the kernel wait queue is a LIFO structure 
-and not a FIFO
-
-Anyway in which I could change it to a FIFO? or any other ideas?
-
-Thanks
--Heinrich
-
-
+thanks 
+paresh
