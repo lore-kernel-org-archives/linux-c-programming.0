@@ -1,25 +1,44 @@
-From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
-Subject: MIME library
-Date: Tue, 05 Aug 2003 14:00:31 -0300
+From: "Steven" <sos22@cam.ac.uk>
+Subject: Re: Linux syscall list
+Date: Tue, 5 Aug 2003 19:10:44 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F2FE2AF.8080104@fi.uba.ar>
-References: <3EAD78F1.9050408@fi.uba.ar> <16045.46253.955065.525478@cerise.nosuchdomain.co.uk>
+Message-ID: <20030805181044.GA828@archibold.chu.cam.ac.uk>
+References: <200308050906.33542.rafael@thinkfreak.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="nFreZHaLTZJo0R7j"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <200308050906.33542.rafael@thinkfreak.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; 
-To: linux-c-programming@vger.kernel.org
+To: Rafael Costa dos Santos <rafael@thinkfreak.com.br>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello:
-   Does anyone know of a MIME library that's more or less well=20
-documented and has a free license (GPL, BSD, etc.)?
-   Thanks,
 
-		Dar=EDo
+--nFreZHaLTZJo0R7j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> Where can I find the last linux syscall list ?
+The system call table for an x86 Linux kernel is at the end of
+arch/i386/kernel/entry.S.  The __NR_ constants are defined in
+include/asm-i386/unistd.h.
+
+Sorry, but I don't know the equivalents for other architectures.
+
+Steven Smith,
+sos22@cam.ac.uk.
+
+--nFreZHaLTZJo0R7j
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (FreeBSD)
+
+iD8DBQE/L/MkO4S8/gLNrjcRAilXAKDWn8MMRukwTnUTcjBxJT6hlFewZQCgtIVr
+Bq3POOd3uo9LTri9Fyrcr+8=
+=ZQte
+-----END PGP SIGNATURE-----
+
+--nFreZHaLTZJo0R7j--
