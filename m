@@ -1,35 +1,50 @@
-From: "Johny Jugianto " <johny.q@plasa.com>
-Subject: Line Graphics Box
-Date: Fri, 20 Jun 2003 16:23:40 +0700
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: Line Graphics Box
+Date: Fri, 20 Jun 2003 11:55:49 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <web-3153785@b1.c.plasa.com>
-References: <20030614060138.35280.qmail@web12602.mail.yahoo.com>
+Message-ID: <20030620095549.GA6353@lug-owl.de>
+References: <20030614060138.35280.qmail@web12602.mail.yahoo.com> <web-3153785@b1.c.plasa.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="zUOaI4FcYSvHUUu9"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030614060138.35280.qmail@web12602.mail.yahoo.com>
+Content-Disposition: inline
+In-Reply-To: <web-3153785@b1.c.plasa.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; 
 To: linux-c-programming@vger.kernel.org
 
-Hi, everyone
 
-Does anyone how to make menu window on text based like 
-setup (have a nice box)?
-I have already tried with ncurses.
-If i run in console mode, the Line Graphics Box is shown 
-awefull
-But if i run in xterm or other terminal that running in 
-X-server, the Line Graphics Box is shown nicely
-How i can make my ncurses program run in console mode with 
-nice interface?
-Is there any setting that i have missed (i have tried to 
-changed TERM with vt100 and other, yet seem not helped)
-Thx in advance
+--zUOaI4FcYSvHUUu9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards
-Johny J.
-===========================================================================================
-"TELKOMNet Instan memberikan diskon 40% untuk akses malam hari dari pukul 23.00 sampai 06.00.
-Berlaku untuk wilayah Jawa Timur mulai 1 Mei 2003 sampai 30 Juni 2003."
-===========================================================================================
+On Fri, 2003-06-20 16:23:40 +0700, Johny Jugianto  <johny.q@plasa.com>
+wrote in message <web-3153785@b1.c.plasa.com>:
+> Does anyone how to make menu window on text based like=20
+> setup (have a nice box)?
+
+"dialog", there are X11 versions also.
+
+MfG, JBG
+
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
+k!
+      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+
+--zUOaI4FcYSvHUUu9
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (GNU/Linux)
+
+iD8DBQE+8tokHb1edYOZ4bsRAikzAJ9qbuuJz10Mx0vVqjUN3vzImyo7ZgCgk/FM
+jTiX4SpKFpa6bKo4g529IOw=
+=N1SQ
+-----END PGP SIGNATURE-----
+
+--zUOaI4FcYSvHUUu9--
