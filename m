@@ -1,95 +1,79 @@
 From: Suciu Flavius <suciuflavius@tiscali.de>
-Subject: Re: Windows can use cpp in c code but in linux ?? I dont know how.
-Date: Thu, 30 Sep 2004 18:49:53 -0700
+Subject: Re: printf format for Float number
+Date: Thu, 30 Sep 2004 18:53:12 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <cjhct8$3uk$1@sea.gmane.org>
-References: <36a2bb3d04093003501d1b58a7@mail.gmail.com>
+Message-ID: <cjhd3g$4jn$1@sea.gmane.org>
+References: <200409291701.16821.adixpope@rdsnet.ro>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <36a2bb3d04093003501d1b58a7@mail.gmail.com>
+In-Reply-To: <200409291701.16821.adixpope@rdsnet.ro>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
 Hi,
 
-Your solution is a partial solution, because you "migration" require 
-also the C++ library to be linked.
+your problem it's a very common "Round-off error".
 
-First, of course it's possible ;)
+Please checkout this link from Micro$oft for a tutorial in floating 
+points mistakes ;)
 
-Second, under windoze you compiler it's smart (or dumb enought) to link 
-automaticly with the c++ library.
+http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/Q42/9/80.ASP&NoWebContent=1
 
-Under Linux, gcc it's a pure c compiler, it never link agains c++ 
-library, so "the misterious" messages refer to the missing c++ library 
-because you code do references for operator new and delete ;)
 
-To solve this is easy, link with the c++ library: -lstdc++
-
-gcc a.c mylib.a -lstdc++
-
-Third, welcom in the Linux world :)
-
-Regards, and don't forget, under Linux EVERYTHING is possible :D
+Regards and "Numa bine" ;)
 
 
 
-
-
-
-mojtaba mahdavi wrote:
-> Hi all.
+Adrian Popescu wrote:
+> Can anyone explain this please ???
+> (what am I getting wrong and how can I avoid this ?)
 > 
-> I am a windows programmer and want to migrate my codes to linux. 
+> I get a roughly output aproximation of a float number
+> using printf: (f=123.1  to  123.099998)
 > 
-> My problem is as followes.
+> If I use the format:
+> %f  i get 123.099998
+> %g i get 123.1
 > 
-> I want to use cpp (File1.cpp) codes in c (File2.c) codes. 
+> The printf "FORMAT" says:
+> %f double-precision floating-point
+> %g double-precision floating-point, using %f or %e
 > 
-> in windows I have done following and it is ok. 
+> I read that "float" is promoted to "double" by printf for Format "%f"
+> If I use "double" instead of "float" it works fine.
 > 
-> 1- I wrote a cpp code (Wrap.cpp) that wraps my cpp code (File1.cpp) and 
-> compiled it using cpp compiler. 
-> ( my strategy: for every method I wrote a c function that calls the methode. 
-> each function gets a void * to the class handle and ... ) 
+> gcc version 3.2.2 20030222 (Red Hat Linux 3.2.2-5)
 > 
-> 2- I exported my wrapper functions as C interfaces using extern "C". (Wrap.h) 
+> /*----------source---------------*/
+> #include <stdio.h>
 > 
-> 3- in File2.c I used wrap.h and compiled it as a c code. every thing is fine. 
+> int main() {
 > 
-> Now I have trouble with linux to do that (because I am a newbie in linux). 
+> float  f=123.1;
+> double d=123.1;
 > 
-> at first, is it possible in linux ?? ( I think it must be possible ).
+> printf ("%f\n", f);
+> printf ("%g\n", f);
+> printf ("%f\n", d);
+> printf ("%f\n", 123.1);
 > 
-> secondly, How do I it. 
+> }
+> /*--------------------------------*/
 > 
-> actually I have done above in linux but I got some error message. 
+> <OUTPUT>
+> 123.099998      <---- ?!?!?!
+> 123.1
+> 123.100000
+> 123.100000
 > 
-> My strateghy is as follows. 
-> 
-> 1- complie file1.cpp and wrap.cpp using gcc and making file1.o and
-> wrap.o. it is ok.
-> 2- making library using ar command. it is ok. (mylib.a) 
-> 3- compile and link file2.c with mylib.a ..???????!!!!!!!! 
-> 	this generates an error. 
-> 		it says : 
-> 
-> ./libmylib.a(wrap.o)(.text+0xc):wrap.cpp: undefined reference to `
-> ___gxx_personality_sj0'
-> ./libmylib.a(wrap.o)(.text+0x44):wrap.cpp: undefined reference to
-> `operator new(unsigned)'
-> ./libmylib.a(wrap.o)(.text+0x85):wrap.cpp: undefined reference to
-> `operator delete(void*)'
-> ./libmylib.a(wrap.o)(.text+0xeb):wrap.cpp: undefined reference to
-> `operator delete(void*)'
-> collect2: ld returned 1 exit status
+> Thanx
+> ___
+> Adrian Popescu
 > 
 > 
-> NOW. 
 > 
-> what should I do ????
 > -
 > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
