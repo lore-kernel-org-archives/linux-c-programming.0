@@ -1,46 +1,16 @@
-From: =?iso-8859-2?Q?Nagy_Imre_=28Vecs=E9s=29?= <ImreNagy@MOL.hu>
-Subject: Start of the time slice
-Date: Mon, 5 Jul 2004 09:22:16 +0200
+From: =?iso-8859-2?Q?Nagy_Imre_=28Vecs=E9s=29?= <ImreNagy@mol.hu>
+Subject: RE: Email Verification Request
+Date: Mon, 5 Jul 2004 09:24:56 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <7F11C0CADA50AF4690BF42F715ABFBF86468B1@battaexch22.mol.hu>
+Message-ID: <7F11C0CADA50AF4690BF42F715ABFBF86468B2@battaexch22.mol.hu>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-
-Dear List,
-
-Excuse me, my English is limited, but I try to formulate clearly.
-
-I would like to konw how many unexpired time is in my process. The normal
-time slice (10ms) is enough for me, but I want to get run my function right
-at the start of time slice. 
-
-        _______________           ______________
-____ ... 10 ms         __ . . . __  10 ms       ___
-
-        |my f()                   |my f()
+To: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
 
 
-main()
-
-{
-.
-.
-.
-
-while(1) {
-   f();
-}
-.
-.
-.
-
-Best regards,
-
-Imre Nagy
 
 
 
