@@ -1,37 +1,54 @@
-From: "Senthil Nathan V" <senthilnathan@mail.cyberneme.com>
-Subject: Re: filesystem in the kernel
-Date: Thu, 25 Nov 2004 15:06:28 +0530
-Message-ID: <opsh0ky2au00eaj5@202.144.45.6>
-References: <5959EA4638D8734599AB75EAAFBB6FEFA471E6@mtv01ex04.mindtree.com>
-Reply-To: senthilnathan@mail.cyberneme.com
+From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
+Subject: help
+Date: Thu, 25 Nov 2004 15:25:23 +0530
+Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E8@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_E048_01C4D302.FBC518D0"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <5959EA4638D8734599AB75EAAFBB6FEFA471E6@mtv01ex04.mindtree.com>
+content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed	delsp=yes"
-To: linux-c-programming@vger.kernel.org
+To: Linux C Programming <linux-c-programming@vger.kernel.org>
 
-On Thu, 25 Nov 2004 12:04:31 +0530, Bakki Srinivas  
-<bakki_srinivas@mindtree.com> wrote:
+This is a multi-part message in MIME format.
 
-> hi,
->     when a filesystem is registered with the kernel eg.
-> register_filesystem(&ext2_fs_type);
->   where is the structure ext2_fs_type declared ?
->
-	ext2_fs_type is variable of type "struct file_system_type"
+------=_NextPart_000_E048_01C4D302.FBC518D0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-	Refer to the source code in /usr/src/lyour_linux_kernel_dir/  
-include/linux/fs.h
+hi,
+    whats the equivalent of sprintf in the kernel mode?
 
+Thanks with Regards
+Srinivas Bakki
 
---
-regards,
-Senthil Nathan V
-	
+------=_NextPart_000_E048_01C4D302.FBC518D0
+Content-Type: text/plain;
+	name="disclaimer.txt"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="disclaimer.txt"
 
+-------------------------------------------------------------------------=
+----------------------------------------------------
+Disclaimer
+-------------------------------------------------------------------------=
+----------------------------------------------------
 
-	
+"This message(including attachment if any)is confidential and may be =
+privileged.Before opening attachments please check them
+for viruses and defects.MindTree Consulting Private Limited =
+(MindTree)will not be responsible for any viruses or defects or
+any forwarded attachments emanating either from within MindTree or =
+outside.If you have received this message by mistake please notify the =
+sender by return  e-mail and delete this message from your system. Any =
+unauthorized use or dissemination of this message in whole or in part is =
+strictly prohibited.  Please note that e-mails are susceptible to change =
+and MindTree shall not be liable for any improper, untimely or =
+incomplete transmission."
 
+-------------------------------------------------------------------------=
+----------------------------------------------------
+------=_NextPart_000_E048_01C4D302.FBC518D0--
