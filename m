@@ -1,8 +1,8 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
 Subject: Re: exit(42)
-Date: Fri, 24 Sep 2004 20:25:17 +0800
+Date: Fri, 24 Sep 2004 09:29:14 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4154122D.3030403@hq.ntsp.nec.co.jp>
+Message-ID: <4154131A.7030208@ig.com.br>
 References: <20040924115759.6133.qmail@web52908.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -13,13 +13,14 @@ Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Ankit Jain <ankitjain1580@yahoo.com>
 Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-it does have a benefit....
-it could be useful to another app that is trying to check the
-return value or exit status of your application
+Operating systems can catch programs exit values (eg: by exit() in C/C++).
 
-like in bash programming... many bash scripts rely on the
-exit values of programs...
+So, you can do it by script shell (in UNIX) or by "DOS" commands in 
+Wndows Console. Well, Operating systems can also give you this values 
+when you call a program from another program, see exec() and system() 
+functions.
 
+Luciano
 
 
 Ankit Jain wrote:
@@ -52,4 +53,3 @@ Ankit Jain wrote:
 >
 >  
 >
-
