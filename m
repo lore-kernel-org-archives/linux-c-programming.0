@@ -1,38 +1,57 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: C/Fortran mixing - Passing arrays
-Date: Sun, 18 May 2003 20:29:18 +0100
+From: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
+Subject: about posix threads.
+Date: Tue, 20 May 2003 13:50:35 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16071.57102.120653.190096@cerise.nosuchdomain.co.uk>
-References: <20030518193753.A1662@neutrino.particles.org>
+Message-ID: <3EC9C22B.9090100@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030518193753.A1662@neutrino.particles.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Elias Athanasopoulos <elathan@phys.uoa.gr>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
 
-Elias Athanasopoulos wrote:
+i made a pthread program and i am quite puzzled why my program
+spawns 4 threads.. when i view it in linux console.
 
-> I have a fortran subroutine with the prototype:
-> 
-> subroutine evolvePDF (x, Q, f)
-> ...
-> real*8 f(-6,6)
-> 
-> which I want to call from C. My problem is that C, IIRC, doesn't support 
-> negative indexes.
+i used 'ps -ax | grep myprog' command to get the processes for
+my application and to my surprise it spawns 4 threads.. when i
+only expected 3.. one for main, one for event, and one for recvdata.
 
-C supports negative indices in the sense that the following works:
+spawnXXXXXX functions create new threads..
 
-	int f[8] = {1,2,3,4,5,6,7,8};
-	int *p = f + 4;
-	int i;
-	
-	for (i = -4; i < 4; i++)
-		printf("%d\n", p[i]);
+i really need ur help. can anyone tell me why this occur?
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+thanks a lot...
+
+
+lejanson
+
+
+=============/* snipp */==================
+int main(void)
+{
+
+     ................
+     ................
+     ................
+
+     if (spawnEventThrd())
+     {
+         fprintf(stderr, "spawning event thread error\n");
+         exit(0);
+     }
+
+
+     if (spawnRecvDataThread())
+     {
+         fprintf(stderr, "spawning response thread error\n");
+         exit(0);
+     }
+
+     ................
+     ................
+     ................
+     return 0;
+}
+
