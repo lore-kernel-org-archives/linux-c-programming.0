@@ -1,37 +1,27 @@
-From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
-Subject: Parsing multipart MIME
-Date: Fri, 15 Aug 2003 15:18:57 -0300
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F3D2411.70106@fi.uba.ar>
+From: Mehran Rezaei <mehran@cs.unt.edu>
+Subject: loader
+Date: Tue, 19 Aug 2003 12:43:54 +0000
+Sender: linux-gcc-owner@vger.kernel.org
+Message-ID: <3F421B8A.5BC868F7@cs.unt.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-gcc-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; 
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: C news group <linux-c-programming@vger.kernel.org>, gcc news group <linux-gcc@vger.kernel.org>, Network news group <linux-net@vger.kernel.org>
 
-Hello:
-    I'm building a minimal MIME parser, mainly to separate the parts in=
- a
-multipart/form-data in a web POST. I was wondering if anyone made the
-regular expression for interpreting it. I thought of this:
+Hello all,
 
-multip  ::=3D start anychar* (delim anychar*)* end?
+I have installed fortran compiler on an alpha system running tru64. I
+have succeeded to compile a fortran
+program; however, it gave me an error "a.out:/sbin/loader:Fatal Error:
+Insufficient memory to execute program" when I tried to run the program.
 
-anychar ::=3D <any character including \0>
-delim   ::=3D <delimiter>
-start   ::=3D "--" delim "\r\n"
-middle  ::=3D "\r\n--" delim "\r\n"
-end     ::=3D "\r\n--" delim "--"
+I assume this relates to hard limits of the system. Do you have any idea
+how to fix the error?
+Thanks,
 
-    I have little experience with grammars so this expression may be
-wrong. Any ideas? thanks,
-
-          Dar=EDo
+Mehran
 
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
