@@ -1,8 +1,8 @@
 From: jnf <xjnfx@doityourself.com>
-Subject: saved eip question [was Re: c debugging w/ gdb revisited]
-Date: Sun, 16 Jun 2002 03:43:46 -0700 (PDT)
+Subject: Re: faults in dynamic libraries
+Date: Sun, 16 Jun 2002 03:50:11 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020616104346.5EC782757@sitemail.everyone.net>
+Message-ID: <20020616105011.E5FAD3ED3@sitemail.everyone.net>
 Reply-To: xjnfx@doityourself.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -10,30 +10,40 @@ Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Glynn Clements <glynn.clements@virgin.net>, Tver Mit <Vukdev@mail.ru>
+Cc: linux-c-programming@vger.kernel.org
 
-yea i didnt think so, but i figured id ask, i was trying to see if i could follow eip honestly.
+not much better, but if one created a plugin manager type process that dealt with them all, it would keep the main process from dying if a plugin died? 
 
-any idea why a saved eip would be restored here
-
-call function
-add $0xsomevalue, %esp
-push $value
-
-why it would die in between add and push, why a saved eip would be restored @ that point is really my question, i guess im asking this to the wrong mailing list ;]
-
-
---- Billy O'Connor <billy@oconnoronline.net> wrote:
->   just a quick question, does anyone know if its possible to set a break/watchpoint in gdb when a register points to a certain location?
->   i own the gdb manual, and have been playing in it for a bit and just cant seem to figure it out, is it possible?
+--- Glynn Clements <glynn.clements@virgin.net> wrote:
 >
+>Tver Mit wrote:
 >
->I don't believe that could be done at all, the machine would have to
->stop whenever it mov'd a value to the register so the debugger could
->examine it.  I don't think that's possible on Intel machines, anyway.
+>> I write a programm that uses plugins (on dl* functions base). When plugin code is free of
+>> bugs all is ok, but when plugin faults by any reason, my programm do so. I want my programm
+>> to work even if plugin dies. I see two ways: 
+>> 1. handling signals 
+>> 2. run plugin in different thread or process
+>> but then: 
+>> in 1. what will be with resources, that plugin use ? 
+>> in 2. it'll be about 15-20 plugins running - so there will be 15-20 processes. And how to synchronise them all?
+>> 
+>> Got any ideas, opinions?
 >
->--
->Billy O'Connor
+>If a plugin shares its address space with the main program, a bug can
+>corrupt that address space, killing the main program.
+>
+>Running plugins in a separate process is the only reliable mechanism,
+>but it probably isn't practical. Even then, a plugin may still be able
+>to interfere with the main process if they share system resources such
+>as file descriptors.
+>
+>-- 
+>Glynn Clements <glynn.clements@virgin.net>
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
 _____________________________________________________________
 Sign up for FREE email from DoItYourself.com at http://doityourself.com
