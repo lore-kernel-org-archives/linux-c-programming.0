@@ -1,38 +1,53 @@
-From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-Subject: Re: Efficient UDP Programming
-Date: Mon, 23 Aug 2004 10:10:47 -0300
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: sequence of steps that goes from compilation to execution
+Date: Mon, 23 Aug 2004 11:50:45 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4129ECD7.9040305@ig.com.br>
-References: <1093057706.5080.28.camel@nicodemus>
+Message-ID: <E3E30069B061524E90BCEE4417E3066113851F@monm207.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1093057706.5080.28.camel@nicodemus>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Chuck Winters <chuckw@ieee.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: 'Sudheer Vutukuru' <sudheer.vutukuru@gmail.com>, linux-c-programming@vger.kernel.org
 
-I suggest you to have a fixed size for your header, then you can read 
-the header that ll say you about the rest of data following the header.
+>    Why a program which is compiled on linux does not execute on windows.. 
+>(though the machine architecture is same)..
 
-Luciano
+Different file formats.  Windows uses PE (portable executable) as its file
+format with the first two bytes being `MZ' (or possibly `ZM') that 
+designates it as a windows executable.  Linux uses ELF (executible linkable 
+format) as its file format with the second, third and fourth bytes of the 
+file being `ELF'.
 
-Chuck Winters escreveu:
+> Also   Can u please suggest me references or help me in knowing the
+>details of what goes on, from compilation to execution (i.e how
+>loading,linking libraries is done.. how addresses
+>are known dynamically etc.. ).
 
->Is there anyway of reading some data from a UDP socket without removing
->it from the received queue?  What I need to do is read in the header
->from a packet to determine how large of a memory chunk I need to
->allocate.
->
->Thanks,
->Chuck
->
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
+One of the best (only?) books on the subject "Linkers and Loaders" by John 
+Levine.  It covers various file formats (from simple (i.e. DOS) up through
+complex (PE and ELF)) and uses these formats to address all of the questions
+that you ask.  In addition, the book is availble from the authors website:
+
+http://www.iecc.com/linker/
+
+as well as in printed format.
+
+> for string literals whether memory is allocated in heap or in code
+>segment only..
+>i.e char* ptr = "Hello World";
+>  the ptr points into code segement or heap..
+
+In this case, I beleive that the C standard specifies that the string
+literal 
+will be a constant, and as such space will be reserved in a read-only
+section 
+of memory.  This is why a statement such as:
+
+ptr[5]='i';
+
+will fail.  Note however, that some compiles do not enforce this while
+others
+have flags that make string literals mutable.
+
+George 
