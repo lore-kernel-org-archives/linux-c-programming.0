@@ -1,35 +1,47 @@
-From: r_zaca <r_zaca@ig.com.br>
-Subject: Re: Type casting
-Date: Fri, 10 Dec 2004 08:06:00 -0200
-Message-ID: <20041210_100600_061286.r_zaca@ig.com.br>
+From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
+Subject: RE: Type casting
+Date: Fri, 10 Dec 2004 15:34:25 +0530
+Message-ID: <5959EA4638D8734599AB75EAAFBB6FEF0228AB43@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="Message-Boundary-by-Mail-Sender-1102673160"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: wwp <subscript@free.fr>, linux-c-programming@vger.kernel.org
+
+ya , lets take it to be declared of type int.
+
+-----Original Message-----
+From: wwp [mailto:subscript@free.fr]
+Sent: Friday, December 10, 2004 2:59 PM
 To: linux-c-programming@vger.kernel.org
+Subject: Re: Type casting
 
-This message is in MIME format. Since your mail reader does not understand
-this format, some or all of this message may not be legible.
 
---Message-Boundary-by-Mail-Sender-1102673160
-Content-type: text/plain; charset=ISO-8859-1
-Content-description: Mail message body
-Content-transfer-encoding: 8bit
-Content-disposition: inline
+Hello Bakki,
 
-> > can any body explain what is the type of x in : 
-> > 
-> >     x = (int) (float) x; 
+
+On Fri, 10 Dec 2004 09:53:59 +0530 "Bakki Srinivas"
+<bakki_srinivas@mindtree.com> wrote:
+
+> can any body explain what is the type of x in : 
 > 
-> No way to know x's type unless you show us the x declaration (maybe: > int 
-x; 
-> ?). 
-> You're maybe dealing w/ the type of the value that will be assigned > to x 
-> (int)? 
+>     x = (int) (float) x;
 
-  So what is the "(float)" for? 
+No way to know x's type unless you show us the x declaration (maybe: int x;
+?).
+You're maybe dealing w/ the type of the value that will be assigned to x
+(int)?
 
---Message-Boundary-by-Mail-Sender-1102673160--
 
+Regards,
+
+-- 
+wwp
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
