@@ -1,36 +1,30 @@
-From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Subject: static or shared
-Date: Tue, 7 Jan 2003 16:49:29 +0530 (IST)
+From: Steve Goodwin <SteveG@bitscorp.com>
+Subject: RE: Curses and key-up information
+Date: Tue, 7 Jan 2003 11:49:49 -0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.33.0301071646230.5493-100000@soochak.ncst.ernet.in>
+Message-ID: <4DB84F6A7711D511A5020002A550C8B778718F@BELL>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
+
+Thanks for that. A (deeper) trawl provided a post from 6/8/02 (thread: Re:
+question about gcc and keyboard hadling) with some source code - will try it
+l8r when I'm at a Linux box.
+
+Steev
 
 
-Hi,
 
-If /usr/lib contains both static and shared libraries of the same name 
-eg odbc, which library compiler is going to take if I do..
 
-gcc file.c -lodbc
+The information in this Internet Email is confidential and is intended
+solely for the addressee. Access, copying or re-use of information in it by
+anyone else is unauthorised. Please immediately notify the sender if you are
+not the intended recipient and have received this mail. 
+Any views or opinions presented are solely those of the author and do not
+necessarily represent those of Bits Corp plc or any of its affiliates. 
 
-How do I explicitly I define which library to take during compilation.
-
--- 
-
-**************************************************************************
-
-Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
-Assistant Manager II                          (off) : 0091-022-2024641
-National Centre for Software Technology   Fax       : 0091-022-2049573 
-8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in 	
-Mumbai 400021.
-
-Homepage : http://soochak.ncst.ernet.in/~khalid			  	  
-
-**************************************************************************
-
+Tel. +44 (0)20 8282 7200 
+Fax. +44 (0)20 8450 9966
