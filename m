@@ -1,23 +1,34 @@
-From: "qhwang" <qhwang@ieeta.pt>
-Subject: Re: out of memory
-Date: Wed, 8 Oct 2003 13:36:16 +0100
+From: "Sandro Dangui" <sdangui@nortelnetworks.com>
+Subject: RE: out of memory
+Date: Wed, 8 Oct 2003 09:44:28 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <003e01c38d98$c45ed300$70ab88c1@ieeta.pt>
-References: <31E38B53D182D51195FA00508BE3A33402CE4C9B@zwnbc004.cala.nortel.com>
+Message-ID: <31E38B53D182D51195FA00508BE3A33402CE4E51@zwnbc004.cala.nortel.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Sandro Dangui <sdangui@nortelnetworks.com>
+Content-Transfer-Encoding: 7bit
+To: qhwang <qhwang@ieeta.pt>
 Cc: linux-c-programming@vger.kernel.org
+
+
+Then you have to send us the piece of code that contains this hungry loop.
+
+
+-----Original Message-----
+From: qhwang [mailto:qhwang@ieeta.pt] 
+Sent: quarta-feira, 8 de outubro de 2003 09:36
+To: Dangui, Sandro [CMPS:RY11:EXCH]
+Cc: linux-c-programming@vger.kernel.org
+Subject: Re: out of memory
+
 
 
 
 > Do you have recursive calls?
-> If you alloc all memory you need in the beginning, then the only problem
-> that I can figure is that you have an infinite recursive call... or a loop
-> between calls. It may be causing a stack overflow.
+> If you alloc all memory you need in the beginning, then the only 
+> problem that I can figure is that you have an infinite recursive 
+> call... or a loop between calls. It may be causing a stack overflow.
 
 In my program there is a loop over 10k iteratives (image). In each loop
 there are some kind of statistical learning algorithm running. It is killed
