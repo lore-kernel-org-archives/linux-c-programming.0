@@ -1,92 +1,55 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+From: Scott <drmemory@3rivers.net>
 Subject: Re: Into the Void
-Date: Thu, 27 Jan 2005 12:02:58 +0800
-Message-ID: <41F867F2.5000201@hq.ntsp.nec.co.jp>
-References: <OFCBCF8B9A.C4F17DCE-ON85256F95.004B650B@teal.com> <20050126161137.GA954@drmemory.local>
+Date: Thu, 27 Jan 2005 10:01:05 -0700
+Message-ID: <20050127170105.GB945@drmemory.local>
+References: <OFCBCF8B9A.C4F17DCE-ON85256F95.004B650B@teal.com> <20050126161137.GA954@drmemory.local> <41F867F2.5000201@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050126161137.GA954@drmemory.local>
+Content-Disposition: inline
+In-Reply-To: <41F867F2.5000201@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Scott <drmemory@3rivers.net>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-extra typing?? r u using the term "type" in the same context as "data 
-type"(progamming language concept)?
-or "type" in the sense "keyboard typing"??
+On Thu, Jan 27, 2005 at 12:02:58PM +0800, Ron Michael Khu wrote:
+> extra typing?? r u using the term "type" in the same context as "data 
+> type"(progamming language concept)?
+> or "type" in the sense "keyboard typing"??
 
->>So I should use
->> memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';
+The latter. Jeff was telling me that I had to cast all of the
+arguments to (void *), rather than, as you correctly said, the return
+value. It doesn't seem to me (or more importantly, to the compiler)
+that casting the ARGUMENTS is necessary?
 
-Oops, I think u've misunderstood jeff's reply...
-What jeff and the others are trying to say is that the return value of 
-memcpy() is of type "void *"
+> 
+> *TAKE NOTE of the enclosing parenthesis:
+> ((char*)SOMETHING)[index] ='\0'   
 
-In essence:
-void *ptr;
-ptr = memcpy(...)
+I did get it right later in my post, didn't I?
+> >Or, I guess, to follow Ron's suggestion too:
+> >
+> >  ((char*) memcpy ((void *) *data_buf, (void *) bp, len)) [len] = '\0';
 
-thus, u need to cast the return value to something more appropriate.
+> 
+> P.S. Hmmmm... u seem to have trouble understanding what a "void*" is.
+> Void * could be anything.. thus u cant simply go around indexing a void*
+> and treating it like an array without properly casting it...
 
-And by the way, 
-"memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';" is WRONG
+I'm starting to grok it. I learned C back in the old days before there
+was such a thing, and you could pretty much do anything you wanted
+with any pointer. Could sure shoot yourself in the foot if you weren't
+paying attention! Actually, I suppose back then memcpy and the like
+returned char*. To test my understanding: I have to cast the function
+because of the indexing operation. If I just ASSIGN the return value,
+then the compiler does implicit type-casting for me. As in:
 
-u still need to cast it properly if ur u persist on doing it the "one-liner way":
-( (char*)memcpy ((void *) *data_buf, (void *) bp, len) )[len] = '\0';
+  char *bp;
+  bp = memcpy(foo,bar,len);
 
-*TAKE NOTE of the enclosing parenthesis:
-((char*)SOMETHING)[index] ='\0'   
+Thanks for your help; I actually managed to get the program to compile
+with no errors, but now am getting a segmentation fault which I can't
+track down, so I'll probably be back to plague you folks some more!
 
-(assuming of course SOMETHING is something that could safely be treated as char *)
-
-and like what George stated earlier... this one-liner thing is a maintenance 
-headache(a code readability issue), and thus, not advisable.
-better chop that one-liner down to something more readable/maintanable.
-
--Ron
-
-P.S. Hmmmm... u seem to have trouble understanding what a "void*" is.
-Void * could be anything.. thus u cant simply go around indexing a void*
-and treating it like an array without properly casting it...
-
-
-
-Scott wrote:
-
->On Wed, Jan 26, 2005 at 08:45:09AM -0500, Jeff.Fellin@rflelect.com wrote:
->  
->
->>The reason you are getting the references to void is the function prototype
->>for memcpy is:
->>
->>      memcpy (void *dest, void *src, size_t n);
->>
->>You are passing char* pointers which are not void * pointers. You have to
->>correct your arguments
->>to remove the error messages. Please use man memcpy() for more details.
->>    
->>
->
->So I should use
->
->   memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';
->
->(len is already type size_t) 
->
->Or, I guess, to follow Ron's suggestion too:
->
->   ((char*) memcpy ((void *) *data_buf, (void *) bp, len)) [len] = '\0';
->
->Just curious as to what evil all of this extra typing is supposed to
->be protecting me from?
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
-
-
+Scott.
