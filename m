@@ -1,25 +1,31 @@
-From: SVisor <svisor@lycos.com>
+From: Emmet Ford <emmet@optonline.net>
 Subject: Re: Directory contents
-Date: Sat, 27 Nov 2004 19:26:28 +0100
-Message-ID: <coagsk$afm$1@sea.gmane.org>
+Date: Sat, 27 Nov 2004 17:38:44 -0500
+Message-ID: <41A901F4.60808@optonline.net>
 References: <200411271900.48627.hitoc_mail@yahoo.it>
-Reply-To: svisor@lycos.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200411271900.48627.hitoc_mail@yahoo.it>
+In-reply-to: <200411271900.48627.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: HIToC <hitoc_mail@yahoo.it>
+Cc: Linux C programming <linux-c-programming@vger.kernel.org>, Linux Assembly <linux-assembly@vger.kernel.org>
+
+opendir, readdir, closedir are C standard library calls.
 
 HIToC wrote:
-...
-> I want to write a function that can read the contents of a specified directory
-> in order to find a certain type of file or to copy a directory-tree or
-> something else.
-> Neverthless I need of some system functions that find the files that are
-> contained in that directory (like FINDFIRST and FINDNEXT under ms-dos).
 
-opendir( ) and readdir( ) might be what you are looking for?
-
+>Hi all!
+>
+>I want to write a function that can read the contents of a specified directory
+>in order to find a certain type of file or to copy a directory-tree or
+>something else.
+>Neverthless I need of some system functions that find the files that are
+>contained in that directory (like FINDFIRST and FINDNEXT under ms-dos).
+>
+>Who can help me?
+>
+>  
+>
