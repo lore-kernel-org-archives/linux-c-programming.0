@@ -1,10 +1,8 @@
-From: ronkhu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: another socket connection question
-Date: Thu, 03 Jul 2003 11:45:19 +0800
+From: Vidya Kotamraju <vidyakr@darya.nio.org>
+Subject: Control key with Ncurses
+Date: Thu, 03 Jul 2003 12:30:17 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F03A6CF.9010407@hq.ntsp.nec.co.jp>
-References: <3F039FB2.3070600@hq.ntsp.nec.co.jp>
-Reply-To: ronkhu@ntsp.nec.co.jp
+Message-ID: <3F03D481.1080008@darya.nio.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -12,168 +10,55 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-( after successful connection)how about  making the client wait
-for a certain u-can-now-send-me-requests message
-from the server before proceeding in sending requests?
+Hi all,
 
-Lejanson C. Go wrote:
+I am writing a graphics-based application in Linux by making use of C 
+and ncurses library.
+The application needs that i take two numbers as input ( i make use of 
+scanw for the same).
+However at this point in the program i want the user to obtain the 
+flexibility of exiting gracefully from the program(by pressing a cntrl 
+key,like say F5).
 
->
->             Client                       Server
->               .                             .
->               .                             .
->               .    retry connect until      .
->               o---------------------------->.
->               .         success             .
->               .                             .
->               .<----------------------------o
->               .                             .
->               .                             .
->               .                             .
->               .                             .
->               .      getServerNodeId        .
->               o---------------------------->.  Server wont be ready
->               .    retry until success      .  until some time
->               .                             .
->               .                             .
->
->
->
-> I am trying to make a client server application where a client
-> is trying to get the nodeId of the server.
->
-> The server opens up its ports and my client connects to the server.
-> If unsuccessful the client side will retry to connect until it is
-> successful.
->
-> Considering the client is connected. Client application then will
-> send a GetServerNodeId request to the server.
->
-> What if the server is not ready to receive any request, how will
-> I make my GetServerNodeId request to be sent without errors? My
-> client application displays "Broken Pipe" when I run the client.
->
->
-> Steps in Testing:
->
-> 1. run server
-> 2. client connects to server until success
-> 3. server is not ready to read requests
-> 4. getServerNodeId - retry until success.
->
->
-> My problem revolves on my getServerNodeId request. Since my client
-> application have no way of knowing if the server is already accepting
-> requests from the client.
->
-> Can anyone help me please?
->
->
-> Here is a code snippet of the getServerNodeId :
->
->
-> //--------------------- SNIP -----------------------------//
->
-> inti sendNMCommand( void *data, inti size )
-> {
->   int ret = -1;
->
->   if (nmCmdSockConnected == FALSE)
->   {
->     return (ERR);
->   }
->
->   ret = write( nmCmdSock, data, size );
->
->   if (ret != size)
->   {
->       return (ERR);
->   }
->
->   return( ret );
-> }
->
->
-> inti getServerNodeId(void)
-> {
->   MSG_HEADER     header;
->   NODE_INFO      node_info;
->   int    stat;
->   char   *str;
->   struct in_addr tmpAddr;
->
->   memset( &header, 0, sizeof(header));
->   memset( &node_info, 0, sizeof(node_info));
->
->   header.msg_type     = CLI_NM_MSG_TYPE_NODE_ID | 
-> CLI_NM_MSG_TYPE_COMMAND_SHOW;
->   header.msg_size = sizeof(header);
->
->   stat = sendNMCommand( &header, sizeof(header) );
->
->   if (stat == ERR )
->   {
->     return(ERR);
->   }
->
->   memset( &header, 0, sizeof(header));
->
->   stat = read(nmCmdSock, &header, sizeof(header));
->
->   if (stat <= 0)
->   {
->     return (ERR);
->   }
->
->   if (header.msg_ret_code != CLI_NM_MSG_RETCODE_SUCCESS)
->   {
->     return (ERR);
->   }
->
->   if (header.msg_type == (CLI_NM_MSG_TYPE_NODE_ID | 
-> CLI_NM_MSG_TYPE_COMMAND_SHOW))
->   {
->     stat = recvNMData( &node_info, sizeof(node_info), &nmCmdSock);
->     if (stat == ERR)
->     {
->       return (ERR);
->     }
->
->     tmpAddr.s_addr = node_info.node_id;
->     str = inet_ntoa(tmpAddr);
->     setPrompt(str);
->   }
->   else
->   {
->     return (ERR);
->   }
->   return(OK);
-> }
->
->
-> //--------------------- SNIP -----------------------------//
->
->
->
->
->
-> ->end.
->
->
->
->
->
->
->
->
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
+Cntrl-D doesnt seem to work with ncurses..
+
+Heres a snippet of the code.....
 
 
+
+/*FORM INITIALIZATION*/
+
+my_form = new_form(field);
+post_form(my_form);
+refresh();
+
+mvprintw(1,8,"NOTE:THE ROW AND COLUMN ARE AS DEFINED IN MATRIXALGEBRA");
+mvprintw(2,8,"Enter the row and column coordinates(i and j values):");
+
+mvprintw(3,8,"i and j: ");
+scanw("%d %d",&i,&j);
+
+// at this point i want to exit from the program if F5 key is pressed.
+
+
+
+Any pointers ?
+
+Regards,
+Vidya
+
+-- 
+--------------------------------------------------------------------------
+As far as the laws of mathematics refer to reality,they are not certain;
+and as far as they are certain, they do not refer to reality.
+                                       - Albert Einstein (1879-1955)
+--------------------------------------------------------------------------
+Kotamraju Vidya
+Marine HydroDynamics Lab,
+Physical Oceanography Division,
+National Institute of Oceanography,
+Dona Paula, Goa 403 004, India.
+Ph.: +91-832-2456700 *4400 (O)
+      +91-832-2541756 (R)
+e-mail: vidyakr@darya.nio.org
 
