@@ -1,27 +1,30 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Debug flag for libraries.
-Date: Tue, 1 Jul 2003 12:02:30 +0100
+From: Francis Lau <fkwlau@utcc.utoronto.ca>
+Subject: quotactl
+Date: Wed, 2 Jul 2003 12:48:14 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16129.27206.195388.670340@cerise.nosuchdomain.co.uk>
-References: <DD9E117A8BE9F34FA4130376EC9C1F6A048B48B7@BANMLVEM01.e2k.ad.ge.com>
+Message-ID: <Pine.LNX.4.44.0307021245010.20193-100000@gpu.utcc>
+References: <S265125AbTGBQaA/20030702163000Z+15659@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <DD9E117A8BE9F34FA4130376EC9C1F6A048B48B7@BANMLVEM01.e2k.ad.ge.com>
+In-Reply-To: <S265125AbTGBQaA/20030702163000Z+15659@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "Ramanan, Venkat (MED)" <Venkat.ramanan@geind.ge.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hi,
 
-Ramanan, Venkat (MED) wrote:
+For some reason, quotactl does not work for me even though I have QUOTA 
+turned on in the kernel.
 
-> I need to compile a program with the debug flag "-g". The program uses
-> some (static) libraries which have already been compiled without the
-> "-g" flag. So, if I need all the debugging information ( line numbers
-> etc. ) even from the libraries, do I need to recompile the libraries?
+ struct mem_dqblk mydq;
+ i = quotactl (QCMD(Q_GETQUOTA,USRQUOTA), "/dev/md5", 2099, &mydq);
 
-Yes.
+i always returns -1 with errno = 22 (EINVAL The kernel has not 
+been compiled with the QUOTA  option. cmd is invalid.)
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+Has anyone seen this before? Any suggestions are welcome.
+
+Thanks,
+Francis
+
