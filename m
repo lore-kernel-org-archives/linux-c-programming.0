@@ -1,35 +1,24 @@
-From: "John T. Williams" <jowillia@vt.edu>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: [Fwd: Re: Implementing a file counter (like "ls | wc")]
-Date: 07 Apr 2004 21:01:47 -0400
+Date: Thu, 8 Apr 2004 05:39:23 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1081386105.20924.1.camel@Marx.fesnel.no-ip.org>
+Message-ID: <16500.55163.50294.74986@cerise.nosuchdomain.co.uk>
 References: <4074313A.5090808@ig.com.br>
-	 <1081356842.18677.23.camel@Marx.fesnel.no-ip.org>
-	 <Pine.LNX.4.58.0404072202460.31808@praktifix.dwd.de>
-	 <200404090200.36787.meren@comu.edu.tr>
+	<1081356842.18677.23.camel@Marx.fesnel.no-ip.org>
+	<Pine.LNX.4.58.0404072202460.31808@praktifix.dwd.de>
+	<200404090200.36787.meren@comu.edu.tr>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-V5iGRkM48/CAwEzZ5Rgw"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <200404090200.36787.meren@comu.edu.tr>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: jtwilliams@vt.edu
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: "A. Murat Eren" <meren@comu.edu.tr>
+Cc: Holger Kiehl <Holger.Kiehl@dwd.de>, linux-c-programming@vger.kernel.org
 
 
---=-V5iGRkM48/CAwEzZ5Rgw
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+A. Murat Eren wrote:
 
-I just want to say after much testing, I've gone and proved myself
-wrong.  
-
-Anyone interested in playing with the concept I've included the code. 
-
-
-
-On Thu, 2004-04-08 at 22:00, A. Murat Eren wrote:
->  Hi,
-> 
 >  I've read all of the mailing thread about this subject and i'd like to ask 
 > some questions..
 > 
@@ -42,11 +31,29 @@ On Thu, 2004-04-08 at 22:00, A. Murat Eren wrote:
 > compiled binary, and when i'm logging in from the console, normally i'm 
 > falling to a prompt which is written by me.
 > 
->  I'm not using the well-known programs such as 'ls', 'cd' etc.. i have my own 
+>  I'm not using the well-known programs such as 'ls', 'cd' etc.
+
+"cd" isn't a program; it's a built-in shell command. It has to be; a
+process can't change the current directory of another process, so a
+"cd" program just wouldn't work.
+
+>. i have my own 
 > envoriment variables and my own basic programs those are invoking from my 
 > prompt with fork and execvp. If i do not want to use the syscalls such as 
 > readdir, opendir what i must do?
-> 
+
+In most of the situations where you use syscalls, you can't avoid
+using them; the point is not to use them excessively.
+
+E.g. if you're reading a file (or any other descriptor), calling
+read() a few times and reading a large amount of data each time is
+more efficient than calling read() lots of times and reading a small
+amount of data each time.
+
+Or, for an "ls" replacement, only call stat() (or lstat()) if you
+actually need the additional data (e.g. for "ls -l", "ls -F" etc)
+rather than always calling it "just in case".
+
 >  With readdir, i can read everything from the every type of file system which 
 > supported by kernel *transparently*, for example when i'm working on a disk 
 > partition which is formatted with ext3 file system i don't have to try to 
@@ -59,32 +66,21 @@ On Thu, 2004-04-08 at 22:00, A. Murat Eren wrote:
 > nearly i'm sure that it would be impossible to undrstand (and this is another 
 > problem, i can't understand the source code usually :( it would be great to 
 > hear your advices about how i improve my vision).
-> 
-> 
->  Thanks for your time from now,
->  Regards.
 
---=-V5iGRkM48/CAwEzZ5Rgw
-Content-Disposition: attachment; filename=ls.tgz
-Content-Type: application/x-gzip; name=ls.tgz
-Content-Transfer-Encoding: base64
+There is seldom any point in bypassing libc. For a syscall, the libc
+function will usually consist of the syscall itself, plus setting
+errno if the syscall returns an error status, so there wouldn't be
+anything to gain from making the syscall directly.
 
-H4sIAAakdEAAA+1YW0/bMBTua/IrzjrB0tJLkt4k2PawiyYe9gJoL2OqssSlHmlSxQ6sm/rfd47T
-pAl06y4UNOEP2sT2l3PxcfwZQtGt7Rq23bdHgwFebXs0rF5XqDm23Rs4rjMa2jXbcYfuoAaDnUeG
-SIX0EoDaF3nNw5B7M7GZt238P0UoujMmp3HgdPxd+bCxuMN+/2f1d3FwVX9nOOw5yO/3em4N7F0F
-VMYjr/9THvlhGrDnYiG6cjFnojN9aRa9AU9YJLELzCqTz1iFSJ04k7LSmUZcyIC6EDyS5szjEVh4
-B15y8boF/tRLmk1qfGjAd9N4c3wCTfQ5b0FTMiGPTIMo4H0WcZhK9hG3iE9559yT07xDyCT1JWTh
-KhNjvEkWOETe/DjF7xdgr6mUwZUXApVftoBFwYormN+CGQ/XVMoLJjxkY7rLafwbO8K0jAsmyVY8
-CbyFBfsre3YDB8mAP19YFGkL6l0m/W5dDfCJBU8syhSjiufonSeK1gD6wakw5gm6mVj1symDV2Ec
-BwuVMXABUYwTqJL1ZZwsDmFPnEf1lhpH84bBvnJptR26X6K36ykGb0ExK+gzYV5APimE3OMq2nyy
-S/ZoxJOlkcJU+2UwjrwZQ1q3uw6aisejiyKy/EllDZOn8VLmxbCKhAwVls4lJlykisaUCcMPY8Ho
-UbKkupbAQsFUImp6qValiPeLAmZOiFY8ojxWXRK98EYGT8fHpydv31mFnY6Q41kcqKAVyVDL7OBA
-PbI01Qd/i1DVXB/dXDL7OAXFemE+zgp2dOTVmBrtbH2ummgYF+aakd6gpIpjrqswZQnDt4vB3oCr
-jLJqqDgps5zI8X2I40ssF+/s2SOuWPmL0DjC9BIm0ySiF2hpPvSepXF3KPTffTD9d0Z42Cv0317p
-f0/r/31gi/5vlPWNB4BNJ4WK/v/ZAWCHyn9LzredCHAPVLvh7a17LfbwiMX+LBP721oPmdhvUeKK
-3GO9wiB6VqpSJsKKlGXqbpT7X8qzYv2rPBt3ps93r9B/LdC4/7/3Lhl53tkes2X/t93133/9UX9A
-+787cvT+fx/wwvAQ6ATgqG/XNFUj61P/FcD3wcdVHJdYWb9iujnTvcF0S/0mHdKrbgzVyC6u6YfM
-iw5xEc+g2YmhPVG3Gb/UcLEBpj5/amhoaGhoaGhoaGhoaGhoaGhoaGj8Bn4Aym04vwAoAAA=
+BTW, on Linux, glibc's readdir() function isn't implemented using the
+readdir syscall but using the getdents syscall instead. The latter
+reads multiple directory entries per call, so is more efficient.
 
---=-V5iGRkM48/CAwEzZ5Rgw--
+You can't realistically bypass the syscalls themselves; not only would
+trying to read files by accessing the device directly require
+sufficient privilege, it would also be error-prone, as a user-space
+process can't hold kernel locks and can't prevent itself being
+preempted at an inconvenient point.
 
+-- 
+Glynn Clements <glynn.clements@virgin.net>
