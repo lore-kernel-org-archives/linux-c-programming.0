@@ -1,90 +1,70 @@
-From: =?iso-8859-1?Q?Carlos_Fern=E1ndez?= <cfernandez@myalert.com>
-Subject: Re: parsing with fscanf().
-Date: Thu, 12 Sep 2002 14:21:58 +0700
+From: jnf <xjnfx@doityourself.com>
+Subject: inet kernel question cont.
+Date: Thu, 12 Sep 2002 00:47:21 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <003601c25a2d$1717d060$305311ac@bangkok1>
-References: <Pine.LNX.4.33.0209121254590.309-100000@soochak.ncst.ernet.in>
+Message-ID: <20020912074723.1055B396E@sitemail.everyone.net>
+Reply-To: xjnfx@doityourself.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>, Elias Athanasopoulos <eathan@otenet.gr>
-Cc: Glynn Clements <glynn.clements@virgin.net>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-http://epaperpress.com/lexandyacc/
-
-(happens to be the first result on google, btw)
-
------ Original Message -----
-From: "Mohammed Khalid Ansari" <khalid@ncst.ernet.in>
-To: "Elias Athanasopoulos" <eathan@otenet.gr>
-Cc: "Glynn Clements" <glynn.clements@virgin.net>;
-<linux-c-programming@vger.kernel.org>
-Sent: Thursday, September 12, 2002 2:25 PM
-Subject: Re: parsing with fscanf().
+ok so i have a barbones modules that registers a callback function w/ the kernel for dealing with ip packets via dev_add_pack(), the problem is, that my function never seems to be called and after an exhaustive search of google and general tinkering around, i dont know what the problem is. below is the code, any help would be appreciated.
 
 
->
-> Hello,
->
-> Is there any site which gives an extensive tutorial on lex/yacc?
->
-> with regards...
->
-> --
->
-> **************************************************************************
->
-> Mohammed Khalid Ansari                    Tel (res) : 0091-022-3051360
-> Assistant Manager II                          (off) : 0091-022-2024641
-> National Centre for Software Technology   Fax       : 0091-022-2049573
-> 8th flr,Air India Build. Nariman Point,   E-Mail    : khalid@ncst.ernet.in
-> Mumbai 400021.
->
-> Homepage : http://soochak.ncst.ernet.in/~khalid
->
-> **************************************************************************
->
-> On Wed, 11 Sep 2002, Elias Athanasopoulos wrote:
->
-> > On Wed, Sep 11, 2002 at 08:36:04PM +0100, Glynn Clements wrote:
-> > > fscanf() is worthless when the data doesn't adhere to a rigid format.
-> > > One of the main problems is that, even when it isn't entirely
-> > > successful, it consumes some of the data from the stream.
-> > >
-> > > A better solution is to read whole lines (e.g. with fgets), then parse
-> > > it with sscanf(). That way, if sscanf() fails, you can try again with
-> > > the same data. E.g.
-> > >
-> > > for (;;)
-> > > {
-> > > char buff[81];
-> > > fgets(buff, sizeof(buff), fp);
-> > > if (sscanf(buff, "%d %d %f", &i1, &i2, &f) == 3)
-> > > continue;
-> > > if (sscanf(buff, "%d %f", &i1, &f) == 2)
-> > > continue;
-> > > error();
-> > > }
-> >
-> > Thank you. I was up to write something like that, but I wasn't sure and
-> > was ready to give up and go traditionaly with read(). ANW, thanks for
-> > the above code, it helps a lot. :-)
-> >
-> > > If you ever need to write a real parser, learn lex/yacc.
-> >
-> > Nah... it is for a short report, a project that I want to spend as less
-> > time as I can.
-> >
-> > Elias
-> >
-> >
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+#define MODULE
+#define __KERNEL__
 
+#include <linux/config.h>
+#include <linux/module.h>
+#include <linux/version.h>
+#include <linux/netdevice.h>
+#include <linux/if_ether.h>
+#include <linux/skbuff.h>
+#include <linux/kernel.h>
+
+char *dev;
+
+MODULE_PARM(dev,"s");
+
+struct net_device *d;
+struct packet_type pproc;
+
+int pprocfunc(struct sk_buff *skb, struct net_device *dv, struct packet_type *pt) {
+
+	printk("yey\n");
+	kfree_skb(skb);
+	return 0;
+}
+
+int __init pproc_mod_init(void) {
+		
+		(char *)d = dev_get(dev);
+		
+		pproc.dev = d;
+		pproc.func = pprocfunc;
+		pproc.type = htons(ETH_P_IP);
+		pproc.data = (void *)1;
+		pproc.next = NULL;
+		dev_add_pack(&pproc);
+		printk("in\n");
+		return 0;
+	}			
+
+void __exit pproc_mod_cleanup(void) {
+	dev_remove_pack(&pproc);
+	printk("rmvd\n");
+}
+
+module_init(pproc_mod_init);
+module_exit(pproc_mod_cleanup);
+
+
+_____________________________________________________________
+Sign up for FREE email from DoItYourself.com at http://doityourself.com
+
+_____________________________________________________________
+Promote your group and strengthen ties to your members with email@yourgroup.org by Everyone.net  http://www.everyone.net/?btn=tag
