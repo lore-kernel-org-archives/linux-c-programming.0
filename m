@@ -1,51 +1,56 @@
-From: "K. Anantha Kiran" <ananth@cse.iitk.ac.in>
-Subject: Re: Reading BIOS
-Date: Sat, 27 Nov 2004 15:13:01 +0530
-Message-ID: <41A84C25.9080707@cse.iitk.ac.in>
-References: <1101371672.3795.36.camel@myLinux> <20041125105214.GF2067@lug-owl.de>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: help
+Date: Sat, 27 Nov 2004 10:57:33 +0100
+Message-ID: <20041127095733.GC14719@lug-owl.de>
+References: <5959EA4638D8734599AB75EAAFBB6FEFA471E8@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="H8ygTp4AXg6deix2"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041125105214.GF2067@lug-owl.de>
+Content-Disposition: inline
+In-Reply-To: <5959EA4638D8734599AB75EAAFBB6FEFA471E8@mtv01ex04.mindtree.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
+To: Linux C Programming <linux-c-programming@vger.kernel.org>
 
-Can anybody give references to interpret the output of *lspci* command
 
-Thanks In Advance
-K.Ananth
+--H8ygTp4AXg6deix2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Jan-Benedict Glaw wrote:
+On Thu, 2004-11-25 15:25:23 +0530, Bakki Srinivas <bakki_srinivas@mindtree.=
+com>
+wrote in message <5959EA4638D8734599AB75EAAFBB6FEFA471E8@mtv01ex04.mindtree=
+=2Ecom>:
+> hi,
+>     whats the equivalent of sprintf in the kernel mode?
 
->On Thu, 2004-11-25 14:04:32 +0530, Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
->wrote in message <1101371672.3795.36.camel@myLinux>:
->  
->
->>Hi,
->>Is it possible to probe for, say, ide controllers from the BIOS, CMOS
->>information with a C program? Is there any documentation available
->>regarding the same??
->>    
->>
->
->Well, you don't really want to fiddle with physical addresses from
->within userspace programs while running a protected-mode operating
->system:-)
->
->If you only want to know the type of IDE controller, and if your
->hardware wasn't build during stone age, it's probably as simple as
->reading the IDE controller's PCI device IDs. There's a libpci available
->for Linux which helps you doing this (because there are different access
->methods for accessing the PCI busses).
->
->'lspci' for example uses it, probably parsing lspci's output is just
->enough for your job...
->
->MfG, JBG
->
->  
->
+sprintf()
 
+MfG, JBG
+
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
+
+--H8ygTp4AXg6deix2
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQFBqE+NHb1edYOZ4bsRAhpDAJ9gu7eKHFPHBGuLJ07XIg6DOe9oowCeIlXv
+GRXn+Ijw79wYNr6HOpkpD4g=
+=vuPv
+-----END PGP SIGNATURE-----
+
+--H8ygTp4AXg6deix2--
