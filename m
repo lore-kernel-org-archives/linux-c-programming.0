@@ -1,43 +1,51 @@
-From: djh <djh@chello.at>
-Subject: Re: C and GTK programming
-Date: Fri, 05 Mar 2004 23:15:00 +0100
+From: Nasir Simbolon <nasir@orbisindonesia.com>
+Subject: constant variable
+Date: Thu, 11 Mar 2004 18:19:00 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4048FBE4.2090301@chello.at>
-References: <1078399551.29095.67.camel@gep.morknat.no-ip.org>
+Message-ID: <200403111819.00752.nasir@orbisindonesia.com>
+Reply-To: nasir@orbisindonesia.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1078399551.29095.67.camel@gep.morknat.no-ip.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Dark <dark@chello.hu>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-hi,
+Hi All, 
+I just curious. I have the following codes
 
-try "gtk-demo".
+main()
+{
+ 	const int i=9;          //declare constant  integer variable and initialize
+       	int* j=NULL;   		     //declare a pointer to integer
+	 j = (int*) &i;         //j point to address of memory i 
+ 	*j = 3;		     //modify value  of  j point to 
 
-open a terminal and type the command ...
-there are a lot of running examples with code.
+	//Now print the result
+	 printf("value of i = %d\n",i);
+  	 printf("value of j = %d\n",*j);
+	 printf("Address of i = %x\n",&i);
+ 	 printf("Address of j = %x\n",j);
+}
+when I compile using gcc version 3.3.2 (Debian) and run, I have the result :
 
-bye
-helmut
+value of i = 9
+value of *j = 3
+Address of i = bffff8a4
+Address of j = bffff8a4
 
-Dark schrieb:
-> I need help with GTK programming in C. Im working on a small
-> Enlightenment menu editor application, but I cannot figure out how to
-> use the gtk_tree_view widget, that I need. Would someone please send a
-> VERY simple example that only makes a tree list appear with some
-> subtrees in a window? I need a really simple stuff probably with only
-> one function, becouse I started C programming some days ago and I don't
-> understand complicated sysntaxes yet.
-> 
-> thanks
-> 
-> Dark
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+Now, I notice  that j point to address of i BUT they do not  have the same 
+value.
+
+Anybody have an explanation?
+
+
+Regards,
+
+Nasir 
+
+
+-- 
+"timor Domini principium scientia (Prov 1:7)"
+
