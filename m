@@ -1,67 +1,70 @@
-From: "+RudyMartin" <rmb@coopenet.com.ar>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: Curses and key-up information
-Date: Thu, 16 Jan 2003 21:17:36 -0300
+Date: Fri, 17 Jan 2003 12:21:40 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001d01c2bdbd$d746b880$28d831c8@oemcomputer>
-References: <4DB84F6A7711D511A5020002A550C8B778718F@BELL>
+Message-ID: <20030117112140.GB9407@lug-owl.de>
+References: <4DB84F6A7711D511A5020002A550C8B778718F@BELL> <001d01c2bdbd$d746b880$28d831c8@oemcomputer>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="jho1yZJdad60DJr+"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <001d01c2bdbd$d746b880$28d831c8@oemcomputer>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
 
-perhaps its my lack of experience in linux programming but I tried the
-referred source code and it didnt worked
+--jho1yZJdad60DJr+
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-also, the ioctrl documentation says the keyboard access is done trhough the
-tty driver but i wanted a direct keyboard access, like VMware under X
+On Thu, 2003-01-16 21:17:36 -0300, +RudyMartin <rmb@coopenet.com.ar>
+wrote in message <001d01c2bdbd$d746b880$28d831c8@oemcomputer>:
+>=20
+> perhaps its my lack of experience in linux programming but I tried the
+> referred source code and it didnt worked
 
-since im doing a Brief emulation I was forced to remap some default keys. :(
-(btw the text editor is currently at 5% of completion but its working pretty
-good, if anyone wants a copy of the sources just let me know)
+Then you probably did something wrong:-)
 
-good luck
+> also, the ioctrl documentation says the keyboard access is done trhough t=
+he
+> tty driver but i wanted a direct keyboard access, like VMware under X
 
+Well, if you do direct I/O the the keyboard controller, you face a
+number of problems:
 
------ Original Message -----
-From: "Steve Goodwin" <SteveG@bitscorp.com>
-To: <linux-c-programming@vger.kernel.org>
-Sent: Tuesday, January 07, 2003 8:49 AM
-Subject: RE: Curses and key-up information
+	1. Your code is not portable, in no way. Not even between
+	different architectures running Linux
+	2. You face races between your code and the in-kernel code which
+	will cause spurious errors
 
+> since im doing a Brief emulation I was forced to remap some default keys.=
+ :(
+> (btw the text editor is currently at 5% of completion but its working pre=
+tty
+> good, if anyone wants a copy of the sources just let me know)
 
-> Thanks for that. A (deeper) trawl provided a post from 6/8/02 (thread: Re:
-> question about gcc and keyboard hadling) with some source code - will try
-it
-> l8r when I'm at a Linux box.
->
-> Steev
->
->
->
->
-> The information in this Internet Email is confidential and is intended
-> solely for the addressee. Access, copying or re-use of information in it
-by
-> anyone else is unauthorised. Please immediately notify the sender if you
-are
-> not the intended recipient and have received this mail.
-> Any views or opinions presented are solely those of the author and do not
-> necessarily represent those of Bits Corp plc or any of its affiliates.
->
-> Tel. +44 (0)20 8282 7200
-> Fax. +44 (0)20 8450 9966
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+That's not good at all:-(
 
+MfG, JBG
 
----
-Outgoing mail is certified Virus Free.
-Checked by AVG anti-virus system (http://www.grisoft.com).
-Version: 6.0.443 / Virus Database: 248 - Release Date: 10/01/03
+--=20
+   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
+   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur
+    fuer einen Freien Staat voll Freier B=FCrger" | im Internet!
+   Shell Script APT-Proxy: http://lug-owl.de/~jbglaw/software/ap2/
 
+--jho1yZJdad60DJr+
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.1 (GNU/Linux)
+
+iD8DBQE+J+dEHb1edYOZ4bsRAj6IAJ4lqLbNn0j0dqeMmbW5nrh/m4fdZwCeOljV
+pwZpgxvTi2kY8sblealpocs=
+=Nc48
+-----END PGP SIGNATURE-----
+
+--jho1yZJdad60DJr+--
