@@ -1,17 +1,37 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Cannot capture SIGPIPE
-Date: Wed, 4 Feb 2004 13:15:43 +0000
+From: "Colovic (ext_evosoft) Aleksandar" 
+	<aleksandar.colovic.external@siemens.com>
+Subject: RE: Cannot capture SIGPIPE
+Date: Wed, 4 Feb 2004 15:12:19 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16416.61567.185027.515162@cerise.nosuchdomain.co.uk>
-References: <MNIBOEAJBKPBGIAA@mailcity.com>
+Message-ID: <856404FAF3EDB94BB597F6316C5569B90EFED0@erlf440a.erlf.siemens.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <MNIBOEAJBKPBGIAA@mailcity.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+
+Hi,
+
+good comment from Glynn. But I would additionaly declare the global variable
+sigpipe as:
+
+static volatile sig_atomic_t sigpipe;
+
+... to be on the safe side.
+In this example (as coded) it think it isn't necessary.
+
+Aleksandar Colovic
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Glynn
+Clements
+Sent: Mittwoch, 4. Februar 2004 14:16
 To: parvezp@lycos.com
 Cc: linux-c-programming@vger.kernel.org
+Subject: Re: Cannot capture SIGPIPE
+
 
 
 Parvez Pathan wrote:
@@ -61,3 +81,8 @@ performed outside of the handler when the flag is set, e.g.
 
 -- 
 Glynn Clements <glynn.clements@virgin.net>
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
