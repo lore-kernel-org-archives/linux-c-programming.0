@@ -1,60 +1,53 @@
-From: Nico Schottelius <nico-linux-c-programming@schottelius.org>
-Subject: Re: Email Verification Request
-Date: Wed, 30 Jun 2004 11:42:20 +0200
+From: John Richard Moser <nigelenki@comcast.net>
+Subject: Re: "static const" attribute in C++ (How to ?)
+Date: Wed, 30 Jun 2004 16:39:47 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040630094220.GR4449@schottelius.org>
-References: <200406260013.i5Q0DcPH017131@www.web-geek.com> <20040630082411.GO4449@schottelius.org> <cbtu9l$ou0$1@sea.gmane.org>
+Message-ID: <40E32513.1090502@comcast.net>
+References: <40E09FC4.50800@ig.com.br> <16608.44836.384260.844173@cerise.nosuchdomain.co.uk> <20040629143238.GD6335@luna.mooo.com>	 <16609.43579.336662.194984@cerise.nosuchdomain.co.uk> <20040630013316.GF9412@luna.mooo.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="TMgB3/Ch1aWgZB1L"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <cbtu9l$ou0$1@sea.gmane.org>
+In-Reply-To: <20040630013316.GF9412@luna.mooo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Charlie Gordon <gmane@chqrlie.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Micha Feigin <michf@post.tau.ac.il>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
 
---TMgB3/Ch1aWgZB1L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Charlie Gordon [Wed, Jun 30, 2004 at 10:42:24AM +0200]:
-> It actually looks more like a bug than a spam.
+Micha Feigin wrote:
+| On Tue, Jun 29, 2004 at 06:43:23PM +0100, Glynn Clements wrote:
+|
+|>It doesn't matter. A #include directive simply inserts the contents of
+|>the header file directly into the source code which is fed to the
+|>compiler. The compiler doesn't care which file a given piece of code
+|>comes from.
+|>
+|
+| It is a problem since a header can be included more then once, and
 
-yep, two bugs: One in your system and one in all
-the users replying.
+Umm.
 
-Can you fix the one in your system?
+#import "foo.h"
 
-Nico
+This includes only one time.  I'd only use this with Objective-C though.
 
---=20
-Keep it simple & stupid, use what's available.
-Please use pgp encryption: 8D0E 27A4 is my id.
-http://nico.schotteli.us | http://linux.schottelius.org
+For C, and in general, you should use:
 
---TMgB3/Ch1aWgZB1L
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+#ifndef __FOO_H__
+#define __FOO_H__
 
+....
+
+#endif /*__FOO_H__*/
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.4 (GNU/Linux)
+Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
 
-iQIVAwUBQOKK+rOTBMvCUbrlAQJydg//UMN6AgLGjXaXkERLzl9HLsdlo68wnKeM
-g1rLXwWM7Ob0opIHZfGvngScaiWWprrD9RSLU0OcnkYZUaCYopM1K4z/CLtWaAi4
-9miil/rvslqZjzlZqXaXW9ZSqYSCJqKpDaCYNS4WUi2q8Jrgp7DCGrWVPp41Vhog
-F++l5WiKh4JBmC0pyBMTHuNkueGGP88sJihHyNa4nTUhk+DftQVwDo1h4gJIJ4Qj
-/w+cwFx/GgRElkV/FUcS14+XkxV+BtP3+xzYE8+QDO5Zzz76rArJSoy8oR+JCsu9
-AY8Lecdtdq5DSjOWVQNOaajoQZ+9WalN41nRq6x4l+qZU6K2MfA/8oroVuUGBcG5
-TktA8OMs8PylxFJOktDKpHfHpFPM6jniVL5jkfGprwe5KInTX7FDEwDogl+oJJTo
-11CZFMjq8nhJw+f+9yZbvh8DktMJ77en+bChdDkJhLu4LH2PB0Qbjamgp1yfrWfx
-lX1FjVq8crVQR+rp/DzrngdBZnig03inFZEl1NQl5QW/uYckerfrH+Yhr0jouMm2
-GSg3NLio7ovyr5Ph2gULT11GAvlDtlhASH+V06VOm6uY9p66gbPMC2h4LnCjU8rd
-Vh1yPewH1nzIUpAs+EBrDkAHCP34sgSa0D48wRptsgyV6mGyfbCC2gAkAbWB6mh6
-iOHRbiR5NxU=
-=JVxx
+iD8DBQFA4yUShDd4aOud5P8RAkoxAJ9mYFKq+MYzPsX+LGbg/iTDA+UFqQCfYnMv
+2Tn7bkzzlPu66jmrOamHJW8=
+=nfHE
 -----END PGP SIGNATURE-----
-
---TMgB3/Ch1aWgZB1L--
