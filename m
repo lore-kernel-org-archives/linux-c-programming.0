@@ -1,47 +1,49 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: File handling
-Date: Mon, 29 Apr 2002 23:57:34 +0100
+From: wwp <subscript@free.fr>
+Subject: Re: static or stuff like that
+Date: Tue, 30 Apr 2002 23:26:31 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15565.53214.231318.243934@cerise.nosuchdomain.co.uk>
-References: <20020429154610.B24899@cs.pdx.edu>
+Message-ID: <20020430232631.046def4f.subscript@free.fr>
+References: <200204281856.43955.wrazlov@gmx.net>
+	<15564.28455.695486.899966@cerise.nosuchdomain.co.uk>
+	<20020429110933.19f3c1af.subscript@free.fr>
+	<15565.5881.728128.202346@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020429154610.B24899@cs.pdx.edu>
+In-Reply-To: <15565.5881.728128.202346@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Marius Nita <marius@cs.pdx.edu>
+To: Glynn Clements <glynn.clements@virgin.net>
 Cc: linux-c-programming@vger.kernel.org
 
+Hi Glynn,
 
-Marius Nita wrote:
+On Mon, 29 Apr 2002 10:48:41 +0100 Glynn Clements
+<glynn.clements@virgin.net> wrote:
 
-> I have a large text file (45Mb) which needs to be searched through in a decent
-> amount of time (4-5 seconds.) So far I have some Perl and shell scripts that
-> search it, but either they are way too slow, or if I try to tweak them to make
-> them faster, I usually run into low memory problems.
+> > > > I want to control whether a process is already running or not,
+> > > > and i don't know how without using some kind of lock-files
+> > > 
+> > > You can scan the files under /proc/<pid> to obtain details about
+> > > which processes are running. E.g. /proc/<pid>/exe is a symlink to
+> > > the program which process <pid> is executing.
+> > 
+> > Is /proc always available?
 > 
-> So I was thinking that if I write the program in C I would get better results.
-> Do you have any suggestions about a way to approach this, pointers about
-> libraries, etc?
-> 
-> PS: The search is very simple. It just tries to match the exact keywords, case
-> insensitive, so that's not an issue. It's file reading performance that I'm
-> worried about.
+> It's possible that /proc isn't mounted but, if it isn't, many OS
+> features won't work (e.g. modprobe). Unless you're targeting a very
+> minimal system (e.g. embedded systems), or writing code which will run
+> early in the boot sequence, it's safe to assume that /proc will be
+> available.
+[snip]
 
-The issue isn't really the search, it's what you want to do once
-you've found a match. Performing a regexp search should only impose a
-minor overhead.
+Thanx for your answers.
+I've also seen software using unix domain socket to prohibit duplicate
+launch of a program on a POSIX system.
+What do you think of this method, Glynn?
 
-If you just need to extract text near the match point, sed should be
-adequate, and is likely to be faster than perl.
 
-If you need to perform more involved operations on the data around the
-match, then it might be worth using C. In which case, the fastest way
-to read the file is to use mmap() to map it into memory.
-
-The standard interface for performing regexp searches in C is the
-functions listed in the regcomp(3) manpage.
+Regards,
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+wwp
