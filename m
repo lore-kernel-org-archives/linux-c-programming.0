@@ -1,44 +1,57 @@
-From: "William N. Zanatta" <william@veritel.com.br>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: Misc C question
-Date: Thu, 20 Jun 2002 09:46:53 -0300
+Date: Thu, 20 Jun 2002 14:23:41 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3D11CEBD.8050102@veritel.com.br>
-References: <20020619214332.A299@nietzsche>    <010701c21808$1a7315b0$0201a8c0@ws1> <20020619234424.A480@nietzsche> <002701c21818$8a302d10$0201a8c0@ws1>
+Message-ID: <15633.55133.760880.963357@cerise.nosuchdomain.co.uk>
+References: <20020619214332.A299@nietzsche>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20020619214332.A299@nietzsche>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: mike <ruler@isolate.net>
-Cc: xmp <xmp@multipasto.net.co>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: xmp <xmp@multipasto.net.co>
+Cc: linux-c-programming@vger.kernel.org
 
-I think we have a mistake here.
-It seems that what was asked is whether the file being opened has or not 
-  a read permission.
-Yes, your aplication will compile normally and if you don't have read 
-permissions on the file, fopen() will return NULL and set errno. By the 
-way, checking errno is a good way of tracking down errors, try it.
 
-The man page says (both Linux and Solaris):
-"Upon  successful  completion  fopen,  fdopen  and  freopen
-return a FILE pointer.  Otherwise, NULL  is  returned  and
-the global variable errno is set to indicate the error."
+xmp wrote:
 
-see ya
+> hi, What is the correct unix-style way to check if a file exists ?
+> create it ? and delete it ?.
 
-william
+There isn't a "correct" way.
+
+1. You may not be able to tell whether or not the file exists, e.g. 
+because the process has neither read nor execute permission for one or
+more of the directories in the file's path (or paths; due to hard
+links, a file may have multiple pathnames).
+
+2. Unless you're using the existence of the file as some sort of
+"flag", checking for existence is seldom useful. More likely you want
+to know if it's readable/writable/executable in a particular context
+(the process' euid/fsuid, egid/fsgid and supplementary gids all affect
+the result).
+
+3. Functions which return information about the filesystem (e.g. 
+stat/lstat) return information about the past. Just because the file
+existed (or did not exist) at the time of the check, there's no
+guarantee that the file still exists (or doesn't exist).
+
+> Maybe trying to fopen() it and if call != NULL it exist, else it
+> doesnt?.
+
+If the file doesn't exist, fopen() will return NULL, but there are
+plenty of other reasons why fopen() may return NULL.
+
+If you actually intend to read or write the file, the correct approach
+is to attempt whatever you intend and to handle any failures. You
+cannot predict in advance whether a given operation will succeed.
+
+If you don't intend to read or write the file, then you shouldn't
+attempt to open it, as that may have unintended consequences. For
+files, directories etc it may update the last-accessed time; for
+device files, the effects vary (e.g. open()ing /dev/st0 device may
+rewind the tape).
 
 -- 
-Perl combines all of the worst aspects of BASIC, C and line noise.
-                 -- Keith Packard
-
-Somebody called 'mike' tried to say something! Take a look:
-> Hi,
-> 
-> "r" is for readonly, if you don't include what it should do with the file,
-> you will get an error on compile. :)  The possible options are "r", "w",
-> "r+" "w+", and more.  You should consult a book/website which will explain
-> everything you need to know about them :)
-> 
-
-
+Glynn Clements <glynn.clements@virgin.net>
