@@ -1,31 +1,135 @@
-From: Vadiraj C S <vadiraj@mail.cyberneme.com>
-Subject: Re: Can I allocate few bytes in a file to store info about that
- file; not visible to user?
-Date: Thu, 29 Apr 2004 09:28:07 +0530
+From: "Alphex K." <alphex@crew.org.ru>
+Subject: Some troubles with linked list/tree
+Date: Thu, 29 Apr 2004 19:39:34 +0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040429092807.173ac98d.vadiraj@mail.cyberneme.com>
-References: <20040428181507.B489EB786@xprdmailfe20.nwk.excite.com>
+Message-ID: <20040429193934.18faf8e1.alphex@crew.org.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040428181507.B489EB786@xprdmailfe20.nwk.excite.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: vintya@excite.com
 Cc: linux-c-programming@vger.kernel.org
 
-> 
-> I was going through the functions like generic_file_write, generic_file_direct_IO, generic_direct_IO and filemap_fdatasync. I was thinking about calling these functions or calling functions written on similar lines to add new few bytes to the file when the inode is created by "ext2_create()". Can any1 please tell me how to do this?
-> 
-> I guess it would have been simpler to call these functions in the call sys_open() when a new file is created, but I want to make changes in kernel code only in ext2 module. playing with sys_open will be like modifying kernel code apart from the ext2 fs module which I dont want.
+Hi guys!
+I'm have a one question
+so I'm have a two linked lists
+typedef struct                                                                  
+{                                                                               
+   int id;                                                                      
+   int sf_id;                                                                   
+   char *from_date;                                                             
+   char *to_date;                                                               
+   struct SfList *next;                                                         
+} SfList;
 
- If you need the kernel to read your information, you can write your own open() for the module, if you have good hold on filesystem
-then this wont be much scary. ext2 filesystem stores all the information in an inode, now you want to write some more at the start
-of the datablock.  
+typedef struct                                                                  
+{                                                                               
+   int id;                                                                      
+   char *name;                                                                  
+   char *author;                                                                
+   char *note;                                                                  
+   int cl_id;                                                                   
+   SfList * list;                                                               
+   struct OapAdvAction *next;                                                   
+} OapAdvAction;
 
+so and functions to operate with there
+SfList * AddSfEntry(SfList * list,int sf_id,char *from_date,char *to_date)           
+{                                                                                    
+   int id=0;                                                                         
+   SfList * lp=list;                                                                 
+   if(list!=NULL)                                                                    
+     {                                                                               
+        id=1;                                                                        
+        while(list->next!=NULL)                                                      
+          {                                                                          
+             list=list->next;                                                        
+             id++;                                                                   
+          }                                                                          
+        list->next=(struct SfList  *) malloc(sizeof(SfList));                        
+        list=list->next;                                                             
+        list->next=NULL;                                                             
+        list->id=id;                                                                 
+        list->sf_id=sf_id;                                                           
+        list->from_date=from_date;                                                   
+        list->to_date=to_date;                                                       
+        return lp;                                                                   
+     }                                                                               
+   else                                                                              
+     {                                                                               
+        list=(struct SfList  *) malloc(sizeof(SfList));                              
+        list->next=NULL;                                                             
+        list->id=id;                                                                 
+        list->sf_id=sf_id;                                                           
+        list->from_date=from_date;                                                   
+        list->to_date=to_date;                                                       
+        return list;                                                                 
+     }                                                                               
+   // end ;-)                                                                        
+}
 
+and for OapAdvAction structure
+OapAdvAction * AddAdvAction(OapAdvAction * action,char *name,char *author,           
+                            char *note,int cl_id,SfList * list)                      
+{                                                                                    
+   OapAdvAction * lp=action;                                                         
+   int id=0;                                                                         
+   if(action!=NULL)                                                                  
+     {                                                                               
+        id=1;                                                                        
+        while(action->next!=NULL)                                                    
+          {                                                                          
+             action=action->next;                                                    
+             id++;                                                                   
+          }                                                                          
+        action->next=(struct OapAdvAction  *) malloc(sizeof(OapAdvAction)+sizeof(SfL$
+        action=action->next;                                                         
+        action->next=NULL;                                                           
+        action->id=id;                                                               
+        action->name=name;                                                           
+        action->author=author;                                                       
+        action->note=note;                                                           
+        action->cl_id=cl_id;                                                         
+        // adding list                                                               
+        /*while(list!=NULL)                                                          
+          {                                                                          
+             action->list=AddSfEntry(action->list,list->sf_id,list->from_date,       
+                                     list->to_date);                                 
+             list=list->next;                                                        
+          }*/                                                                        
+        action->list=(struct SfList  *) malloc(sizeof(list));                        
+        action->list=list;                                                           
+        return lp;                                                                   
+     }                                                                               
+   else                                                                              
+     {                                                                               
+        action=(struct OapAdvAction  *) malloc(sizeof(OapAdvAction)+sizeof(SfList)); 
+        action->next=NULL;                                                           
+        action->id=id;                                                               
+        action->name=name;                                                           
+        action->author=author;                                                       
+        action->note=note;                                                           
+        action->cl_id=cl_id;                                                         
+        // adding list                                                               
+        /*while(list!=NULL)                                                          
+          {                                                                          
+             action->list=AddSfEntry(action->list,list->sf_id,list->from_date,       
+                                     list->to_date);                                 
+             list=list->next;                                                        
+          }*/                                                                        
+        action->list=(struct SfList  *) malloc(sizeof(list));                        
+        action->list=list;                                                           
+        return action;
+}
+}
 
--- 
+what the right way to add SfList to OapAdvAction ?
+I try some methods but it doesn't work?
 
-With Best Regards
- Vadiraj C S    
+Thanx
+
+---===---
+Alphex Kaanoken
+Senior developer of Crew IT research labs
+web: http://crew.org.ru
+mailto:Alphex@Crew.Org.RU
