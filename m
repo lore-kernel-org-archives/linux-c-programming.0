@@ -1,136 +1,83 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: John Richard Moser <nigelenki@comcast.net>
 Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Thu, 1 Jul 2004 05:27:27 +0100
+Date: Thu, 01 Jul 2004 03:12:45 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16611.37551.259074.929826@cerise.nosuchdomain.co.uk>
-References: <40E09FC4.50800@ig.com.br>
-	<16608.44836.384260.844173@cerise.nosuchdomain.co.uk>
-	<20040629143238.GD6335@luna.mooo.com>
-	<16609.43579.336662.194984@cerise.nosuchdomain.co.uk>
-	<20040630013316.GF9412@luna.mooo.com>
-	<40E32513.1090502@comcast.net>
-	<16611.16213.876963.610967@cerise.nosuchdomain.co.uk>
-	<20040701032226.GB3419@luna.mooo.com>
+Message-ID: <40E3B96D.4080507@comcast.net>
+References: <40E09FC4.50800@ig.com.br>	<16608.44836.384260.844173@cerise.nosuchdomain.co.uk>	<20040629143238.GD6335@luna.mooo.com>	<16609.43579.336662.194984@cerise.nosuchdomain.co.uk>	<20040630013316.GF9412@luna.mooo.com>	<40E32513.1090502@comcast.net> <16611.16213.876963.610967@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040701032226.GB3419@luna.mooo.com>
+In-Reply-To: <16611.16213.876963.610967@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Micha Feigin <michf@post.tau.ac.il>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: Micha Feigin <michf@post.tau.ac.il>, linux-c-programming <linux-c-programming@vger.kernel.org>
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
 
-Micha Feigin wrote:
 
-> > The key point is that C++ appears to treat initialised "static const"
-> > members as compile-time constants, not as lvalues. Thus, they don't
-> > exist in any object file, and so the problem of them existing in
-> > multiple object files doesn't arise.
-> 
-> That can't be true; What happens if the static int value is defined in
-> another file? it's value won't be known at compile time, only at link
-> time.
+Glynn Clements wrote:
+| John Richard Moser wrote:
+|
+|
+|>|>It doesn't matter. A #include directive simply inserts the contents of
+|>|>the header file directly into the source code which is fed to the
+|>|>compiler. The compiler doesn't care which file a given piece of code
+|>|>comes from.
+|>|>
+|>|
+|>| It is a problem since a header can be included more then once, and
+|>
+|>Umm.
+|>
+|>#import "foo.h"
+|>
+|>This includes only one time.  I'd only use this with Objective-C though.
+|>
+|>For C, and in general, you should use:
+|>
+|>#ifndef __FOO_H__
+|>#define __FOO_H__
+|>
+|>....
+|>
+|>#endif /*__FOO_H__*/
+|
+|
+| That only prevents against the header being included multiple times
+| within a given compilation unit, which isn't the issue which was being
+| discussed. The issue was that, if an lvalue is defined (as opposed to
+| declared) in a header file, it will exist in every object file whose
+| source code included the header.
+|
 
-By "initialised", I'm referring to the situation where they are
-initialised in the class declaration. See my previous example.
+yeah, externally linked rather than staticly linked.  If you declare
+them static, they won't be associated with an object symbol, thus it's
+like they don't exist in relation to linking multiple objects together.
 
-> What g++ may be doing is ignoring the problem of multiple
-> definitions if they have the same value.
+It goes like this:
 
-No.
+int foo; /*We can say 'extern int foo' somewhere and access this from
+another compilation unit*/
+static int bar; /*This we can't.*/
 
-The class declaration doesn't cause any lvalues to be created. There
-are no definitions in the object file. Try it.
+| The key point is that C++ appears to treat initialised "static const"
+| members as compile-time constants, not as lvalues. Thus, they don't
+| exist in any object file, and so the problem of them existing in
+| multiple object files doesn't arise.
 
-> It does allow initializing array size using static const, unlike gcc, I
-> don't know the mechanism, but I believe it also requires linker
-> support, not only compiler.
+Actually, they're the same as regular consts; they just don't get an
+exported symbol, so they're invisible to the other compilation units.
+They STILL get a position in the data segment!
 
-No.
+|
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
+Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
 
-In most situations, the size of an array has to be known at compile
-time. If the array is a local variable, its size will affect the the
-frame offsets of any local variables which are below it in the stack
-frame. If the array is a structure field, its size will affect the
-size of the structure. If you multiply by sizeof(array), the compiler
-will often generate different code depending upon whether
-sizeof(array) is a power of two. And so on.
-
-The only exceptions are in declarations where you don't need to
-specify the size, e.g.:
-
-	extern int array[];
-and:
-	void foo(int array[]);
-
-Anywhere that you have to specify a size, the size needs to be known
-at compile time (variable-sized automatic arrays are permitted in C99,
-but not in C89 or C++, although gcc will allow them unless you use
--pedantic; variable-sized global arrays and structure fields aren't
-allowed anywhere and aren't supported by gcc).
-
-> I compiled a sample program with a static const int val = 10; and then
-> ran nm on it and in the output:
-> 
-> a.out:080484c4 r val
-> 
-> so the value is in the object, read only data if I recall the section
-> symbols correctly.
-
-That's a variable definition, not a class declaration.
-
-Here's a concrete example:
-
-	$ cat foo.cc
-	#include <stdio.h>
-	
-	class Foo
-	{
-	public:
-		static const int DEFSIZE = 100;
-	};
-	
-	int main(void) {
-		printf("%d\n", Foo::DEFSIZE);
-		return 0;
-	}
-
-	$ g++ -c -ansi -pedantic -Wall foo.cc
-	$ nm foo.o
-	00000000 T main
-	         U printf
-	$ g++ foo.o
-	$ ./a.out 
-	100
-
-If you try to use Foo::DEFSIZE as an lvalue (e.g. taking its address),
-you will get a link error unless you actually add a definition for it. 
-But you can use it as a value without supplying a definition, and
-nothing will appear in the object file. Also, if it's initialised in
-the declaration, you can omit the initialiser from any subsequent
-definition, i.e.:
-
-	$ cat foo.cc
-	#include <stdio.h>
-	
-	class Foo
-	{
-	public:
-		static const int DEFSIZE = 100;
-	};
-	
-	const int Foo::DEFSIZE;
-	const int *ptr = &Foo::DEFSIZE;
-	
-	int main(void) {
-		printf("%d\n", *ptr);
-		return 0;
-	}
-
-	$ g++ -ansi -pedantic -Wall foo.cc
-	$ ./a.out
-	100
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+iD8DBQFA47lshDd4aOud5P8RAumVAJ9CmfPM1lUlOvDQjT3Dz8CG9ayg4QCZAekl
+e5/IVRksVVq0HldmWYFDcv8=
+=6vVS
+-----END PGP SIGNATURE-----
