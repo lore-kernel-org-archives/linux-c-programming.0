@@ -1,46 +1,23 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: structure containing node pointing to an other type structure
-Date: Fri, 21 Jan 2005 05:31:19 +0100 (CET)
-Message-ID: <Pine.LNX.4.21.0501210522490.17563-100000@hestia>
-Reply-To: linux-c-programming@vger.kernel.org
+From: Scott <drmemory@3rivers.net>
+Subject: Re: Initializer element is not constant
+Date: Fri, 21 Jan 2005 09:27:27 -0700
+Message-ID: <20050121162726.GA977@drmemory.local>
+References: <20050120232132.GE1279@drmemory.local> <41F06AC1.2000605@hq.ntsp.nec.co.jp> <41F06AD8.7080206@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <41F06AD8.7080206@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Friday, January 21 05:22:49
-
-Hi,
-
-My question, below I have declared a struct which is used in a binary
-tree, but I have to keep track of the root node from another node which is
-used in an array of ptr's -> structs. Can I do that or is that illegal ?
-
- the tree node....
-struct tnode {
- char *destination;
- float mcount;
- float msize;
- float mav_size;
- time_t utc_time;
-
- struct tnode *left;
- struct tnode *right;
-};
-
- and the node for the array which should hold the pointer to the 
- binary tree...
-struct lognode {
- char *logfile;
- float tot_bytes;
- float tot_messages;
- struct tnode *root;  /* <==== ?? */
-};
-
-Thnkx..
-
-J.
-
+On Fri, Jan 21, 2005 at 10:37:12AM +0800, Ron Michael Khu wrote:
+> Hi,
+> 
+> can u point us to line 124??
+> 
+> >>DATUM recip_data[] = {
+> >>{  namectrl, NAMECTRL_LEN, make_upper },        <-- Line 124
+> >>{  name1, NAME1_LEN, make_upper },
