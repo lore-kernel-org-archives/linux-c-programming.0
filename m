@@ -1,58 +1,131 @@
-From: Micha Feigin <michf@post.tau.ac.il>
+From: "John T. Williams" <jowillia@vt.edu>
 Subject: Re: Newbie question on malloc()
-Date: Fri, 4 Jun 2004 02:44:57 +0300
+Date: Thu, 03 Jun 2004 20:14:36 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040603234457.GK2562@luna.mooo.com>
-References: <002d01c44897$78ae58d0$de01a8c0@qnessmphibiki> <1086196092.29970.2.camel@localhost> <16574.4399.288522.256729@cerise.nosuchdomain.co.uk> <20040602183734.GU20632@lug-owl.de> <20040603013427.GD2562@luna.mooo.com> <20040603194251.GY20632@lug-owl.de>
+Message-ID: <1086308075.22895.3.camel@localhost>
+References: <002d01c44897$78ae58d0$de01a8c0@qnessmphibiki>
+	 <20040603012832.GC2562@luna.mooo.com>
+	 <16574.55886.797709.765778@cerise.nosuchdomain.co.uk>
+	 <1086301555.22497.0.camel@localhost>  <001501c449c1$efc075e0$3410fea9@zoom>
+Reply-To: jtwilliams@vt.edu
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040603194251.GY20632@lug-owl.de>
+In-Reply-To: <001501c449c1$efc075e0$3410fea9@zoom>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Paul Gimpelj <pgimpelj@sympatico.ca>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On Thu, Jun 03, 2004 at 09:42:51PM +0200, Jan-Benedict Glaw wrote:
-> On Thu, 2004-06-03 04:34:27 +0300, Micha Feigin <michf@post.tau.ac.il>
-> wrote in message <20040603013427.GD2562@luna.mooo.com>:
-> > On Wed, Jun 02, 2004 at 08:37:34PM +0200, Jan-Benedict Glaw wrote:
-> > > Well, that all depends on the definition of "OS". Any recent 32+ bit
-> > > operating system with virtual memory capabilities and multi-processing
-> > > will reclaim malloc()ed RAM upon process termination.
-> > 
-> > It has nothing to do with virtual memory. In any multi-processing OS
-> > (any modern one probably) memory allocations are done by the kernel
-> > since the kernel is the one managing the system's memory.
-> > 
-> > If the kernel doesn't have a bug, this memory is released on process
-> > exit (unless it is still used by another process such as with fork with
-> > virtual memory where it is marked copy on write).
+According to the glibc documentation, it is not guaranteed to do so
+
+http://www.gnu.org/software/libc/manual/html_node/Termination-Internals.html#Termination%20Internals
+
+
+
+
+
+
+On Thu, 2004-06-03 at 19:24, Paul Gimpelj wrote:
+> hi,
+> pardon me for patching to this thread,
 > 
-> Read again. There ARE (or at least: were) operating systems that
-> intentionally did *not* implicitely free memory. If an application
-> missed to free all allocated memory, it's lost. Forever.
+> but, following this conversation,
+> if files are left open at exit, does the operating system (linux) flush the
+> i/o buffers to disk before closing files?
+> This is not the case with windows 95/98  and dos.
+> OR, does the _exit() function in the c runtime do it.
+> Thanks.
 > 
-
-Single process operating systems could get away with doing that. Multi
-process operating systems (and most modern ones are) can't afford that
-luxury as it will allow one misbehaving process to kill the system
-(maybe win 3 could get away with that as it was a cooperative multi
-tasking system as opposed to a properly scheduled one and dynamic memory
-there was a very sick thing using handles)
-
-Maybe some special purpose embedded systems will do that to reduce
-overhead but they will be hard to find probably.
-
-> But modern OSes (those with at least have the capabilities mentioned
-> above) will automatically reclaim all of a exit'ed process' memory.
+> thanks
 > 
-> MfG, JBG
+> regards,
+> Paul
 > 
-> -- 
->    Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
->    "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
->     fuer einen Freien Staat voll Freier B?rger" | im Internet! |   im Irak!
->    ret = do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA));
-
+> 
+> ----- Original Message -----
+> From: "John T. Williams" <jowillia@vt.edu>
+> To: "Glynn Clements" <glynn.clements@virgin.net>
+> Cc: "Micha Feigin" <michf@post.tau.ac.il>; "linux-c-programming"
+> <linux-c-programming@vger.kernel.org>
+> Sent: Thursday, June 03, 2004 6:25 PM
+> Subject: Re: Newbie question on malloc()
+> 
+> 
+> >
+> > I think this is may be a somewhat misleading statement. Not freeing
+> > memory before normal termination decreases re-usability of your code.
+> > You never know when your main function might be reused verbatim as
+> > another sub function. Failing to free memory before all reference leave
+> > scope can lead to massive memory leeks. Further, the more memory your
+> > program is holding at any given moment of operation the more pages it
+> > holds, the more pages it holds the more likely any particular call to a
+> > memory location will lead to a page fault, and page faults are
+> > expensive. Freeing memory allows malloc to reassign that memory next
+> > time its called. Now I know that this was a question about freeing
+> > memory before termination, and therefore unless we are talking about a
+> > situation where your code is being reused my last two arguments hold no
+> > weight, but I believe that it is simply good practice to always be aware
+> > of memory you have dynamically allocated and always free it after you no
+> > more use for it. In this way you don't get used to saying well if I miss
+> > it the operating system will clean it up for me. Please note I do not
+> > suggest that one should go to out of the way to free memory on abnormal
+> > termination, but its simply good practice to free memory when it is no
+> > longer being used in the normal behavior of your code.
+> >
+> >
+> >
+> > On Thu, 2004-06-03 at 03:59, Glynn Clements wrote:
+> > > Micha Feigin wrote:
+> > >
+> > > > > I have made a daemon in which dynamic memory is gotten
+> > > > > by malloc(). Does the memory get free automatically without
+> > > > > free() by the deamon  when the daemon process is killed?
+> > > > > Thanks in advance.
+> > > >
+> > > > It does, but in general its not in good practice to count on process
+> > > > exit for freeing memory (a good way to get memory leaks).
+> > >
+> > > This is incorrect.
+> > >
+> > > You shouldn't make an effort to return memory to the process' heap (by
+> > > calling free()) if the program is about to terminate.
+> > >
+> > > Doing so consumes CPU time (and probably disk bandwidth, given that
+> > > some of that memory will probably be swapped out) and doesn't provide
+> > > any benefit (free() won't usually return memory to the OS and, in any
+> > > case, all of the process' memory will be returned to the OS upon
+> > > exit).
+> > >
+> > > The only valid reason for free()ing memory blocks upon termination is
+> > > if the structure of the program is such that it isn't practical to
+> > > avoid doing so. E.g. if data structures have matched setup/cleanup
+> > > routines, and you need to call the cleanup code for other reasons, and
+> > > the cleanup code will free the memory anyway.
+> > >
+> > > Similarly, you don't need to explicitly close() file descriptors, or
+> > > release file locks (those obtained with flock/lockf/fcntl) as the OS
+> > > will do that.
+> > >
+> > > The sort of actions which might make sense to perform before calling
+> > > exit() are:
+> > >
+> > > + Writing a log entry reporting shutdown
+> > > + Deleting temporary files
+> > > + Deleting any SysV IPC structures which aren't shared with other
+> > >   processes.
+> > > + Informing other networked processes of termination, e.g. sending a
+> > >   "QUIT" command.
+> > > + Killing child processes.
+> >
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe
+> linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
