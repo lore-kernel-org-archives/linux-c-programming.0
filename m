@@ -1,39 +1,44 @@
-From: "Oleg O. Ossovitskii" <oleg@kgpa.ru>
-Subject: Re[2]: Misc C question
-Date: Thu, 20 Jun 2002 11:51:58 +0300
+From: "William N. Zanatta" <william@veritel.com.br>
+Subject: Re: Misc C question
+Date: Thu, 20 Jun 2002 09:46:53 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4512499703.20020620115158@kgpa.ru>
-References: <Pine.LNX.4.33.0206201333470.26820-100000@soochak.ncst.ernet.in>
-Reply-To: "Oleg O. Ossovitskii" <oleg@kgpa.ru>
+Message-ID: <3D11CEBD.8050102@veritel.com.br>
+References: <20020619214332.A299@nietzsche>    <010701c21808$1a7315b0$0201a8c0@ws1> <20020619234424.A480@nietzsche> <002701c21818$8a302d10$0201a8c0@ws1>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0206201333470.26820-100000@soochak.ncst.ernet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-Cc: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: mike <ruler@isolate.net>
+Cc: xmp <xmp@multipasto.net.co>, linux-c-programming@vger.kernel.org
 
-Hello Mohammed,
+I think we have a mistake here.
+It seems that what was asked is whether the file being opened has or not 
+  a read permission.
+Yes, your aplication will compile normally and if you don't have read 
+permissions on the file, fopen() will return NULL and set errno. By the 
+way, checking errno is a good way of tracking down errors, try it.
 
-Thursday, June 20, 2002, 11:05:58 AM, you wrote:
+The man page says (both Linux and Solaris):
+"Upon  successful  completion  fopen,  fdopen  and  freopen
+return a FILE pointer.  Otherwise, NULL  is  returned  and
+the global variable errno is set to indicate the error."
 
+see ya
 
+william
 
-MKA> The simple C function is
+-- 
+Perl combines all of the worst aspects of BASIC, C and line noise.
+                 -- Keith Packard
 
-MKA>         int access(const char *pathname, int mode);
+Somebody called 'mike' tried to say something! Take a look:
+> Hi,
+> 
+> "r" is for readonly, if you don't include what it should do with the file,
+> you will get an error on compile. :)  The possible options are "r", "w",
+> "r+" "w+", and more.  You should consult a book/website which will explain
+> everything you need to know about them :)
+> 
 
-MKA> to suit you needs. Read man pages to find out more.
-
-access() isn't so useful as stat() because access() use real user ID
-and real group ID, instead of EUID and EGID.
-
-But You are right - for checking for existense of file access()
-function is simpler than stat() or lstat().
-
-Best regards, Oleg O. Ossovitskii
-programming engineer, KGPA Ltd.
-tel: +7(0112)46-23-40, fax: +7(0112)43-64-96
-mailto:oleg@kgpa.ru, icq# 33366588
 
