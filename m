@@ -1,28 +1,50 @@
-From: <TristanWW@SmileAtYou.com>
-Subject: confirmation
-Date: Fri, 11 Jul 2003 18:08:06 -0700
+From: Lejanson Go <lejanson@yahoo.com>
+Subject: INADDR_ANY
+Date: Tue, 15 Jul 2003 05:07:42 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E19b8ru-0005ly-00@turkey.mail.pas.earthlink.net>
+Message-ID: <20030715120742.94906.qmail@web12403.mail.yahoo.com>
+Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
-
-Confirmation for linux-c-programming@vger.kernel.org
-
-Thank you for your interest in my work.  After you complete the verification below you will be added to my list to receive updates whenever a piece is completed.
-
-If you didn't sign up, perhaps a friend added you.
-
-Reply to this email and type 'Yes Please' in the body and you will be added.  Do nothing and you will be forgotten.
-
-Derek Olson
-Tristan Woodworks
-Your soul speaks Art.
-http://www.SmileAtYou.com
-Highlands Ranch, Colorado
+To: linux-c-programming@vger.kernel.org
 
 
+Hello good day to everyone.
 
+my other email ad is a member of this list but im 
+just confuse so i use this email ad instead to ask
+some questions.
+
+i have a question regarding network programming.
+my program connects to a server using INADDR_ANY
+as the host address.
+
+does the macro INADDR_ANY points to loopback
+interface?
+
+what if the /etc/hosts fileis edited and the value of
+localhost is changed to "50.50.50.20" from "127.0.0.1"
+  
+is it possible the program will fail? considering that
+using 127.0.0.1 as "localhost" ip add the program
+functions well.
+
+it puzzles me. since the program was supposed to work.
+
+any help would be very much appreciated. 
+
+thanks a lot.
+
+
+lejanson
+
+
+
+
+
+__________________________________
+Do you Yahoo!?
+SBC Yahoo! DSL - Now only $29.95 per month!
+http://sbc.yahoo.com
