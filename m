@@ -1,73 +1,60 @@
-From: Hossein Mobahi <hmobahi@yahoo.com>
-Subject: Re: assignment makes pointer from integer without a cast?
-Date: Sun, 12 Dec 2004 17:47:57 -0800 (PST)
-Message-ID: <20041213014757.89052.qmail@web12706.mail.yahoo.com>
-References: <1102899159.7251.14.camel@guru.puzzled.xs4all.nl>
+From: r_zaca <r_zaca@ig.com.br>
+Subject: Re: Assignment  make pointers
+Date: Mon, 13 Dec 2004 08:04:32 -0200
+Message-ID: <20041213_100432_025782.r_zaca@ig.com.br>
 Mime-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1102932272"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1102899159.7251.14.camel@guru.puzzled.xs4all.nl>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Patrick
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
-Your program has a few incorrect assignments. Is
-prog_ptr going to hold a string? I guess so because
-you want to print program name. So "int *prog_ptr" is
-wrong, use "char *prog_ptr" instead, i.e. an address
-pointing to the first character of a given string. 
+--Message-Boundary-by-Mail-Sender-1102932272
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
 
-Moreover, you do not need to use ampersand to obtain
-prog_ptr's address because it is already a pointer
-itself not an ordinary variable.
-
-Eventually, you must pass a pointer to fprintf when
-you use %s. So the * is incorrect (*prog_ptr returns a
-character only, the first character of your string,
-which is not what you want).
-
-I'd rewrite your program as follows:
-
-#include <stdio.h>
-
-void usage(char *prog_ptr) /* not int* */
-{
-	fprintf(stdout,"progname is: %s\n",prog_ptr); /* not
-*prog_ptr */
-}
-	
-int main(int argc, char *argv[])
-{
-	char *prog_ptr; /* not int * */
-	prog_ptr = basename (argv[0]);
-	usage(prog_ptr); /* not &prog_ptr */
-	return(0);
-}
+  If you take a look in "man 3 basename", you'll see that basename function 
+just returns a pointer to a char. In the case above you need to "cast" the 
+pointer returned to be of type int. 
+  Like: prog_ptr = (int *) basename (argv[0]); 
+  I hope it will help you. 
+  Good luck. 
 
 
---- Patrick <patrickC@puzzled.xs4all.nl> wrote:
-> #include <stdio.h>
-> 
-> void usage(int *prog_ptr)
-> {
-> 	fprintf(stdout,"progname is: %s\n",*prog_ptr);
-> }
-> 	
-> int main(int argc, char *argv[])
-> {
-> 	int *prog_ptr;
-> 	prog_ptr = basename (argv[0]);
-> 	usage(&prog_ptr);
-> 	return(0);
-> }
+Hello, 
 
+New to the list and to C. Read O'Reilly's Practical C Programming and 
+another C book and am now trying to evolve beyond helloworld.c. When I 
+compile the snippet below, gcc-3.4.2 on Fedora Core 3 spits out: 
+test2.c:11: warning: assignment makes pointer from integer without a 
+cast 
+test2.c:12: warning: passing arg 1 of `usage' from incompatible pointer 
+type 
 
+I just can't figure out why it does that and how to fix it since my 
+pointer/casting/C knowledge is definitely lacking. The snippet does work 
+ok. Anyone care to enlighten me? 
 
-		
-__________________________________ 
-Do you Yahoo!? 
-Yahoo! Mail - Helps protect you from nasty viruses. 
-http://promotions.yahoo.com/new_mail
+#include <stdio.h> 
+
+void usage(int *prog_ptr) 
+{ 
+	fprintf(stdout,"progname is: %s\n",*prog_ptr); 
+} 
+	 
+int main(int argc, char *argv[]) 
+{ 
+	int *prog_ptr; 
+	prog_ptr = basename (argv[0]); 
+	usage(&prog_ptr); 
+	return(0); 
+} 
+
+--Message-Boundary-by-Mail-Sender-1102932272--
+
