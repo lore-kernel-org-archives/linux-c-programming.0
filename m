@@ -1,46 +1,66 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: RE: strange behavious
-Date: Wed, 25 Dec 2002 09:55:22 +0000
+From: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
+Subject: Re: strange behavious
+Date: Wed, 25 Dec 2002 17:58:40 +0530 (IST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15881.32906.386882.764352@cerise.nosuchdomain.co.uk>
-References: <75B979779CA1D311808400508B6F40FF06B4354E@zes06exm01.madrid.ecid.cig.mot.com>
-	<Pine.LNX.4.33.0212241011001.31854-100000@soochak.ncst.ernet.in>
+Message-ID: <Pine.LNX.4.33.0212251757430.11856-100000@soochak.ncst.ernet.in>
+References: <5.2.0.9.0.20021224020627.01e09340@fluent2.pyramid.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0212241011001.31854-100000@soochak.ncst.ernet.in>
+In-Reply-To: <5.2.0.9.0.20021224020627.01e09340@fluent2.pyramid.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: Alvarez Alberto-AALVARB1 <AALVARB1@motorola.com>, linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Stephen Satchell <list@fluent2.pyramid.net>
+Cc: Glynn Clements <glynn.clements@virgin.net>, linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
 
-Mohammed Khalid Ansari wrote:
+On Tue, 24 Dec 2002, Stephen Satchell wrote:
 
-> > 	i'll try to answer your question. This may be not be an accurate answer, but i think it'll do.
-> > 
-> > 	The way you've assigned values to 'words' is the reason of the failure. The allocation of memory takes place in program data space (the same place where code is), so you can't modify it.
-> > 	If you want to modify that array, you should dynamically allocate it. Something like this will work,
+> At 10:50 AM 12/24/02 +0530, Mohammed Khalid Ansari wrote:
+> > > > #include <stdio.h>
+> > > >
+> > > > void parse (char **);
+> > > > char        *words[] = {"mohammed", "khalid", "ansari"};
+> > >
+> > > While the array of pointers will be mutable, the strings themselves
+> > > aren't; if you attempt to modify them, you will get a segmentation
+> > > fault.
+> > >
+> >
+> >Is this in ANSI C?  Will you please elaborate why is it so with this array
+> >only and how it is different from the example you have given below because
+> >ultimately both examples are same ie array of pointers.
+> >
+> >As far as I know if there is an string in a code with sufficient memory,
+> >it can be overwritten unless it is static.
 > 
-> that means it should not work for the following code as the memory is 
-> allocated in program data space, but it works...
-> 
-> #######
-> #include <stdio.h>
-> 
-> int main()
-> {
-> 	char	string[] = "mohammed";
-> 	
-> 	strcpy (string, "khalid");
-> 	printf ("%s\n", string);
-> 	
-> 	return 0;
-> }
-> #######
+> Look at the type for string constants.  It is "const array of char".  
 
-Sure; in this case the variable "string" is stored in the data
-segment, which is mutable.
+I haven't defined them to be const, please see above.
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+And, 
+> based on the number of compilers that assign this type to a string 
+> constant, it is ANSI C.  (It was true for the original ANSI specification, 
+> I don't know about the latest ones.)
+> 
+> This is at variance with K&R C, and has been documented.
+> 
+> Because the string constant has the "const" property, the compiler is free 
+> to include it in a read-only space.  In modern computers with worthwhile 
+> operating systems, the hardware will then enforce the "const"-ness of the 
+> string.
+> 
+> This is a good thing, because it avoids some of the more astonishing 
+> results that happens when you change a string constant.  Older Unix 
+> compilers would store separate instances of each constant string; modern 
+> compilers will re-use the constant for multiple instances.
+> 
+> The GCC compiler has switches to modify the behavior such that the old 
+> Unix-style mechanisms can be used.  RTFM.
+> 
+> Or learn how to deal with the new rules -- which is what I had to do, and 
+> have found my programming life made a little easier by them.  They make sense.
+> 
+> Satch
+> 
+
