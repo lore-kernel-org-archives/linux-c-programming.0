@@ -1,40 +1,97 @@
-From: Llfrg@aol.com
+From: "John T. Williams" <jowillia@vt.edu>
 Subject: Re: Monitoring a program
-Date: Mon, 01 Mar 2004 19:02:30 -0500
+Date: Mon, 1 Mar 2004 21:39:09 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3878299D.71102FC3.0000FADF@aol.com>
+Message-ID: <000901c3ffff$8a57f770$ed64a8c0@descartes>
+References: <183D9E9B.3D6733E9.0000FADF@aol.com>
+Reply-To: "John T. Williams" <jtwilliams@vt.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Llfrg@aol.com, linux-c-programming@vger.kernel.org
 
-Yes John, what I am trying to do is quite like your description. Only that instead of a simple program like ls, the target program would be scientific applications that take several seconds/minutes/hours executing, so that I would like to collect statistics periodically (i.e. every 0.1 second) and store it on a log file for future use (in a way similar to the vmstat command). I believe such information is not available after the execution (if it is, even better!). I would like to know ways of doing it with minimal effect on the target application performance.
+I'm not sure what you mean by every part of the execution.
 
-John wrote:
+however you could do a very simple program in that record the exicution time
+of its child process.
 
+----------------main.c-------------------------------
+#include <sys/times.h>
+#include <sys/param.h>
+#include <wait.h>
+
+char* prog = "/bin/bash";
+char* arglist[] = {
+ "bash",
+ 0
+};
+
+
+int main () {
+ int pid, status;
+ struct tms systime;
+ time_t point[2];
+ int elaps;
+ int ktime;
+ int utime;
+ int ttime;
+ int itime;
+
+ time(&point[0]);
+ if( (pid = fork()) == 0 ) {
+  execv(prog, arglist);
+  printf("execv error\n");
+  _exit(0);
+ }
+
+ wait(&status);
+ time(&point[1]);
+ times(&systime);
+
+
+ elaps = point[1] - point[0];
+ ktime = systime.tms_cstime / HZ;
+ utime = systime.tms_cutime / HZ;
+ ttime = ktime + utime;
+       itime = elaps - ttime;
+
+ printf("total time for of exicution: %i\n", ttime);
+ printf("time in kernel for process:  %i\n", ktime);
+ printf("time in user space:          %i\n", utime);
+ printf("idile time:                  %i\n", itime);
+ printf("total elaps time:            %i\n", elaps);
+
+
+}
+-------------End main.c--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+----- Original Message ----- 
+From: <Llfrg@aol.com>
+To: ""John T. Williams"" <jtwilliams@vt.edu>
+Sent: Monday, March 01, 2004 7:21 PM
+Subject: Re: Monitoring a program
+
+
+> Ok, but I would like to have specific information on every part of the
+execution, not only the total time. The objective of all this is to have a
+profiling tool that measures performance of parallel programs. I wish to
+find out load imbalance on different processors at different times on the
+execution of parallel programs. I intend to run the profiling program on
+every node and then compare their statistics.
 >
-Let me see if I understand what you are trying to do.  Lets pretend the
-target program is ls.
-Whenever ls is run by any user you would like you daemon to store
-statistical information about the execution of ls.
-
-You might have to get this information from the kernels process table.
-While executing the information you want is available in the procfs, however
-when the process completes the information disappears.  It has been awhile
-since I took my OS class, so I'm not sure if the information is still
-available in the kernel's data structures or not.  I believe it would be
-until another process with the same pid runs, but there is a good chance
-that I'm wrong.
-
-Depending on what you are trying to accomplish there may be better/easier
-ways to accomplish your goal.
-
---
-John
->
-
-Thanks,
-Leonardo
+> Thanks,
+> Leonardo.
 
