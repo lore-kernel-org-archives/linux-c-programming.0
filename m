@@ -1,86 +1,59 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: how to read a constantly changing file
-Date: Wed, 5 Jun 2002 17:12:35 +0100
+From: Alina Valea <avalea@home.ro>
+Subject: xdr functions cause segmentation fault
+Date: 7 Jun 2002 05:59:53 -0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15614.14451.263787.449323@cerise.nosuchdomain.co.uk>
-References: <20020604095456.GA1012@cam.ac.uk>
-	<Pine.LNX.4.33.0206051702360.1073-100000@soochak.ncst.ernet.in>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <20020607055953.2129.qmail@relay1.home.ro>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0206051702360.1073-100000@soochak.ncst.ernet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
 
-Mohammed Khalid Ansari wrote:
 
-> > > I want to know how can I read a file (through a C code) which is 
-> > > constatnly changing, like a log file.(eg tail command)
-> > 
-> > As far as I can make out, tail does it by sitting in a loop
-> > and calling sleep(1), and then fstat() to see if the file's grown.
-> 
-> That's ok but it is not feasible to open a file every time it changes, go 
-> to the last bytes which appended to the file and print it (tail command) 
-> especially when the filesize is bigger (eg log file). There must be some 
-> other method.
+Hello everybody,
 
-Who said anything about repeatedly opening it? Just keep reading the
-file; if you hit EOF, sleep for a while, then continue. E.g.
+I have one client program that sends a message string to a
+server program, which echoes it back to the client.
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+The server side: ... char * print_message(char *message) {
 
-int main(int argc, char **argv)
-{
-	int fd;
+printf("Arg: %s\n",message); return message; }
 
-	if (argc != 2)
-	{
-		fprintf(stderr, "usage: %s <filename>\n", argv[0]);
-		return 1;
-	}
+void main() {
 
-	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-	{
-		perror("open");
-		return 1;
-	}
+... if(registerrpc (PRINTPROG,PRINTVERS,PRINTPROC_NUM,
+print_message,xdr_message,xdr_message, "visible")==-1) { ...}
+svc_run(); }
 
-	if (lseek(fd, 0, SEEK_END) < 0)
-	{
-		perror("lseek");
-		return 1;
-	}
+The client side: ... char
+*tokens[]={"message1","message2","message3","message4"}; char
+result[20];
 
-	for (;;)
-	{
-		char buff[0x10000];
-		int n = read(fd, buff, sizeof(buff));
-		if (n < 0)
-		{
-			perror("read");
-			break;
-		}
-		if (n == 0)
-		{
-			sleep(1);
-			continue;
-		}
-		if (write(STDOUT_FILENO, buff, n) < 0)
-		{
-			perror("write");
-			break;
-		}
-	}
+while(1) { i=counter++ % 4; if( (error_code=callrpc(
+"localhost", PRINTPROG, PRINTVERS, PRINTPROC_NUM, xdr_message,
+tokens[i], xdr_message, result))!=RPC_SUCCESS) 	{...}
+printf("client: %s\n",result); }
 
-	return 1;
-}
+where bool_t xdr_message(XDR *xdrs, char *message) { return
+(xdr_string(xdrs,&message,20)); }
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+The problem is I always get a segmentation fault on the
+server side (using any of the xdr_message(),
+xdr_wrapstring(),xdr_string()) after the receipt and printing
+of the first string. The only time the server doesn't crash is
+when using xdr_message() on the client side, and
+xdr_wrapstring() on the server side. Except that the server
+won't print the right string, but 'I', over and over.
+
+Even more, I get a gcc warning on compiling the client: args
+5,7 of callrpc of incompatible pointer type.
+
+Thanks for your help, Alina
+
+
+----
+
+Home, no matter how far...
+http://www.home.ro
