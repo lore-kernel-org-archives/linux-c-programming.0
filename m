@@ -1,26 +1,26 @@
-From: "Chris Nanakos" <nanakos@wired-net.gr>
+From: Francis Lau <fkwlau@utcc.utoronto.ca>
 Subject: Re: quotactl
-Date: Wed, 2 Jul 2003 20:37:17 +0300
+Date: Wed, 2 Jul 2003 14:04:04 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <002e01c340c0$95fc8a40$db1e05d5@carlos>
-References: <Pine.LNX.4.44.0307021245010.20193-100000@gpu.utcc>
+Message-ID: <Pine.LNX.4.44.0307021401270.20193-100000@gpu.utcc>
+References: <002e01c340c0$95fc8a40$db1e05d5@carlos>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Received: from carlos (ppp30-219-gw03.athens.access.acn.gr [213.5.30.219])
-	by enigma.wired-net.gr (******/******) with SMTP id h62HdU4x018778;
-	Wed, 2 Jul 2003 20:39:31 +0300
+In-Reply-To: <002e01c340c0$95fc8a40$db1e05d5@carlos>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Francis Lau <fkwlau@utcc.utoronto.ca>, linux-c-programming@vger.kernel.org
-
-make a clean compilation of the kernel from the beggining.(use make clean &&
-make mrproper).Be sure that no object files exist when you start building
-your new kernel.Try this....and e-mail again:)
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Chris Nanakos <nanakos@wired-net.gr>
+Cc: linux-c-programming@vger.kernel.org
 
 
+> make a clean compilation of the kernel from the beggining.(use make clean &&
+> make mrproper).Be sure that no object files exist when you start building
+> your new kernel.Try this....and e-mail again:)
+> 
+I'm running RedHat 9 with the stock 2.4.20 SMP kernel.  Unfortunately, I 
+cannot (not allowed to) recompile the kernel...Any other suggestions?
 
-Best regards,
-Chris.
-
+Thanks
+Francis
 
