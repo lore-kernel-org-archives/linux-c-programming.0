@@ -1,29 +1,51 @@
-From: Matti Aarnio <matti.aarnio@zmailer.org>,
-	Matti Aarnio <matti.aarnio@zmailer.org>
-Subject: Archive hunt for vger's lists ...  (and FAQs too!)
-Date: Wed, 21 Aug 2002 12:34:08 +0300
+From: Alina Valea <avalea@home.ro>
+Subject: extern storage class & multiple declaration
+Date: 22 Aug 2002 07:52:34 -0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <17616.2085765556$1029922387@news.gmane.org>
-Reply-To: webmaster@vger.kernel.org
-Mime-Version: 1.0
+Message-ID: <20020822075234.20104.qmail@relay1.home.ro>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-bbs@vger.kernel.org, linux-config@vger.kernel.org
-Cc: linux-console@vger.kernel.org, linux-c-programming@vger.kernel.org, linux-diald@vger.kernel.org, linux-doc@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-At vger's web we have:
-  http://vger.kernel.org/vger-lists.html
 
-which has all lists at vger, and links to all list archives that
-I found last week (at google/marc) when I did a full review of those.
 
-If you know any archive that should be listed there, please tell
-vger's webmaster.  (NOT the lists!)
+Hello everybody,
 
-Also, if any list has a FAQ, we would like to know about it too!
-My plan is to add archive and FAQ pointters to all list footers
-(in style similar to linux-kernel).
+Suppose we have:
 
+---------------------------------------- file.h
+
+extern int i; ----------------------------------------
+
+and ---------------------------------------- file.c
+
+#include "file.h"
+
+int i; ...
+
+/* No actual use of i here */
+------------------------------------------
+
+----------------------------------------- another_file.c
+
+#include "file.h"
+
+void func() {
+
+i=3; }
+
+-----------------------------------------
+
+I know this is entirely correct, but is it an acceptable
+programming habit?
+
+Thank you, Alina
+
+
+----
+
+Home, no matter how far...
+http://www.home.ro
