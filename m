@@ -1,92 +1,69 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Returned mail: delivery problems encountered
-Date: Thu, 28 Oct 2004 18:26:26 +0200
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041028162625.GG11105@lug-owl.de>
-References: <1098934436.6437.7.camel@localhost.localdomain>
+From: =?iso-8859-1?Q?F=E1bio_Russo?= <russo@bluecup.com.br>
+Subject: Re: buggy_double_use_of _scanf
+Date: Mon, 1 Nov 2004 17:03:50 -0200
+Message-ID: <005001c4c045$86334580$2100a8c0@titanio>
+References: <417E4640.2040504@laposte.net> <16766.47776.33240.455119@cerise.gclements.plus.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="jRdC2OsRnuV8iIl8"
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <1098934436.6437.7.camel@localhost.localdomain>
+Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: Glynn Clements <glynn@gclements.plus.com>, simon <simon.guinot@laposte.net>
+Cc: linux-C-programming <linux-c-programming@vger.kernel.org>
 
 
---jRdC2OsRnuV8iIl8
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+----- Original Message -----
+=46rom: "Glynn Clements" <glynn@gclements.plus.com>
+To: "simon" <simon.guinot@laposte.net>
+Cc: "linux-C-programming" <linux-c-programming@vger.kernel.org>
+Sent: Tuesday, October 26, 2004 6:59 PM
+Subject: Re: buggy_double_use_of _scanf
 
-On Wed, 2004-10-27 22:34:05 -0500, Edward Parrilla <eparrilla@comcast.net>
-wrote in message <1098934436.6437.7.camel@localhost.localdomain>:
-> > I have the following:
-> > #define STDIN 0
 
-Use STDIN_FILENO (unistd.h) instead of this hack.
+>
+> simon wrote:
+>
+> > I have observe a strange scanf behaviour...
+> > when using two successive scanf... the second receive a return char=
+acter
+> >
+> > for example :
+> >
+> > int a;
+> > char b;
+> >
+> > scanf ("%d", &a);
+> > fflush (stdin);
+> > scanf ("%c", &b);
+> > fprintf (stdout, "a : %d\nb : %c\n", a, b);
+> >
+> > what's the problem ?
+>
+> What makes you think that there is a problem?
+>
+> What's the input? If it's a decimal number followed by newline, the
+> first scanf() will return the parsed number, the second will return
+> the newline.
 
-> > /* .......*/
-> > =20
-> > int nfds;
-> > struct timeval tv;
-> > fd_set rfds;
-> > fd_set afds;
-> > FD_ZERO(&afds);
-> > tv.tv_sec=3D0;
-> > tv.tv_usec=3D0
-> > FD_SET(STDIN, &afds);
-> > FD_SET(msock, &afds);
-> > nfds=3Dgetdtablesize();
-> > msock=3DpassiveTCP(service, 5); <--listening socket
-> > while(1)
-> > {
-> >    memcpy(&rfds,&afds, sizeof(rfds));
-> >    if (select(nfds, &rfds, (fd_set *)0, (fd_set *)0, &tv)<0)
-> >          errexit (" error ");
-> >   if (FD_ISSET(STDIN,&rfds)
-> >      handle(stdin);
-> > =20
-> > =20
-> > /*  it is not making to this line */  <-- here is the prolem, it does
-> > not make to the next line, it does work to the line before(i.e. takes
-> > input from STDIN), but it doesn't take something coming to the socket.
 
-Glynn already pointed out that you FD_SET(msock) before you assign it.
-Additionally, you're calling select() inside a loop. You actually need
-to initialize tv.tv_sec, tv.tv_usec and afds _each time_ before calling
-select(). So move that into the loop:-)
+The problem, I beleve is in the fflush function. I Have the same behavi=
+our
+with this source code,
+but when I put a additional scanf in the line, all works fine -;)
 
-> > if (FD_ISSET(msock, &rfds))
-> >    {
-> >       handle _incoming _request()
-> >   }
-> > =20
-> > }
+Now I ask:
+Why the fflush function did not remove the new line caracter when it sh=
+ould
+?
 
-MfG, JBG
+it=B4s all folks !!!
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+        Russo.
 
---jRdC2OsRnuV8iIl8
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBgR2xHb1edYOZ4bsRAmWrAJ9xqtyeV7yu07Ngjym4FiEcndOxAgCfRak6
-/zlRqhyxerOoT3HQPzJotj0=
-=Oume
------END PGP SIGNATURE-----
-
---jRdC2OsRnuV8iIl8--
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
