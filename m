@@ -1,67 +1,44 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: Forcing fsync() using an ouput stream in C++
-Date: Thu, 3 Mar 2005 09:15:00 +0100
-Message-ID: <6a00c8d50503030015237d9844@mail.gmail.com>
-References: <7728232c05030222384c65f341@mail.gmail.com>
-Reply-To: Steve Graegert <graegerts@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: SIGSEGV
+Date: Fri, 4 Mar 2005 00:33:22 +0000
+Message-ID: <16935.44242.116101.200958@gargle.gargle.HOWL>
+References: <1109766028.5107.5.camel@localhost.localdomain>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <7728232c05030222384c65f341@mail.gmail.com>
+In-Reply-To: <1109766028.5107.5.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-Cc: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
+To: kaushal@rocsys.com
+Cc: linux-c <linux-c-programming@vger.kernel.org>
 
-On Thu, 3 Mar 2005 00:38:10 -0600, Hareesh Nagarajan
-<hareesh.nagarajan@gmail.com> wrote:
-> Hi,
-> 
-> I am aware this is a C-programming mailing list. I just thought I
-> might get some useful inputs from this ML.
-> 
-> My problem is that I haven't figured out how I must fsync an output
-> stream (in C++) even after reading the contents of this link:
-> http://gcc.gnu.org/ml/gcc-help/2004-02/msg00285.html
-> 
-> How must I modify this method (this method doesn't work; it prints the
-> error message and exits!) ?
-> 
-> void logRecovery::syncToDisk(fstream& f)
-> {
->    unix_filebuf_t* buf;
->    buf = dynamic_cast<unix_filebuf_t*>(f.rdbuf());
->    if (buf == NULL) {
->        cerr << "Fatal: Don't know fd of stream" << endl;
->        exit(-1);
->    }
-> 
->    fsync(buf->fd());
-> }
-> 
-> I am using GCC 3.3.4.
-> 
-> Thanks,
-> 
-> Hareesh
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
 
-I have actually now idea why you are using unix_filebuf_t. Why not
-simply call f.flush()? If you need to obtain a reference to the
-streambuf object associated with a stream you can call f.readbuf() and
-then do a sync, like this:
+kaushal wrote:
 
-streambuf *buf;
-buf = f.readbuf();
-buf->sync();
+> 	I have big package which "must" run all the time irrespective of any
+> errors.As a part of that Iam even handling the SIGSEGV.The problem is
+> even if I handle the sigsegv,the handler gets called continuously in an
+> infinite loop as if the signal is being recvd. continuously.How can I
+> solve this issue and make my handle run only once?
 
-May be I get you wrong, but hope this helps.
+Install the handler using sigaction() with the SA_RESETHAND flag. When
+the signal is received, the handler will be de-installed; if SIGSEGV
+is received again, the program will be terminated.
+
+The fact that your program received SIGSEGV suggests that one or more
+variables contain an invalid value. If you attempt to resume execution
+without fixing the error, you will just get further SIGSEGVs.
+
+More generally, if you detect that your program has got into an
+invalid state, you have two reasonable choices: either give up (i.e.
+terminate) or correct the problem.
+
+Ignoring the problem and hoping that that the program will magically
+recover isn't going to work.
+
+A more realistic approach for programs which need to run continuously
+would be to run the program from init with the "respawn" option; if
+the program terminates, init will restart it.
 
 -- 
-Kind Regards
-
-    \Steve
+Glynn Clements <glynn@gclements.plus.com>
