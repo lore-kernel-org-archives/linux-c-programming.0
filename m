@@ -1,51 +1,28 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: stack -> PROT_EXEC/why?
-Date: Mon, 5 Aug 2002 12:10:03 +0100
+From: +Rudymartin <rmb@coopenet.com.ar>
+Subject: question about gcc and keyboard hadling
+Date: Mon, 5 Aug 2002 04:25:52 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15694.23819.46199.920521@cerise.nosuchdomain.co.uk>
-References: <sqby9bmnlpi.wl@nue.mac.com>
+Message-ID: <02080504255200.24029@linux>
+Reply-To: rmb@coopenet.com.ar
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <sqby9bmnlpi.wl@nue.mac.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kkonaka@mac.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+hi folks 
 
-kkonaka@mac.com wrote:
+im trying to develop a text editor using gcc version 2.96 20000731 (Red Hat 
+Linux 7.1 2.96-81) , and thats because I want to make some experience with 
+C++ (I used to program in Java and C under windowz) The Info pages have 
+information about most libraries and functions but I have found no way to 
+trap the modifiers keys (ALT/CTRL/SHIFT) under a terminal. And I noticed 
+emacs can trap those keys under a terminal.
 
-> casually looking at files like this:
-> glibc-2.2.3/linuxthreads/manager.c
->  |       res_addr = mmap(map_addr, stacksize + guardsize,
->  | 		      PROT_READ | PROT_WRITE | PROT_EXEC,
->  | 		      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
->  it appears PROT_EXEC is also given to the per thread
-> stack(?) pages -- why is it the case?
-> 
->  that is - if we
-> consider things like buffer overflow (security)
-> problems, isn't it better not give PROT_EXEC unless
-> abslutely necessary? [so -- maybe there *is* some
-> absolute necessity I'm not aware of,... :(]
+I tried using the ncurses library and termcap.
 
-It is sometimes necessary to execute dynamically generated code which
-is placed on the stack. The most common cases are in handling signals,
-in a technique called a "trampoline" (this is mentioned in the gcc
-Info file), and some emulators (e.g. Executor, the Mac emulator).
+Where I can find some information about that? 
 
->  (stepping back) is PROT_EXEC also given to ordinally
-> stack segment of single threaded programs?
+btw sry my english isnt perfect. thanks in advance. Rudy.
 
-Yes. There is a patch available to change this, but in the standard
-kernel, the primary stack is executable.
-
-> was there any API to retrieve page protection bits given only
-> arbitrary VM addresses?
-
-It isn't portable, but you can get this information from
-/proc/<pid>/maps.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
