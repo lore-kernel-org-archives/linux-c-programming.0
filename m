@@ -1,23 +1,31 @@
-From: Jason Cooper <lcprog@lakedaemon.net>
+From: Eljay Love-Jensen <eljay@adobe.com>
 Subject: Re: complex.h
-Date: Mon, 13 Sep 2004 06:16:31 -0400
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040913101631.GB7924@lakedaemon.net>
+Date: Mon, 13 Sep 2004 06:06:56 -0500
+Sender: gcc-help-owner@gcc.gnu.org
+Message-ID: <6.1.2.0.2.20040913060344.01f77ec0@iplan-mn.corp.adobe.com>
 References: <20040913042902.7546.qmail@web52906.mail.yahoo.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040913042902.7546.qmail@web52906.mail.yahoo.com>
+Content-Transfer-Encoding: 7BIT
+Return-path: <gcc-help-return-17859-gcc-help=m.gmane.org@gcc.gnu.org>
+List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
+List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
+List-Post: <mailto:gcc-help@gcc.gnu.org>
+List-Help: <mailto:gcc-help-help@gcc.gnu.org>
+In-reply-to: <20040913042902.7546.qmail@web52906.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Ankit Jain <ankitjain1580@yahoo.com>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Ankit Jain <ankitjain1580@yahoo.com>, linux prg <linux-c-programming@vger.kernel.org>
+Cc: gcc <gcc-help@gcc.gnu.org>
 
-Ankit Jain (ankitjain1580@yahoo.com) scribbled:
-> i am working on complier version gcc 2.96
+Hi Ankit,
 
-http://gcc.gnu.org/gcc-2.96.html
+RH/GCC 2.96 came out before the 1999 version the C standard, and the 1998 
+version of the C++ standard.
 
-hth,
+ >so will it matter on portability of the program?
 
-Cooper.
+Depends what you want to be portable to.  1989 version of C?  Coalescing 
+(pre-1998) version of C++?
+
+--Eljay
+
