@@ -1,41 +1,47 @@
-From: xlp <xlp@emtel.net.co>
-Subject: New project
-Date: Fri, 26 Jul 2002 06:41:56 -0500
+From: ibraheem umaru-mohammed <iumarumo@eidosnet.co.uk>
+Subject: Telnet issues
+Date: Fri, 26 Jul 2002 12:43:42 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020726064156.C365@nietzsche.metrotel.net.co>
+Message-ID: <20020726114341.GC9971@micromuse.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Hi, I am coding a new project that demands me advanced C programming, I am bored
-of "Learn how to program in C" and those basic C tasks.
-I decided to make my own projects, understand manual pages style, learn how
-to make sucessfull web search, use irc channel and so on...
-I am coding a project, that It's a like a telnetd with login features, it
-becomes a daemon, listens on certain port, accepts connection, autenticate, and
-execute a shell.
-The problem is when authentication is successful, It execve() a /bin/sh
-however, I want to define certain variable such as PATH, TERM, etc.
-I want that when a client 'logs in', my daemon set certain variables (ej.
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin) and then
-executes the shell, so the client has a presetted variables on his session.
-You may think, Why dont you read his .cshrc ?, I dont want to read any file
-on the system , I just want my daemon set everything and then executes the 
-shell.
-smthg like:
-char *PATH="/bin:/sbin:/usr/bin:/usr/sbin";
-char *TERM="vt100";
-char *FOO="bar";
+This is a shot in the dark...am having some *solaris* issues and was
+just hoping someone might spot something that i am missing...
 
-I read putenv() man, Does it have any relation?, I dont know who to put it
-to work...
+Basically, telnet seems to work differently when given
+an IP address to when it is given a hostname?
 
-Thank you for any advice/help
+Basically, we have a problem where we attempt to spawn a shell to start
+xterm with telnet as the command...when a hostname is specified, telnet
+establishes contact, but for some reason is started up in
+SINGLE_CHARACTER_MODE. When an IP address is specified, telnet is
+started in LINE_MODE. 
 
-bye.
+We get the following when started in SINGLE_CHARACTER_MODE:
 
+			--cut here--
+Trying 193.131.98.222...
+Connected to springfield.
+Escape character is '^]'.
+			--cut here--
 
+And it just hangs there. The command we are trying to issue in C is:
+
+execl("/bin/sh", "sh", "-c", "xterm -e /bin/sh -c 'telnet springfield'", (char *)0);
+
+Anyone have any ideas?
+
+Kindest regards,
+
+			--ibs.
+
+-- 
+			ibraheem umaru-mohammed
+			   www.micromuse.com
+			         --0--
