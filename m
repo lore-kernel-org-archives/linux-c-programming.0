@@ -1,26 +1,37 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: How to get the status of the Shift key from the Terminal?
-Date: Thu, 18 Mar 2004 05:18:09 +0000
+From: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
+Subject: Question on socket of broadcast
+Date: Thu, 18 Mar 2004 20:15:11 +0900
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16473.12561.39219.483720@cerise.nosuchdomain.co.uk>
-References: <c3b89n$38v$1@sea.gmane.org>
+Message-ID: <012901c40cda$47c51a40$de01a8c0@qnessmphibiki>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <c3b89n$38v$1@sea.gmane.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Senthil Murugan <zenmurugan@hotmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Hello,
+I create a socket for broadcast by
 
-Senthil Murugan wrote:
+dhcpSocket = socket(PF_PACKET, SOCK_PACKET, htons(ETH_P_ALL));
+setsockopt(dhcpSocket, SOL_SOCKET, SO_BROADCAST, &flags, sizeof(int *));
 
-> I am using Putty as my terminal program. I want to get the shift key staus
-> from  the Terminal in my c program. Is there any possibility to get the
-> shift key status?
+and send a message by
 
-Probably not.
+sendto(dhcpSocket,&UdpIpMsgSend,sizeof(struct packed_ether_header)+
+    sizeof(udpiphdr)+sizeof(dhcpMessage),0,
+    &addr,sizeof(struct sockaddr)
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+then receive a replied broadcast message by
+
+recvfrom(dhcpSocket,&UdpIpMsgRecv,sizeof(udpipMessage),0,(struct sockaddr
+*)&addr,&i);
+
+It works well on normal LAN. But on a wireless LAN the message
+which was sent by the socket. is received from itself.
+Should a message sent by broadcast socket be recieved by itself?
+
+Thanks in advance.
+
+--Wen
+
