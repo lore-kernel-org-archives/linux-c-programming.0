@@ -1,63 +1,47 @@
-From: Alphex =?UTF-8?B?S2HDpG5va2Vu?= <akaanoken@softminecorp.com>
-Subject: Re: programs for linux commands
-Date: Thu, 10 Feb 2005 16:32:22 +0300
-Message-ID: <20050210163222.03d12e47.akaanoken@softminecorp.com>
-References: <cufh3o$t4u$1@sea.gmane.org>
-	<HDENKFBAFLFEPEPFAEPPEEKJCCAA.thomas.fleury@elsys-design.com>
+From: Rechberger Markus <mrechberger@gmail.com>
+Subject: Re: ncurses problem
+Date: Thu, 10 Feb 2005 15:28:30 +0100
+Message-ID: <d9def9db050210062849a0d22d@mail.gmail.com>
+References: <420B365D.7090109@hq.ntsp.nec.co.jp>
+Reply-To: Rechberger Markus <mrechberger@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-In-Reply-To: <HDENKFBAFLFEPEPFAEPPEEKJCCAA.thomas.fleury@elsys-design.com>
+Content-Transfer-Encoding: 7bit
+In-Reply-To: <420B365D.7090109@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-On Thu, 10 Feb 2005 14:26:25 +0100
-"Thomas FLEURY" <thomas.fleury@elsys-design.com> wrote:
+Hey Earl!
 
-> You can find a bundle of such commands at http://www.busybox.net.
-I think that look for it in coreutils better.
->=20
-> Thomas.
->=20
-> -----Message d'origine-----
-> De : linux-c-programming-owner@vger.kernel.org
-> [mailto:linux-c-programming-owner@vger.kernel.org]De la part de
-> Muruganandam
-> Envoy=C3=A9 : jeudi 10 f=C3=A9vrier 2005 12:57
-> =C3=80 : linux-c-programming@vger.kernel.org
-> Objet : programs for linux commands
->=20
->=20
-> hi all,
->=20
->   Could u anybody give me the programs for linux commands like ls,cp
->=20
->=20
-> thanks,
-> C.Muruganandam
->=20
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->=20
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->=20
-See for its in GNU coreutils.
-What are you really needed commands?
+try
+FIELD *fields[3];
+and
+fields[2] = NULL;
 
---=20
-Valmis ...
-Alphex Ka=C3=A4noken,
-Software Developer
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+I wondered how should new_form know when the array ends..
+
+regards,
+
+Markus
+
+
+On Thu, 10 Feb 2005 18:24:29 +0800, Earl R. Lapus <elapus@ntsp.nec.co.jp> wrote:
+> hi there,
+> 
+> i have a problem using ncurses. i attached the source code with this email.
+> this program displays two text fields. my problem occurs when i add this,
+> `char buff[256];` after the declaration, `int ch;`.
+> after adding the character array declaration, the text fields won't
+> display anymore.
+> any ideas?
+> 
+> -earl-.
+> 
+> --
+> ==========================================
+>   There are seven words in this sentence.
+> ==========================================
+> 
+> 
+>
