@@ -1,17 +1,14 @@
 From: "Yigit Can" <yigit.can@karel.com.tr>
 Subject: getprotobyname failure
-Date: Tue, 25 Feb 2003 10:34:10 +0200
+Date: Tue, 25 Feb 2003 10:57:00 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <00ed01c2dca8$ab5e84f0$3002a8c0@yigitcan>
+Message-ID: <014901c2dcab$dba77ba0$3002a8c0@yigitcan>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux c programming <linux-c-programming@vger.kernel.org>, linux config <linux-config@vger.kernel.org>, linux kernel <linux-kernel@vger.kernel.org>
-
-
-
+To: linux c programming <linux-c-programming@vger.kernel.org>, linux kernel <linux-kernel@vger.kernel.org>
 
 
 Hello,
@@ -41,7 +38,7 @@ please help,
 
  my program :
  
- #include <netdb.h>
+#include <netdb.h>
 #include <stdio.h>
  
  int main(void){
@@ -57,5 +54,4 @@ please help,
 Yigit CAN
 Karel Electronics Corp.
 yigit.can@karel.com.tr
- 
 
