@@ -1,46 +1,39 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: The stickybit!!
-Date: Sat, 18 Dec 2004 00:25:34 +0000
-Message-ID: <16835.30974.291491.153681@cerise.gclements.plus.com>
-References: <1103265276.6880.8.camel@myLinux>
+From: "Igor A. Deruga" <ingvarrr@hotbox.ru>
+Subject: Raw Sockets
+Date: Sun, 19 Dec 2004 11:19:13 +0700
+Message-ID: <200412191119.14034.ingvarrr@hotbox.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1103265276.6880.8.camel@myLinux>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
+
+Greetings, fellows!
+
+Hope you'll be able to help me with your useful advice...
+I need to establish a connection using a Raw socket. That's what I'm doing:
+
+int sock = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
+ sockaddr_ll addr;
+        addr.sll_family = AF_PACKET;
+        addr.sll_protocol = 0;
+        addr.sll_ifindex = 0;
+        addr.sll_hatype = 0;
+        addr.sll_pkttype = 0;
+        addr.sll_halen = 0;
+
+But where can I get a value for addr.sll_addr? And what is it? "man 7 packet" 
+sais it's a Physical layer address, which is MAC, i guess... so, how do I 
+retreive it?
+
+If it's possible, could anybody send me an example that uses sockaddr_ll to 
+SEND packets via RAW SOCKET? That'd be great!
+
+Sincerely 
+        Igor	
 
 
-Jagadeesh Bhaskar P wrote:
-
-> 	Though it is known that stickybit is obsolete, im just curious to see
-> the effect of setting a sticky bit on an executable file.
-> 
-> 	Is there a way to findout the data if residing in swap area after the
-> process is terminated, using a C program??
-
-Read-only sections (e.g. text, rodata) of binaries (executables or
-libraries) will never end up in the swap file. Either they reside in
-RAM or they don't; if they don't, they will be read in from the binary
-as required.
-
-The swap file is only used for storing mutable data (e.g. data or bss
-sections of binaries, memory allocated by brk() or anonymous mmap(),
-or writeable mmap()ed files using MAP_PRIVATE).
-
-Immutable data is already stored in the mapped file, so there's no
-point in copying it to swap.
-
-As for the question which you presumably meant to ask, i.e. how to
-determine if a particular page of a file is currently stored in
-physical RAM, I don't have an answer.
-
-Obviously, the kernel has this information, so you could always dig it
-out of /dev/kmem or /proc/kcore or similar. I don't know whether
-there's a better interface.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+P.S.: I've set the encoding to iso-8859-5. Hope this time it goes through...
