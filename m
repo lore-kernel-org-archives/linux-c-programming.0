@@ -1,12 +1,10 @@
 From: Hossein Mobahi <hmobahi@yahoo.com>
 Subject: Re: Problem with read() and named pipe (FIFO) (pipe not disk)
-Date: Tue, 17 Aug 2004 12:25:11 -0700 (PDT)
+Date: Tue, 17 Aug 2004 12:25:47 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040817192511.83411.qmail@web12703.mail.yahoo.com>
-References: <41224737.9010006@sancharnet.in>
+Message-ID: <20040817192547.72085.qmail@web12708.mail.yahoo.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <41224737.9010006@sancharnet.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
