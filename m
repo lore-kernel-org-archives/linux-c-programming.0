@@ -1,63 +1,36 @@
-From: rinku rathore <rinku_ques@yahoo.com>
-Subject: Re: want to create menu bar
-Date: Wed, 20 Oct 2004 05:07:12 -0700 (PDT)
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
+Subject: STL - creating std::map key higher than double
+Date: Wed, 20 Oct 2004 16:42:06 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041020120712.75769.qmail@web53010.mail.yahoo.com>
-References: <20041020115518.72727f60.kaanoken@crew.org.ru>
+Message-ID: <4176BF8E.5010107@ig.com.br>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041020115518.72727f60.kaanoken@crew.org.ru>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: kaanoken@crew.org.ru
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-hello,
-can u suggest any tutorial,to create the menubar
-thanx
-rinku
+THE PROBLEM:
+I never created a map<> object that has a key different from embbeded 
+types. When I need a different key type, I create a union joinning my 
+type with a large enough embbed type. A sample:
+urion {
+      myObject X; // Its size is less or equal to double size;
+      double real_key;
+};
 
+Well, now I need a key larger than 128 bits, because it ll have about 48 
+bytes. I tryed to create a map like as:
+typedef std::map<myKeyType, stItem, std::less< myKeyType > > tpList;
 
+But, off course, the compiler advised me that "less<>" cannot compare 
+"myKeyType", then I implemented a "operator<" into "myKeyType". And now 
+the problem is with "iterator".
 
---- Alphex Kaanoken <kaanoken@crew.org.ru> wrote:
+MY QUESTIONS:
+Does exist a way to get a map<> with a customized key ? Should I fix the 
+compiling erros, building my own objects ?
 
-> On Wed, 20 Oct 2004 00:44:29 -0700 (PDT)
-> rinku rathore <rinku_ques@yahoo.com> wrote:
-> 
-> > Hello all,
-> > Is ther any way to insert a menu bar in X11 window
-> > without using GTK toolkit if
-> > yes please help me.
-> > Thanx
-> > rinku
-> Yes , U can use Xlib functions to drawing it , or 
-> GDK , so or other toolkit =)
-> > 
-> > 
-> > 	
-> > 		
-> > __________________________________
-> > Do you Yahoo!?
-> > Yahoo! Mail - You care about security. So do we.
-> > http://promotions.yahoo.com/new_mail
-> > -
-> > To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at 
-> http://vger.kernel.org/majordomo-info.html
-> 
-> 
-> -- 
-> Alphex Kaanoken,
-> Senior Developer of
-> Crew IT research labs.
-> Web: http://crew.org.ru
-> Mail: kaanoken at crew.org.ru
-> 
+Thanks,
+Luciano
 
-
-__________________________________________________
-Do You Yahoo!?
-Tired of spam?  Yahoo! Mail has the best spam protection around 
-http://mail.yahoo.com 
