@@ -1,74 +1,26 @@
-From: Saurabh Agarwal <saurabhagarwal@linux.net>
-Subject: RE: where can i find linux kernel 2.6 documentation.
-Date: Mon, 17 May 2004 02:07:52 -0700 (PDT)
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: How to write/copy kernel data in newly allocated cache page?
+Date: Wed, 19 May 2004 21:44:53 -0400 (EDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040517090753.4E9BE3964@sitemail.everyone.net>
-Reply-To: saurabhagarwal@linux.net
+Message-ID: <20040520014453.7611FB6D5@xprdmailfe20.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "Sanjay Kumar, Noida" <sanjayku@noida.hcltech.com>, saurabhagarwal@linux.net, linux-c-programming@vger.kernel.org
-
-
-Hi ,
-Thanks but cant i find any such thing like Linux Kernel Internals 2.4 for kernel 2.6 version.
-I also want to know what differences are there in writing device drivres  for kernel 2.6.
-Thanks & Regards 
-Saurabh
-
---- "Sanjay Kumar, Noida" <sanjayku@noida.hcltech.com> wrote:
-hi 
-if you have linux kernel 2.6 source with you, 
-then linux/Documentation folder is the best place to look for the
-documnetation
-regards
-sanjay
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Saurabh
-Agarwal
-Sent: Saturday, May 15, 2004 4:37 PM
 To: linux-c-programming@vger.kernel.org
-Subject: where can i find linux kernel 2.6 documentation.
 
 
-Hi All,
-I want to download linix kernel 2.6 documentation,
-specially relating to Device Drivers where can i find it.
-Thanks 
-Saurabh
+Hi all,
+
+While working at the kernel level, I want to write some data to the file without user knowing about it.
+I guess I can allocate a new page using "__grab_cache_page()" and write/copy that data to the newly allocated page. The page will be eventually written to the file.
+If this idea sounds practical, how do I write/copy the data at kernel level to that newly allocated page?
+
+Vineet
 
 
-_____________________________________________________________
-Linux.Net -->Open Source to everyone
-Powered by Linare Corporation
-http://www.linare.com/
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-Disclaimer: 
-
-This message and any attachment(s) contained here are information that is
-confidential,proprietary to HCL Technologies and its customers, privileged
-or otherwise protected by law.The information is solely intended for the
-individual or the entity it is addressed to. If you are not the intended
-recipient of this message, you are not authorized to read, forward,
-print,retain, copy or disseminate this message or any part of it. If you
-have received this e-mail in error, please notify the sender immediately by
-return e-mail and delete it from your computer.
-
-
-
-
-_____________________________________________________________
-Linux.Net -->Open Source to everyone
-Powered by Linare Corporation
-http://www.linare.com/
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
