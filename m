@@ -1,80 +1,97 @@
-From: Eric Bambach <eric@cisu.net>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: Byte Order
-Date: Wed, 12 Jan 2005 11:31:16 -0600
-Message-ID: <200501121131.16555.eric@cisu.net>
+Date: Wed, 12 Jan 2005 18:34:57 +0100
+Message-ID: <20050112173457.GS25737@lug-owl.de>
 References: <20050112_170357_014648.r_zaca@ig.com.br>
-Reply-To: eric@cisu.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="jo46wx5DSA4a/gWG"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050112_170357_014648.r_zaca@ig.com.br>
 Content-Disposition: inline
+In-Reply-To: <20050112_170357_014648.r_zaca@ig.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: r_zaca <r_zaca@ig.com.br>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Wednesday 12 January 2005 11:03 am, you wrote:
->   Hello all,
->
->   How can I say if the machine where I am working uses "Host Byte Ord=
-er" or
-> "Network Byte Order"?
->   Is it an obvius question? I mean, all hosts (machines) uses "Host B=
-yte
-> Order" and when it needs to send data through the network it uses "Ne=
-twork
-> Byte Order".
->   Thanks.
 
-Well,
+--jo46wx5DSA4a/gWG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- Im not sure if this answers your question, but when doing network prog=
-ramming=20
-you should always use hton and ntoh conversions to make your program po=
-rtable=20
-whether or not your machine uses the same byte order as the network.
+On Wed, 2005-01-12 15:03:57 -0200, r_zaca <r_zaca@ig.com.br>
+wrote in message <20050112_170357_014648.r_zaca@ig.com.br>:
+Content-Description: Mail message body
+>   How can I say if the machine where I am working uses "Host Byte Order" =
+or=20
+> "Network Byte Order"?=20
 
- If you;re asking which architectures are Big Endian and little endian =
-and how=20
-to tell..then im afraid I dont know. Google will tell you which archite=
-ctures=20
-are which.
+Something like this should do the job:
 
-However, man pages also say "On machines which have a byte order which =
-is the=20
-same as the network order, routines are defined as null macros." so its=
- safe=20
-and desirable to use whether your machine uses the same of different or=
-dering=20
-anyways.
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-P.S. If you want to check Endianess perhaps you can pass an int through=
- htons=20
-or ntohs (etc.) and see if it changes the values. If it doesn't, then y=
-ou're=20
-using the same ordering as the network. Perhaps someone can clarify if =
-this=20
-will actually work its just a stab in the dark.
-----------------------------------------
---EB
+int
+main (int argc, char *argv[])
+{
+        uint32_t i =3D 0x44332211;
+        unsigned char *c;
 
-> All is fine except that I can reliably "oops" it simply by trying to =
-read
-> from /proc/apm (e.g. cat /proc/apm).
-> oops output and ksymoops-2.3.4 output is attached.
-> Is there anything else I can contribute?
+        c =3D (unsigned char *) &i;
 
-The latitude and longtitude of the bios writers current position, and
-a ballistic missile.
+        if (c[0] =3D=3D 0x11 && c[1] =3D=3D 0x22 && c[2] =3D=3D 0x33 && c[3=
+] =3D=3D 0x44)
+                printf ("This is a little-endian host\n");
+        else if (c[0] =3D=3D 0x44 && c[1] =3D=3D 0x33 && c[2] =3D=3D 0x22 &=
+& c[3] =3D=3D 0x11)
+                printf ("This is a big-endian host\n");
+        else if (c[0] =3D=3D 0x33 && c[1] =3D=3D 0x44 && c[2] =3D=3D 0x11 &=
+& c[3] =3D=3D 0x22)
+                printf ("This is a pdp-endian host\n");
+        else {
+                printf ("This host is broken:-)\n");
+                return EXIT_FAILURE;
+        }
 
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
-r 08,2000=20
+        return EXIT_SUCCESS;
+}
 
-----------------------------------------
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+>   Is it an obvius question? I mean, all hosts (machines) uses "Host Byte=
+=20
+> Order" and when it needs to send data through the network it uses "Networ=
+k=20
+> Byte Order".=20
+
+The rule is easy: Just *always* either use htonl/htons/ntohl/ntohs or
+transmit the number in readable format. The nice thing is that any sane
+libc will implement those as macros, so if your host already works in
+network byte order, the conversion will get optimized away.
+
+MfG, JBG
+
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
+k!   O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
+
+--jo46wx5DSA4a/gWG
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQFB5V/BHb1edYOZ4bsRAg3yAJ9I/A2d3L77b0laZb/RbpFVT5GXlACeMQXx
+hbIaV9BmWJV7RFMKdnAGH/s=
+=KJrW
+-----END PGP SIGNATURE-----
+
+--jo46wx5DSA4a/gWG--
