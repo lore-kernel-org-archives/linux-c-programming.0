@@ -1,59 +1,41 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: PAM programming with gtk.
-Date: Thu, 17 Jul 2003 02:49:52 +0100
+From: ramzez <r4mz3z@yahoo.es>
+Subject: xml document
+Date: 17 Jul 2003 21:13:34 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16150.192.720325.136343@cerise.nosuchdomain.co.uk>
-References: <3F15BF2E.7000107@servidor.unam.mx>
+Message-ID: <1058492084.904.3.camel@localhost.localdomain>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-zsH+1ClZQjyQWlVy+fBp"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3F15BF2E.7000107@servidor.unam.mx>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: davidgn@servidor.unam.mx
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-David Eduardo Gomez Noguera wrote:
+--=-zsH+1ClZQjyQWlVy+fBp
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> Hello. I am having some problems writing a small app that will shutdown 
-> the pc, and I have a few questions, if someone of you know the answers 
-> please?
-> 
-> shutdown needs root to execute it, so how can I get to do it? I was 
-> thinking of a suid app that will authenticate the user via login and 
-> password and if all is right, then execl shutdown, but gtk wont let an 
-> app be suid. So how can I get root priviledges with pam? is it possible 
-> at all?
-> 
-> Then, I dont quite understand how pam works. I compiled the demo app, 
-> but root can authenticate to any user (using only pam_unix_auth), but 
-> other users can authenticate to no one but themselves.
-> 
-> in an nutshell, any user that knows a password (to an account, not 
-> necessarily theirs, that belongs to a certain group) should be able to 
-> reboot.
+Hi friends... is there some way to give a tag (or tags) since a XML
+document; and use the value in something?
 
-I strongly suggest that you use sudo for this. I.e. configure sudo to
-allow all such users to run /sbin/shutdown as root, then have your GTK
-program invoke sudo via xterm, e.g.
+thanks
 
-	xterm -T Sudo -geometry 30x1 -e sudo shutdown -h now
+--=20
+  Linux User Registered #232544
+         ICQ : 337889406
+my GnuPG-key at www.keyserver.net
+    --- rm -rf /bin/laden ---
 
-Shutdown needs root privilege. Your GUI program isn't running with
-root privilege. Consequently, a setuid program has to get involved
-somewhere along the line. Writing a setuid program which doesn't give
-everyone unrestricted root privilege is hard. So use an existing
-program which is likely to have been written by someone who knows what
-they are doing.
+--=-zsH+1ClZQjyQWlVy+fBp
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: Esta parte del mensaje esta firmada digitalmente
 
-If you are intent on doing this yourself, don't use a setuid program. 
-Write a daemon which is run as root (via init and /etc/rc.d/) and
-which will perform a shutdown upon receipt of a valid request. Writing
-a daemon is easier to get right than writing a setuid program. A
-daemon only has to worry about malicious input on it's socket (or FIFO
-etc), whereas a setuid program has to worry about its entire process
-environment.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.1 (GNU/Linux)
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+iD8DBQA/F06zG3Fqyap52TERArU4AKCBZG4cSj9EpT95TASBxu0PoXZyxgCgu3r5
+T0Rxr7p8T5kMUDOPku6fbBE=
+=1tKl
+-----END PGP SIGNATURE-----
+
+--=-zsH+1ClZQjyQWlVy+fBp--
+
