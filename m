@@ -1,65 +1,39 @@
-From: "John T. Williams" <jtwilliams@vt.edu>
-Subject: Re: Problem in accessing executable files
-Date: Tue, 1 Feb 2005 10:37:30 -0500
-Message-ID: <009b01c50873$f33bc910$680aa8c0@descartes2>
-References: <20050201135857.154ED1E491@xprdmailfe25.nwk.excite.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: RE: Into the Void
+Date: Wed, 2 Feb 2005 12:15:58 +0000
+Message-ID: <16896.50302.251490.680737@gargle.gargle.HOWL>
+References: <D2AA47A6FB2C1A48AF0526440C0F245CAA3634@monm207.nae.ds.army.mil>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Sender: linux-kernel-owner@vger.kernel.org
+In-Reply-To: <D2AA47A6FB2C1A48AF0526440C0F245CAA3634@monm207.nae.ds.army.mil>
+Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: vintya@excite.com, linux-kernel@vger.kernel.org
-Cc: linux-c-programming@vger.kernel.org
-
-This is just a thought.
-
-Text files are better able to handle small faults. ie an extra space or
-characters or even an unreadable piece of data might not cause the file to
-become unreadable by most text editors.  Binary files aren't as flexible.
-Every bit could be an instruction to the processor and might cause a seg
-fault.
-
-Just to test the theory, I would start by making the encrypt decrypt
-function only effect the first byte.  If doing this doesn't cause a seg
-fault, I would recheck my decrypt encrypt algorithm to make sure it doesn't
-pad or expand at any point. maybe use them on a regular file and the an
-md5sum on the file before and after, just to make extra sure.
+To: linux-c-programming@vger.kernel.org
 
 
------ Original Message ----- 
-From: "Vineet Joglekar" <vintya@excite.com>
-To: <linux-kernel@vger.kernel.org>
-Cc: <linux-c-programming@vger.kernel.org>
-Sent: Tuesday, February 01, 2005 8:58 AM
-Subject: Problem in accessing executable files
+Huber, George K RDECOM CERDEC STCD SRI wrote:
 
+> Well we have not put anything in that memory location yet, and
+> as I recall, under Linux any memory is zero-out when returned by malloc to
+> help prevent information leakage from one application to another.
 
->
-> Hi all,
->
-> I am trying to add some cryptographic functionality to ext2 file system
-for my masters project. I am working with kernel 2.4.21
->
-> since the routines do_generic_file_read and do_generic_file_write are used
-in reading and writing, I am decrypting and encrypting the data in the resp.
-functions. This is working fine for regular data files. If I try to copy /
-execute executable files, I am getting segmentation fault. In kernel
-messages, I see same functions (read and write) getting called for the
-executables also. If I comment encrypt/decrypt functions, its working fine.
->
-> Now since it is working for regular text files, I suppose there is not a
-problem in my encrypt/decrypt routines, then what might be going wrong?
->
-> Thanks and regards,
->
-> Vineet
->
-> _______________________________________________
-> Join Excite! - http://www.excite.com
-> The most personalized portal on the Web!
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Memory contains zeroes when it is first given to the process by the
+kernel. Whether or not memory returned from malloc() contains zeroes
+depends upon whether that memory has been used previously by the
+current process.
 
+At the beginning of a process' life cycle (e.g. at the top of main()),
+memory returned from malloc() is likely to contain zeroes.
+
+As time goes by, it becomes increasingly likely that memory returned
+from malloc() has previously been allocated, used, then free()d. In
+which case, the memory's contents will have been retained; neither
+malloc() nor free() themselves fill the memory with zeroes.
+
+If you need to ensure that memory contains zeroes, either use calloc()
+(which is defined to fill the memory with zeroes), or fill it yourself
+with memset().
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
