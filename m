@@ -1,49 +1,36 @@
-From: ronkhu <ronkhu@ntsp.nec.co.jp>
-Subject: socket send and recv
-Date: Thu, 07 Aug 2003 18:46:18 +0800
+From: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>
+Subject: Re: socket send and recv
+Date: Thu, 7 Aug 2003 12:40:57 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3F322DFA.2030509@hq.ntsp.nec.co.jp>
-Reply-To: ronkhu@ntsp.nec.co.jp
+Message-ID: <20030807114057.GA19378@lsd.di.uminho.pt>
+References: <3F322DFA.2030509@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <3F322DFA.2030509@hq.ntsp.nec.co.jp>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Earl Lapus <lapuz.rl@mp.ncos.nec.co.jp>, "Lejanson C. Go" <g_l-go@tmg99.ntes.nec.co.jp>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: ronkhu <ronkhu@ntsp.nec.co.jp>
+Cc: Earl Lapus <lapuz.rl@mp.ncos.nec.co.jp>, "Lejanson C. Go" <g_l-go@tmg99.ntes.nec.co.jp>, linux-c-programming@vger.kernel.org
 
-i have a client program which sends a sequence of bytes everytime 
-anything(plus carriage return)  is inputted into STDIN...
+On Thu, Aug 07, 2003 at 06:46:18PM +0800, ronkhu wrote:
+> i have a client program which sends a sequence of bytes everytime 
+> anything(plus carriage return)  is inputted into STDIN...
+> 
+> but the problem lies in the receiving end of the socket connection...
+> with a single call of the recv() function, multiple messages sent by the 
+> client are concatenated into one stream..
+Yes, STREAM sockets have no knowledge of messages, but DGRAM do (but
+are unreliable).
 
-but the problem lies in the receiving end of the socket connection...
-with a single call of the recv() function, multiple messages sent by the 
-client are concatenated into one stream..
+So you need to have a way to know what is a single message, either by
+using delimiters (like \n) or by using headers, with the length of the message.
+(Or use DGRAM sockets.)
 
+Also, you can use the TCP_NODELAY socket(7) option to force the data to
+be sent immediately, but there's no gaurantee it won't be buffered at the
+receiver.
 
-    unsigned char msg[] = { 0x00, 0x00, 0x00, 0x20, 0x20, 0x01, 0x00, 
-0x00, 0xB2, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 
-0x00, 0x20, 0x03, 0x06, 0x03, 0x16, 0x20, 0x10, 0x00, 0x00, 0x00, 0x00, 
-0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF };
-
-        while(1)
-        {
-            FD_ZERO( &readSet );
-            FD_SET( 0, &readSet );
-            if ( select( 1, &readSet, NULL, NULL, NULL ) > 0 )
-            {
-                read( 0, temp, 10 );
-                send( sock, msg, 40, 0 ));
-            }
-        }
-
-
-
-
-because of this scenario, i was forced to add a sequence of bytes that 
-would serve as a delimter separating the messages. The server program
-would then pre-parsed the message by sub dividing the data using the 
-delimeter sequence of bytes
-
-
-
-
-
+Regards,
+Luciano Rocha
