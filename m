@@ -1,37 +1,28 @@
-From: syedk <syedk@intotoinc.com>
+From: Progga <abulfazl@juniv.edu>
 Subject: Re: generating ethernet packets
-Date: 31 Dec 2003 10:07:57 +0530
+Date: Wed, 31 Dec 2003 13:01:31 +0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1072845486.24938.11.camel@qa.intotoind.com>
+Message-ID: <20031231130131.A279@Imrashi.net.bd>
 References: <20031230153502.0c98a9cd.cialdi@firenze.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20031230153502.0c98a9cd.cialdi@firenze.net>
+Content-Disposition: inline
+In-Reply-To: <20031230153502.0c98a9cd.cialdi@firenze.net>; from cialdi@firenze.net on Tue, Dec 30, 2003 at 03:35:02PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: Massimiliano Cialdi <cialdi@firenze.net>
 Cc: linux-c-programming@vger.kernel.org
 
-u can find a tool named nemesis in packetfactory.net..
-after installing it u can generate custom ethernet traffic.
-If u want to do it on your own u can use raw sockets.
-otherwise u can use libnet
-luv and seasons greetings
-Syed SK
-On Tue, 2003-12-30 at 20:05, Massimiliano Cialdi wrote:
+On Tue, Dec 30, 2003 at 03:35:02PM +0100, Massimiliano Cialdi wrote:
+
 > I need to generate custom ethernet packets. I want to test a protocol.
 > How can I send my custom ethernet packets through the network? Do I need libpcap?
-> 
-> thanks
-> 
-> -- 
-> Massimiliano Cialdi
-> cialdi@firenze.net
-> m.cialdi@oksys.it
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
+ Probably, the combination of ping's  "-p" and "-s" option can send custom 
+packets.
+
+
+ Khoda Hafez
+ Progga
 
