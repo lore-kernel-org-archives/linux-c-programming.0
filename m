@@ -1,79 +1,96 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Basic C encryption
-Date: Tue, 8 Jul 2003 22:09:40 +0200
+From: "Matthew Studley" <matthew.studley@uwe.ac.uk>
+Subject: Re: what causes SIGTERMs?
+Date: Wed, 9 Jul 2003 16:36:53 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030708200940.GT20605@lug-owl.de>
-References: <DDFD9B60F648D411AD670000F80822EA03FCAAB7@mail7.monmouth.army.mil>
+Message-ID: <012101c3462f$ec43a810$caba0ba4@uwe.ac.uk>
+References: <00be01c34553$57ea97a0$caba0ba4@uwe.ac.uk> <16138.54505.701672.164306@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="MET8MpPxp2u2c48q"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <DDFD9B60F648D411AD670000F80822EA03FCAAB7@mail7.monmouth.army.mil>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Hi all
 
---MET8MpPxp2u2c48q
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thanks for the help regarding linux signals... very useful!
 
-On Tue, 2003-07-08 16:03:30 -0400, Huber, George K CECOM RDEC STCD SRI <Geo=
-rge.K.Huber@us.army.mil>
-wrote in message <DDFD9B60F648D411AD670000F80822EA03FCAAB7@mail7.monmouth.a=
-rmy.mil>:
-> Jan-Benedict Glaw wrote:
-> >Nice examples, but mostly worthless. It was asked to "encrypt" a
-> >function (or a class/instance), not a file. Starting with the binary,
-> >you'd first need to find your function/method. Note that objects per se
-> actually read the original post, quoted below:
->=20
-> "Hi, I need a small, basic way to encrypt a binary file saving a custom
-> class from a windoze 32 proyect.
+I have written this little test program, which I then send a SIGTERM using
+another process.
+(I've been testing this under the current stable release of Debian)
 
-"custom class"?
+I notice that, while siginfo_t.si_signo seems to have a meaningful value,
+all other fields e.g. si_pid are ZERO !
 
-> The original poster wanted to encrypt a binary file.  The question that he
-> asks is how to add a one to each characte (byte) being saved to disk -
-> exactly what my examples show.
+Does anybody have any ideas about this?
 
-If it was ment that way - you're right and I claim to be unable to
-read:)
+cheers Matt
 
-However, my reading was that he wanted to hide some
-functions/methods/classes from a binary executable file, which is a
-non-trivial task, esp. because unencrypting it is much more easier than
-encrypting it.
+============================================
 
-For the purpose of simply encrypting some random data, I'd say to
-install gnupg and use one of its simple password ciphers. Then, he even
-gets high-quality encryption for the price of only writing some little
-wrapper (or using gpgme, which IMHO isn't really easier than writing a
-wrapper for that purpose...).
 
-If I misread the original posting - I'm really sorry for submitting TOFU
-then...
+#include <signal.h>
+#include <stdio.h>
 
-MfG, JBG
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+void myHandler(int i, siginfo_t *info, void *v){
+  printf("i = %d\n", i);
+  printf("signo is %d\n", info->si_signo);
+  printf("calling pid is %d\n", info->si_pid);
+  printf("calling uid is %d\n", info->si_uid);
+  printf("errno : %d\n", info->si_errno);
+  printf("code : %d\n", info->si_code);
+  fflush(stdout);
+}
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+int main(void){
+  int i;
+  struct sigaction mySigaction;
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+  mySigaction.sa_sigaction = (myHandler);
+  sigemptyset (&mySigaction.sa_mask);
+  mySigaction.sa_flags = SA_SIGINFO;      //SA_RESTART | SA_SIGINFO;
+  if(sigaction(SIGTERM, &mySigaction, NULL) < 0) {
+  perror("ERROR: registering Handler Function\n");
+  exit(1);
+  }
 
---MET8MpPxp2u2c48q
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+  while(1){
+    // do nothing.
+  }
+}
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
+========
+>
+> Matthew Studley wrote:
+>
+> > I wonder whether you could help me?  I have a problem; I'm running an
+> > application I've written in C under Slackware 7.1  Occasionally it
+receives
+> > a SIGTERM.
+> >
+> > * In what circumstances do processes get sent a SIGTERM?
+>
+> If something raises it with kill(). Note that SIGTERM is the default
+> signal sent by the kill and killall commands.
+>
+> > * Am I correct that this is unlikely to be issued in response to a bug
+in my
+> > code?
+>
+> Correct. SIGTERM isn't sent synchronously (i.e. in response to the
+> actions of the process which receives it).
+>
+> > * How can I find which process is issuing the SIGTERM against my code?
+>
+> Install a signal handler using sigaction() with the SA_SIGINFO flag;
+> the sending process ID will be in the si_pid field of the siginfo_t
+> structure. Other fields of that structure may also contain useful
+> information.
+>
+> --
+> Glynn Clements <glynn.clements@virgin.net>
+>
+>
 
-iD8DBQE/CyUEHb1edYOZ4bsRAitKAJsGX8CoPWSfQfgbpST24QunCX63JgCfewdv
-P5UNsehdQyWDT/8WkfVuvGE=
-=gmO2
------END PGP SIGNATURE-----
-
---MET8MpPxp2u2c48q--
