@@ -1,32 +1,17 @@
-From: Andrew Edmondson <inbox@andy.co.uk>
-Subject: Re: Running make seems to be crashing my computer.
-Date: Wed, 8 May 2002 20:53:28 +0100
+From: Mark Johnson <rmjohnson144@adelphia.net>
+Subject: Begining C book
+Date: Thu, 09 May 2002 21:19:23 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <02050820532800.02600@localhost.localdomain>
-References: <02050222174801.01065@localhost.localdomain> <20020502220737.GA16467@cam.ac.uk>
-Reply-To: inbox@andy.co.uk
+Message-ID: <3CDB4A4B.1060204@adelphia.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020502220737.GA16467@cam.ac.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-On Thu, 02 May 2002, you wrote:
+I am new to linux and would like to learn how to program in C.  can 
+someone suggest a good beginners book that covers linux C.
 
-> My guess is filesystem corruption. Reboot to emergency mode or with
-> init=/bin/bash and fsck it.
->
-> Steven Smith,
-> sos22@cam.ac.uk.
+-=Mark=-
 
-After a little bit of carefull looking (due to the other suggestions) I have 
-found that it was the file-system. Thank you all very much for your help.
-
-Andrew
-
-
--- 
-
-for x in *; do echo go on\!; sleep 1;done; echo Have a cup of tea\!
