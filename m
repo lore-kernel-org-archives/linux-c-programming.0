@@ -1,66 +1,38 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Defunct Processes
-Date: Wed, 29 Dec 2004 11:16:58 +0100
-Message-ID: <20041229101658.GR2460@lug-owl.de>
-References: <BDE318F8.1618%dsessions@ionosphere.net> <BDF77D14.1AE7%dsessions@ionosphere.net>
+From: Daniel Souza <thehazard@gmail.com>
+Subject: library calls relocation
+Date: Thu, 30 Dec 2004 12:25:28 -0200
+Message-ID: <e1e1d5f404123006255ad56324@mail.gmail.com>
+Reply-To: Daniel Souza <thehazard@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="82WbDBJhFeTAYH8j"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <BDF77D14.1AE7%dsessions@ionosphere.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+anyone knows any docs about how library relocations works ?
+for example, i have a library called
 
---82WbDBJhFeTAYH8j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+/usr/lib/mylib.so.0
 
-On Tue, 2004-12-28 21:13:56 -0500, Darren Sessions <dsessions@ionosphere.ne=
-t>
-wrote in message <BDF77D14.1AE7%dsessions@ionosphere.net>:
-> The application I'm working on right now gets called from another
-> application. When my program is finished, I just use exit(0); to quit, but
-> if I do a ps there are a ton of [applicationname] <defunct> messages.
+that has a function called mylib_init(), and a program that was linked
+to use it, like (gcc -o test test.c -lmylib). I know that when the
+program is executed, the ld-linux is called to load the required
+libraries (that I believe, are listed in some ELF section). The
+question is, supposing that in my binary i have a call to
+mylib_init(), so it looks something like in objdump -D
 
-This is a fault of the calling application. Your program became a
-zombie. That's the remaining rest of a process that already finished.
-(Basically, it consists of accounting information, the process' exit
-value and probably of the signal number that led to the process' death).
+pushl (%eax)
+call 0x484763ec <mylib_init>
 
-This information needs to be handled (the parent process needs to wait()
-or wait4() it, or using other methods). Normally, the parent process
-should handle the SIGCHLD signal; it's generated upon a child's death.
-This would allow the parent to call wait() as long as there are finished
-childs (remember, you only know the signal got fired, but you don't know
-how often :)  Calling wait() then will finally bury the finished child.
+and I know that there is a symbol table that tells that 0x484763ec is
+mylib_init from mylib.so.0. The question is: if i increment the
+library with other things, etc, and recompile it (maybe in another
+machine), the size and addresses of library symbols will get changed.
+But, if I copy the compiled library back to the original system, and
+run the program, it still working. If the address of mylib_init in the
+library has changed, why the 'static' address 0x484763ec used in the
+binary still get pointing to the mylib_init in the changed library ?
 
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---82WbDBJhFeTAYH8j
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFB0oQaHb1edYOZ4bsRAlqzAJ4nfqC7Z1sg/mU6GMpszGHlAdsx2wCfewRV
-lQOtKFH8tWHoXAwq0jp0UjM=
-=l7WG
------END PGP SIGNATURE-----
-
---82WbDBJhFeTAYH8j--
+thanks guys =)
