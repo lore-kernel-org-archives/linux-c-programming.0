@@ -1,28 +1,22 @@
-From: "Ruslan U. Zakirov" <cubic@wr.miee.ru>
-Subject: Re: undefined sqrt()
-Date: Sat, 26 Oct 2002 14:07:40 +0400
+From: Wrazlov <wrazlov@gmx.net>
+Subject: Building a program "static"
+Date: Tue, 29 Oct 2002 10:00:17 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <55450121991.20021026140740@wr.miee.ru>
-Reply-To: "Ruslan U. Zakirov" <cubic@wr.miee.ru>
+Message-ID: <200210291000.17896.wrazlov@gmx.net>
+Reply-To: wrazlov@gmx.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-TSS> Glynn,
-TSS> Thanks for the explanation.  I understand now.  After getting your explanation, I did a bit of web browsing to try to find a page that tells me what libraries I need for which header files, but
-TSS> I haven't been too successful.  Do you know of a URL where I could find that info?
-TSS> Thanks,
-TSS> Sean
-Hello!
-There are two sections in man sqrt.
-1) Library: In this section described which library you must link with
-your program.
-2) Sinopsis: Here specified file where you can find prototype of
-function. This file(s) you must include in your project.
-Good luck.
-_______________________________________________________________________
-Sorry for my English.
+Hello,
+I tried to build a program to be static, but it always says that some library 
+was not found, altough it works very well if it's built normal (shared):
+gcc -L/usr/qt-3.0.4/lib -lqt-mt -static program.static program.o
+ld says: "-lqt-mt not found"
+What's wrong with the linker-options?
+ Thanks for helping...
+
 
