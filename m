@@ -1,77 +1,91 @@
 From: =?iso-8859-1?q?will=20fitzgerald?= <linux_learning@yahoo.co.uk>
-Subject: expanding on t these functions do!
-Date: Tue, 1 Oct 2002 20:30:14 +0100 (BST)
-Sender: linux-kernel-owner@vger.kernel.org
-Message-ID: <20021001193014.6899.qmail@web13107.mail.yahoo.com>
+Subject: this code does not get called in dev.c so do we need it?
+Date: Wed, 2 Oct 2002 15:02:35 +0100 (BST)
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <20021002140236.53405.qmail@web13107.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
-Return-path: <linux-kernel-owner+linux-kernel=40quimby.gnus.org@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
+To: linux-kernel@vger.kernel.org
+Cc: linux-c-programming@vger.kernel.org
 
 hi all,
 
+this code excerpt from net_rx_action in dev.c does not
+get executed at all. is there any need for it? what
+does it do?
 
- i was hoping someone could explain what is it exactly
-that each of these functions actually do.i have
-supplied what i think they do under each of them.i'm
-using kernel 2.4.14 (old i know!!!!)
+i inserted printk's in it just about everywhere.
+i have a test network set up, A talks to C via router
+B
+(kernel 2.4.14)
+justificattion:
+i've pinged C from A, I've pinged eth0 on B from
+A,I've pinged eth1 on B from A and i've pinged A from
+router B and in no instance was any of the following
+code executed.
 
-skb_bond() in dev.c
-net_rx_action() calls it, it returns and then
-net_rx_action calls ip_rcv() but what is skb_bond
-doing?
+whats CONFIG_NET_FASTROUTE supposed to do?
 
- skb_shared() in skbuff.h
-  ip_rcv() calls it befoe doing a NF_HOOK to call
-ip_rcv_finish() again i'm not sure of what it does.
+the only part that does get executed are the lines:
+"skb->h.raw = skb->nh.raw = skb->data;
+		{struct packet_type *ptype, *pt_prev;
+		 unsigned short type = skb->protocol;
+                  pt_prev = NULL;" just after the
+CONFIG_NET_FASTROUTE section of code.
 
-skb_cloned() in skbuff.h
-it seems to be linked to skb_shared() according to the
-comments.  ip_forwad() calls  calling
-rt_tos2priority() and skb_cow() and skb_cow calls
-skb_cloned().
-what is skb cloned used for?
+#ifdef CONFIG_NET_FASTROUTE
+		if (skb->pkt_type == PACKET_FASTROUTE) {
+			netdev_rx_stat[this_cpu].fastroute_deferred_out++;
+			dev_queue_xmit(skb);
+			dev_put(rx_dev);
+			continue;
+		}
+#endif
+		skb->h.raw = skb->nh.raw = skb->data;
+		{
 
-rt_tos2priority in route.h
-  does it give security priority information? even
-though i don't have a firewall set on my linux router
-(experimenting with networks, hobbie) , it gets called
-  as i have inserted printk's to test if it gets
-called.
+			struct packet_type *ptype, *pt_prev;
+			unsigned short type = skb->protocol;
 
-ip_decrease_ttl() in net/ip.h
- whats the purpose of this?
+			pt_prev = NULL;
+			for (ptype = ptype_all; ptype; ptype = ptype->next)
+{
+				if (!ptype->dev || ptype->dev == skb->dev) {
+					if (pt_prev) {
+						if (!pt_prev->data) {
+							deliver_to_old_ones(pt_prev, skb, 0);
+						} else {
+							atomic_inc(&skb->users);
+							pt_prev->func(skb,
+								      skb->dev,
+								      pt_prev);
+						}
+					}
+					pt_prev = ptype;
+				}
+			}
 
-ip_send() in net/ip.h
-ip_forward_finish() calls this function. what does
-this line "skb->len > skb->dst->pmtu" do in order to
-make the decision of calling one of two functions?
+#ifdef CONFIG_NET_DIVERT
+			if (skb->dev->divert && skb->dev->divert->divert)
+				handle_diverter(skb);
+#endif /* CONFIG_NET_DIVERT */
 
-neigh_resolve_output() in neighbour.c
-this calls the next two functions below. its called
-from ip_finish_output2(). does this lookup fib tables
-or cahces etc?
+			
+#if defined(CONFIG_BRIDGE) ||
+defined(CONFIG_BRIDGE_MODULE)
+			if (skb->dev->br_port != NULL &&
+			    br_handle_frame_hook != NULL) {
+				handle_bridge(skb, pt_prev);
+				dev_put(rx_dev);
+				continue;
+			}
+#endif
 
-neigh_event_send() in neighbour.h
-
-what does this function check in order to call the
-next function:   __neigh_event_send(neigh, skb)
-   
-__neigh_event_send() in neighbour.c
-what exactly is going on here? after the above
-function has returned its result this one gets
-executed.
-
-
-thank you for your time,
-regards.
-
-
-
-
-
+if i'm wrong let me know,
+thanks.
 
 __________________________________________________
 Do You Yahoo!?
