@@ -1,50 +1,28 @@
-From: Steven Smith <sos22@cam.ac.uk>
-Subject: Re: Debugging a Process ...
-Date: Sat, 26 Oct 2002 08:44:21 +0100
+From: "Ruslan U. Zakirov" <cubic@wr.miee.ru>
+Subject: Re: undefined sqrt()
+Date: Sat, 26 Oct 2002 14:07:40 +0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20021026074421.GA328@cam.ac.uk>
-References: <3DB86A25.5000109@uv.unitec.edu>
+Message-ID: <55450121991.20021026140740@wr.miee.ru>
+Reply-To: "Ruslan U. Zakirov" <cubic@wr.miee.ru>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="mYCpIKhGyMATD0i+"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <3DB86A25.5000109@uv.unitec.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Ivan Deras <ideras@uv.unitec.edu>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
+TSS> Glynn,
+TSS> Thanks for the explanation.  I understand now.  After getting your explanation, I did a bit of web browsing to try to find a page that tells me what libraries I need for which header files, but
+TSS> I haven't been too successful.  Do you know of a URL where I could find that info?
+TSS> Thanks,
+TSS> Sean
+Hello!
+There are two sections in man sqrt.
+1) Library: In this section described which library you must link with
+your program.
+2) Sinopsis: Here specified file where you can find prototype of
+function. This file(s) you must include in your project.
+Good luck.
+_______________________________________________________________________
+Sorry for my English.
 
---mYCpIKhGyMATD0i+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-> I want to know how to debug a process in Linux, i know that in Windows i=
-=20
-> can use Windows-API to attach a debugger process to the debugged=20
-> process, but in Linux i don't know ...
-If you want to attach an existing debugger, look at the documentation
-for that debugger (in gdb, it's ``gdb <program_name> <pid of program>'').
-If you're thinking of writing your own, have a look at man ptrace.
-This isn't the clearest of documents, so you may want to have a look
-at the source to a few programs which use it, like gdb, strace, or
-ltrace, before starting on your own.
-
-Steven Smith,
-sos22@cam.ac.uk.
-
---mYCpIKhGyMATD0i+
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.6 (GNU/Linux)
-Comment: For info see http://www.gnupg.org
-
-iD8DBQE9ukfVO4S8/gLNrjcRAv6kAKDaGEaZU/d+4+vkg4rNnvDy8bbuiwCdFwfN
-jfXJLhb7Cgo6am3WJqdNSb4=
-=d89b
------END PGP SIGNATURE-----
-
---mYCpIKhGyMATD0i+--
