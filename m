@@ -1,45 +1,41 @@
-From: "John T. Williams" <jowillia@vt.edu>
-Subject: Re: section description
-Date: Thu, 25 Sep 2003 08:46:04 -0400
+From: Jeff Woods <kazrak+kernel@cesmail.net>
+Subject: Re: using the same port with two sockets
+Date: Thu, 25 Sep 2003 10:15:52 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000b01c38362$fc0474d0$ed64a8c0@descartes>
-References: <20030924111324.00004da9.cialdi@firenze.net> <20030924192536.B288@Imrashi.net.bd>
-Reply-To: "John T. Williams" <jtwilliams@vt.edu>
+Message-ID: <5.2.1.1.0.20030925100439.01af0250@no.incoming.mail>
+References: <Pine.A41.4.20.0309251006170.140698-100000@delfin.unideb.hu
+ >
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.A41.4.20.0309251006170.140698-100000@delfin.unideb.hu
+ >
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Progga <abulfazl@juniv.edu>, Massimiliano Cialdi <cialdi@firenze.net>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
+To: Fekete Gabor <feketga@delfin.unideb.hu>
 Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-http://linux4u.jinr.ru/usoft/WWW/www_debian.org/Documentation/elf/node2.html#SECTION00020000000000000000
------ Original Message ----- 
-From: "Progga" <abulfazl@juniv.edu>
-To: "Massimiliano Cialdi" <cialdi@firenze.net>
-Cc: "linux-c-programming" <linux-c-programming@vger.kernel.org>
-Sent: Wednesday, September 24, 2003 9:25 AM
-Subject: Re: section description
+At 9/25/2003 10:16 AM +0200, Fekete Gabor wrote:
+>with SOCK_STREAM if the server accept()s a connection it creates
+>another sokcet that can be used to handle that connection.
+>I want to do the same but with SOCK_DGRAM.
+>So what I want is to recvfrom() a "connection" request and then
+>create another socket to handle that "connection", that is, the
+>server would go back to recvfrom() requests without worrying about
+>packets arriving from the previously "accepted" client which would
+>send those packets to the socket created especially for it.
+>Is it possible?
 
+Unlike SOCK_STREAM (aka TCP sockets) SOCK_DGRAM (aka UDP sockets) are 
+connectionless.  Every new UDP packet arrives at the single listening 
+socket which is bound to the UDP port addressed.  You can not have two 
+sockets listening on the same UDP port (IIUC).
 
-> On Wed, Sep 24, 2003 at 11:13:24AM +0200, Massimiliano Cialdi wrote:
->
-> > where can I find a detailed description of sections (like .text, .bss,
-> > .rodata, .jcr, .tors, etc.)?
->
->  The ELF specification has some info about these. But I have forgot the
-URL. If
-> you can't find it with Google then I can send you a copy.
->
->
->  Khoda Hafez
->  Progga
->
-> ** Filename is ELF11G.ZIP
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+I recommend Richard Stevens' book "Unix Network Programming" (ISBN: 
+013490012X ) for an excellent explanation.
+http://www.amazon.com/exec/obidos/ASIN/013490012X
+
+--
+Jeff Woods <kazrak+kernel@cesmail.net> 
+
 
