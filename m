@@ -1,65 +1,40 @@
-From: Holger Kiehl <Holger.Kiehl@dwd.de>
-Subject: Re: Question about checksums
-Date: Fri, 22 Aug 2003 20:18:57 +0000 (GMT)
+From: "J." <mailing-lists@xs4all.nl>
+Subject: printf(), aligning fields
+Date: Sat, 23 Aug 2003 22:31:26 +0200 (CEST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.44.0308222010400.17321-100000@praktifix.dwd.de>
-References: <5.2.1.1.0.20030821100717.032dfb30@no.incoming.mail>
+Message-ID: <Pine.LNX.4.21.0308232217220.23476-100000@hestia>
+References: <Pine.LNX.4.44.0308222010400.17321-100000@praktifix.dwd.de>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <5.2.1.1.0.20030821100717.032dfb30@no.incoming.mail>
+In-Reply-To: <Pine.LNX.4.44.0308222010400.17321-100000@praktifix.dwd.de>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Jeff Woods <kazrak+kernel@cesmail.net>
-Cc: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Thu, 21 Aug 2003, Jeff Woods wrote:
+Hello,
 
-> At +0000 04:36 PM 8/21/2003, Holger Kiehl wrote:
-> >On Thu, 21 Aug 2003, Luciano Miguel Ferreira Rocha wrote:
-> >>On Thu, Aug 21, 2003 at 12:48:05PM +0000, Holger Kiehl wrote:
-> [snip]
-> >>>I think md5sum could do the job but, think it is a bit of an overkill to 
-> >>>generate a 128 Bit checksum for such small input data. Also storing such 
-> >>>huge numbers is a bit of a pain. Would a 32 or 64 Bit checksum 
-> >>>sufficient, or would I be running into problems when these are to short?
-> >>
-> >>CRC-32 is normally sufficient. It's designed for data corruption on 
-> >>transmission, though, but it should be OK as long as you don't expect 
-> >>people to try and break your code with equal checksums.
-> >
-> >I am not trying to make anything more secure. Will a CRC-32 be sufficient 
-> >to always generate a different sum if a single bit changes within the 
-> >maximum 5120 Bytes?
-> 
-> In general, X bits of storage can take on 2^X distinct values.  So CRC-32 
-> can take a maximum of  approximately four billion possible values.  That's 
-> a number with three commas in US notation; I suppose that's twelve periods 
-> or spaces on your side of the pond.  A 128 bit value can store 
-> approximately 64 trillion trillion trillion distinct values. That's a 
-> number with *twelve* commas.  And a 5120 byte file has 40960 bits so it can 
-> have roughly 1*10^4096 distinct values.  There will always be the 
-> possibility for duplicate values when you take a checksum on arbitrary data 
-> longer then the checksum length.
-> 
-> You have to make a tradeoff of how much risk you're willing to accept for a 
-> duplicate based on how that would affect you.  A 32 bit checksum has a 
-> *minimum* of one in 4 billion chance of two files sharing the same 
-> checksum.  For most non-security applications, that's ample.  The same 
-> possibility exists with 128 bit md5 checksums (or any other hash) but the 
-> larger the checksum the less often you'll get duplicate checksums for 
-> different data (assuming comparable quality hash algorithms).
-> 
-> One way to make such use of checksums fail-safe is to use the checksum as 
-> proof that files are different but not as proof they are the same.  When 
-> the checksum matches you don't really know the files are the same unless 
-> their contents are actually the same and once every four billion times you 
-> probably can afford to go check if it's really critical to know for certain.
-> 
-Thanks for the very good explanation! I will try one of the CRC-32 checksums.
-I am always checking for double entries in any case so I will discover it
-when there is one checksum for two or more jobs.
+I am trying to print collums from a c program, as the
+following example illustrates:
 
-Thanks,
-Holger
+  Total  Number   Folder
+  -----  ------   ------
+  15502   17      cronlog
+  189897  42      linux/debian-curiosa
+  161751  32      linux/debian-firewall
+   4305   1       linux/debian-general
+  17431   1       linux/debian-news
+  107517  1       linux/vger-kernel-announce
+  61136   16      linux/vger-kernel-c-programming
+   8580   2       linux/vger-kernel-gcc
+
+How can I can align the output to the max right field boundry without
+overcrossing that field boundry if the field value gets longer?
+
+Do I really have to check the length of the value before printing it with,
+%*s, and then determine how many spaces I need? 
+
+Thnkx...
+
+JM
 
