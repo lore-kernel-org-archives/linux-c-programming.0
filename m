@@ -1,35 +1,46 @@
-From: =?iso-8859-2?Q?Nagy_Imre_=28Vecs=E9s=29?= <ImreNagy@mol.hu>
-Subject: Boot screen
-Date: Fri, 3 Sep 2004 07:55:14 +0200
+From: canbaby <canbaby@21cn.com>
+Subject: Re: 'C' source analyzer.
+Date: Fri, 03 Sep 2004 15:02:21 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <7F11C0CADA50AF4690BF42F715ABFBF864692F@battaexch22.mol.hu>
+Message-ID: <413816FD.1050603@21cn.com>
+References: <05ac01c48b8e$b9abfdd0$c901010a@zoom>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <05ac01c48b8e$b9abfdd0$c901010a@zoom>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Paul Gimpelj <pgimpelj@sympatico.ca>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Hi!
+Paul Gimpelj wrote:
 
-I would like the screen would be total blank until login. Can I disable all
-messages?
+>Hi,
+>
+>I was wondering if anyone can recommend a 'C' source analyzer.
+>Cross references of functions, and call linkages would be nice. dependances
+>, h files,
+>and output to a sql db and or graphical connected node diagram. with
+>direction.
+>
+>This would help me in understanding the code quicker.
+>
+>Thanks
+>Paul
+>mailto:quadbox2003@yahoo.ca
+>or
+>mailto:pgimpelj@sympatico.ca
+>
+>
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+>
+>  
+>
 
-Imre from Hungary 
-
-
-Ezen uzenet es annak barmely csatolt anyaga bizalmas, jogi vedelem alatt all, a nyilvanos kozlestol vedett.
-Az uzenetet kizarolag a cimzett, illetve az altala meghatalmazottak hasznalhatjak fel. Ha On nem az uzenet cimzettje, ugy kerjuk, hogy telefonon, vagy e-mail-ben ertesitse errol az uzenet kuldojet es torolje az uzenetet, 
-valamint annak osszes csatolt mellekletet a rendszerebol. Ha On nem az uzenet cimzettje, abban az esetben tilos az 
-uzenetet vagy annak barmely csatolt mellekletet lemasolnia, elmentenie, az uzenet tartalmat barkivel kozolnie 
-vagy azzal visszaelnie.
-
-
-This message and any attachment are confidential and are legally privileged. It is intended solely for the use of 
-the individual or entity to whom it is addressed and others authorised to receive it. If you are not the intended 
-recipient, please telephone or email the sender and delete this message and any attachment from your system. 
-Please note that any dissemination, distribution, copying or use of or reliance upon the information contained in 
-and transmitted with this e-mail by or to anyone other than the recipient designated above by the sender is 
-unauthorised and strictly prohibited.
-
-
+There are a commerce software named Source InSight, it's very good
+Redhat had a soft Source Navigater, but it's slower and bigger, also not 
+very beautiful like Source Insight.
