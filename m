@@ -1,62 +1,57 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: bitfield array
-Date: Mon, 12 Jan 2004 10:40:23 -0300
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: bitfield array
+Date: Mon, 12 Jan 2004 21:06:58 +0000
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000001c3d911$a179eea0$0c81640a@aca.org.ar>
-References: <20040112115643.0000382e.cialdi@firenze.net>
-Reply-To: <mariano_moreyra@aca.org.ar>
+Message-ID: <16387.3186.943352.155205@cerise.nosuchdomain.co.uk>
+References: <20040112111016.000072cf.cialdi@firenze.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040112115643.0000382e.cialdi@firenze.net>
+In-Reply-To: <20040112111016.000072cf.cialdi@firenze.net>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: 'Massimiliano Cialdi' <cialdi@firenze.net>, 'linux-c-programming' <linux-c-programming@vger.kernel.org>
-Cc: 'wwp' <subscript@free.fr>
-
-Maybe you should use a 2-byte variable, and access each bit with a mask.
-In this case, if you only need 10 one bit flags, there will be 6 unused
-bits, but you may use those bits with future flags...
-Anyway...you will be using only 2 bytes...and not 10 bytes... you still gain
-some memory.
+To: Massimiliano Cialdi <cialdi@firenze.net>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
------Mensaje original-----
-De: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]En nombre de
-Massimiliano Cialdi
-Enviado el: Lunes, 12 de Enero de 2004 07:57
-Para: linux-c-programming
-CC: wwp
-Asunto: Re: bitfield array
+Massimiliano Cialdi wrote:
 
+> Is it possible to declare a bitfield array?
 
-On Mon, 12 Jan 2004 11:29:26 +0100
-wwp <subscript@free.fr> wrote:
+No.
 
-> AFAIK, bitfields are stored in memory block which can only be
-> allocated with 1-byte minimum.. Try to allocate 1 bit in memory,
-> sounds not possible :-).
-I know but I don't want to allocate a single bit. Since I need an array
-of binary flag, I thought that the compiler could help me. 10 bits could
-be placed in 2 bytes. Else I need 10 bytes (80% of space lost).
+> I also tried with
+> 
+> typedef struct
+> {
+>   u8_t busy:1;
+> }dummy;
+> dummy a[10];
+> 
+> but then a is as large as 10 bytes.
 
-> IOW, if you use a 1-bit bitfield, it will still be require an amount
-> of memory counted in bytes. That's partly why bitfields are not so
-> used for optimization, 'cause following the compiler you don't gaim
-> memory space not cpu time.
-I work with a (very) limited memory embedded system. I need to save
-memory, no matter in cpu time.
+Structures which contain bitfields will be padded to an integral
+number of bytes.
 
-thanks
+> > AFAIK, bitfields are stored in memory block which can only be
+> > allocated with 1-byte minimum.. Try to allocate 1 bit in memory,
+> > sounds not possible :-).
+> 
+> I know but I don't want to allocate a single bit. Since I need an array
+> of binary flag, I thought that the compiler could help me. 10 bits could
+> be placed in 2 bytes. Else I need 10 bytes (80% of space lost).
 
---
-Massimiliano Cialdi
-cialdi@firenze.net
-m.cialdi@oksys.it
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Declare a 16-bit field and set of macros to access the individual
+bits, e.g.
 
+	typedef struct
+	{
+		uint16_t bits;
+	} dummy;
+	
+	#define get_flag(s, i) (((s).bits >> (i)) & 1)
+	#define set_flag(s, i) ((s).bits |= 1 << (i))
+	#define clear_flag(s, i) ((s).bits &= ~(1 << (i)))
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
