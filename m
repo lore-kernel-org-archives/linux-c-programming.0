@@ -1,53 +1,62 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re:
-Date: Mon, 13 Sep 2004 19:20:58 +0800
+From: Richard Sammet <richard.sammet@sit.fraunhofer.de>
+Subject: how to find the end of piped data?
+Date: Mon, 13 Sep 2004 13:36:35 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <4145829A.4000607@hq.ntsp.nec.co.jp>
-References: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
+Message-ID: <41458643.7060907@sit.fraunhofer.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20040913111103.77851.qmail@web52901.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Ankit Jain <ankitjain1580@yahoo.com>
-Cc: gcc <gcc-help@gcc.gnu.org>, linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-did u try allocating it the dynamic way??
-via a call to malloc or in a similar fashion?
+hey list,
 
-Ankit Jain wrote:
+i wrote a small tool which gets data over a pipe from other tools (like=
+:=20
+cat stuff | mytool).
 
->hi
->
->well i am fixed up in a new problem
->
->i am using a array of size 1024*1024
->
->it gives segmentation fault
->
->it works with 512*512
->
->my menory size is 128 mb and 512 swap
->
->i have enough memory space and using gcc 3.2 v
->
->may be i need to increase the memory size
->
->how to do that?
->
->ankit
->
->________________________________________________________________________
->Yahoo! Messenger - Communicate instantly..."Ping" 
->your friends today! Download Messenger Now 
->http://uk.messenger.yahoo.com/download/index.html
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
+how can i find the end of this data stream?
 
+at the moment im looking for a newline to see if the input is finished,=
+=20
+but thats not practicable.
+
+this is the rutine for getting the data:
+
+      75 void scanin()
+      76 {
+      77    int tmpcnt=3D0;
+      78
+      79    while(sizeof(tmpkey) && tmpkey[tmpcnt-1] !=3D 10)
+      80    {
+      81       tmpkey[tmpcnt]=3Dgetchar();
+      82       tmpcnt++;
+      83    }
+      84 }
+
+im looking for a flag like EOF but EndOfStream or something like this? =
+;)
+
+anybody any idea?
+
+e-axe
+
+--=20
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=46raunhofer-Institut f=FCr Sichere Informations-Technologie (SIT)
+
+Richard Sammet
+Tel.: +49 6151 869 60027
+Email: richard.sammet@sit.fraunhofer.de
+
+main(){int
+y=3D0,x;while(y!=3D6){x=3D(y=3D=3D0)?101:((y=3D=3D1)?45:((y=3D=3D2)?97:=
+((y=3D=3D3)?120:((y=3D=3D4)?101:10))));putchar(x);y++;}}
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
