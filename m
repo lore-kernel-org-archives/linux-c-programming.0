@@ -1,39 +1,86 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: wwp <subscript@free.fr>
 Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Thu, 1 Jul 2004 23:33:24 +0100
+Date: Fri, 2 Jul 2004 09:47:55 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16612.37172.723320.441386@cerise.nosuchdomain.co.uk>
+Message-ID: <20040702094755.73ee5ec6@tethys.solarsys.org>
 References: <40E09FC4.50800@ig.com.br>
 	<16608.44836.384260.844173@cerise.nosuchdomain.co.uk>
-	<20040629143238.GD6335@luna.mooo.com>
-	<16609.43579.336662.194984@cerise.nosuchdomain.co.uk>
-	<20040630013316.GF9412@luna.mooo.com>
-	<16610.7915.923533.301196@cerise.nosuchdomain.co.uk>
-	<87k6xovci7.fsf@wigwam.deepwood.net>
+	<40E17D0A.2030206@ig.com.br>
+	<20040629192621.1a99c86c.henry.margies@gmx.de>
+	<40E1BE97.1090209@ig.com.br>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <87k6xovci7.fsf@wigwam.deepwood.net>
+In-Reply-To: <40E1BE97.1090209@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Daniel Brockman <drlion@deepwood.net>
+To: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
 Cc: linux-c-programming@vger.kernel.org
 
+Hello Luciano,
 
-Daniel Brockman wrote:
 
-> >> > > > It appears that you are allowed to initialise constant static
-> >> > > > members within the declaration
-> >
-> > [...]
-> >
-> > But in this case, there isn't a variable. Foo::DEFSIZE is a
-> > compile-time constant; it doesn't exist in memory.
+On Tue, 29 Jun 2004 16:10:15 -0300 Luciano Moreira - igLnx <lucianolnx@ig.com.br> wrote:
+
+> Because, the compiler doesn't know the value of the symbol DEFSIZE when 
+> it is used for a array declaration, like as:
+> char myArray[MYCLASS::DEFSIZE];
 > 
-> So what happens if you try to take its address?
+> Then, we have the conclusion that the value atribution should be in 
+> header file (.h) - for that case. But, I tried the use of "enum", and 
+> now it's working well.
 
-You get a link error, unless you also add a definition in one of the
-source files.
+Of course #define'd values can be used in array range. Such value is not
+dynamically interpreted, since the pre processor is performing substitution of
+macros before the compiler gets the file.
+
+Did you try to maintain you const int in the header file and to encapsulate it
+like this:
+
+[beginning of .h file]
+#ifndef MY_CLASS_H
+#define MY_CLASS_H
+
+// .. here the previous content of your .h file
+
+#endif
+[EOF]
+
+
+My 2 cts..
+
+
+Regards,
+
+> Henry Margies wrote:
+> 
+> >Just put the definition in the cpp file.
+> >
+> >Header File:
+> >class Foo
+> >{
+> >	public:
+> >		static const int DEFSIZE;
+> >};
+> >
+> >in CPP-File:
+> >
+> >const int Foo::DEFSIZE=100
+> >
+> >
+> >Why does this not work for you?
+> >
+> >
+> >Henry
+> >
+> >  
+> >
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
+
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+wwp
