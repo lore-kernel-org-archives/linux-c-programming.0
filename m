@@ -1,58 +1,47 @@
-From: "Alphex K." <alphex@crew.org.ru>
-Subject: Re: Some troubles with dynamic structures ;-(
-Date: Fri, 23 Jan 2004 19:41:37 +0300
+From: syedk <syedk@intotoinc.com>
+Subject: compiling programs which use pthreads
+Date: 25 Jan 2004 15:06:29 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040123194137.4cdb7f5a.alphex@crew.org.ru>
-References: <20040122232345.75911b51.alphex@crew.org.ru>
-	<16400.25735.492139.552175@cerise.nosuchdomain.co.uk>
+Message-ID: <1075023389.27269.12.camel@qa.intotoind.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <16400.25735.492139.552175@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Glynn Clements <glynn.clements@virgin.net>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Fri, 23 Jan 2004 00:02:15 +0000
-Glynn Clements <glynn.clements@virgin.net> wrote:
-
-> 
-> Alphex K. wrote:
-> 
-> > Where I have a mistake,
-> > integers in structure work normally, but 
-> > I'm have a problem with pointers to char 
-> 
-> The pointers are those returned from gtk_entry_get_text(), whose
-> documention says:
-> 
-> 	Retrieve the contents of the entry widget. The returned
-> 	pointer points to internally allocated storage in the widget
-> 	and must not be freed, modified or stored. For this reason,
-> 	this function is deprecated. Use gtk_editable_get_chars()
-> 	instead.
-> 
-> I take this as meaning that the data to which they point may become
-> invalid at the next operation to be performed on the GtkEntry (e.g. 
-> the next time it receives a signal or is accessed via one of the
-> gtk_entry_* functions).
-> 
-> Use e.g. strdup() to copy the data, e.g.
-> 
->    aname=strdup(gtk_entry_get_text(GTK_ENTRY(namecentry)));
-yes it's work normally, thanx
-> 
-> -- 
-> Glynn Clements <glynn.clements@virgin.net>
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Hi all,
+     I am getting strange results while compiling programs which use
+pthreads.
+I am working on a RedHat Linux on a 2.4 kernel.
+to start with i wrote a simple program as follows:
 
 
--- 
-Alphex Kaanoken
-Senior developer of Crew IT research labs
-web: http://crew.org.ru
-mailto:Alphex@Crew.Org.RU
+#include <pthread.h>
+#include <stdio.h>
+void * hello(void *);
+main()
+{
+        pthread_t tid;
+        pthread_create(&tid,NULL,hello,NULL);
+}
+void *hello(void *arg)
+{
+        printf("Hello World/n");
+}
+
+but  when i tried to compile using gcc it is giving linktime error:
+undefined reference to pthread_create.
+but why is it giving this error when the header file pthread.h is
+present.
+when i tried to do cat /proc/ksyms | grep pthread_create
+no matches were found. Does that mean that pthread library is not
+installed in my system?
+
+Can anyone suggest how to hack this and compile my program apart from
+downloading some freely available user-level libraries(like gnu
+pthreads).
+Thanx
+Syed SK
+
+
