@@ -1,58 +1,89 @@
 From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: assignment makes pointer from integer without a cast?
-Date: Mon, 13 Dec 2004 20:53:16 +0100
-Message-ID: <20041213195316.GE16958@lug-owl.de>
-References: <1102899159.7251.14.camel@guru.puzzled.xs4all.nl> <20041213014757.89052.qmail@web12706.mail.yahoo.com> <20041213161354.GD1487@sweetdream>
+Subject: Re: Newbie - Perl Equivalent Split - Seg Faults
+Date: Mon, 13 Dec 2004 21:21:51 +0100
+Message-ID: <20041213202151.GF16958@lug-owl.de>
+References: <BDE333E9.1622%dsessions@ionosphere.net>
 Mime-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="1BXV+/FYeXhtv2WT"
+	protocol="application/pgp-signature"; boundary="mg8cdxx98+SFDaXr"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <20041213161354.GD1487@sweetdream>
+In-Reply-To: <BDE333E9.1622%dsessions@ionosphere.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
 
---1BXV+/FYeXhtv2WT
+--mg8cdxx98+SFDaXr
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2004-12-13 17:13:54 +0100, Francesco Gadaleta <francesco@gadaleta.o=
-rg>
-wrote in message <20041213161354.GD1487@sweetdream>:
-> > void usage(char *prog_ptr) /* not int* */
-> > {
-> > 	fprintf(stdout,"progname is: %s\n",prog_ptr); /* not
-> > *prog_ptr */
-> > }
-> > =09
-> > int main(int argc, char *argv[])
-> > {
-> > 	char *prog_ptr; /* not int * */
-> > 	prog_ptr =3D basename (argv[0]);
-> > 	usage(prog_ptr); /* not &prog_ptr */
-> > 	return(0);
-> > }
-> change this line:
-> prog_ptr =3D basename (argv[0]);
+On Mon, 2004-12-13 11:56:25 -0500, Darren Sessions <dsessions@ionosphere.ne=
+t>
+wrote in message <BDE333E9.1622%dsessions@ionosphere.net>:
+> #include <stdio.h>
+> #include <string.h>
 >=20
-> with this:
-> prog_ptr =3D (char*) basename (argv[0]);
+> char *split_char(char *string, char *delim) {
+>   fprintf( stderr, "\tString =3D %s \n", string);
+>   fprintf( stderr, "\tDelimiter =3D %s \n", delim);
+>   string =3D strtok(string, delim);
 
-No, better include the proper header file <libgen.h> or <string.h>
-(after #defining _GNU_SOURCE). This way, you don't force gcc into
-guessing it's type. If you had compiled this with a C++ compiler (*), it
-wouldn't even had accepted the code or wouldn't link it later on.
+Rule of thumb: don't use strtok(), because it internally maintains some
+parsing state. Even if you (right now) only have a single-threaded
+program which wouldn't probably suffer from strtok()'s limitations, you
+don't know if your code won't be--at some time--used in a threaded
+environment. Just use strtok_r() instead. ...and even if you use the
+strtok_r(), try to avoid it:-)
+
+Both strtok_r() and strtok() modify the string you supplied. While this
+is acceptable for some uses, it'll break from time to time (as in this
+example). This is why the man page actually warns about using these
+functions.
+
+=2E..but what happens here, why does it break? Well, that's easy. Keeping
+in mind that this function actually modifies the supplied string, this
+is actually where it segfaults...
+
+>   return string;
+> }
+>=20
+> int main()
+> {
+>   char *testvar;
+>   testvar =3D split_char("test-hello", "-");
+
+=2E..and it segfaults because you supply "test-hello right here, right the
+way you do it.
+
+If you put some "sdfkjhsdf constant somewhere, of if you have a=20
+
+char *string =3D "some text";
+
+the compiler is allowed to imply that these strings are never ever
+modified, but (in the 2nd example) the *pointer* to the string may
+change. So gcc knows that "test-hello" won't ever be modified and puts
+it into a segment of memory that gets configured as "modify forbidden".
+When split_char() calls strtok(), the later one tries to modify the
+string (replaces ' ' by '\0') which will result in a segmentation
+violation. So you need to force the compiler into laying out your text
+as a modifyable string. You can do this by:
+
+char test_hello[] =3D "test_hello";
+=2E..
+testvar =3D split_char (test_hello, "-");
+=2E..
+
+Notice that this time, I didn't declare a pointer to string (char *),
+but an array of chars (char []). This builds up to the difference of
+"modify forbidden" versus "modify allowed".
+
+>   fprintf( stderr, "\tArray =3D %s \n", testvar);
+>   return(0);
+> }
 
 MfG, JBG
-(*) Compiling not-too-complicated C code with a C++ compiler can reveal
-some additional oddities that a pure C compiler wouldn't warn on. So if
-you keep your code being compileable with both a C and a  C++ compiler
-when you start a new project, this won't hurt (but probably pay back at
-some time). (-> Right, I'm a C programmer and personally don't use C++
-that often, because it's too hard to write "basic" stuff with it).
 
 --=20
 Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
@@ -64,7 +95,7 @@ k!   O O O
 ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
 );
 
---1BXV+/FYeXhtv2WT
+--mg8cdxx98+SFDaXr
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 Content-Disposition: inline
@@ -72,9 +103,9 @@ Content-Disposition: inline
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.5 (GNU/Linux)
 
-iD8DBQFBvfMsHb1edYOZ4bsRAh5pAJ4vAL0q1dqBXD6xuIKbv0d1u3FGZgCeI3ae
-g4iZmiPRgrmS3DCJCQ5dDL8=
-=gEjP
+iD8DBQFBvfnfHb1edYOZ4bsRAnwZAJ0ea1VTjsAagjsV8t2R4PSX/8Ub3ACdEz1c
+wiaA2HztXggf8DiIjbUoIf4=
+=Mird
 -----END PGP SIGNATURE-----
 
---1BXV+/FYeXhtv2WT--
+--mg8cdxx98+SFDaXr--
