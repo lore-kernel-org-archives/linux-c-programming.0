@@ -1,37 +1,30 @@
-From: "Wen Guangcheng" <wen.guangcheng@cnt.sp.qnes.nec.co.jp>
-Subject: Question on socket of broadcast
-Date: Thu, 18 Mar 2004 20:15:11 +0900
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: function pointers in C++
+Date: Thu, 18 Mar 2004 13:17:59 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <012901c40cda$47c51a40$de01a8c0@qnessmphibiki>
+Message-ID: <20040318111759.GA804@velka.phys.uoa.gr>
+References: <31E38B53D182D51195FA00508BE3A334036497A1@zwnbc004.cala.nortel.com> <20040315112849.GA774@velka.phys.uoa.gr> <16470.45491.927067.620232@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <16470.45491.927067.620232@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: Sandro Dangui <sdangui@nortelnetworks.com>, linux-c-programming@vger.kernel.org, Dar?o Mariani <dmarian@fi.uba.ar>
 
-Hello,
-I create a socket for broadcast by
+On Tue, Mar 16, 2004 at 07:50:11AM +0000, Glynn Clements wrote:
+> If you want a fixed number of Foo's, you need one wrapper and one
+> static variable for each. If you want an arbitrary number of Foo's,
+> you're out of luck.
 
-dhcpSocket = socket(PF_PACKET, SOCK_PACKET, htons(ETH_P_ALL));
-setsockopt(dhcpSocket, SOL_SOCKET, SO_BROADCAST, &flags, sizeof(int *));
+Thanx Glynn for the detailed answer. It seems that I am out of luck
+here, but your answer was very insightful.
 
-and send a message by
+Regards,
+-- 
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
 
-sendto(dhcpSocket,&UdpIpMsgSend,sizeof(struct packed_ether_header)+
-    sizeof(udpiphdr)+sizeof(dhcpMessage),0,
-    &addr,sizeof(struct sockaddr)
-
-then receive a replied broadcast message by
-
-recvfrom(dhcpSocket,&UdpIpMsgRecv,sizeof(udpipMessage),0,(struct sockaddr
-*)&addr,&i);
-
-It works well on normal LAN. But on a wireless LAN the message
-which was sent by the socket. is received from itself.
-Should a message sent by broadcast socket be recieved by itself?
-
-Thanks in advance.
-
---Wen
-
+	
