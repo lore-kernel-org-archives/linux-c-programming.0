@@ -1,33 +1,39 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: static variables and functions in header files
-Date: Tue, 27 Aug 2002 15:17:07 +0100
+From: Ibraheem Umaru-Mohammed <iumarumo@eidosnet.co.uk>
+Subject: Advanced Programming in the Unix Environment [Stevens]
+Date: Fri, 30 Aug 2002 16:04:51 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15723.35299.232003.638370@cerise.nosuchdomain.co.uk>
-References: <20020827071753.14590.qmail@relay1.home.ro>
+Message-ID: <20020830150451.GK25019@micromuse.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020827071753.14590.qmail@relay1.home.ro>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Alina Valea <avalea@home.ro>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+So, I was going through some of the exercises in the said book. Came
+across Exercise 3.2, which states the following:
 
-Alina Valea wrote:
+    ,----[ Exercise 3.2 ]
+    | Write your own function called dup2 that performs the same service
+    | as the dup2 function we described in Section 3.12, without calling
+    | the fcntl function. Be sure to handle errors correctly.
+    `----
 
-> Has anybody ever declared variables and functions as static
-> in header files (that will be included in several .c files)?
-> I've just seen this in a project and it puzzled me. Is it OK
-> to do it?
+Is there some sort of function that I don't know of that opens a file on a 
+specified file descriptor? If not, am not seeing how this can be done,
+since open returns the lowest available file descriptor - that is we
+can't specify the second argument to dup2 to an open function. I noticed
+fdopen(), but that associates a stream with an *existing* file
+descriptor. Can someone help [1] ?
 
-It won't usually cause any problems, but it's seldom a good idea.
+Kindest regards,
 
-What's the point in declaring identically-named (but distinct)
-variables in each source file which includes a particular header?
+				--ibz.
 
-In general, header files should only contain declarations; definitions
-belong in the actual source (.c) files.
+[1] - The answer is not at the back of the book. :(
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+				Ibraheem Umaru-Mohammed 
+					"ibz"
+			umarumohammed (at) btinternet (dot) com
