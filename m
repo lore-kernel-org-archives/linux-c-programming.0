@@ -1,76 +1,50 @@
-From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
-Subject: RE: inline function
-Date: Tue, 23 Nov 2004 16:03:19 +0530
-Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E2@mtv01ex04.mindtree.com>
+From: Justinas <jugu3479@uosis.mif.vu.lt>
+Subject: Re: deletion in singly linked list
+Date: Tue, 23 Nov 2004 18:57:55 +0200
+Message-ID: <20041123185755.194d428c@localhost.localdomain>
+References: <1101198249.3786.3.camel@myLinux>
+	<20041123104246.772f55e3@localhost.localdomain>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_492CA_01C4D175.F3C3C9D0"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
+In-Reply-To: <20041123104246.772f55e3@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Ronaldo Zacarias Afonso <r_zaca@ig.com.br>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Justinas <jugu3479@uosis.mif.vu.lt>
+Cc: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>, Linux C Programming <linux-c-programming@vger.kernel.org>
 
-This is a multi-part message in MIME format.
+sorry, my mistake, i wrote it in a hurry, before lectutes:).
 
-------=_NextPart_000_492CA_01C4D175.F3C3C9D0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+i wanted to write like tris:
+*n = *(n->next).
 
-http://www.greenend.org.uk/rjk/2003/03/inline.html
+On Tue, 23 Nov 2004 10:42:46 +0200
+Justinas <jugu3479@uosis.mif.vu.lt> wrote:
 
-Srinivas
-
------Original Message-----
-From: Ronaldo Zacarias Afonso [mailto:r_zaca@ig.com.br]
-Sent: Tuesday, November 23, 2004 3:28 PM
-To: linux-c-programming@vger.kernel.org
-Subject: inline function
-
-
-  Hello all,=20
-
-  A simple question: What is an inline function?=20
-  Does anyone know where I can get more information about it?=20
-
-  Thanks.=20
-
-_________________________________________________________________________=
-____
-____
-Quer mais velocidade?
-S=F3 com o acesso Aditivado iG, a velocidade que voc=EA quer na hora que =
-voc=EA
-precisa.
-Clique aqui: http://www.acessoaditivado.ig.com.br
-
-
-------=_NextPart_000_492CA_01C4D175.F3C3C9D0
-Content-Type: text/plain;
-	name="disclaimer.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="disclaimer.txt"
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-Disclaimer
--------------------------------------------------------------------------=
-----------------------------------------------------
-
-"This message(including attachment if any)is confidential and may be =
-privileged.Before opening attachments please check them
-for viruses and defects.MindTree Consulting Private Limited =
-(MindTree)will not be responsible for any viruses or defects or
-any forwarded attachments emanating either from within MindTree or =
-outside.If you have received this message by mistake please notify the =
-sender by return  e-mail and delete this message from your system. Any =
-unauthorized use or dissemination of this message in whole or in part is =
-strictly prohibited.  Please note that e-mails are susceptible to change =
-and MindTree shall not be liable for any improper, untimely or =
-incomplete transmission."
-
--------------------------------------------------------------------------=
-----------------------------------------------------
-------=_NextPart_000_492CA_01C4D175.F3C3C9D0--
+> Hello,
+> 
+> i think You can. For instance n is a pointer to curent node and n->next is pointer to next node. lets say we like this tmp = n, and n = n->next. After that free(tmp).
+> 
+> On Tue, 23 Nov 2004 13:54:10 +0530
+> Jagadeesh Bhaskar P <jbhaskar@hclinsys.com> wrote:
+> 
+> > I am having the address of a single node of a singly linked list. All I
+> > know about that node is that it is not the head of the list. Now say, I
+> > want to delete this node. I can infer its next node, but not its
+> > predicissor. Is there any way to delete that node, without breaking the
+> > whole linked list down!!
+> > 
+> > -- 
+> > Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+> > 
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
