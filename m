@@ -1,25 +1,23 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Why does linking a.so with b.so require execs to be linked both
- -la and -lb?
-Date: Tue, 12 Aug 2003 18:54:05 +0100
+From: "Steven" <sos22@cam.ac.uk>
+Subject: Re: Why does linking a.so with b.so require execs to be linked both -la and -lb?
+Date: Tue, 12 Aug 2003 20:12:41 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16185.10685.979954.655332@cerise.nosuchdomain.co.uk>
-References: <m3k79jj4av.fsf@bfnet.com>
-	<tmml01xphg.ln2@thune.mrc-home.org>
-	<m3vft320sv.fsf@bfnet.com>
-	<16184.61520.502240.104624@cerise.nosuchdomain.co.uk>
-	<m3r83qzv2j.fsf@bfnet.com>
+Message-ID: <20030812191241.GA1063@archibold.chu.cam.ac.uk>
+References: <m3k79jj4av.fsf@bfnet.com> <tmml01xphg.ln2@thune.mrc-home.org> <m3vft320sv.fsf@bfnet.com> <16184.61520.502240.104624@cerise.nosuchdomain.co.uk> <m3r83qzv2j.fsf@bfnet.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 In-Reply-To: <m3r83qzv2j.fsf@bfnet.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: David Wuertele <dave-gnus@bfnet.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-David Wuertele wrote:
+--bg08WKrSYDhXBjb5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 > Glynn> One consequence of this difference is that Linux allows an
 > Glynn> executable to export symbols to a library. Thus you can create
@@ -27,56 +25,33 @@ David Wuertele wrote:
 > Glynn> by either the library or any of it's explicit dependencies). So
 > Glynn> long as that symbol actually gets provided at run-time (e.g. by
 > Glynn> the executable itself), everything works.
-> 
 > Does this "flexibility" have practical applications?
+If it's combined with weak symbols it's often handy.  Suppose library
+A arranges to libA_error whenever it suffers an error, which prints an
+error message and terminates the program.  If the libA_error is weak,
+then an application can define its own libA_error as a strong symbol,
+which will then override the weak variant and be called in preference
+to the library's own version.
 
-I have encountered uses of this in the past, but I can't recall any
-specifics. Ultimately, you can always achieve the same effect by
-having the application register callbacks with the library.
+Systems with multiple, incompatible, threading libraries, such as
+FreeBSD, often do something similar with symbols be provided by the
+application's chosen threading library.  This means that libA should
+be able to work reasonably well whether the application uses libkse or
+libthr, without the author of libA having to do anything special.
 
-> Glynn> In any case: if you need libB.so to actually run the
-> Glynn> executable, why does it matter if you need it in order to link
-> Glynn> the program?
-> 
-> Encapsulation and portability.  We're writing a toolkit that isolates
-> the programmer from the underlying implementation.  Requiring the
-> programmer to explicitly link to the underlying library requires that
-> the programmer know what that underlying library is.  Also, it
-> prevents us from changing the underlying library.  These goals don't
-> seem that unreasonable to us, and they are very important for our
-> application.
+Steven Smith,
+sos22@cam.ac.uk.
 
-The programmer doesn't *explicitly* link to the library; an
-application will typically only link against the "topmost" library
-(libA in your example), and the resulting executable will only have a
-direct dependency (one which is actually stored in the executable)
-upon that library.
+--bg08WKrSYDhXBjb5
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-In order for the link step to succeed, the library which is explicitly
-referenced has to exist. If that library has any dependencies, they
-must also exist at link time, but the information won't be encoded
-into the executable (ldd will show the transitive dependencies, but
-they aren't stored in the executable; if you hide the direct
-dependencies, the transitive dependencies will disappear from the ldd
-output).
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (FreeBSD)
 
-E.g. if an application links with -lgtk, libgtk must exist; if the
-implementation uses libX11, that must also exist, and so on. However,
-the executable will only contain a dependency upon libgtk, not upon
-libX11. You could transfer the executable to a system where the libgtk
-implementation uses the framebuffer API instead of X11, and it should
-still work.
+iD8DBQE/OTwpO4S8/gLNrjcRAhiMAKCBmrBYyktmBY7hh1f/jEl2lL9AVQCfaSkc
+0ewf6aTOVZZhdM3hREXywRk=
+=Wpy1
+-----END PGP SIGNATURE-----
 
-Sometimes shared libraries are built without dependency information. 
-In that case, the executable has to explicitly link against the
-dependencies, otherwise you would end up with unresolved symbols at
-run-time. However, omitting dependency information could be considered
-a bug (for your purposes, it would definitely be a bug).
-
-Finally, if you want to be able to build executables which use libA,
-but are unable or unwilling to supply a specific libB, you could
-supply a "stub" library (one which provides functions which do
-nothing). Obviously, such a library would have no dependencies.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+--bg08WKrSYDhXBjb5--
