@@ -1,72 +1,40 @@
-From: Eric Bambach <eric@cisu.net>
-Subject: Re: malloc and free
-Date: Fri, 24 Dec 2004 12:52:36 -0600
-Message-ID: <200412241252.36261.eric@cisu.net>
-References: <20041224183913.9579.qmail@web52907.mail.yahoo.com>
-Reply-To: eric@cisu.net
+From: "J." <mailing-lists@xs4all.nl>
+Subject: Re: file deletion
+Date: Mon, 27 Dec 2004 04:50:15 +0100 (CET)
+Message-ID: <Pine.LNX.4.21.0412270410050.3874-100000@hestia>
+References: <003f01c4e9ba$7679d020$316c4ed5@j0s6l8>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041224183913.9579.qmail@web52907.mail.yahoo.com>
-Content-Disposition: inline
+In-Reply-To: <003f01c4e9ba$7679d020$316c4ed5@j0s6l8>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Ankit Jain <ankitjain1580@yahoo.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-On Friday 24 December 2004 12:39 pm, you wrote:
-> hi
->
-> routine xyz uses malloc and free functions. it gives
-> accurate and correct result if called once.
->
-> but if the function is called in a loop N number of
-> times then probably it gives segmentation fault.
->
-> what is the reason?  can any body guess or test code
-> is needed?
->
-> thanks
->
-> ankit jain
+On Fri, 24 Dec 2004, Andy wrote:
 
-A common cause of failure in the malloc/free routines is memory corrupt=
-ion.=20
-The trick about memory corruption and buffer overflows is that they wor=
-k=20
-sometimes/most of the time. Perhaps you are doing out-of-bounds reading=
- or=20
-(gak!) writing with the memory. Try running it under valgrind to see if=
- this=20
-is the case.
+> Does anybody know of any useful code or c commands that
+> you can use to search for duplicate files within a linux/unix directory and
+> its subdirectories and remove them?
+> Thanks
+> Andrew
 
-Also, although routine xyz may not corrupt the memory perhaps something=
- else=20
-in your program is? Writing in strange places confuses libc and can res=
-ult in=20
-a segfault in places that can be quite far away from the original spot =
-of=20
-corruption.
+Ehm.. Personally no.. However there is ftw, opendir, readdir, stat,
+fstat... etc.. Ones you are able to access all the directory entries you
+have to make a decision how you want to compare e.g. md5, crc32, only size
+or name etc... Then there is the issue of choosing a optimal ADT and
+access/retrieval algo.
 
-----------------------------------------
---EB
+If you dont have to c code the program but just looking for a solution I
+would most certainly go for a: 
+`find -type f -exec md5sum '{}' \; >> md5.log` 
+and parse the md5.log with a simple shell or awk script. That would save
+many headache's.. Plus you don't have to reinvent `find`... 
 
-> All is fine except that I can reliably "oops" it simply by trying to =
-read
-> from /proc/apm (e.g. cat /proc/apm).
-> oops output and ksymoops-2.3.4 output is attached.
-> Is there anything else I can contribute?
+J.
 
-The latitude and longtitude of the bios writers current position, and
-a ballistic missile.
+--
+http://www.rdrs.net
 
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
-r 08,2000=20
-
-----------------------------------------
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
