@@ -1,61 +1,26 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Is there any function to delete lines from a text file
-Date: Mon, 11 Oct 2004 07:31:34 +0200
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: pass 2 D array in C
+Date: Thu, 14 Oct 2004 12:26:15 +0100 (BST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041011053133.GJ5033@lug-owl.de>
-References: <20041010160917.GA3279@jehuty.server01.org> <JLEEKLMLBNBBGELJFIHPGELICIAA.eparrilla@comcast.net>
+Message-ID: <20041014112615.91429.qmail@web52901.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="/GGxXfKRHScBDXG5"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <JLEEKLMLBNBBGELJFIHPGELICIAA.eparrilla@comcast.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Edward Parrilla <eparrilla@comcast.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux prg <linux-c-programming@vger.kernel.org>
 
+its a simple question...
 
---/GGxXfKRHScBDXG5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+how to pass a 2 D array address in C
 
-On Sun, 2004-10-10 17:55:00 -0500, Edward Parrilla <eparrilla@comcast.net>
-wrote in message <JLEEKLMLBNBBGELJFIHPGELICIAA.eparrilla@comcast.net>:
-> Hi there,
-> I know that fputs(), or fgets() can store or get a line from a file, is
-> there a way to delete a line from a text file?
+is there any way by **pointer?
 
-No.
+thanks
 
-The only way to do that is to copy the whole file and omitting the line
-you want to omit (using the "f" functions). Alternatively, you'd use the
-"normal" functions and only copy the part after the line to be deleted
-some bytes towards the front...
+ankit
 
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---/GGxXfKRHScBDXG5
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBahq1Hb1edYOZ4bsRAizJAJ9hXHs+aKRjCekoQOCXc3dATH4/CACfZXYz
-Msj+/ouEUw61ZxnwSdhNvKI=
-=BWnY
------END PGP SIGNATURE-----
-
---/GGxXfKRHScBDXG5--
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
