@@ -1,69 +1,49 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: *w[1]++ = *[k[1]++; does not work .. ?
-Date: Sun, 23 Feb 2003 18:37:08 +0100 (CET)
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: *w[1]++ = *[k[1]++; does not work .. ?
+Date: Sun, 23 Feb 2003 21:30:34 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0302231825450.10716-100000@hestia>
+Message-ID: <20030223213034.B21636@neutrino.particles.org>
+References: <Pine.LNX.4.21.0302231825450.10716-100000@hestia>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.21.0302231825450.10716-100000@hestia>; from mailing-lists@xs4all.nl on Sun, Feb 23, 2003 at 06:37:08PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: "J." <mailing-lists@xs4all.nl>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello...
+On Sun, Feb 23, 2003 at 06:37:08PM +0100, J. wrote:
+> I can print char by char like this: printf("%c", *w[1]++);
+> but I can not copy char by char like this: *w[1]++ = *k[1]++;
 
-I am trying to copy a string into the first element of an array of char
-pointers.
+It works.
 
-I can print char by char like this: printf("%c", *w[1]++);
-but I can not copy char by char like this: *w[1]++ = *k[1]++;
+>  while(*w[1] != '\0')
+>   *k[1]++ = *w[1]++; 
 
-I dont understand ? If I can print it, it should also copy ..
+You move the pointer while doing the copy, so after the loop it points to
+the terminated null character.
 
-Strangly enough the compiler does not complain.
+You should keep the original address of k[1] before the loop and use it 
+instead. I.e.:
 
-I have inserted a small illustrative example in this e-mail.
+	char *s;
+	...
+	s = k[1];
 
-/* To illustrate the difference: This works */
-#include <stdio.h>
-#include <string.h>
+	while (...) { ... }
+	
+	printf ("%s\n", s);
 
-int main(void) {
- char *w[1];
- char str[] = "jehova";
+You can do the copy more efficiantly using other ways. Check how strcpy()
+works (it exists in K&R, glibc or even inside the kernel).
 
- w[1] = strdup(str);
+Elias
 
- while(*w[1] != '\0')
-  printf("%c", *w[1]++);
+-- 
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
 
- printf("\n");
- return 0;
-}
-
-/* But this does not work */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-int main(void) {
- char *w[1];
- char *k[1];
- char str[] = "jehova";
-
- w[1] = strdup(str);
- k[1] = calloc(strlen(str) + 1, sizeof(char));
-
- while(*w[1] != '\0')
-  *k[1]++ = *w[1]++; 
-
- printf("%s\n", w[1]);
- return 0;
-}
-
-Can someone explain what I am doing wrong ?
-
-Thankx a lot,...
-
-J.
-
+	
