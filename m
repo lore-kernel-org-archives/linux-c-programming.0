@@ -1,38 +1,32 @@
-From: Kurt Wall <kwall@kurtwerks.com>
-Subject: Re: Signal on Ctrl-C
-Date: Tue, 7 May 2002 21:43:03 -0400
+From: Andrew Edmondson <inbox@andy.co.uk>
+Subject: Re: Running make seems to be crashing my computer.
+Date: Wed, 8 May 2002 20:53:28 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020507214303.H15207@marta>
-References: <02050222174801.01065@localhost.localdomain> <3CD1B00C.71CB2F38@fi.uba.ar> <3CD83493.F2C50ADC@fi.uba.ar>
+Message-ID: <02050820532800.02600@localhost.localdomain>
+References: <02050222174801.01065@localhost.localdomain> <20020502220737.GA16467@cam.ac.uk>
+Reply-To: inbox@andy.co.uk
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <3CD83493.F2C50ADC@fi.uba.ar>; from dmarian@fi.uba.ar on Tue, May 07, 2002 at 05:09:55PM -0300
+In-Reply-To: <20020502220737.GA16467@cam.ac.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Scribbling feverishly on May 07, Dar=EDo Mariani managed to emit:
-> Hello:
->   Wich is the UNIX signal emited when you press Ctrl-C on a console
-> application?
->   Thanks for your help,
+On Thu, 02 May 2002, you wrote:
 
-SIGINT.
+> My guess is filesystem corruption. Reboot to emergency mode or with
+> init=/bin/bash and fsck it.
+>
+> Steven Smith,
+> sos22@cam.ac.uk.
 
-$ man 7 signal
+After a little bit of carefull looking (due to the other suggestions) I have 
+found that it was the file-system. Thank you all very much for your help.
 
-reveals all. See also
+Andrew
 
-$ kill -l
 
-Kurt
---=20
-When does summertime come to Minnesota, you ask?  Well, last year, I
-think it was a Tuesday.
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+
+for x in *; do echo go on\!; sleep 1;done; echo Have a cup of tea\!
