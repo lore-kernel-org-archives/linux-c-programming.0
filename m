@@ -1,65 +1,83 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: TCP/IP Stack Programming in Linux
-Date: Fri, 2 Jul 2004 14:03:44 +0200
+From: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
+Subject: Re: "static const" attribute in C++ (How to ?)
+Date: Fri, 02 Jul 2004 11:29:16 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040702120344.GF18841@lug-owl.de>
-References: <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>
+Message-ID: <40E5713C.3060009@ig.com.br>
+References: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="gneEPciiIl/aKvOT"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>
+In-Reply-To: <20040702102014.58508.qmail@web8310.mail.in.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Dinesh Ahuja <mdlinux7@yahoo.co.in>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: 
 Cc: linux-c-programming@vger.kernel.org
 
+Yes ! It was my solution.
 
---gneEPciiIl/aKvOT
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Luciano
 
-On Fri, 2004-07-02 11:23:29 +0100, Dinesh Ahuja <mdlinux7@yahoo.co.in>
-wrote in message <20040702102329.1172.qmail@web8305.mail.in.yahoo.com>:
-> Hi Everybody,
->=20
-> I have started making familiar myself with TCP/IP
-> Programming in Linux. I am interested in learing
-> TCP/IP Stack Programming in Linux and how could I
+Dinesh Ahuja wrote:
 
-I suggest you go over to your book dealer and ask him for "Stevens,
-W. Richard: Unix Network Programming, Volume 1: Networking APIs: Sockets
-and XTI".
-
-> modify a TCP/IP stack to meet my requirements.
-
-Most probably, that's not needed at all.
-
-> Could anyone suggest me a book on TCP/IP Stack
-> Programming in C/C++ ?
-
-MfG, JBG
-
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-   ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TC=
-PA));
-
---gneEPciiIl/aKvOT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.4 (GNU/Linux)
-
-iD8DBQFA5U8fHb1edYOZ4bsRAr24AJ4pWQ0QVE4cr250vVGAkAzkI7l7BwCfX5b+
-X/GKw4I38YLE6ZjwNBb065o=
-=imKf
------END PGP SIGNATURE-----
-
---gneEPciiIl/aKvOT--
+>Hi Henry,
+>
+>There is a concept of constant folding in C++.
+>Whenever you declare any data member of class as a
+>constant, the compiler should allocate the memory for
+>it in the object layout and compiler should know the
+>size of the variable in advance. Suppose, if I have a
+>class like below :
+>class MyClass {
+>   const int size;
+>   int arrSize[size];
+>};
+>This will not compile because compiler can not do the
+>constant folding in above case as memory needs to be
+>allocated for the constant data member size.
+>
+>The above problem can be resolved by using enums.
+>class MyClass {
+>   enum {size = 100};
+>   int arrSize[size];
+>};
+>
+>This will work as enum doesn't have any linkage and
+>hence no memory is allocated for them. Even use of
+>extern keyword prevents constant folding for a
+>constant variable.
+>
+>I hope the above thing may have helped you.
+>
+>Thanks & Regards
+>Dinesh-Ahuja
+>
+>  
+>
+>>>Henry Margies wrote:
+>>>Just put the definition in the cpp file.
+>>>Header File:
+>>>class Foo
+>>>{
+>>>	public:
+>>>		static const int DEFSIZE;
+>>>};
+>>>
+>>>in CPP-File:
+>>>
+>>>const int Foo::DEFSIZE=100
+>>>
+>>>Why does this not work for you?
+>>>
+>>>Henry
+>>>      
+>>>
+>
+>
+>
+>________________________________________________________________________
+>Yahoo! India Careers: Over 50,000 jobs online
+>Go to: http://yahoo.naukri.com/
+>
+>
+>  
+>
