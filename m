@@ -1,24 +1,43 @@
-From: Progga <abulfazl@juniv.edu>
-Subject: Re: Size of the terminal with curses
-Date: Thu, 21 Oct 2004 18:30:28 +0600
+From: <yiding_wang@agilent.com>
+Subject: RE: Size of the terminal with curses
+Date: Thu, 21 Oct 2004 11:08:55 -0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20041021183028.A502@Imrashi.net.bd>
-References: <cl6gpb$gap$1@sea.gmane.org>
+Message-ID: <08A354A3A9CCA24F9EE9BE13600CFBC50F8580@wcosmb07.cos.agilent.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <cl6gpb$gap$1@sea.gmane.org>; from tyler@agat.net on Wed, Oct 20, 2004 at 10:11:23PM +0200
+content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Tyler <tyler@agat.net>
-Cc: linux-c-programming@vger.kernel.org
+To: tyler@agat.net, linux-c-programming@vger.kernel.org
 
-On Wed, Oct 20, 2004 at 10:11:23PM +0200, Tyler wrote:
-> 
-> How can I get the size of the terminal (in lines and cols) of the actual 
-> terminal ? It would be cool if the solution uses some curses function.
+The simplist way - run shell command "set", you will see some setting like 
+...
+COLUMNS=80 
+...
+LINES=25
+...
 
- Get the values of the 'LINES' and 'COLUMNS' env variables using getenv().
+It is an environment setting.
+
+Eddie
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Tyler
+Sent: Wednesday, October 20, 2004 1:11 PM
+To: linux-c-programming@vger.kernel.org
+Subject: Size of the terminal with curses
 
 
+Hey,
+
+How can I get the size of the terminal (in lines and cols) of the actual 
+terminal ? It would be cool if the solution uses some curses function.
+
+Thx
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
