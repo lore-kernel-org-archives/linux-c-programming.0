@@ -1,39 +1,21 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: SEGFAULT
-Date: Wed, 20 Aug 2003 20:35:38 +0100
+From: "Singh, Umesh K (MED)" <Umesh.Singh@geind.ge.com>
+Subject: stack trace
+Date: Thu, 21 Aug 2003 09:29:56 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16195.52618.542642.288213@cerise.nosuchdomain.co.uk>
-References: <3F3D20F3.7030304@fi.uba.ar>
-	<001301c3674c$bc7dc3c0$ed64a8c0@descartes>
+Message-ID: <DD9E117A8BE9F34FA4130376EC9C1F6A05E5136D@BANMLVEM01.e2k.ad.ge.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <001301c3674c$bc7dc3c0$ed64a8c0@descartes>
+Content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "John T. Williams" <jtwilliams@vt.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+is it possible to get the stack trace without attaching the process to debugger. For Ex. can i write a func let's say "print_stack_trace()" and call it anywhere in my program to print the stack trace at that point of time.
 
-John T. Williams wrote:
+i thot it will be helpful in my big programs.
 
->     I can't figure out why this code sigfaults when it exits.
-> gdb only tells me
-> 
-> Program received signal SIGSEGV
-> 0xda64a8c0 in ? ()
-> 
-> and shows the step as being the final "}"  in main ().
+if it is possible, any direction/pointers???
 
-Sandro has already pointed out some likely causes of the segfault.
-
-However, the above GDB output suggests that you compiled the program
-either without debug info (without -g), or without a frame pointer
-(with -fomit-frame-pointer), or that you subsequently stripped the
-debug info (e.g. with the -s linker switch).
-
-If you want to be able to debug a program, use the -g switch for both
-compilation and linking, and don't use any optimisation switches.
-
--- 
-Glynn Clements <glynn.clements@virgin.net>
+thanks,
+-umesh
