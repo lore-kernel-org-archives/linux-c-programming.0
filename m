@@ -1,44 +1,63 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: SIGSEGV
-Date: Fri, 4 Mar 2005 00:33:22 +0000
-Message-ID: <16935.44242.116101.200958@gargle.gargle.HOWL>
-References: <1109766028.5107.5.camel@localhost.localdomain>
+From: Fabio <fabio@crearium.com>
+Subject: getopt() library function options
+Date: Thu, 03 Mar 2005 22:35:02 -0600
+Message-ID: <1109910902.595.32.camel@0003ba16bccc>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <1109766028.5107.5.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kaushal@rocsys.com
-Cc: linux-c <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
+
+Hello,
+
+I am coding a small utility for system administrator. The following command line options will be accepted:
+
+$apstat 
+$apstat -t 1
+$apstat -n 1
+$apstat -t 2 -n 2
+$apstat -v
+$apstat -t 1 -v
+$apstat -v -t 1 -n 2
+
+unaccepted command line options:
+
+$apstat -t
+$apstat -n 
+$apstat -t <<non integer value>>
+$apstat -n <<non integer value>>
 
 
-kaushal wrote:
+I would like that know what would be the while() command that I have to call getopt() inside the case(), for example, I need all this:
 
-> 	I have big package which "must" run all the time irrespective of any
-> errors.As a part of that Iam even handling the SIGSEGV.The problem is
-> even if I handle the sigsegv,the handler gets called continuously in an
-> infinite loop as if the signal is being recvd. continuously.How can I
-> solve this issue and make my handle run only once?
 
-Install the handler using sigaction() with the SA_RESETHAND flag. When
-the signal is received, the handler will be de-installed; if SIGSEGV
-is received again, the program will be terminated.
+     while ((c = getopt(argc, argv, ":abf:")) != -1) {
+         switch(c) {
+         case 'a':
+              printf("a is set\n");
+              break;
+         case 'b':
+              printf("b is set\n");
+              break;
+         case 'f':
+              filename = optarg;
+              printf("filename is %s\n", filename);
+              break;
+         case ':':
+              printf("-%c without filename\n", optopt);
+              break;
+         case '?':
+              printf("unknown arg %c\n", optopt);
+              break;
+         }
+     }
 
-The fact that your program received SIGSEGV suggests that one or more
-variables contain an invalid value. If you attempt to resume execution
-without fixing the error, you will just get further SIGSEGVs.
 
-More generally, if you detect that your program has got into an
-invalid state, you have two reasonable choices: either give up (i.e.
-terminate) or correct the problem.
+This was I got on a getopt() man page, I understand some basic concept, but I cant put the unaccpted arguments to work. Thanks alot if someone can build this from scratch.
 
-Ignoring the problem and hoping that that the program will magically
-recover isn't going to work.
+Thanks in advance,
 
-A more realistic approach for programs which need to run continuously
-would be to run the program from init with the "respawn" option; if
-the program terminates, init will restart it.
+fabio.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+
