@@ -1,64 +1,48 @@
-From: joy <gracecott@sancharnet.in>
-Subject: Re: various doubts part 2
-Date: Thu, 12 Aug 2004 16:19:44 +0530
+From: "simon\.guinot" <simon.guinot@laposte.net>
+Subject: memory_allocation
+Date: Fri, 13 Aug 2004 14:27:51 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <411B4B48.9000901@sancharnet.in>
-References: <41183899.9000203@sancharnet.in>
- <1092121443.1419.3.camel@linux.local> <411989D8.1030000@sancharnet.in>
- <20040811192131.52ff2760.lcapitulino@terra.com.br>
-Reply-To: gracecott@sancharnet.in
+Message-ID: <I2DXAF$7B97927BCA10A589B58FC0F34E16A58F@laposte.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-reply-to: <20040811192131.52ff2760.lcapitulino@terra.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"
-To: "Luiz Fernando N. Capitulino" <lcapitulino@terra.com.br>
-Cc: lantis@iqranet.info, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="windows-1252"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Luiz Fernando N. Capitulino wrote:
+hello,
 
-> Don't, I found the bug:
->
->while((bytes_read = read(STDIN_FILENO,buff,sizeof(buff))>0))
->
-> look where ">0" is inside... If you change to:
->
->while((bytes_read = read(STDIN_FILENO,buff,sizeof(buff)))>0)
->
->  
->
-Ouch as usual, the retard in me begins to show up.........
+i have a problem with a structure memory allocation...
+=20
+struct dns_answer {
+         unsigned short type;
+         unsigned short class;
+         unsigned int ttl;
+         unsigned short rdlength;
+         unsigned int addr_answer;
+         } dns_answ;
 
-> it will work... man, this bug needed about 20 min to be catch up...
->
-> every time I did run the program I tought "it _must_ work, all is
->right"... Only saw the bug when I started to write it again myself. :)
->
->  
->
-You DO have some kind of  obsessive compulsive disorder ( You remind me 
-of myself :-)
+all this element are not adjacent in memory... i have two
+"free bytes" between rdlenght and addr_answer...
+since here, i have alway made my headers like this... and no
+problem...
+an idea to force this structure elements to be adjacent in
+memory ?
+=20
+thank by advance for help
 
-> and I didn't played with the second part of the code, because
->I didn't understand very well what do you want.
->
->PS(0): I'm not a C expert, but I advice you: *always* try to write
->clean code.
->
->PS(1): I worked in this because I can't sleep when something which
->should work don't work.
->
->
->  
->
-Thanks a lot, anyway I had rewritten the code using frread and fwrite, 
-forgot to do an fflush,
-got empty output files , almost broke my computer , added an fclose just 
-after the fwrite,
-got nice output files, cried in happiness, and swore to write clean code 
-an hour before I
-read this mail ;-).
+simon
 
-regards,
-Joy.
+ps : sorry for my poor english...
+
+
+Acc=E9dez au courrier =E9lectronique de La Poste : www.laposte.net ;=20
+3615 LAPOSTENET (0,34=80/mn) ; t=E9l : 08 92 68 13 50 (0,34=80/mn)
+
+
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
