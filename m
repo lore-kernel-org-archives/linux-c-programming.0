@@ -1,109 +1,92 @@
-From: Joel Pareja <jpareja@ntsp.nec.co.jp>
-Subject: Re: binary tree traversal...
-Date: 27 Jan 2005 11:19:13 +0800
-Message-ID: <1106795952.983.26.camel@localhost.localdomain>
-References: <Pine.LNX.4.21.0501262350200.30870-100000@hestia>
+From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+Subject: Re: Into the Void
+Date: Thu, 27 Jan 2005 12:02:58 +0800
+Message-ID: <41F867F2.5000201@hq.ntsp.nec.co.jp>
+References: <OFCBCF8B9A.C4F17DCE-ON85256F95.004B650B@teal.com> <20050126161137.GA954@drmemory.local>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-VBZvA12JwnTGcez2hf+x"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.21.0501262350200.30870-100000@hestia>
+In-Reply-To: <20050126161137.GA954@drmemory.local>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Scott <drmemory@3rivers.net>, linux-c-programming@vger.kernel.org
+
+extra typing?? r u using the term "type" in the same context as "data 
+type"(progamming language concept)?
+or "type" in the sense "keyboard typing"??
+
+>>So I should use
+>> memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';
+
+Oops, I think u've misunderstood jeff's reply...
+What jeff and the others are trying to say is that the return value of 
+memcpy() is of type "void *"
+
+In essence:
+void *ptr;
+ptr = memcpy(...)
+
+thus, u need to cast the return value to something more appropriate.
+
+And by the way, 
+"memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';" is WRONG
+
+u still need to cast it properly if ur u persist on doing it the "one-liner way":
+( (char*)memcpy ((void *) *data_buf, (void *) bp, len) )[len] = '\0';
+
+*TAKE NOTE of the enclosing parenthesis:
+((char*)SOMETHING)[index] ='\0'   
+
+(assuming of course SOMETHING is something that could safely be treated as char *)
+
+and like what George stated earlier... this one-liner thing is a maintenance 
+headache(a code readability issue), and thus, not advisable.
+better chop that one-liner down to something more readable/maintanable.
+
+-Ron
+
+P.S. Hmmmm... u seem to have trouble understanding what a "void*" is.
+Void * could be anything.. thus u cant simply go around indexing a void*
+and treating it like an array without properly casting it...
 
 
---=-VBZvA12JwnTGcez2hf+x
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Scott wrote:
 
-It did traverse your binary tree. However, your call to printf is only
-performed with the first(?) node.
+>On Wed, Jan 26, 2005 at 08:45:09AM -0500, Jeff.Fellin@rflelect.com wrote:
+>  
+>
+>>The reason you are getting the references to void is the function prototype
+>>for memcpy is:
+>>
+>>      memcpy (void *dest, void *src, size_t n);
+>>
+>>You are passing char* pointers which are not void * pointers. You have to
+>>correct your arguments
+>>to remove the error messages. Please use man memcpy() for more details.
+>>    
+>>
+>
+>So I should use
+>
+>   memcpy ((void *) *data_buf, (void *) bp, len) [len] = '\0';
+>
+>(len is already type size_t) 
+>
+>Or, I guess, to follow Ron's suggestion too:
+>
+>   ((char*) memcpy ((void *) *data_buf, (void *) bp, len)) [len] = '\0';
+>
+>Just curious as to what evil all of this extra typing is supposed to
+>be protecting me from?
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+>
+>  
+>
 
-I think this is how to accomplish what you want.
-
----- snippet+  ---
-
-{
-  ....
-  treerecurse(root);   // you don't need a loop here
-  ....
-
-}
-
-struct tnode *treerecurse(struct tnode *p) {
- if(p !=3D NULL) {
-  treerecurse(p->left);
-
-  printf("%4d %s\n", p->count, p->word);  // perform what  =20
-                                          //  you desire for
-                                          //  each entry
-  treerecurse(p->right);
- }
-}
-
----- snippet- ----
-
-
-Hope this helps,
-Joel=20
-
-On Thu, 2005-01-27 at 07:01, J. wrote:
-> Wednesday, January 26
->=20
-> Hello,
->=20
-> I am trying to traverse a binary tree, returning each node that is
-> encounterd so that I can preform operations on that node. However it keep=
-s
-> looping over the same first node, it refuses to travel any further down
-> the tree ... What did I overlooked ? I know the tree is loaded with data
-> since a simple recursive preorder treeprint confirms that.
->=20
-> An example:=20
->=20
->  while((root =3D treerecurse(root)) !=3D NULL)
->   printf("%4d %s\n", root->count, root->word);
->=20
-> And the treerecurse function would look something like:
->=20
-> struct tnode *treerecurse(struct tnode *p) {
->  if(p !=3D NULL) {
->   treerecurse(p->left);
->   return p;
->   treerecurse(p->right);
->  }
-> }
->=20
-> I guess there is something wrong in my reasoning about this...
->=20
-> Thnkx..
->=20
-> J.
->=20
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-program=
-ming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
---=20
-"Debugging is twice as hard as writing the code in the first place.
-Therefore, if you write the code as cleverly as possible, you are,
-by definition, not smart enough to debug it."=20
-					    - Brian W. Kernighan
-
---=-VBZvA12JwnTGcez2hf+x
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
-
-iD8DBQBB+F2wjwMmU1vnFI0RAteeAJ9H5Jkvcmu1dT6IlraDMGSKxBerGgCfXxNf
-WZn6yAMoSmmaL36R7s+mYLQ=
-=DfY5
------END PGP SIGNATURE-----
-
---=-VBZvA12JwnTGcez2hf+x--
 
