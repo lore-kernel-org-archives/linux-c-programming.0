@@ -1,32 +1,39 @@
-From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Subject: Hex editor.
-Date: Fri, 11 Feb 2005 16:16:33 -0600 (CST)
-Message-ID: <Pine.LNX.4.58.0502111613290.22331@ns.isi.ulatina.ac.cr>
+From: "J." <mailing-lists@xs4all.nl>
+Subject: Re: programs for linux commands
+Date: Sat, 12 Feb 2005 00:57:06 +0100 (CET)
+Message-ID: <Pine.LNX.4.21.0502120051060.22125-100000@hestia>
+References: <cufh3o$t4u$1@sea.gmane.org>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
+In-Reply-To: <cufh3o$t4u$1@sea.gmane.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+On Thu, 10 Feb 2005, Muruganandam wrote:
 
-I would like to know how a developer can view .dat files or data stored in
-non-text files.
+> hi all,
+> 
+>   Could u anybody give me the programs for linux commands like ls,cp
+> 
+> thanks,
+> C.Muruganandam
 
-Let's say a developer store struct's on a binary file called foo.dat.
-Another developer want to find out what is the structure and dont have the
-source code, how can he analize the foo.dat file? What tools do you guys
-know that work on solaris sparc by the way???
+Saturday, February 12 00:51:06
 
-Another question a bit related to this. On unix like systems, what tools
-beside gdb and truss (strace) do a developer have to know what is a
-program doing?
+Either download the source of the [base] packages/programs at the
+software repositories of your operating System:
 
-How can I monitor what libc or syscall is certain binary doing?
+If that fails, you can download the GNU versions from:
+http://www.gnu.org/
 
-Thanks for the very "misc" questions,
+Greetzz,
 
-Kind regards,
+J.
+
+--
+http://www.rdrs.net
 
 
-f.v.
