@@ -1,33 +1,61 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Building a program "static"
-Date: Tue, 29 Oct 2002 10:06:45 +0000
+From: videoapp@globo.com
+Subject: Unresolved symbol prefetch
+Date: Tue, 29 Oct 2002 08:44:24 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15806.23989.856359.135348@cerise.nosuchdomain.co.uk>
-References: <200210291000.17896.wrazlov@gmx.net>
+Message-ID: <3DAE3AEE00055D2F@riosf06.globoi.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="=========3DAE3AEE00055D2F/nplex.globo.com"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200210291000.17896.wrazlov@gmx.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: wrazlov@gmx.net
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-Wrazlov wrote:
+--=========3DAE3AEE00055D2F/nplex.globo.com
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
 
-> I tried to build a program to be static, but it always says that some library 
-> was not found, altough it works very well if it's built normal (shared):
-> gcc -L/usr/qt-3.0.4/lib -lqt-mt -static program.static program.o
-> ld says: "-lqt-mt not found"
-> What's wrong with the linker-options?
+Hello,
 
-If you use "-static", you must have static (".a") versions of every
-library which the program uses. In the above case, it's complaining
-that it couldn't find "libqt-mt.a".
+I'm currently developing a loadable kernel module. At home, where I have
+an older linux distribution using kernel 2.2.17, it works fine. When I te=
+sted
+it in newer kernel versions, insmod complained about a unresolved symbol:=
 
-Binary packages often don't include static libraries; in which case,
-you will have to build a static version of the library from source.
+"prefetch".
+What am I missing? Do I need some #include or some #define, somewhere? I
+have already searched the internet after that, but was unable to find a
+solution. I would appreciate any help.
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+Thanks in advance.
+
+________________________________________
+A busca mais veloz e precisa da internet. Acesse agora: http://www.zoom.c=
+om.br.
+
+
+
+--=========3DAE3AEE00055D2F/nplex.globo.com
+Content-Type: message/rfc822
+Content-Disposition: inline
+
+Return-Path: <videoapp@globo.com>
+Received: from [200.180.4.224] by nplex.globo.com with HTTP; Mon, 28 Oct 2002 21:14:40 -0300
+Date: Mon, 28 Oct 2002 22:14:40 -0200
+Message-ID: <3DAE3A160004F4C1@riosf98.globoi.com>
+From: videoapp@globo.com
+Subject: =?ISO-8859-15?Q?Vers=E3o=20kernel?=
+To: videoapp@globo.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+
+Conectiva 2.2.17
+
+________________________________________
+A busca mais veloz e precisa da internet. Acesse agora: http://www.zoom.c=
+om.br.
+
+
+
+
+--=========3DAE3AEE00055D2F/nplex.globo.com--
