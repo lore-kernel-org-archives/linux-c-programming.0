@@ -1,159 +1,64 @@
 From: "Bakki Srinivas" <bakki_srinivas@mindtree.com>
 Subject: RE: deletion in singly linked list
-Date: Tue, 23 Nov 2004 15:53:38 +0530
-Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E0@mtv01ex04.mindtree.com>
+Date: Tue, 23 Nov 2004 16:01:47 +0530
+Message-ID: <5959EA4638D8734599AB75EAAFBB6FEFA471E1@mtv01ex04.mindtree.com>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_48F12_01C4D174.98F39BD0"
+	boundary="----=_NextPart_000_49264_01C4D175.BC8750E0"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Cc: mikael-aronsson <mikael-aronsson@telia.com>, Justinas <jugu3479@uosis.mif.vu.lt>, Linux C Programming <linux-c-programming@vger.kernel.org>
+To: Bakki Srinivas <bakki_srinivas@mindtree.com>, Glynn Clements <glynn@gclements.plus.com>, Linux C Programming <linux-c-programming@vger.kernel.org>
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_48F12_01C4D174.98F39BD0
+------=_NextPart_000_49264_01C4D175.BC8750E0
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-it is a dangling pointer.ofcourse it gives a seg. fault
-
+ya we cant delete the last item this way.very true
 Srinivas
 
 -----Original Message-----
-From: Jagadeesh Bhaskar P [mailto:jbhaskar@hclinsys.com]
-Sent: Tuesday, November 23, 2004 3:26 PM
-To: Bakki Srinivas
-Cc: mikael-aronsson; Justinas; Linux C Programming
+From: Bakki Srinivas=20
+Sent: Tuesday, November 23, 2004 3:53 PM
+To: 'Glynn Clements'; Linux C Programming
 Subject: RE: deletion in singly linked list
 
 
-On Tue, 2004-11-23 at 15:05, Bakki Srinivas wrote:
-> Until and unless u free the memory obtained by malloc,the address =
-space is
-> still in the process address space.
+prior to copyin we need to check for NULL.
 
-Even if i do free it, where will the address A->next point to. Since it =
-is
-not inside the process address space, wont that segfault??
+-----Original Message-----
+From: Glynn Clements [mailto:glynn@gclements.plus.com]
+Sent: Tuesday, November 23, 2004 3:30 PM
+To: Linux C Programming
+Subject: RE: deletion in singly linked list
 
->=20
-> Srinivas
->=20
-> -----Original Message-----
-> From: Jagadeesh Bhaskar P [mailto:jbhaskar@hclinsys.com]
-> Sent: Tuesday, November 23, 2004 3:00 PM
-> To: Bakki Srinivas
-> Cc: mikael-aronsson; Justinas; Linux C Programming
-> Subject: RE: deletion in singly linked list
->=20
->=20
-> Sorry about my last reply. There is a small, subtle problem.Say the
-> nodes as A, B, C itself. Now if we make B=3DC, still the address to =
-which
-> A->next will b pointing will be the address of B itself. Now wont that
-> make a seg fault????
->=20
-> On Tue, 2004-11-23 at 14:30, Bakki Srinivas wrote:
-> > how is this---=20
-> > copy the content of the next item and place it in the current =
-pointed
-> > item,check if the next item pointed by the next item is NULL if it =
-is
+
+
+Bakki Srinivas wrote:
+
+> copy the content of the next item and place it in the current pointed
+> item,check if the next item pointed by the next item is NULL if it is =
 then
-> > delete the next item else move the pointer till it reaches NULL =
+> delete the next item else move the pointer till it reaches NULL =
 finally
-> > delete the last one.
-> >=20
-> > Srinivas
-> >=20
-> > -----Original Message-----
-> > From: mikael-aronsson [mailto:mikael-aronsson@telia.com]
-> > Sent: Tuesday, November 23, 2004 2:25 PM
-> > To: Justinas; Jagadeesh Bhaskar P
-> > Cc: Linux C Programming
-> > Subject: Re: deletion in singly linked list
-> >=20
-> >=20
-> > That will break the list, the previous item has to be updated so you =
-will
-> > need to get the first item of the list and walk through the list =
-until
-you
-> > find the item in front of the one you want to delete and change the
-"next"
-> > pointer in that item to point to the one in the "next" pointer in =
-the
-item
-> > you are deleting.
-> >=20
-> > Then you can delete the item you started with.
-> > There is no other way to do it without a double linked list.
-> >=20
-> > Mikael
-> >=20
-> > ----- Original Message -----=20
-> > From: "Justinas" <jugu3479@uosis.mif.vu.lt>
-> > To: "Jagadeesh Bhaskar P" <jbhaskar@hclinsys.com>
-> > Cc: "Linux C Programming" <linux-c-programming@vger.kernel.org>
-> > Sent: Tuesday, November 23, 2004 9:42 AM
-> > Subject: Re: deletion in singly linked list
-> >=20
-> >=20
-> > > Hello,
-> > >
-> > > i think You can. For instance n is a pointer to curent node and =
-n->next
-> is
-> > pointer to next node. lets say we like this tmp =3D n, and n =3D =
-n->next.
-After
-> > that free(tmp).
-> > >
-> > > On Tue, 23 Nov 2004 13:54:10 +0530
-> > > Jagadeesh Bhaskar P <jbhaskar@hclinsys.com> wrote:
-> > >
-> > > > I am having the address of a single node of a singly linked =
-list. All
-I
-> > > > know about that node is that it is not the head of the list. Now =
-say,
-I
-> > > > want to delete this node. I can infer its next node, but not its
-> > > > predicissor. Is there any way to delete that node, without =
-breaking
-the
-> > > > whole linked list down!!
-> > > >
-> > > > --=20
-> > > > Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-> > > >
-> > > > -
-> > > > To unsubscribe from this list: send the line "unsubscribe
-> > linux-c-programming" in
-> > > > the body of a message to majordomo@vger.kernel.org
-> > > > More majordomo info at  =
-http://vger.kernel.org/majordomo-info.html
-> > > >
-> > > -
-> > > To unsubscribe from this list: send the line "unsubscribe
-> > linux-c-programming" in
-> > > the body of a message to majordomo@vger.kernel.org
-> > > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> >=20
-> > -
-> > To unsubscribe from this list: send the line "unsubscribe
-> > linux-c-programming" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> delete the last one.
+
+That fails if there is no next item, i.e. you're deleting the last
+element from the list.
+
 --=20
-Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Glynn Clements <glynn@gclements.plus.com>
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-
-------=_NextPart_000_48F12_01C4D174.98F39BD0
+------=_NextPart_000_49264_01C4D175.BC8750E0
 Content-Type: text/plain;
 	name="disclaimer.txt"
 Content-Transfer-Encoding: quoted-printable
@@ -180,4 +85,4 @@ incomplete transmission."
 
 -------------------------------------------------------------------------=
 ----------------------------------------------------
-------=_NextPart_000_48F12_01C4D174.98F39BD0--
+------=_NextPart_000_49264_01C4D175.BC8750E0--
