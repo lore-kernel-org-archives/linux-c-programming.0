@@ -1,19 +1,25 @@
-From: Uma Shankar Kayarohanam <umas@aztec.soft.net>
-Subject: http client
-Date: Mon, 24 Jun 2002 15:32:58 +0530 (India Standard Time)
+From: xlp <xlp@emtel.net.co>
+Subject: exploitable function
+Date: Tue, 25 Jun 2002 16:02:21 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.WNT.4.40.0206241526190.202-100000@uma.aztec.soft.net>
+Message-ID: <20020625160221.A489@nietzsche>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hi,
-  I am searching for a thin http client library.
-  Positively with support for https.
+hi, if this code is setuid root, is exploitable:
 
-  Any pointers will be of great help.
-Regards,
-Uma
+if(argc==2){
+	        if(!strcmp("-show_release",argv[1]))
+        {
+                printf("%s\n", VERSION);
+                exit(1);
+        }
+}
+
+
+
