@@ -1,47 +1,26 @@
-From: ruler@isolate.net
-Subject: Re: multi threaded file access
-Date: Fri, 6 Dec 2002 08:38:33 -0500
+From: "Joseph D. Wagner" <wagnerjd@prodigy.net>
+Subject: How does malloc tell the kernel to allocate more memory?
+Date: Sun, 8 Dec 2002 12:46:57 -0600
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <39265468443.20021206083833@isolate.net>
-References: <3DF08C71.30605@tlabs.ac.za>
-Reply-To: ruler@isolate.net
+Message-ID: <000301c29eea$3107dd10$032a1c43@joe>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3DF08C71.30605@tlabs.ac.za>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Linux C Programming <linux-c-programming@vger.kernel.org>, Linux Newbie <linux-newbie@vger.kernel.org>
 
-Hello Heinrich,
+I'm trying to write a tracer on memory allocation, and I'm having a little
+trouble figuring this out.
 
-Friday, December 6, 2002, 6:39:29 AM, you wrote:
+At some point, malloc has to call the kernel to tell it to allocate more
+memory for this user process, right?  I can't figure out which function
+malloc calls, or where in the code (line number) it's called.
 
-HdT> Hello
+I'm looking at glib-2.3.1 to try and find my answers.  After all, that's
+where malloc is defined, right?
 
-HdT> I have a tcp/ip server which is offcourse multi threaded :-)
+TIA.
 
-HdT> Is it safe to have to threads access the same file descriptor at the 
-HdT> same time?
-HdT> Or should I put a mutex over the file descriptor?
-
-HdT> Thanks for your help
-HdT> -Heinrich
-
-
-HdT> -
-HdT> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-HdT> the body of a message to majordomo@vger.kernel.org
-HdT> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-Put a mutex over the writing to file descriptor.  Depends on how much
-and what you are writing, it could makes lines combine with each other
-into a bunch of garbled letters.
-
-Thanks,
-
--- 
-Best regards,
- ruler                            mailto:ruler@isolate.net
-
+Joseph Wagner
 
