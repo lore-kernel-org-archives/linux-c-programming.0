@@ -1,47 +1,38 @@
-From: =?iso-8859-1?Q?Carlos_Fern=E1ndez?= <cfernandez@myalert.com>
-Subject: Re: static variables and functions in header files
-Date: Tue, 27 Aug 2002 14:19:32 +0700
+From: Uma Shankar Kayarohanam <umas@aztec.soft.net>
+Subject: Unicode and cygwin
+Date: Tue, 27 Aug 2002 16:25:32 +0530 (India Standard Time)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <013a01c24d9a$1f6f10b0$ba5311ac@bangkok1>
-References: <20020827071753.14590.qmail@relay1.home.ro>
+Message-ID: <Pine.WNT.4.44.0208271619340.104-100000@uma.aztec.soft>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Alina Valea <avalea@home.ro>, linux-c-programming@vger.kernel.org
-
-Yes but you need to be aware of its meaning :-)
-
-Do it with care. Be gentle with the code...
-
------ Original Message -----
-From: "Alina Valea" <avalea@home.ro>
-To: <linux-c-programming@vger.kernel.org>
-Sent: Tuesday, August 27, 2002 2:17 PM
-Subject: static variables and functions in header files
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
 
->
->
-> Hello,
->
-> Has anybody ever declared variables and functions as static
-> in header files (that will be included in several .c files)?
-> I've just seen this in a project and it puzzled me. Is it OK
-> to do it?
->
-> Thanks, Alina
->
->
-> ----
->
-> Home, no matter how far...
-> http://www.home.ro
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+I'm writing a portable application that has support for Unicode.
+For this I'm using Cygwin on Windows.
+Can anybody give me pointers on how to go about it?
 
+This code snipet doesn't seem to work on Cygwin/Windows NT but works fine on
+Linux. On Windows only the first character gets printed. Also the size of
+wchar_t on Windows is reported as 2 bytes whereas on Linux its reported to be
+4 bytes.
+
+#include <stdlib.h>
+#include <stdio.h>
+
+int main()
+{
+    cont wchar_t* str = L"Hello World";
+    wprintf(L"String - %s\n", str);
+    return 0;
+}
+
+Any suggestions are welcom.
+
+tia
+
+--
+A mistake is just another way of doing things.
