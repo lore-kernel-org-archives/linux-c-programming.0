@@ -1,61 +1,43 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: Eric Bambach <eric@cisu.net>
 Subject: Re: C Newbie
-Date: Mon, 13 Dec 2004 16:50:43 +0100
-Message-ID: <20041213155043.GY16958@lug-owl.de>
-References: <200412130858.22661.eric@cisu.net> <BDE318F8.1618%dsessions@ionosphere.net>
+Date: Mon, 13 Dec 2004 10:03:57 -0600
+Message-ID: <200412131003.57421.eric@cisu.net>
+References: <BDE318F8.1618%dsessions@ionosphere.net>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="FVm6dlxF4pQlpRQl"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 In-Reply-To: <BDE318F8.1618%dsessions@ionosphere.net>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Darren Sessions <dsessions@ionosphere.net>
+Cc: linux-c-programming@vger.kernel.org
 
-
---FVm6dlxF4pQlpRQl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, 2004-12-13 10:01:28 -0500, Darren Sessions <dsessions@ionosphere.ne=
-t>
-wrote in message <BDE318F8.1618%dsessions@ionosphere.net>:
-> I need to know (before I get flamed) if this is an appropriate spot to po=
-st
+On Monday 13 December 2004 09:01 am, you wrote:
+> I need to know (before I get flamed) if this is an appropriate spot to post
 > questions on C programming or not and the very most newbie level. I'm
 > attempting a transition from Perl and, while I understand a lot of the
 > fundamentals of C, am having a hard time with string (char) manipulation.
+>
+> Thanks,
+>
+>  - Darren
 
-Start asking. However, start a question with a new email, not by
-pressing you email client's "reply" button and deleting any old text.
-Hijacking threads is bad habit and makes proper email sorting a hard
-challange...
+As JBG advised yes please don't hijack threads. It confuses me AND my mailer. 
+Other than that I would be happy to assist on the list if I can, even though 
+my programming skills aren't great yet. My advice is to limit your questions 
+though. Try to do most of the reasearch off list and ask specifc questions 
+when something stumps you or doesnt work as expected after you've tried to 
+debug it yourself. If it looks like you didn't try (ex. throwing code at us 
+with the subject it doesnt compile) or cant give us specific code with 
+questions to help on you're less likely to get any useful information off the 
+list.
 
-MfG, JBG
+Other than that, I hope I can be of help and I hope the list gurus agree with 
+me.
 
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
-k!   O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
+-- 
 
---FVm6dlxF4pQlpRQl
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBvbpTHb1edYOZ4bsRAtyPAJwMCOoc/rQ34K+ao8m326BQxb62cQCghUip
-rT0hy6y637v1901lQnfgFaA=
-=C01t
------END PGP SIGNATURE-----
-
---FVm6dlxF4pQlpRQl--
+-EB
