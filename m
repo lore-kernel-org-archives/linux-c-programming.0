@@ -1,54 +1,26 @@
-From: Shanks <mshanks79@yahoo.co.in>
-Subject: strange gcc warning
-Date: Mon, 13 Jan 2003 09:57:55 -0800 (PST)
+From: Elias Athanasopoulos <eathan@otenet.gr>
+Subject: Re: strange gcc warning
+Date: Mon, 13 Jan 2003 21:25:09 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030113175755.71066.qmail@web8001.mail.in.yahoo.com>
+Message-ID: <20030113212508.B1128@neutrino.particles.org>
+References: <20030113175755.71066.qmail@web8001.mail.in.yahoo.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20030113175755.71066.qmail@web8001.mail.in.yahoo.com>; from mshanks79@yahoo.co.in on Mon, Jan 13, 2003 at 09:57:55AM -0800
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: Shanks <mshanks79@yahoo.co.in>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+On Mon, Jan 13, 2003 at 09:57:55AM -0800, Shanks wrote:
+> my_print(int errno)
 
-Sample program: b.c
-#include <stdio.h>
-#include <errno.h>
+errno is defined in errno.h. You shouldn't use a new variable with this
+name.
 
-void
-my_print(int errno)
-{
-    printf("ERRNO: %d\n", errno);
-}
+Elias
 
-int
-main()
-{
-    int a = 10;
-    errno = 0;
-    my_print(a);
-}
-
-On compiling this code i get the warning:
-b.c: In function `main':
-b.c:15: warning: passing arg 1 of `my_print' makes pointer from integer without
-a cast
-
-On running the code i get a seg. fault. So i did some gdb'ing and got
-(gdb) run 
-Starting program: ./b
-Breakpoint 1, my_print (__errno_location=0x19) <<<<<<<<
-    at b.c, line...
-(gdb)
-
-From above i see that instead of getting a plain int its go the address.
-But i would like it if someone explained it to me better.
-
-Thanks in advance.
--S
-
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
-http://mailplus.yahoo.com
+-- 
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
