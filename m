@@ -1,77 +1,59 @@
 From: Micha Feigin <michf@post.tau.ac.il>
 Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Tue, 29 Jun 2004 04:10:39 +0300
+Date: Tue, 29 Jun 2004 17:32:38 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040629011039.GB6335@luna.mooo.com>
-References: <40E090AF.6090300@ig.com.br>
+Message-ID: <20040629143238.GD6335@luna.mooo.com>
+References: <40E09FC4.50800@ig.com.br> <16608.44836.384260.844173@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <40E090AF.6090300@ig.com.br>
+In-Reply-To: <16608.44836.384260.844173@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On Mon, Jun 28, 2004 at 06:42:07PM -0300, Luciano Moreira - igLnx wrote:
-> Sorry for this rookie question, but I'm not a experienced C++ programmer 
-> (I m a old C-ANSI programmer, not in C++)
+On Tue, Jun 29, 2004 at 12:52:04AM +0100, Glynn Clements wrote:
 > 
-> How can us create a kind of "static const" attribute into a class ? I 
-> need to use it like as:
-> char myArray[MYCLASS::DEFSIZE];
-> Where "DEFSIZE" whould be a "static const" member (or another type) of 
-> MYCLASS.
+> Luciano Moreira - igLnx wrote:
 > 
-> What do I already tried ? Follow:
-> class MYCLASS {
->    public:
->       static const int DEFSIZE;
-> };
-> const int DEFSIZE = 100;
+> > Is very commom in Java, the declaration of "static const" attributes 
+> > into class escope. Is possible to do anything similar in C++ ?
+> > Using another techniques ?
+> > 
+> > All we need is to have a public static symbol into a class escope that 
+> > can be used to declare a array, intead of using a lot of global symbols.
 > 
+> It appears that you are allowed to initialise constant static members
+> within the declaration, so you can do this:
+> 
+> 	class Foo
+> 	{
+> 	public:
+> 		static const int DEFSIZE = 100;
+> 	};
+> 	
+> 	class Bar
+> 	{
+> 	public:
+> 		char myArray[Foo::DEFSIZE];
+> 	};
+> 
+> This compiles with "g++ -ansi -pedantic", so it's probably standard
+> ISO C++.
 
-The line setting the value should in a .cpp file not a header. You may
-only set the value once for a variable during compilation (the value is
-put in the actual file, not generated on startup - the data section)
+Does this also work when put in a header or only when put directly in
+the cpp file?
 
-I am not sure if a static const may be used for array sizes? IIRC it is
-possible under c++ and not on c but far away from sure on that.
-
-Another option is to define the value as an enum and then you still get
-type checking and you can encapsulate it in a class unlike a define,
-but it acts like a define for all other purposes (you can use it as a
-test option for a case statement).
-
-> But, when the file "MYCLASS.h" is included more than one file ".cpp", 
-> the linker says that the member "MYCLASS::DEFZISE" "was already defined 
-> in 'filename'". And don't have occurrences of compiler errors, only on 
-> linking.
 > 
-> Thanks,
-> 
-> Luciano
-> 
-> -------------------------------------------
-> FOLLOW SOME COMPILER FULL ERROR MESSAGE (MSVC++ 6.0):
-> HMMessageProcessor_Canal.obj : error LNK2005: "public: static unsigned 
-> int const MMDadosCarteira::_OFFSET_CARTEIRA2B" 
-> (?_OFFSET_CARTEIRA2B@MMDadosCarteira@@2IB) already defined in HMApp.obj
-> 
-> HMMessageProcessor_Canal.obj : error LNK2005: "public: static unsigned 
-> int const MUDadosRecarga::_OFFSET_CARTEIRA2B" 
-> (?_OFFSET_CARTEIRA2B@MUDadosRecarga@@2IB) already defined in HMApp.obj
-> 
-> PS: I didn't code "static unsigned int const". In my source code I coded 
-> "static const unsigned" only. I don't know why MSVC "translated" my code.
-> 
+> -- 
+> Glynn Clements <glynn.clements@virgin.net>
 > -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> +++++++++++++++++++++++++++++++++++++++++++
-> This Mail Was Scanned By Mail-seCure System
-> at the Tel-Aviv University CC.
+>  
+>  +++++++++++++++++++++++++++++++++++++++++++
+>  This Mail Was Scanned By Mail-seCure System
+>  at the Tel-Aviv University CC.
 > 
