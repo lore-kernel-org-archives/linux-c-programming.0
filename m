@@ -1,113 +1,61 @@
-From: =?iso-8859-1?q?Dinesh=20Ahuja?= <mdlinux7@yahoo.co.in>
-Subject: Re: "static const" attribute in C++ (How to ?)
-Date: Mon, 5 Jul 2004 06:35:27 +0100 (BST)
+From: =?iso-8859-2?Q?Nagy_Imre_=28Vecs=E9s=29?= <ImreNagy@MOL.hu>
+Subject: Start of the time slice
+Date: Mon, 5 Jul 2004 09:22:16 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040705053527.45632.qmail@web8304.mail.in.yahoo.com>
-References: <40E5F9F5.4080009@ig.com.br>
+Message-ID: <7F11C0CADA50AF4690BF42F715ABFBF86468B1@battaexch22.mol.hu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40E5F9F5.4080009@ig.com.br>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-The problem which you are facing is a bug in MSVC.
-MSVC does not support in-class initialization of const
-static data member. 
+Dear List,
 
-Read the following link :
+Excuse me, my English is limited, but I try to formulate clearly.
 
-http://www.corfield.org/index.php?event=cplusplus.section&section=mcon
+I would like to konw how many unexpired time is in my process. The normal
+time slice (10ms) is enough for me, but I want to get run my function right
+at the start of time slice. 
 
-The compiler which supports in-class initialization of
-const static data members provides the feature of
-const-folding and hence it can be used to set the size
-of an array.
+        _______________           ______________
+____ ... 10 ms         __ . . . __  10 ms       ___
 
-Regards
-Dinesh
+        |my f()                   |my f()
 
---- Luciano Moreira - igLnx <lucianolnx@ig.com.br>
-wrote: > Ok, but during our talk, I had asked for
-anothers
-> ways to do anything 
-> similar, and I get a way using enum. And another
-> hands, my compiler 
-> (MSVC), doesn't compile static const "initialized
-> member", like as:
-> 
-> class MyClass {
->    static const int size = 100;
->    int arrSize[size];
-> };
-> 
-> It seems to think that I m trying to initialize a
-> pure virutal function with wrog sintax, because it
-> need "=0" and not "=100".
-> Sorry, I dont know why, but MSVC cannot compile it,
-> I already searched MS documentation, but no answers.
-> 
-> Luciano
-> 
-> Glynn Clements wrote:
-> 
-> >Dinesh Ahuja wrote:
-> >
-> >  
-> >
-> >>There is a concept of constant folding in C++.
-> >>Whenever you declare any data member of class as a
-> >>constant, the compiler should allocate the memory
-> for
-> >>it in the object layout and compiler should know
-> the
-> >>size of the variable in advance. Suppose, if I
-> have a
-> >>class like below :
-> >>
-> >>class MyClass {
-> >>   const int size;
-> >>   int arrSize[size];
-> >>};
-> >>This will not compile because compiler can not do
-> the
-> >>constant folding in above case as memory needs to
-> be
-> >>allocated for the constant data member size.
-> >>    
-> >>
-> >
-> >However, the title explicitly says:
-> >
-> >	STATIC const attribute in C++ (How to ?)
-> >
-> >[Emphasis mine.]
-> >
-> >There is a difference.
-> >
-> >  
-> >
-> >>The above problem can be resolved by using enums.
-> >>class MyClass {
-> >>   enum {size = 100};
-> >>   int arrSize[size];
-> >>};
-> >>    
-> >>
-> >
-> >It can also be resolved using an initialised static
-> const member:
-> >
-> >class MyClass {
-> >   static const int size = 100;
-> >   int arrSize[size];
-> >};
-> >
-> >  
-> > 
 
-________________________________________________________________________
-Yahoo! India Careers: Over 50,000 jobs online
-Go to: http://yahoo.naukri.com/
+main()
+
+{
+.
+.
+.
+
+while(1) {
+   f();
+}
+.
+.
+.
+
+Best regards,
+
+Imre Nagy
+
+
+
+Ezen uzenet es annak barmely csatolt anyaga bizalmas, jogi vedelem alatt all, a nyilvanos kozlestol vedett.
+Az uzenetet kizarolag a cimzett, illetve az altala meghatalmazottak hasznalhatjak fel. Ha On nem az uzenet cimzettje, ugy kerjuk, hogy telefonon, vagy e-mail-ben ertesitse errol az uzenet kuldojet es torolje az uzenetet, 
+valamint annak osszes csatolt mellekletet a rendszerebol. Ha On nem az uzenet cimzettje, abban az esetben tilos az 
+uzenetet vagy annak barmely csatolt mellekletet lemasolnia, elmentenie, az uzenet tartalmat barkivel kozolnie 
+vagy azzal visszaelnie.
+
+
+This message and any attachment are confidential and are legally privileged. It is intended solely for the use of 
+the individual or entity to whom it is addressed and others authorised to receive it. If you are not the intended 
+recipient, please telephone or email the sender and delete this message and any attachment from your system. 
+Please note that any dissemination, distribution, copying or use of or reliance upon the information contained in 
+and transmitted with this e-mail by or to anyone other than the recipient designated above by the sender is 
+unauthorised and strictly prohibited.
+
+
