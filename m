@@ -1,50 +1,56 @@
-From: Martin Buchan <M.J.Buchan@gre.ac.uk>
+From: Glynn Clements <glynn.clements@virgin.net>
 Subject: Re: segfault with strdup
-Date: Tue, 20 May 2003 14:52:54 +0100
+Date: Tue, 20 May 2003 17:32:39 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030520135254.GD674@gre.ac.uk>
-References: <20030520112034.GZ674@gre.ac.uk> <200305201316.h4KDGUhG007842@grinch.txt.com>
+Message-ID: <16074.22695.413401.35248@cerise.nosuchdomain.co.uk>
+References: <20030520112034.GZ674@gre.ac.uk>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200305201316.h4KDGUhG007842@grinch.txt.com>
+In-Reply-To: <20030520112034.GZ674@gre.ac.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
-Cc: "Jason P. Winters" <jason@txt.com>
+To: Martin Buchan <M.J.Buchan@gre.ac.uk>
+Cc: linux-c-programming@vger.kernel.org
 
-On Tue, May 20, 2003 at 06:15:58AM -0700, Jason P. Winters wrote:
->  
-> > The place where it is seg faulting is
-> > 
-> > uri = xmlGetProp(cur, "name");
-> > mePtr[i].appname = strdup(uri);  /* HERE */
-> 
-> Well, I don't have a lot of time to spend on it, but here are a
-> couple of observations:
-> 
-> First and formost: you're not testing the result of xmlGetProp for
-> null. This is probably your "problem", as you then try and dup a
-> null string.  Bad habit, that. :}
 
-Point taken :-)
-Now i am testing for NULL but i still get the same problem. However,
-i do not think this is the probelm because if i step thru the
-program with ddd, just before it segfaults at the line 
+Martin Buchan wrote:
 
-mePtr[i].appname = strdup(uri);
+> This is all working now, however, it only works if i run it in the
+> directory that i have done all my coding in. I.e. If i compile and
+> install to a different location, i get a seg fault when parsing the
+> XML file. Its not that it cant find the file, it goes thru and
+> parses the first entry in the file and then croaks on the 2nd
+> while parsing the name of the app - which is "Netscape Navigator"
+> If i shorten the name to just "Netscape", it then croaks on the 3rd
+> entry which is "Lynx Text Only Browser", if i then shorten this to
+> just "Lynx Browser", it then croaks on the 4th and so on and so on.
 
-If i hover the mouse over the previous line:
+There is a problem in parseTermXpm:
 
-uri = xmlGetProp(cur, "name");
+144	gchar *xpmdir;
+145	xpmdir = strdup(XPMDIR);
+	...
+154	termPtr[0].termxpm = strcat(xpmdir, termPtr[0].termxpm);
 
-It shows me that the value of uri is "Netscape Navigator"
+The buffer which is being allocated isn't guaranteed to be any larger
+than XPMDIR itself (in practice it may be slightly larger due to
+padding, but you can't rely on it), so the strcat() call is corrupting
+the heap.
 
-Also, if this was the case (and i wish it was cos then i could fix
-it :) then that would apply to the directory where the code works in
-as well as any other directory.??
+Once you corrupt the heap, all bets are off; usually what happens is
+that a later call to a heap-management function (malloc, calloc, free
+etc) will segfault.
 
-thanks for pointing out testing for NULL though.
+You are also doing exactly the same thing with HELPDIR.
 
-Martin
+The most obvious solution is:
+
+	gchar *xpmdir;
+	xpmdir = malloc(strlen(XPMDIR) + strlen(termPtr[0].termxpm) + 1);
+	strcpy(xpmdir, XPMDIR);
+	...
+	termPtr[0].termxpm = strcat(xpmdir, termPtr[0].termxpm);
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
