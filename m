@@ -1,77 +1,75 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: how to implement tail -n
-Date: Mon, 24 Jan 2005 19:26:52 +0000
-Message-ID: <16885.19452.391228.523655@gargle.gargle.HOWL>
-References: <1106461572.1122.1.camel@KrishnaMohan>
-	<20050123184550.B330@Imrashi.net.bd>
-	<1106487378.1122.14.camel@KrishnaMohan>
-	<009a01c501d8$6d504cf0$dc846840@apac.cisco.com>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Subject: Re: Unix Domain Sockets
+Date: Mon, 24 Jan 2005 20:32:00 +0100
+Message-ID: <20050124193200.GD28037@lug-owl.de>
+References: <20050124_191803_058538.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="9o6tjhKcA+PBUYK5"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <009a01c501d8$6d504cf0$dc846840@apac.cisco.com>
+Content-Disposition: inline
+In-Reply-To: <20050124_191803_058538.r_zaca@ig.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Venkatesh Joshi <joshiv@cisco.com>
-Cc: LinuxC <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
 
-Venkatesh Joshi wrote:
+--9o6tjhKcA+PBUYK5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I would like to know how to implement "tail -n" in C.
+On Mon, 2005-01-24 17:18:03 -0200, r_zaca <r_zaca@ig.com.br>
+wrote in message <20050124_191803_058538.r_zaca@ig.com.br>:
+Content-Description: Mail message body
+>   Hello everybody,=20
+>=20
+>   Does anyone know what a "unix domain socket" is, and how it differ from=
+ an=20
+> "Internet domain socket"?=20
 
-Use a circular buffer which contains the last N lines read. Each time
-you read a line, remove the first line and add the new line to the end
-of the buffer. When you reach the end, display the contents of the
-buffer.
+Internet domain sockets work with IP addresses and port numbers. A unix
+socket merely is a special file on a local file system, a so calles
+"fifo". It's created with the "mkfifo" library call or userspace
+command.
 
-E.g.
+After you've created a fifo, which is displayed with a 'p' as the
+file-type at "ls -l" output, you can open/close/read/write it.
 
-void tail(FILE *fp, int num_lines)
-{
-	char **buffer = calloc(num_lines, sizeof(char *));
-	int index = 0;
-	int i;
+>   If you know a nice site or documentation about this subject, please tel=
+l=20
+> me.=20
 
-	for (;;)
-	{
-		char *line = NULL;
-		int len = 0;
+There's not much to tell about it. It's created once locally, then you
+can access it. Keep in mind that it's a purely local thing. You cannot
+export it by any means (I've seen people putting it on a shared NFS
+filesystem....). The data passed through the fifo is kept within the
+operating system's kernel; it's never ever written somewhere onto stable
+storage.
 
-		if (getline(&line, &len, fp) < 0)
-			break;
+MfG, JBG
 
-		if (buffer[index])
-			free(buffer[index]);
+--=20
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=C3=BCrger" | im Internet! |   im Ira=
+k!   O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
 
-		buffer[index] = line;
+--9o6tjhKcA+PBUYK5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
-		index++;
-		index %= num_lines;
-	}
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
 
-	for (i = 0; i < num_lines; i++)
-		puts(buffer[(index + i) % num_lines]);
-}
+iD8DBQFB9U0wHb1edYOZ4bsRAtzRAKCO5MdnzZUeV/snqPtf9Xifg2dNlwCfZG3q
+xHiSEKYrxKCf/uNlkzYrnog=
+=SESC
+-----END PGP SIGNATURE-----
 
-In practice, you would probably want to do your own memory allocation
-rather than using getline(). You also need to allow for files with
-less than num_lines lines..
-
-> The "-n" option will be used to print the last n lines of a file -
-> rather than the default option of printing the last 10 lines of a file.
-> 
-> I wish to do this in a single pass. I can use lseek() to go to the end
-> of the file. How to traverse backwards from there ? Is there any
-> function that does this ?
-
-Use lseek(SEEK_CUR) with a negative offset to seek backwards. You
-would have to use trial and error to determine how much you need to
-read.
-
-Also, lseek() will only work on regular files. It won't work on pipes,
-etc. The "tail" command works on pipes.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--9o6tjhKcA+PBUYK5--
