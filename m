@@ -1,61 +1,33 @@
-From: "Mathur, Shobhit" <Shobhit_mathur@adaptec.com>
-Subject: linux-source debugging with kgdb-patch
-Date: Thu, 17 Apr 2003 20:46:24 +0530
-Sender: linux-serial-owner@vger.kernel.org
-Message-ID: <3E9EC548.117005DD@adaptec.com>
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: Calling fortran from C
+Date: Thu, 17 Apr 2003 18:23:14 +0300
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <20030417182314.F16619@neutrino.particles.org>
+References: <20030412114620.B10166@neutrino.particles.org> <16023.59187.84926.103292@cerise.nosuchdomain.co.uk> <20030416195300.D16619@neutrino.particles.org> <16029.38433.687171.868280@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-serial-owner@vger.kernel.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <16029.38433.687171.868280@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Wed, Apr 16, 2003 at 06:42:57PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org, linux-serial@vger.kernel.org, linux-newbie@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: linux-c-programming@vger.kernel.org
 
+Hi Glynn,
 
+On Wed, Apr 16, 2003 at 06:42:57PM +0100, Glynn Clements wrote:
+> Fortran functions are call-by-reference, so you have to pass a pointer
+> to a C variable:
 
-Hello,
+Thank you very much! :-) It worked and you really saved me a lot of time of
+research, since I know almost null about fortran.
 
-BACKGROUND:
+Regards,
+Elias
 
-I was keen to see kgdb running  for  purely academic reasons. Thus,
-I made a setup of 2 machines for source-level debugging of the
-linux-kernel. The procedure mentioned on the web-site
-[ kgdb.sourceforge.net] has  been adhered to.  I was able to
-successfully configure the setup. Also, I decided to use "ddd" front-end
-on gdb [local m/c]  for debugging  the kgdb-patched kernel on the remote
-machine, which is the usual setup for such debugging-efforts.
-    The m/c to be debugged stops with the message "Waiting for
-connection from remote gdb..." until the "target remote" command is run
-from the "gdb" prompt of "ddd", upon which the m/c to be debugged
-continues it's bootup till it shows the command-prompt.
+-- 
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
 
-PROBLEM:
-
-I was interested in setting a break-point in start_kernel thru' "ddd"
-such that the boot-up  of the m/c to be debugged could be analysed
-step-by-step remotely. Though, I am able to set the breakpoint in
-start_kernel(),
-the commands "run" or "continue" on the "gdb" prompt, only throw up the
-following errors :
-
-(gdb) info break
-Num Type           Disp Enb Address    What
-7   breakpoint      keep  y   0xc027e7f0 in start_kernel at
-init/main.c:614
-(gdb) run
-warning: shared library handler failed to enable breakpoint
-warning: Cannot insert breakpoint 7:
-Cannot access memory at address 0xc027e7f0
-
-QUESTION:
-
-I very strongly suspect that this exercise follows a particular sequence
-of steps to get it right. Either I am missing some step or I am not
-following the "order".  In either case, I would be glad to receive some
-help/comments on my academic endeavour to be able to remotely debug the
-kernel.
-
-- Kindly let me know a solution
-
-- TIA
-
-- Shobhit Mathur
+	
