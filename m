@@ -1,43 +1,43 @@
 From: joy <gracecott@sancharnet.in>
-Subject: Re: various doubts ......
-Date: Wed, 11 Aug 2004 08:21:55 +0530
+Subject: Re: various doubts part 2
+Date: Wed, 11 Aug 2004 08:22:08 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <411989CB.3000304@sancharnet.in>
-References: <4117B259.1090500@sancharnet.in>
+Message-ID: <411989D8.1030000@sancharnet.in>
+References: <41183899.9000203@sancharnet.in>
+ <1092121443.1419.3.camel@linux.local>
 Reply-To: gracecott@sancharnet.in
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-reply-to: <4117B259.1090500@sancharnet.in>
+In-reply-to: <1092121443.1419.3.camel@linux.local>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; format="flowed"; charset="us-ascii"
-To: 
-Cc: linux-c-programming@vger.kernel.org
+To: lantis@iqranet.info, linux-c-programming@vger.kernel.org
 
-joy wrote:
+Sascha Retzki wrote:
 
-> Hello,
-> I  have a few , though unconnected doubts.
+>Am Di, 2004-08-10 um 04.53 schrieb joy:
+>  
 >
-> 1) can a named pipe be locked using normal lockf()  or do I have to 
-> perform some voodoo?
+>>	outfile = open(filename,O_WRONLY|O_CREAT,S_IRWXU|S_IRWXO);
+>>	while((bytes_read = read(STDIN_FILENO,buff,sizeof(buff))>0))
+>>	{
+>>		if((bytes_written = write(outfile , buff ,bytes_read))!=bytes_read)
+>>		{
+>>			fprintf(stderr,"write error");
+>>			exit(1);
+>>		}
+>>	}
+>>    
+>>
 >
-Yes it can! I tried it out with two processes trying to write to the 
-pipe at the same time.One obtains the  lock
-and sleep()s for 10 seconds during which the other process is blocked.
+>Why not reading from 'stdin' directly ? That FD is defined in stdio.h
+>iirc... What is STDIN_FILENO anyway :) ?
+>  
+>
+Also a defined contant,  and corresponds to the fd of stdin 
+(0).(Stevens, adv., prog in unix env.,)
+Anyways ,I used fread and fwrite and the fellow seems to work.
+guess you have to treat stdin as streams only.
 
-> 2) I need to transfer data (protocol not an issue, just raw data) from 
-> a usb peripheral(not HDD)
->    to the host comp. can I do this without writing a usb driver 
-> myself, i.e , using some generic or user-space driver (like ppdev)
->    the peripheral is a texas instruments tusb246b hub.
->
-> Thanx in advance,
-> Joy.M.Monteiro
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
-
+Joy.M.M
