@@ -1,72 +1,51 @@
-From: "Earl R. Lapus" <elapus@ntsp.nec.co.jp>
-Subject: RE: migration from perl
-Date: Fri, 16 Aug 2002 08:34:42 -0700
+From: "Theewara Vorakosit" <thvo@ksc.th.com>
+Subject: Pthread consume 100% CPU
+Date: Mon, 19 Aug 2002 21:20:38 +0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <LFEIJFMKHCJIHBFOGINPAEDDCHAA.elapus@ntsp.nec.co.jp>
-References: <Pine.GSO.4.21.0208151528350.21083-100000@general1.asu.edu>
+Message-ID: <001101c2478b$97519e50$1e226c9e@eternity>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.GSO.4.21.0208151528350.21083-100000@general1.asu.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-prog <linux-c-programming@vger.kernel.org>, "<Iliyan Malchev>" <ibm@asu.edu>
+To: linux-c-programming@vger.kernel.org
 
-I disagree...
-Bjarne said that because that is how he wanted C++ to be...
-something that's suppose to be a "different new language"
-But basing on my experiences in school, those who knew C
-learned C++ much faster than those who have no background in C.
-So study C first.
+Dear All,
+    I developer multithread programming on linux using pthread. I use C++
+language. I implement my thread as a class. Here is my class:
 
+static void *thread_func(void *rv)
+{
+ ((Thread *) rv)->run();
+ return NULL;
+}
 
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of <Iliyan
-Malchev>
-Sent: Thursday, August 15, 2002 3:32 PM
-To: Glynn Clements
-Cc: Mat Harris; linux-c-programming@vger.kernel.org
-Subject: Re: migration from perl
+int Thread::start(void)
+{
+ int retval;
 
+ sigfillset(&newset);
+ pthread_sigmask(SIG_BLOCK, &newset, &oldset);
+ pthread_attr_init(&attr);
+ retval = pthread_create(&(this->pt), NULL, thread_func, this);
+ pthread_sigmask(SIG_UNBLOCK, &newset, &oldset);
+ return retval;
+}
 
+int Thread::join(void)
+{
+ int retval;
+ pdebugl();
+ retval = pthread_join(this->pt, NULL);
+ pdebugl();
+ return retval;
+}
 
-
-On Thu, 15 Aug 2002, Glynn Clements wrote:
-
-> > Should I learn C or C++?
->
-> I recommend learning C first. C++ is based upon C, so most of the
-> effort spent on learning C will still be relevant if you decide to use
-> C++.
-
-I must disagree with this statement.  Bjarne Stroustrup in his book "The
-Design and Evolution of C++" has a section dedicated to questions of that
-nature, and his answer to "Should I learn C first, and then C++?" is that
-you
-should not learn C if you want to learn C++ eventually.  Start with C++ from
-scratch.  Yes, while C++ is superset of C, you should not think of it this
-way.  C++ lets you program around a different paradigm, and you should start
-with that.
-
-Regards
-Ilian Maltchev
-
-
-"Computers in the future may weigh no more than 1.5 tons."
-     --Popular Mechanics, forecasting the relentless march of
-       science, 1949
-
--------------------------------------------------
-Ilian Maltchev
--------------------------------------------------
-email: ibm@asu.edu
-       ilian_maltchev@inter-tel.com
--------------------------------------------------
-
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+To create thread, inherited this class, new it and call start method. After
+call pthread_create, there are 3 processes of my program, right? I call
+method join, and exit from my main. My program exits normally. However,
+there is thread process still running at 100% reported by top. I also get
+command prompt from my shell. Would you please tell what cause this problem?
+Thanks,
+Theewara
 
