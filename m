@@ -1,41 +1,54 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: Need to implement
-Date: Mon, 8 Sep 2003 12:08:05 -0300
+From: Matthew Harrison <matth@3d-computers.co.uk>
+Subject: ncurses help
+Date: Wed, 10 Sep 2003 13:23:33 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000001c3761b$02ca1ae0$0b04a8c0@aca.org.ar>
-References: <8EA11405E59BD611BA7100104B93C260020B2777@exdel01.del.mgsl.com>
-Reply-To: <mariano_moreyra@aca.org.ar>
+Message-ID: <20030910122333.GB15788@3d-computers.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="aVD9QWMuhilNxW9f"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <8EA11405E59BD611BA7100104B93C260020B2777@exdel01.del.mgsl.com>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: 'Harmeet Uppal' <Harmeet_Uppal@KeaneIndia.com>, linux-c-programming@vger.kernel.org
-
-Hi Harmeet...
-What do you mean with "using write preference" ??
+To: linux-c-programming@vger.kernel.org
 
 
------Mensaje original-----
-De: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]En nombre de Harmeet
-Uppal
-Enviado el: Lunes, 08 de Septiembre de 2003 09:14
-Para: linux-c-programming@vger.kernel.org
-Asunto: Need to implement
+--aVD9QWMuhilNxW9f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
+  I am a sorta ok c programmer after becoming a bit of a wizz at perl/php, =
+but
+C is a very different language to learn and here I go:
 
-Hi All,
+I have been trying to get my first ncurses program working after following =
+all
+the examples on www.tldp.org, but now it just either gives me a blank window
+(getstr functions still work and the app exits normally) or it just segfaul=
+ts.
 
-Any clues how to implement a Read-Write lock on Linux using write
-preference.
+Please can someone glance at the sources (main source is=20
+inventory-0.1/src/inventory.c in the attached tarball)
 
-Thanks,
-Harmeet
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+TIA
 
+--=20
+Mat Harrison
+Technical Developer
+3d Computer Systems Ltd.
+matth@3d-computers.co.uk
+
+--aVD9QWMuhilNxW9f
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (OpenBSD)
+
+iD8DBQE/XxfFmbMTrp/jhicRAqBuAJoC2zCbpscaKiyWnxXQvLx+RlRKegCeP+td
+rifKaFjtz0zd7x5bqIr90qs=
+=W7Y8
+-----END PGP SIGNATURE-----
+
+--aVD9QWMuhilNxW9f--
