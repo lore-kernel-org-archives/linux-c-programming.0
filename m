@@ -1,36 +1,31 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: Network Statistics Collection
-Date: Tue, 21 Sep 2004 09:54:23 -0400
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: _var_name
+Date: Fri, 24 Sep 2004 03:54:27 +0100 (BST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E3E30069B061524E90BCEE4417E30661138533@monm207.monmouth.army.mil>
+Message-ID: <20040924025427.37460.qmail@web52909.mail.yahoo.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-kernel@vger.kernel.org, linux-net@vger.kernel.org, linux-c-programming@vger.kernel.org, linux-admin@vger.kernel.org, linux-newbie@vger.kernel.org
+To: linux prg <linux-c-programming@vger.kernel.org>
 
-Tejas wondered:
 
->I am working on a company project and as a part of it - I have to
->collect and show some network information on the Monitoring utility.
->Please help to find out that how can I collect these information from
->a Linux Machine.
+hi
 
->1. Number of active TCP connection
->2. Information of Active connections (Source and Dest IP, Source and Dest
-Port)
->3. Retransmitted packets due to Duplicate ACK and SACK
->4. Connection Duration and RTT
->5. Transmission Troughput (in KB/Sec)
->6. Number of Newly Created TCP Connections
->7. Closed TCP Connections
->8. Total Data transmitted (in byte)
->9. Total Data Retransmitted (in byte)
+i have seen some variables in C defined in this
+format(_var_name or __var1_name). generally like this
+they are defined in header files also
 
-Take a look at iptraf - it does most (if not all of what you want).  Through
-a
-study of its source code you should be able to figure out how to do what you
-want.
+how to use them
 
-George
+thanks
+
+ankit
+
+
+
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
