@@ -1,48 +1,43 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: clear the screen
-Date: Mon, 28 Feb 2005 06:36:39 +0000
-Message-ID: <16930.48119.987267.500405@gargle.gargle.HOWL>
-References: <1108969688.5088.12.camel@localhost.localdomain>
-	<16923.52084.408249.817998@gargle.gargle.HOWL>
-	<20050223185457.A550@Imrashi.net.bd>
+From: krzaq <krzakers@gmail.com>
+Subject: open() and read() a file from sysfs
+Date: Mon, 28 Feb 2005 15:18:44 +0100
+Message-ID: <2ab8d39a050228061825dda7fe@mail.gmail.com>
+Reply-To: krzaq <krzakers@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <20050223185457.A550@Imrashi.net.bd>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Progga <abulfazl@juniv.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Hi all!
 
-Progga wrote:
+I have a basic question with file opening.
+I would like to make use of the data accessed from i2c sensors through sysfs.
 
-> > See the manpage for setupterm() and tigetstr() for more information.
-> 
->  Should it be like this ? 
-> 
-> 
-> <code>
->     char *area[100], bp[2048] ;
-> 
->     tgetent( bp, getenv( "TERM" )) ;
->     puts( tgetstr( "cl", area )) ;
-> </code>
+Here's the code:
 
-First, that's the old termcap interface; new programs should use the
-terminfo interface.
+fd = open(/sys/bus/i2c/.../temp2_input,O_RDONLY);
 
-Second, the use of the "area" variable is wrong. It should be
-something like:
+while(1) {
+  char[64] buf;
+  read(fd,buf,siezof(buf));
+  ...
+  do_something
+  ...
+  sleep(5);
+}
 
-	char buf[100];
-	char *area = buf;
-	
-	puts(tgetstr("cl", &area));
+The thing is I always get the same reading in each read() :(.
+When I do:
+# cat /sys/bus/i2c.../temp2_input
+I see that the temperature is changing, but my code still displays the
+same reading.
 
-Repeated calls to tgetstr() will advance the "area" pointer, so that
-"buf" will contain, in order, all of the strings retrieved by
-tgetstr().
+So what's the deal? Why is it cached?
+Am I supposed to open() and close() the file inside 'while' loop??
+What's the proper way to do it?
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+Regards
+Karol Krzak
