@@ -1,43 +1,40 @@
-From: fabmirha@ns.isi.ulatina.ac.cr
-Subject: Re: Basic mp3 player
-Date: Sun, 08 Dec 2002 13:28:36 -0600 (CST)
-Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1039375716.3df39d64bc633@correo>
-References: <1039374511.3df398af75963@correo> <20021208204605.GA4651@bandit.kista.gajba.net>
+From: Glynn Clements <glynn.clements@virgin.net>
+Subject: Re: How does malloc tell the kernel to allocate more memory?
+Date: Sun, 8 Dec 2002 21:20:52 +0000
+Sender: linux-newbie-owner@vger.kernel.org
+Message-ID: <15859.47028.420364.128585@cerise.nosuchdomain.co.uk>
+References: <000301c29eea$3107dd10$032a1c43@joe>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20021208204605.GA4651@bandit.kista.gajba.net>
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-newbie-owner@vger.kernel.org>
+In-Reply-To: <000301c29eea$3107dd10$032a1c43@joe>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Boris Bezlaj <boris@bandit.kista.gajba.net>
-Cc: fabmirha@ns.isi.ulatina.ac.cr, linux-c-programming@vger.kernel.org
-
-It's a project for a subject.
+To: "Joseph D. Wagner" <wagnerjd@prodigy.net>
+Cc: Linux C Programming <linux-c-programming@vger.kernel.org>, Linux Newbie <linux-newbie@vger.kernel.org>
 
 
-Mensaje citado por: Boris Bezlaj <boris@bandit.kista.gajba.net>:
+Joseph D. Wagner wrote:
 
-> On Sun, Dec 08, 2002 at 01:08:31PM -0600, fabmirha@ns.isi.ulatina.ac.cr
-> wrote:
-> > Hi, I am interested in coding a very thin, basic, small mp3 play in C
-> for dos 
-> > and linux.
+> I'm trying to write a tracer on memory allocation, and I'm having a little
+> trouble figuring this out.
 > 
-> Whats wrong with ogg123 and mpg123 players?
-> 
-> -- 
-> 
-> With best regards,
-> 
-> 		Boris B.
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+> At some point, malloc has to call the kernel to tell it to allocate more
+> memory for this user process, right?  I can't figure out which function
+> malloc calls, or where in the code (line number) it's called.
 
+malloc can use either sbrk/brk or (anonymous) mmap to obtain more
+memory from the kernel.
 
--------------------------------------------------
-This mail sent through IMP: correo
+> I'm looking at glib-2.3.1 to try and find my answers.  After all, that's
+> where malloc is defined, right?
+
+It's in glibc (GNU libc), not glib (the GNOME utility library).
+
+-- 
+Glynn Clements <glynn.clements@virgin.net>
+-
+To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Please read the FAQ at http://www.linux-learn.org/faqs
