@@ -1,56 +1,45 @@
-From: Karsten Jeppesen <kj-list@jeppesens.com>
+From: ibraheem umaru-mohammed <iumarumo@eidosnet.co.uk>
 Subject: Re: actual memory size
-Date: Wed, 31 Jul 2002 09:15:51 -0700
+Date: Wed, 31 Jul 2002 17:16:55 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <12564.4405991354$1028132352@news.gmane.org>
+Message-ID: <20020731161655.GH1595@micromuse.com>
 References: <3D47C16C.26CE722D@cs.unt.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 In-Reply-To: <3D47C16C.26CE722D@cs.unt.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Mehran Rezaei <mehran@CS.UNT.EDU>, gcc news group <linux-gcc@VGER.KERNEL.ORG>, C news group <linux-c-programming@VGER.KERNEL.ORG>
+Content-Transfer-Encoding: 7bit
+To: C news group <linux-c-programming@vger.kernel.org>
 
-There are a number of possibilities.
-Most likely you are looking for:
+[Mehran Rezaei wrote...]
+-| Hello,
+-| 
+-| Is anyone aware of a shell command that tells you the size of physical
+-| memory used in your computer?
+-| Any help is appreciated.
+-| So long,
+-| 
+-| Mehran
+-| 
 
-cat /proc/meminfo
+try 'free':
 
-which tells you what the machine itself was told about mem.
-You can also use:
+			-- cut here --
+ibraheem@ignoramus:1 $ free
+	
+             total       used       free     shared    buffers     cached
+Mem:       1027924     1014776     13148        324     119456     715936 
+-/+ buffers/cache:      179384 	  848540 
+Swap:      2040244	     0	 2040244	
+			-- cut here --
 
-top
+Kindest regards,
 
-which amongst other things also gives you the mem info.
+			--ibs.
 
-
-Sincerely,
-
-Dr. Karsten Jeppesen
-VP of Technology
-Total Impact
-<kj@totalimpact.com>     Phn: (805) 987-8704     Fax: (805) 484-9469
-----------------------------------------------------------------------
-Satellite Safety Tip #14:
-    If you see a bright streak in the sky coming at you, duck.
-----------------------------------------------------------------------
-
-
-
-
-> 
-> Hello,
-> 
-> Is anyone aware of a shell command that tells you the size of physical
-> memory used in your computer?
-> Any help is appreciated.
-> So long,
-> 
-> Mehran
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-gcc" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
+-- 
+			ibraheem umaru-mohammed
+			   www.micromuse.com
+			         --0--
