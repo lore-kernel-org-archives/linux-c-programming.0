@@ -1,54 +1,71 @@
-From: =?ISO-8859-1?Q?Mat=EDas_Aguirre?= <matiasaguirre@gmail.com>
+From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Subject: Re: Question about Malloc
-Date: Tue, 19 Oct 2004 09:41:49 -0300
+Date: Tue, 19 Oct 2004 15:27:38 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <a3c4234104101905413e127d3e@mail.gmail.com>
-References: <1097386256.6100.16.camel@localhost.localdomain>
-	 <20041010111316.GD5033@lug-owl.de>
-Reply-To: =?ISO-8859-1?Q?Mat=EDas_Aguirre?= <matiasaguirre@gmail.com>
+Message-ID: <20041019132738.GR5033@lug-owl.de>
+References: <1097386256.6100.16.camel@localhost.localdomain> <20041010111316.GD5033@lug-owl.de> <a3c4234104101905413e127d3e@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Az0epPX+YORSTLVv"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041010111316.GD5033@lug-owl.de>
+Content-Disposition: inline
+In-Reply-To: <a3c4234104101905413e127d3e@mail.gmail.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
 To: linux prg <linux-c-programming@vger.kernel.org>
 
-It's not safer to make:
 
-Recpointer r;
-r=3D(Recpointer)malloc(Recpointer);
+--Az0epPX+YORSTLVv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-
-On Sun, 10 Oct 2004 13:13:16 +0200, Jan-Benedict Glaw <jbglaw@lug-owl.d=
-e> wrote:
-> On Sun, 2004-10-10 00:31:05 -0500, Edward Parrilla <eparrilla@comcast=
-=2Enet>
-> wrote in message <1097386256.6100.16.camel@localhost.localdomain>:
-> > Hi all,
-> > I got the following structure:
-> > typedef struct  {
-> >       char *file;
-> >       char *ip_addres;
-> >       }TABLE;
-> >
-> > then define a pointer to it:
-> >
-> > typedef TABLE *Recpointer;
-> > Recpointer r;
-> >
-> > I'm trying to use malloc as:
-> >
-> > r=3Dmalloc(Recpointer);
-> > but it gives me error.
+On Tue, 2004-10-19 09:41:49 -0300, Mat=EDas Aguirre <matiasaguirre@gmail.co=
+m>
+wrote in message <a3c4234104101905413e127d3e@mail.gmail.com>:
+> It's not safer to make:
 >=20
+> Recpointer r;
+> r=3D(Recpointer)malloc(Recpointer);
 
+malloc is void, while r isn't. So you don't need the cast here. However,
+notice that your malloc call is actually wrong: the argument isn't a
+number (or sizeof(something)), but only a type.
 
+General rule of thumb:
+
+	The "output" of malloc should be assigned to a variable whose
+	type is a pointer to whatever you give to sizeof(xxx) as the
+	malloc argument.
+
+or in short:
+
+	One star more on the left than on the right.
+
+Of course, if you play with types, this doesn't apply any longer...
+
+MfG, JBG
 
 --=20
-Mat=EDas Aguirre
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
+_ O _
+"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
+_ _ O
+ fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
+  O O O
+ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
+);
+
+--Az0epPX+YORSTLVv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
+
+iD8DBQFBdRZKHb1edYOZ4bsRAjDNAKCGWaR0aGdpFZtaF6eo1eptD9tRZgCffSq2
+545lEbFu0oYIQxCW8H3RsQg=
+=XKkI
+-----END PGP SIGNATURE-----
+
+--Az0epPX+YORSTLVv--
