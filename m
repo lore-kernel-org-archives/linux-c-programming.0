@@ -1,29 +1,36 @@
-From: Adam Luchjenbroers <adam@luchjenbroers.com>
-Subject: Re: Type conversion
-Date: Fri, 28 Jun 2002 21:14:23 +0930
+From: Ducrot Bruno <poup@poupinou.org>
+Subject: Re: TRUE FALSE
+Date: Fri, 28 Jun 2002 14:20:41 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020628113938Z317144-685+266@vger.kernel.org>
-References: <20020628054419Z317059-685+171@vger.kernel.org> <15644.12899.635930.540711@cerise.nosuchdomain.co.uk>
-Reply-To: adam@luchjenbroers.com
+Message-ID: <20020628122041.GA6112@poup.poupinou.org>
+References: <200206230221.g5N2L8x28617@fsn3.frontstreetnetworks.com> <15637.14929.975497.394653@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <15644.12899.635930.540711@cerise.nosuchdomain.co.uk>
+Content-Disposition: inline
+In-Reply-To: <15637.14929.975497.394653@cerise.nosuchdomain.co.uk>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: Gerald Waugh <gwaugh@frontstreetnetworks.com>, linux-c-programming@vger.kernel.org
+
+On Sun, Jun 23, 2002 at 04:02:41AM +0100, Glynn Clements wrote:
+> 
+> Gerald Waugh wrote:
+> 
+> > Oh, I know this is dumb
+> > But where is TRUE and FALSE defined
+> 
+> They aren't defined in any standard header; if you want them to be
+> defined, you have to define them yourself.
+
+Right, but wrong in some sense.  ANSI C99 define the type 'bool' in stdbool.h
+
+FALSE and TRUE didn't exist in any standard, though.  You have to use
+actually 'true' and 'false' instead if you want to use stdbool.h.
 
 
-> If you weren't aware of type casts, you probably need to get a book on
-> C.
-
-Is there a good book you could recommend.
-
-> You can't realistically learn a language from a combination of
-> trial-and-error and asking questions on mailing lists. Primarily
-> because, for many of the things which you need to learn, you won't
-> realise that you need to learn them until you've learnt them.
-
-I've learned alot from various projects where I've worked with code already 
-given to me and I've absorbed the techniques I've seen used. That said, there 
-would still be many techniques I don't know.
+-- 
+Ducrot Bruno
+http://www.poupinou.org        Page profaissionelle
+http://toto.tu-me-saoules.com  Haume page
