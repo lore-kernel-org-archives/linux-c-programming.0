@@ -1,43 +1,29 @@
-From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Subject: Re: deletion in singly linked list
-Date: Thu, 25 Nov 2004 15:56:31 +0530
-Message-ID: <1101378391.3795.59.camel@myLinux>
-References: <1101198249.3786.3.camel@myLinux>
-	 <20041124154309.5588936e.akaano ken@softminecorp.com>
-	 <1101354576.3795.1.camel@myLinux>
-	 <20041125131142.652bdb95.akaanoken@softminecorp.com>
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: uint8_t  mean8[8] __attribute__ ((aligned (32))), *mp;
+Date: Fri, 26 Nov 2004 18:40:15 +0000 (GMT)
+Message-ID: <20041126184015.11326.qmail__43989.2069939107$1101541457$gmane$org@web52906.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041125131142.652bdb95.akaanoken@softminecorp.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Alphex Kaanoken <akaanoken@softminecorp.com>
-Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
+To: newbie <linux-newbie@vger.kernel.org>
 
-Thanks for the reply. Adding my comments below:
+if somebody can tell me what this __attribute__ is
+doing
 
-On Thu, 2004-11-25 at 15:41, Alphex Kaanoken wrote:
-> if you need to remove member in any place you must do following things
->  - find member to remove
->  - take a pointer of prev member and change him to the next member that following after removeing member
->  - free memory that malloced for removing member
-But I had explained previously, that this is a special case. I dont know
-which is the head and which is the tail of a singly linkedlist. All I
-know is that this is a node of the linked list and say the format of the
-node. So from this I can get only the pointer to its next node. How can
-I find its previous node? Is there a way to find it out?
+what kind of alignement is this
 
-Otherwise its simply linkedlist manipluation, and thatz not what I asked
-for :-(
+ uint8_t  mean8[8] __attribute__ ((aligned (32))),
+*mp;
 
--- 
-With regards,
 
-Jagadeesh Bhaskar P
-R&D Engineer
-HCL Infosystems Ltd
-Pondicherry
-INDIA
+thanks
 
+ankit jain
+
+________________________________________________________________________
+Yahoo! Messenger - Communicate instantly..."Ping" 
+your friends today! Download Messenger Now 
+http://uk.messenger.yahoo.com/download/index.html
