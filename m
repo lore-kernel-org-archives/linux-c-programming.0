@@ -1,46 +1,69 @@
-From: Edward Parrilla <eparrilla@comcast.net>
-Subject: mapping client to port
-Date: 07 Oct 2004 01:34:21 -0500
+From: Suciu Flavius <suciuflavius@tiscali.de>
+Subject: Re: C language(asm construct)
+Date: Fri, 08 Oct 2004 08:02:18 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1097130850.4086.838.camel@localhost.localdomain>
+Message-ID: <ck59si$qsf$1@sea.gmane.org>
 References: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
-	 <1097099245.4086.421.camel@localhost.localdomain>
-	 <6.1.1.1.0.20041006171515.04d4c6b8@no.incoming.mail>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6.1.1.1.0.20041006171515.04d4c6b8@no.incoming.mail>
+In-Reply-To: <20041006104403.96723.qmail@web52903.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-Hi all,
-sorry again for bothering you:
+Hi,
 
-I have the following entry to do:
+Steps:
 
-myprog port1 port2 servname 
-that will be executed from the client's command line.
+1) write hello_world.c
+2) the preprocesor parse you hello_world.c file, process every # 
+starting commands (like #include #define #ifdef ...) and generate a 
+temporary file
+3) the compiler start it's job reading the c file, parsing it, checking 
+it for errors, optimizing it and generating an assembler file
+4) the assembler generate than the obj files
+5) the linker solve the libraries, global variables referencing, etc and 
+generate the executable which of course, is in machine code and platform 
+dependent.
 
-where
-port1 is the client's port
-port2 is the server's port
-and servname is the server to which I want to connect.
+Retain that step 4 can be optional, the compiler can generate object 
+files without an assembler, it depending on the compilers ;)
 
-In order to associate port2 with servername I have to create a 
-struct servent *serv;
-struct socket_in *fin;
+So, to move your compiler on another platform, you need a new assembler 
+and linker, the compiler can be the same. Look for example at GNU 
+Compiler family ;)
 
-then associate it with 
-fin.sin_port -->getservbyname(port2)
-
-the question is how do to associate the port1 to the local host?
-
-is it valid if I do:
-fin.in_port = htons(atoi(port1))
-
-Thanks in advance for your help
-Edward
+For more info read
+Aho, Sethi, Ullman - Compilers Principles, Techinques, And Tools
 
 
+
+Ankit Jain wrote:
+> hi
+> 
+> i want to know if this is correct? i am a bit confused
+> about linker...i am talking this topic when we have a
+> asm construct in our code.
+> 
+> The compiler basically reads the .c program and
+> converts it into assembly code.Now during this it
+> neglects this assembler construct and leaves it for
+> assembler.Assembler is the person which basically
+> looks for this part of the code and changes it into
+> machine code. 
+> 
+> thanks
+> 
+> ankit
+> 
+> ________________________________________________________________________
+> Yahoo! Messenger - Communicate instantly..."Ping" 
+> your friends today! Download Messenger Now 
+> http://uk.messenger.yahoo.com/download/index.html
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
 
