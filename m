@@ -1,42 +1,30 @@
-From: Hemant Mohan <hemantm@pune.tcs.co.in>
-Subject: Re: interfacing other languages
-Date: Fri, 31 Jan 2003 09:37:58 +0530
+From: Alexi Jordanov <alexi91@yahoo.com>
+Subject: Reading from pipe
+Date: Tue, 4 Feb 2003 07:31:58 -0800 (PST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <OFD07ADDF3.C15A7B6F-ON65256CBF.0016864F@pune.tcs.co.in>
+Message-ID: <20030204153158.46580.qmail@web40606.mail.yahoo.com>
 References: <1043980862.1683.2.camel@hikaru>
-Reply-To: hemantm@pune.tcs.co.in
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <1043980862.1683.2.camel@hikaru>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux c programming <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-C libraries can be called from Java using the java Native Interface (JNI) 
-interface. There is a nice JNI tutorial at
-http://java.sun.com/docs/books/tutorial/native1.1/index.html
+Hello,
 
-hemant
-On Friday 31 January 2003 08:10 am, linux-c-programming-owner@vger.kernel.org 
-wrote:
-> Hello.
->
-> I have a pad im writing some libraries for, in C, that need to ba called
-> from java.
->
-> Can anyone direct me to a link or book to read on how to write such
-> interfaces?
-> It'd be usefull to know it for any other case, as in use those same
-> libraries from, say, perl, or some othere scripting or non scripting
-> language, if possible.
->
-> thanks.
->
->
->
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+I'm using pipes at this moment and I try decrease
+threads in my application. Therefore I need to know
+whether there is a way to check if there are any
+available bytes in pipe. I don't want to use blocking
+read operation. Just to check and if there are then to
+read them.
+
+Regards, 
+Alex
+
+__________________________________________________
+Do you Yahoo!?
+Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
+http://mailplus.yahoo.com
