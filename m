@@ -1,32 +1,28 @@
-From: Progga <abulfazl@juniv.edu>
-Subject: Re: linking at run time.
-Date: Fri, 11 Jul 2003 15:51:31 +0600
+From: <TristanWW@SmileAtYou.com>
+Subject: confirmation
+Date: Fri, 11 Jul 2003 18:08:06 -0700
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030711155131.C240@Imrashi.net.bd>
-References: <00be01c34553$57ea97a0$caba0ba4@uwe.ac.uk> <16138.54505.701672.164306@cerise.nosuchdomain.co.uk> <012101c3462f$ec43a810$caba0ba4@uwe.ac.uk> <16140.52121.385331.351810@cerise.nosuchdomain.co.uk> <003501c346c8$d32cd4c0$ed64a8c0@descartes>
-Mime-Version: 1.0
+Message-ID: <E19b8ru-0005ly-00@turkey.mail.pas.earthlink.net>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <003501c346c8$d32cd4c0$ed64a8c0@descartes>; from jtwilliams@vt.edu on Thu, Jul 10, 2003 at 02:50:48AM -0700
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: "John T. Williams" <jtwilliams@vt.edu>
-Cc: linux-c-programming@vger.kernel.org
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-On Thu, Jul 10, 2003 at 02:50:48AM -0700, John T. Williams wrote:
- 
-> I was wondering if there was any way to run my program, getmail, so that ldd
-> would link it against a specified file so that I didn't have to put a
-> library that I'm developing into my /usr/lib folder.  nor have to run
-> ldconfig as root.
+Confirmation for linux-c-programming@vger.kernel.org
 
- To link and then exec using an uninstalled lib:
+Thank you for your interest in my work.  After you complete the verification below you will be added to my list to receive updates whenever a piece is completed.
 
- c++ -o hihi hihi_main.c++ path/libvovo.so -Wl,-rpath,path,-rpath,/usr/local/lib
+If you didn't sign up, perhaps a friend added you.
+
+Reply to this email and type 'Yes Please' in the body and you will be added.  Do nothing and you will be forgotten.
+
+Derek Olson
+Tristan Woodworks
+Your soul speaks Art.
+http://www.SmileAtYou.com
+Highlands Ranch, Colorado
 
 
- Khoda Hafez
- Progga
 
- 
