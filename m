@@ -1,53 +1,32 @@
-From: "Steven" <sos22@cam.ac.uk>
-Subject: Re: (F)stack trace
-Date: Thu, 21 Aug 2003 08:57:04 +0100
+From: Luciano Miguel Ferreira Rocha <luciano@lsd.di.uminho.pt>
+Subject: Re: stack trace
+Date: Thu, 21 Aug 2003 11:57:08 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030821075704.GA598@archibold.chu.cam.ac.uk>
+Message-ID: <20030821105708.GA8141@lsd.di.uminho.pt>
 References: <DD9E117A8BE9F34FA4130376EC9C1F6A05E5136D@BANMLVEM01.e2k.ad.ge.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="FCuugMFkClbJLl1L"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
 In-Reply-To: <DD9E117A8BE9F34FA4130376EC9C1F6A05E5136D@BANMLVEM01.e2k.ad.ge.com>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: "Singh, Umesh K (MED)" <Umesh.Singh@geind.ge.com>
 Cc: linux-c-programming@vger.kernel.org
 
+On Thu, Aug 21, 2003 at 09:29:56AM +0530, Singh, Umesh K (MED) wrote:
+> is it possible to get the stack trace without attaching the process to debugger. For Ex. can i write a func let's say "print_stack_trace()" and call it anywhere in my program to print the stack trace at that point of time.
+> 
+> i thot it will be helpful in my big programs.
+> 
+> if it is possible, any direction/pointers???
 
---FCuugMFkClbJLl1L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Other people pointed to backtrace(), but I normally use in my programs,
+for debugging purposes, assert(3) or abort(2) directly. The program is
+also then terminated.
 
-> is it possible to get the stack trace without attaching the process
-> to debugger. For Ex. can i write a func let's say
-> "print_stack_trace()" and call it anywhere in my program to print
-> the stack trace at that point of time.
-If you're using glibc, it's reasonably easy:
+Thus I get a core file with the state of the program at that time. (Don't
+forget to check the ulimit for core file size.)
 
-#include <execinfo.h>
-
-void print_stack_trace(void)
-{
-	void *buffer[100];
-	int x;
-	x = backtrace(buffer, 100);
-	backtrace_symbols_fd(buffer, x, 1);
-}
-
-Steven Smith,
-sos22@cam.ac.uk.
-
---FCuugMFkClbJLl1L
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (FreeBSD)
-
-iD4DBQE/RHtQO4S8/gLNrjcRAoipAKCPB+6KGLdVmGRXCPBKh66HpLfYjwCY3t51
-kPuajO9SMzFP5WoHS65mmw==
-=6gjI
------END PGP SIGNATURE-----
-
---FCuugMFkClbJLl1L--
+Regards,
+Luciano Rocha
