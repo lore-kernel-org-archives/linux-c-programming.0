@@ -1,65 +1,42 @@
-From: linux-os <linux-os@analogic.com>
-Subject: Re: when and where shall I encrypt dentry?
-Date: Wed, 2 Feb 2005 09:14:53 -0500 (EST)
-Message-ID: <Pine.LNX.4.61.0502020905330.16140@chaos.analogic.com>
-References: <20050202134901.9926C3E12@xprdmailfe6.nwk.excite.com>
-Reply-To: linux-os@analogic.com
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: Into the Void
+Date: Wed, 2 Feb 2005 13:17:33 -0500
+Message-ID: <D2AA47A6FB2C1A48AF0526440C0F245CAA3636@monm207.nae.ds.army.mil>
 Mime-Version: 1.0
-In-Reply-To: <20050202134901.9926C3E12@xprdmailfe6.nwk.excite.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Vineet Joglekar <vintya@excite.com>
-Cc: Linux kernel <linux-kernel@vger.kernel.org>, linux-c-programming@vger.kernel.org
+To: 'Glynn Clements' <glynn@gclements.plus.com>, linux-c-programming@vger.kernel.org
 
 
-The correct place to encrypt or decrypt ANYTHING is
-just before access to the "outside" world, i.e., in the
-case of a file-system, the reads and writes to the
-storage device (disk drive). You are in a world of
-hurt if you intend to encrypt 'data' and directories
-separately.
 
-If you need to use an existing file-system and then
-encrypt it, you use the same technique but your
-"storage device" is a "container file" that you mount
-using the loop device. This allows you to have an
-encrypted file-system below some mount-point and
-a normal file-system above.
+-----Original Message-----
+From: Glynn Clements [mailto:glynn@gclements.plus.com]
+Sent: Wednesday, February 02, 2005 7:16 AM
+To: linux-c-programming@vger.kernel.org
+Subject: RE: Into the Void
 
-FYI, there are existing tools/code that allow one to
-mount an encrypted file-system. Perhaps your masters
-project just got easier?
+Glynn wrote:
 
+>Huber, George K RDECOM CERDEC STCD SRI wrote:
 
-On Wed, 2 Feb 2005, Vineet Joglekar wrote:
+>> Well we have not put anything in that memory location yet, and
+>> as I recall, under Linux any memory is zero-out when returned by malloc to
+>> help prevent information leakage from one application to another.
 
->
-> Hi all,
->
-> I am trying to add some cryptographic functionality to ext2 file system for my masters project. I am working with kernel 2.4.21
->
-> Along with regular files, I intend to encrypt directory contents too. For reading I guess the function ext2_get_page in fs/ext2/dir.c is used. Hence I can put my decryption routine in that function. Is that correct?
->
-> I was trying to look for the routine which writes the dentry on disk, but was unable to find it. I found out that the function d_instantiate is used to fill in inode information for a dentry, but unable to see when it is written on disk. I suppose that I have to encrypt the dentry just before writing on to the disk, as if i encrypt it before, other functions using it wont be able to access until they decrypt. So please help me with this, that when and where shall I encrypt the directory contents.
->
-> Thanks and regards,
->
-> Vineet
->
-> _______________________________________________
-> Join Excite! - http://www.excite.com
-> The most personalized portal on the Web!
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-kernel" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> Please read the FAQ at  http://www.tux.org/lkml/
->
+>Memory contains zeroes when it is first given to the process by the
+>kernel. Whether or not memory returned from malloc() contains zeroes
+>depends upon whether that memory has been used previously by the
+>current process.
 
-Cheers,
-Dick Johnson
-Penguin : Linux version 2.6.10 on an i686 machine (5537.79 BogoMips).
-  Notice : All mail here is now cached for review by Dictator Bush.
-                  98.36% of all statistics are fiction.
+Agreed.
+
+I was thinking of the case where there are multiple processes running at a time.  Each
+process has it quanta `on the' processor and then another is swapped in.  I do not 
+recall ever hearing if on a switch from one process to another if memory is reset or if 
+the pages are just swapped back in.
+
+Any one have information on this?
+
+George
