@@ -1,69 +1,33 @@
-From: =?iso-8859-1?q?will=20fitzgerald?= <linux_learning@yahoo.co.uk>
-Subject: important how to stop interrupts and start them again after finishing what you wanted to do??
-Date: Tue, 5 Nov 2002 17:35:55 +0000 (GMT)
+From: "Richard B. Johnson" <root@chaos.analogic.com>
+Subject: Re: important how to stop interrupts and start them again after finishing what you wanted to do??
+Date: Tue, 5 Nov 2002 13:59:49 -0500 (EST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20021105173555.88591.qmail@web13102.mail.yahoo.com>
+Message-ID: <Pine.LNX.3.95.1021105135903.410B-100000@chaos.analogic.com>
+References: <20021105173555.88591.qmail@web13102.mail.yahoo.com>
+Reply-To: root@chaos.analogic.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20021105173555.88591.qmail@web13102.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-kernel@vger.kernel.org
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: =?iso-8859-1?q?will=20fitzgerald?= <linux_learning@yahoo.co.uk>
+Cc: linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
 
-Hi all,
+On Tue, 5 Nov 2002, [iso-8859-1] will fitzgerald wrote:
 
-does any know how i can stop and start interrupts.
+> Hi all,
+> 
+> does any know how i can stop and start interrupts.
+> 
+[SNIPPED...]
 
-i have added a probe function to the kernel to measure
-network mechanisms times in cycles, called 
-probe_point().
-
-probe_point(int probeid){
-
-get rdtsc time and put id and time into buffer
-when full use printk to write buffer to disk.
-
-}
-
-then in mechanisms of interest i place a call to the
-probe_point()for example,
-
-vortex_interrupt(){
-
-probe_point(10);// entry of function
-.
-.function stuff
-.
-.probe_point(11);// exit of function
-}
-
-the problem is some times my buffer does not record
-some id's or times. i think this is because another
-interrupt took place and so the probe_point() exits
-before it gets a chance to store the id and time.
-
-how do i go about setting an non interrupt in the
-probe_point function to make sure it finishes what its
-supposed to do?
-
-for example:
-
-probe_point(int probeid){
-
-do not interrupt me until i do:
-
-get rdtsc time and put id and time into buffer
-when full use printk to write buffer to disk.
-
-now i have finshed puting an id and time into a buffer
-so you can interrpt now.
-
-}
+`grep` kernel driver code for spinlock.
 
 
-__________________________________________________
-Do You Yahoo!?
-Everything you'll ever need on one web page
-from News and Sport to Email and Music Charts
-http://uk.my.yahoo.com
+Cheers,
+Dick Johnson
+Penguin : Linux version 2.4.18 on an i686 machine (797.90 BogoMips).
+   Bush : The Fourth Reich of America
+
+
