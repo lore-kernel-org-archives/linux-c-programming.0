@@ -1,27 +1,31 @@
-From: "Jogesh Kanojia" <jogesh.kanojia@patni.com>
-Subject: Sorry for  wrong question
-Date: Tue, 11 May 2004 13:39:28 +0530
+From: "Charlie Gordon" <gmane@chqrlie.org>
+Subject: Re: Sorry for  wrong question
+Date: Tue, 11 May 2004 12:50:21 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <001e01c4372f$48ebf3b0$ae63d103@patni.com>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Message-ID: <c7qb2b$es9$1@sea.gmane.org>
+References: <001e01c4372f$48ebf3b0$ae63d103@patni.com>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-To: "Linux-C-Programming (E-mail)" <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-Hello everyone
+> I am working on windows environment.
 
-I am really very sorry for posting my question on this list.
+Unless you belong with Microsoft, you are merely working UNDER the windows
+environment, and it may be that what you produce belongs TO Microsoft.
+The great thing about linux is that everybody is free to work ON linux,
+unless maybe Microsoft employees who have given up that right.
 
-I am know all the answer in C but i do not know Unix and how to interpreat
-it in
-unix shell script so i had ask my silly question to this Linux-c programing
-group.
-I am working on windows environment.
+Charlie.
 
-BTW sorry for disturbing you all.
+PS: back on track, a few simple trick questions for C newbies :
+- what is -1 ?
+- what is wrong with : enum BOOL { FALSE=0, TRUE=1 };
+- what is the difference between : i << 2  and i * 4
+- same question for : i >> 2  and  i / 4
 
-have a nice time .
+
 
 
