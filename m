@@ -1,58 +1,72 @@
-From: "Sanjay Kumar, Noida" <sanjayku@noida.hcltech.com>
-Subject: RE: where can i find linux kernel 2.6 documentation.
-Date: Sat, 15 May 2004 16:57:41 +0530
+From: joy <gracecott@sancharnet.in>
+Subject: ioctl fails....
+Date: Sun, 16 May 2004 10:43:26 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <1B3885BC15C7024C845AAC78314766C5064E3F3D@exch-01.noida.hcltech.com>
+Message-ID: <40A6F876.50405@sancharnet.in>
+Reply-To: gracecott@sancharnet.in, gracecott@sancharnet.in
 Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: saurabhagarwal@linux.net, linux-c-programming@vger.kernel.org
-
-hi 
-if you have linux kernel 2.6 source with you, 
-then linux/Documentation folder is the best place to look for the
-documnetation
-regards
-sanjay
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of Saurabh
-Agarwal
-Sent: Saturday, May 15, 2004 4:37 PM
 To: linux-c-programming@vger.kernel.org
-Subject: where can i find linux kernel 2.6 documentation.
+
+This is a multi-part message in MIME format.
+
+--Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)
+Content-type: text/plain; charset=us-ascii; format=flowed
+Content-transfer-encoding: 7BIT
+
+     Hi,
+
+I'm trying to do some low level data transmission using the parallel
+port .in Debian, it is /dev/par0
+my source is attached .perror gives me "invalid argument". if I change
+the file being
+opened to say, lp0, it gives me "bad file descriptor".
+should I use ioperm() even in this case?
+and also,is it guaranteed that the parallel port is assigend par0(I have
+only one P port)?
+
+Thanx in advance,
+Joy.M.Monteiro.
 
 
-Hi All,
-I want to download linix kernel 2.6 documentation,
-specially relating to Device Drivers where can i find it.
-Thanks 
-Saurabh
 
 
-_____________________________________________________________
-Linux.Net -->Open Source to everyone
-Powered by Linare Corporation
-http://www.linare.com/
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+--Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)
+Content-type: text/plain; name=test.c
+Content-transfer-encoding: 7BIT
+Content-disposition: inline; filename=test.c
+
+#include<linux/ppdev.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<linux/parport.h>
+#include<time.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+#include<linux/ioctl.h>
+
+main()
+{
+	int filedes;
+	char data=0xff;
+	struct timespec time;
+	filedes=open("/dev/par0",O_RDWR);
+	if(ioctl(filedes,PPCLAIM)==-1)
+		perror("OPEN");
+	
+	if(ioctl(filedes, PPWDATA, &data)==-1)
+		perror("Hi");
+	time.tv_sec=1;
+	time.tv_nsec=1000;
+	nanosleep(&time,NULL);
+	close(filedes);
+	return;
+}
+	
+	
 
 
-Disclaimer: 
-
-This message and any attachment(s) contained here are information that is
-confidential,proprietary to HCL Technologies and its customers, privileged
-or otherwise protected by law.The information is solely intended for the
-individual or the entity it is addressed to. If you are not the intended
-recipient of this message, you are not authorized to read, forward,
-print,retain, copy or disseminate this message or any part of it. If you
-have received this e-mail in error, please notify the sender immediately by
-return e-mail and delete it from your computer.
-
-
+--Boundary_(ID_y7YkCutu09YCaxjQTlaxHw)--
