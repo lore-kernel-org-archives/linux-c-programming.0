@@ -1,72 +1,100 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: Basic C encryption
-Date: Tue, 8 Jul 2003 18:01:28 +0200
+From: "Huber, George K CECOM RDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: Basic C encryption
+Date: Tue, 8 Jul 2003 13:48:14 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030708160128.GM20605@lug-owl.de>
-References: <16138.56968.622900.806213@cerise.nosuchdomain.co.uk> <Pine.LNX.4.44.0307080924450.28267-100000@ns.isi.ulatina.ac.cr>
+Message-ID: <DDFD9B60F648D411AD670000F80822EA03FCAAB6@mail7.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="UeXZ3FjlYZvuln/G"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44.0307080924450.28267-100000@ns.isi.ulatina.ac.cr>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: 'Fabio Miranda Hamburger' <fabmirha@ns.isi.ulatina.ac.cr>, linux-c-programming@vger.kernel.org
+
+Just add one.
+
+For example, assume that there is a function (ReadByte()) that reads
+a single byte from a file and returns it as a char.  Also assume that 
+there is a function (WriteByte(char)) that writes a single character
+to an output file.  With these two functions, you can write your
+encryption routine as:
+
+unsigned char  ch;
+
+while(!EOF)
+{
+   ch = ReadByte();
+   int    nVal = (int)ch + 1;
+   if(nVal > 255) nVal = 0;
+   WriteByte(char(nVal));
+}
+
+So, for example if we read the character 'Z' from the input file which
+has the ACSII value of 90, after adding one we would have the value 
+91, which is character [.
+
+The reason for the test is that in reading a binary file it is possible 
+to return 0xFF as a possible value, which on adding on would yield 0x100
+which would not fit into a single-byte quanity.  The decryption routine
+would be as simple,
+
+unsigned char  ch;
+
+while(!EOF)
+{
+    ch = ReadByte();
+    int   nVal = (int)ch - 1;
+    if(nVal < 0) nVal = 255;
+    WriteByte(char(nVal));
+}
+
+
+
+As others have pointed out, a simple subsitituion cypher is very easy
+to break.  With a few additional lines of code, you can get a stronger
+encryption.  The following example assumes that the values in the 
+input file are between 0 and 127 (i.e. the normal ASCII values).  It is
+left as an exercise for the reader to figure out how to modify this 
+for the case when the values are between 0 and 255.
+
+char*    lpKey = "This is a key"
+char     ch;
+int      nIdx = 0;
+
+
+while(!EOF)
+{
+    ch = ReadByte();
+    if(nIdx >= strlen(lpKey)) nIdx = 0;
+    ch = (int)ch + int(lpKey[nIdx++]);
+    WriteByte(ch);
+}
+
+George Huber
+
+
+
+
+-----Original Message-----
+From: Fabio Miranda Hamburger [mailto:fabmirha@ns.isi.ulatina.ac.cr]
+Sent: Tuesday, July 08, 2003 10:13 AM
 To: linux-c-programming@vger.kernel.org
+Subject: Basic C encryption
 
 
---UeXZ3FjlYZvuln/G
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi, I need a small, basic way to encrypt a binary file saving a custom
+class from a windoze 32 proyect.
 
-On Tue, 2003-07-08 09:26:44 -0600, Fabio Miranda Hamburger <fabmirha@ns.isi=
-=2Eulatina.ac.cr>
-wrote in message <Pine.LNX.4.44.0307080924450.28267-100000@ns.isi.ulatina.a=
-c.cr>:
+For example, add +1 to each character that is about to be saved in the
+disk. How would that be?
 
-> C'mon guys. I just need a basic encrypt from project of a subject of my
-> bachelor.
-> It's not big deal. I am out of time also.
-> How can I add 1 to the ascii value of a char and write it to disc. Then,
-> When am I going to read it, I have to reduce to 1 the ascii value.
+---
+Fabio Andres Miranda
+Ingenieria de sistemas informaticos
+Universidad Latina - Costa Rica
 
-So you want no compile your program, modify the binary and after
-startup, you want the binary to "cure" itself?
 
-Some systems won't even allow that (sometimes, you can either execute
-_or_ modify code, but not both). Further more, you'd have to localize
-your target function. Even that's a hard part (maybe you can play with
-explicitely named sections), but you'll need in-depth knowledge of the
-binary format your binary uses (most probably ELF or ELF64) or you need
-to use the libbfd.
-
-So - there's on "simple" way to achieve this.
-
-Or this one - compile your function into a separate .o file and
-dynamically link it with dlopen()/dlsym()/dlclose(). But then, the
-reader is presented with a single object of interest:)
-
-Again - easy to de"crypt".
-
-MfG, JBG
-
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
-
---UeXZ3FjlYZvuln/G
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
-
-iD8DBQE/CurYHb1edYOZ4bsRAm6kAJ0VJKxBokwHaz3/D6vphuVlMK2B1wCfZROc
-u60o4ZwA3CdLz+6npvm2mew=
-=N/ct
------END PGP SIGNATURE-----
-
---UeXZ3FjlYZvuln/G--
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
