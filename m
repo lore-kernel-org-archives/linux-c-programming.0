@@ -1,79 +1,41 @@
 From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
-Subject: Re: deletion in singly linked list
-Date: Thu, 25 Nov 2004 09:19:37 +0530
-Message-ID: <1101354576.3795.1.camel@myLinux>
-References: <1101198249.3786.3.camel@myLinux>
-	 <20041124154309.5588936e.akaanoken@softminecorp.com>
+Subject: Re: usage of WIN_SMART
+Date: Thu, 25 Nov 2004 09:57:03 +0530
+Message-ID: <1101356823.3795.9.camel@myLinux>
+References: <1101293397.3787.34.camel@myLinux>
+	 <20041124121036.GQ2067@lug-owl.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20041124154309.5588936e.akaanoken@softminecorp.com>
+In-Reply-To: <20041124121036.GQ2067@lug-owl.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Alphex Kaanoken <akaanoken@softminecorp.com>
+To: Jan-Benedict Glaw <jbglaw@lug-owl.de>
 Cc: Linux C Programming <linux-c-programming@vger.kernel.org>
 
+I meant how to use WIN_SMART in the code? Not its uses or advantages!!
 
+Can someone help me with that??
 
-/************* start of code ***********/
-#include <stdio.h>
-
-typedef struct _node{
-	int data;
-	struct _node *next;
-}node;
-
-void printList(node* head){
-	node *temp;
-	temp = head;
-	while(temp){
-		printf("%d\n", temp->data);
-		temp = temp->next;
-	}
-	return;
-}
-
-int main(void){
-
-	node *a, *b, *c;
-	a = (node*)malloc(sizeof(node));
-	b = (node*)malloc(sizeof(node));
-	c = (node*)malloc(sizeof(node));
-	
-	a->data = 1;
-	a->next = b;
-
-	b->data = 2;
-	b->next = c;
-
-	c->data = 3;
-	c->next = NULL;
-
-	node *head;
-	head = a;
-	
-	printList(head); //prints 1, 2, 3 -- its OK
-
-	//deletion of b
-	printf("Attaching node with data = %d\n", (b->next)->data);
-	b = b->next;
-	free(b);
-	
-	
-	printList(head); //prints 1, 2, 0 -- NOT OK -- still a->next points to the location of b, even if its freed!! And also making b = b->next and free(b) removes the link b->next pointing to c. So finally c->data is not obtained!!
-	return 0;
-}
-
-/********** end of code ************/
-
-It is exactly in the same track as Kaanoken mentioned. But the linked list is broken.
-
-Now how can this be fixed???
-
-
+On Wed, 2004-11-24 at 17:40, Jan-Benedict Glaw wrote:
+> On Wed, 2004-11-24 16:19:57 +0530, Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+> wrote in message <1101293397.3787.34.camel@myLinux>:
+> > Can someone help me with an explanation for the usage of WIN_SMART
+> > directive declared in hdreg.h in ioctl() function?
+> 
+> Just look at some users of WIN_SMART. Found these with Google:
+> 
+> Function ataReadSmartValues() in
+> http://cvs.sourceforge.net/viewcvs.py/smartmontools/sm5/atacmds.c?rev=1.2
+> 
+> Function smart_read_values() in
+> http://www.linux-ide.org/smart/ide-smart.c
+> 
+> There are other examples, too.  Of course, you can only use code out of
+> these if your software is going to be available under GNU GPL ...
+> 
+> MfG, JBG
 -- 
-With regards,
-
-Jagadeesh Bhaskar P
+Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
 
