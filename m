@@ -1,32 +1,34 @@
-From: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
-Subject: Check if a process exists?
-Date: Tue, 1 Mar 2005 02:17:04 -0600
-Message-ID: <7728232c050301001710a2787@mail.gmail.com>
-Reply-To: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: Re: Check if a process exists?
+Date: Tue, 1 Mar 2005 08:35:44 +0000 (GMT)
+Message-ID: <Pine.LNX.4.61.0503010832470.5662@praktifix.dwd.de>
+References: <7728232c050301001710a2787@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <7728232c050301001710a2787@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
+To: Hareesh Nagarajan <hareesh.nagarajan@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+On Tue, 1 Mar 2005, Hareesh Nagarajan wrote:
 
-Can a process check if a given PID exists or not? In other words can a
-process check if an unrelated process is alive? Is there any system
-call that does this?
+> Hi,
+>
+> Can a process check if a given PID exists or not? In other words can a
+> process check if an unrelated process is alive? Is there any system
+> call that does this?
+>
+Use kill() with a second argument being zero.
 
-I can think of a (few) work arounds to this:
+     if (kill(pid, 0) == -1)
+     {
+        /* Process is not there. */
+     }
+     else
+     {
+        /* Process is alive. */
+     }
 
-1. open("/proc/pid_in_question") will return true if the process with
-pid = pid_in_question is alive.
-
-2. lock a file called ``pid_in_question". Test the lock from the other
-process.  If the process is dead then there is no lock on the file
-``pid_in_question".
-
-Any ideas/comments?
-
-Thanks,
-
-Hareesh
+Holger
