@@ -1,64 +1,30 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: RE: Pointers to classes
-Date: Mon, 21 Jun 2004 10:55:12 -0400
+From: john moser <bluefoxicy@linux.net>
+Subject: Where is Harmony? :(
+Date: Tue, 22 Jun 2004 13:59:50 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <E3E30069B061524E90BCEE4417E3066113850B@monm207.monmouth.army.mil>
+Message-ID: <20040622205950.9A2A83949@sitemail.everyone.net>
+Reply-To: bluefoxicy@linux.net
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Eric wrote:
+Please CC replies to me.
 
+A long, long time ago, Qt was proprietary, and un-gpl.  So, a new project
+was started, called the Harmony Toolkit.
 
-> The abstract class worked like a charm! I think I had some weird include 
->problems where they werent going in the order I needed them to and I
-couldn't 
->trace it down. Firthermore I didnt want to redefine the class inside 
->connection.h...that would just be silly. But an abstract class worked 
->beautifully.
+I have read that it grew to 25000 LOC, and Qt was 60000 or 80000 LOC.  I
+also read that it was of high quality.
 
-Actually, the correct term, AFAIR, is a forward declaration.  
+I'd like to have a copy of wherever the project died at.  I'm afraid the
+code has been deleted, all of it.  I haven't seen any indication of a
+copy ANYWHERE.  If anyone has it, can you get it to me?
 
-An `abstract class' is a class that can not be instantiated due to having
-one or
-more abstract functions in the class.  The `abstract class' is used as a
-base class
-for inheridence.  For example, the following class is an abstract class:
-
-class CShape
-{
-public:
-   void virtual Draw() = 0;
-   int   GetType();
-   ...
-private:
-   int   m_nType;
-};
-
-The strange looking syntax `void virtual Draw() = 0' is how an abstract
-function is 
-declared.  This has several consequences:
-
-1.  As stated before, it is impossible to instantiate an abstract class.  
-
-2.  The compiler will require that _all_ classes derived from an abstract
-class provide
-    an implementation for the abstract function.  
-
-3.  You can use pointers to the abstract class to get polymorphic behavior.
-For example,
-    if you represent a picture an a collections of shapes, you can declare a
-picture like:
-
-     std::vector<CShape*>     pic;
-
-    and the compiler will be happy.  You will need typecast the derived
-classes to the
-    parent class to insert into the collection.  
-
-George
-
-
+_____________________________________________________________
+Linux.Net -->Open Source to everyone
+Powered by Linare Corporation
+http://www.linare.com/
