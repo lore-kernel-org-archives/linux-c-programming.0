@@ -1,63 +1,46 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+From: Scott <drmemory@3rivers.net>
 Subject: Re: Initializer element is not constant
-Date: Sat, 22 Jan 2005 01:46:31 +0800
-Message-ID: <41F13FF7.4020802@hq.ntsp.nec.co.jp>
-References: <20050120232132.GE1279@drmemory.local> <41F06AC1.2000605@hq.ntsp.nec.co.jp> <41F06AD8.7080206@hq.ntsp.nec.co.jp> <20050121162726.GA977@drmemory.local>
+Date: Fri, 21 Jan 2005 11:54:54 -0700
+Message-ID: <20050121185454.GB977@drmemory.local>
+References: <20050120232132.GE1279@drmemory.local> <41F06AC1.2000605@hq.ntsp.nec.co.jp> <41F06AD8.7080206@hq.ntsp.nec.co.jp> <20050121162726.GA977@drmemory.local> <41F13FF7.4020802@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050121162726.GA977@drmemory.local>
+Content-Disposition: inline
+In-Reply-To: <41F13FF7.4020802@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Scott <drmemory@3rivers.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-have u tried changing the first field of each element??
-something like... replacing those char ptrs with something static?
+On Sat, Jan 22, 2005 at 01:46:31AM +0800, Ron Michael Khu wrote:
+> have u tried changing the first field of each element??
+> something like... replacing those char ptrs with something static?
+> 
+> example:
+> 
+> DATUM recip_data[] = {
+> {  "i am a constant str", NAMECTRL_LEN, make_upper },       
+> {  "i am a constant str", NAME1_LEN, make_upper },
 
-example:
+As I recalled, the ability to HAVE dynamic pointers was one of the
+primary benefits of using c in the first place! Later in the file I
+have this routine which allocates space for each pointer in the
+structure:
 
-DATUM recip_data[] = {
-{  "i am a constant str", NAMECTRL_LEN, make_upper },       
-{  "i am a constant str", NAME1_LEN, make_upper },
+alloc_space(r) RECORD *r;
+{	register size_t i;
+	register char **v;
+	
+	for(i=0; i<r->n; i++)
+	{	if(r->data[i].len == 0 || r->data[i].len == 0xFFFF) continue;
+		v = (r->data[i].var);
+		if (*v == NULL)
+		{	*v = (char *) calloc(1,r->data[i].len + 1);
+			memset(*v,'A'+i,r->data[i].len);
+		}
+	}
+}
 
-u might notice that some of  "initializer element is not constant" 
-errors will be significantly reduced....
-
-perhaps, the compiler is complaining that u have used something 
-"dynamic"(or at least non-static) in defining a
-"statically" allocated data structure(recip_data)
-=(
-
-perhaps u can change the way u define/declare ur variables/data 
-structures....
-
-
-Scott wrote:
-
->On Fri, Jan 21, 2005 at 10:37:12AM +0800, Ron Michael Khu wrote:
->  
->
->>Hi,
->>
->>can u point us to line 124??
->>
->>    
->>
->>>>DATUM recip_data[] = {
->>>>{  namectrl, NAMECTRL_LEN, make_upper },        <-- Line 124
->>>>{  name1, NAME1_LEN, make_upper },
->>>>        
->>>>
->-
->To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->the body of a message to majordomo@vger.kernel.org
->More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->  
->
-
-
-
+I guess i just don't understand why a "modern" compiler wants to
+restrict my options in this fashion....
