@@ -1,28 +1,28 @@
-From: Progga <abulfazl@juniv.edu>
+From: Massimiliano Cialdi <cialdi@firenze.net>
 Subject: Re: generating ethernet packets
-Date: Wed, 31 Dec 2003 13:01:31 +0600
+Date: Wed, 31 Dec 2003 14:47:46 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20031231130131.A279@Imrashi.net.bd>
+Message-ID: <20031231144746.7eade402.cialdi@firenze.net>
 References: <20031230153502.0c98a9cd.cialdi@firenze.net>
+	<1072845486.24938.11.camel@qa.intotoind.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20031230153502.0c98a9cd.cialdi@firenze.net>; from cialdi@firenze.net on Tue, Dec 30, 2003 at 03:35:02PM +0100
+In-Reply-To: <1072845486.24938.11.camel@qa.intotoind.com>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Massimiliano Cialdi <cialdi@firenze.net>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+Cc: syedk <syedk@intotoinc.com>
 
-On Tue, Dec 30, 2003 at 03:35:02PM +0100, Massimiliano Cialdi wrote:
+On 31 Dec 2003 10:07:57 +0530
+syedk <syedk@intotoinc.com> wrote:
 
-> I need to generate custom ethernet packets. I want to test a protocol.
-> How can I send my custom ethernet packets through the network? Do I need libpcap?
-
- Probably, the combination of ping's  "-p" and "-s" option can send custom 
-packets.
+> If u want to do it on your own u can use raw sockets.
+How can I generate an ethernet frame (with custom payload) with raw sockets?
 
 
- Khoda Hafez
- Progga
-
+thanks
+-- 
+Massimiliano Cialdi
+cialdi@firenze.net
+m.cialdi@oksys.it
