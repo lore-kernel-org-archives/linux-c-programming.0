@@ -1,49 +1,51 @@
-From: "A. Murat Eren" <meren@comu.edu.tr>
+From: Chuck Winters <chuckw@ieee.org>
 Subject: Re: processing arguments
-Date: Sat, 24 Apr 2004 00:58:20 +0000
+Date: Fri, 23 Apr 2004 19:40:51 -0500
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <200404240058.20979.meren@comu.edu.tr>
+Message-ID: <1082767251.3606.2.camel@whatever.local>
 References: <Pine.LNX.4.58.0404231743080.1006@debian>
+Reply-To: chuckw@ieee.org
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <Pine.LNX.4.58.0404231743080.1006@debian>
-Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: ameer armaly <ameer@charter.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
+
+Ameer,
+  Your if stmt:
+    if(argv[1] == "hello")
+  is only comparing the pointer values in memory.  You need
+  to use strncmp(3) to do comparison on strings.
+
+Chuck
+
+On Fri, 2004-04-23 at 16:44, ameer armaly wrote:
+     Hi all.
+     Let's say that I have the following c++ code:
+     #include <iostream>
+     int main(int argc, char *argv[])
+     {
+     if(argv[1]=="hello")
+     cout <<"Hello World!";
+     return 0;
+     }
 
 
- Hi,
+     When I try that, and I type:
+     ./a.out hello
 
-> if(argv[1]=3D=3D"hello")
-
- man strcmp
-
- you can not compare strings like yours..
-
-
- regards, murat.
---=20
+     It doesn't give me any output.
+     Can someone explain how to process args properly?
+     Thanks,
 
 
-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-=A0A. Murat Eren
-=A0meren@comu.edu.tr, evreniz@core.gen.tr
-=A0http://zion.comu.edu.tr/~evreniz/
-=A00x88FD9FC7,=20
-=A0910A FCB3 2AAB 4CA5 E4D9 EFFA 6555 A33A 88FD 9FC7
-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
+     Ameer
 
---
-=A0free software is a matter of liberty,
-=A0not price. to understand the concept,
-=A0you should think of "free speech",
-=A0not "free beer".
--
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+     -
+     To unsubscribe from this list: send the line "unsubscribe linux-c-
+     programming" in
+     the body of a message to majordomo@vger.kernel.org
+     More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
