@@ -1,32 +1,36 @@
-From: Axel Siebenwirth <axel@hh59.org>
-Subject: Re: migration from perl
-Date: Thu, 15 Aug 2002 17:29:39 +0200
+From: Christopher Quinn <cq@htec.demon.co.uk>
+Subject: Re: finer grained threading?
+Date: Thu, 15 Aug 2002 16:37:43 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20020815152939.GA1977@prester.freenet.de>
-References: <20020815153530.A31011@genestate.com>
+Message-ID: <3D5BCAC7.80701@htec.demon.co.uk>
+References: <3D5284CF.8090708@veritel.com.br> <3D5BBB61.7050305@htec.demon.co.uk> <3D5BC1F6.1040001@htec.demon.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20020815153530.A31011@genestate.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Mat Harris <mat.harris@genestate.com>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Christopher Quinn <cq@htec.demon.co.uk>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi Mat!
+I'm tripping over myself...
+the 'feature' I'm after is as originally stated, not as might or might 
+not be fulfilled by DECthreads/LinuxThreads
+ie. ability to register interest in/ receive noticification of, 
+page-fault events.
 
-On Thu, 15 Aug 2002, Mat Harris wrote:
+sorry,
+chris
 
-Look at http://gcc.gnu.org and learn C++, I'd say. Because if you know C++
-you also know plain C. And object-oriented programming is always a good 
-thing nowadays.
-
-Regards
-Axel
-
-> hi, i am a 'fairly' competant perl programmer but I believe that as most
-> of my work is with redhat, i should know that language it is built with.
+Christopher Quinn wrote:
+> Ah!  As suspected I am not the first to think about this!  I have just 
+> found a DECthreads page mentioning upcalls and the ability to switch 
+> threads on a page fault event.
 > 
-> can anyone point me in the right directions? what is the C equivalent to
-> perl.org? Should I learn C or C++?
+> Is it correct to say LinuxThreads(pthreads impl.) cannot offer this 
+> feature?
+> Any suggestions for alternative thread packages for linux that do?
+> 
+> cheers,
+> chris Q.
+> 
+
