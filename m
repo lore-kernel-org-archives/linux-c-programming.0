@@ -1,27 +1,23 @@
-From: Progga <abulfazl@juniv.edu>
-Subject: Re: I need to make a Compiler(translator) from C to assembler (bison -
-Date: Sun, 25 Jul 2004 01:23:11 +0600
+From: "Anshuman S. Rawat" <asr@cs.columbia.edu>
+Subject: perl wrapper for C
+Date: Tue, 27 Jul 2004 13:41:43 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040725012311.A1089@Imrashi.net.bd>
-References: <200407241230.52096.r4mz3z@yahoo.es>
+Message-ID: <023301c47400$fb833ac0$3ef527a0@Viper>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200407241230.52096.r4mz3z@yahoo.es>; from r4mz3z@yahoo.es on Sat, Jul 24, 2004 at 12:30:52PM -0500
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Ramzez <r4mz3z@yahoo.es>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Sat, Jul 24, 2004 at 12:30:52PM -0500, Ramzez wrote:
+Hi,
+This might be the wrong list for this question -
+I have a C module for which I need to build a perl wrapper. Does anyone have
+any pointers on how to go about that? (the C module is itself dependent on a
+whole lot of other modules).
 
-> *Where do I look up information about bison files for C language?
+Absolutely any help would be appreciated!
 
- 'Lex & Yacc' by Jhon R. Levine et al, OReilly.
+Thanks.
 
-
-
- Khoda Hafez
- Progga
 
