@@ -1,38 +1,23 @@
-From: "Alphex K." <alphex@crew.org.ru>
-Subject: Re: daemons
-Date: Sun, 15 Feb 2004 13:06:01 +0300
+From: "romesh sahu" <r.sahu@zensar.com>
+Subject: How to set string font size in XMotif
+Date: Fri, 20 Feb 2004 15:13:35 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040215130601.4a5cfdc8.alphex@crew.org.ru>
-References: <Pine.LNX.4.58.0402142313510.2561@debian>
+Message-ID: <5369F0C739D7BD40B04265D0CAA8FF72149219@ZENMAILHQ.ind.zensar.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.58.0402142313510.2561@debian>
+Content-class: urn:content-classes:message
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ameer armaly <ameer@charter.net>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Sat, 14 Feb 2004 23:14:45 -0500 (EST)
-ameer armaly <ameer@charter.net> wrote:
+> Hello all,
+> 
+> I am facing a problem in XMotif on solaris...I am setting a string as a title for the form widget ..I am not setting any font size or other font setting...in one solaris server ,the title appears ok but in other the end of title is getting left out...that is string display length is more than the form widget width so end of title is cut out.....i want to reduce the string display font size so that the string display length will also reduce.....i tried changing the font value in fallback string but its not having any effect ...
+> 
+> Rgds,
+> Romesh
 
-So, You can do it =)
-You must call the fork(),close all enviroment and so all =)
-some like this
 
-//closing the enviroment
-int pid;
-if((pid=fork())==0)
-{
-for(;;)
-{
-// something useful
-}
-}
-
-so, it's all
----===---
-Alphex Kaanoken
-Senior developer of Crew IT research labs
-web: http://crew.org.ru
-mailto:Alphex@Crew.Org.RU
+This e-mail message (including its attachments) is private communication solely intended for the recipients named in it and may contain material which is confidential and privileged. No one other than the named recipients may read, copy, rely on, redirect, save, alter or otherwise make any use of the message or any part of it or any attachment to it in any way. If received by error, please advise the sender and then delete the mail from your system. Zensar Technologies Limited does not control the content of the emails and as such does not verify the correctness, accuracy or validity of the message. Any views or opinions presented are solely those of the author and do not represent those of Zensar Technologies Limited unless otherwise specifically stated. While reasonable effort has been made to ensure this message is free of viruses,interceptions or interference, opening and using this 
+ message is entirely at the risk of the recipient.
