@@ -1,9 +1,9 @@
 From: "Daniel" <uval@rz.uni-karlsruhe.de>
-Subject: Re: Newbie Questions
-Date: Thu, 25 Apr 2002 10:10:02 +0200
+Subject: Re: start learning gcc...?
+Date: Thu, 25 Apr 2002 10:42:25 +0200
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000b01c1ec30$99ce6430$444615ac@stud.unikarlsruhe.de>
-References: <200204070157.g371vDs24544@superglide.netfx-2000.net>
+Message-ID: <001b01c1ec35$1ff200e0$444615ac@stud.unikarlsruhe.de>
+References: <567847100.20020409184820@sby.centrin.net.id>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -11,53 +11,46 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-1) if you can use cin.getline(), for parameters see in doc
-2) to convert you can use atoi-i for int (const char *) or atol - l for
-long,
-    see man atoi, also you have to include stdlib (man tells you the needed
-header also)
-3) include <time.h> and use gmtime, it returns a pointer to a struct with
-all information
-    you will not need to convert the year at all, it is in this struct .(as
-member)
-4) I don't know what is wrong, but try it in this way
-    int c;
-    while((c=fgetc(pF))!=EOF){// it reads first from file, c is an int !!}
-Ok , good luck
+There are a lot of tutorals on web(in many languages). Try with google.
+Do you want to learn C or C++ ? You write about gcc, there also a C++
+Compiler
+in Linux available  g++ .(Both of them are for using in shell, I prefer a
+bash shell)
+The options you need are simple.(and equal in gcc and g++ / see for example
+g++ --help , and gcc --help / both are GNU-Compiler, that's why the syntax
+is equal)
+Option "g++ -o prog prog.cpp " creates a binary named  "prog" not "a.out" .
+(Important : if shell don't start your programm
+by its name (here "prog") use "./prog" that means for shell : execute the
+binary
+in the current directory:)
+
+ok ?
+Bye
 
 ----- Original Message -----
-From: "The Gyzmo" <gyzmobro@linuxfreemail.com>
+From: "adwin" <fox@sby.centrin.net.id>
 Newsgroups: ka.lists.linux.c.programming
-Sent: Sunday, April 07, 2002 3:57 AM
-Subject: Newbie Questions
+Sent: Tuesday, April 09, 2002 4:46 PM
+Subject: start learning gcc...?
 
 
-> Hello. I'm new to C and I'm working on an age program. I have some
-> questions:
+> Hi...
 >
-> 1) Gcc tells me that the gets() function is dangerous and should not be
-> used - which function could I replace gets() with that does exactly the
-> same thing?
+> I'm newbie here...:)(also newbie in Linux)
+> I  know  a  little  about C/C++ programming (in DOS) and now I want to
+> learn  about GCC, where I can find some (good) tutorials about it (urls
+> please)?
+> may be I need some example for compiling (and debugging) with
+> gcc...because gcc's option too many and it's not simple I think.
 >
-> 2) In my program, I want to calculate the age of people from their birth
-> date whithout having to make the user input the current year. Which time
-> funciton should I use to get the year and if it outputs a string, how
-> would I convert that string to an integer?
+> And, also, where I can find some good tutorials about using KDevelop ?
 >
-> 3) One of the goals of my program is to input birth dates from a
-> database file, display them all, and then find the average. I have a
-> 'while(!feof(fp))' loop that takes each line in the file and extracts
-> the birth dates and counts how many entries there are in the file, but
-> it loops one too many times - that is it also loops after it reaches the
-> EOF. This results in 2 of the same entry being displayed and the counter
-> for how many entries there are being 1 too high. Which function can I
-> use to loop only before it reaches the EOF?
+> thank you...
 >
-> Thanks for any help in advance,
-> Serban Giuroiu
->
-> Get your own FREE E-mail address at http://www.linuxfreemail.com
-> Linux FREE Mail is 100% FREE, 100% Linux, 100% better, and 100% yours!
+> --
+> Best regards,
+>  adwin
 >
 > -
 > To unsubscribe from this list: send the line "unsubscribe
