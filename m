@@ -1,243 +1,145 @@
-From: Mat Harris <mat.harris@genestate.com>
-Subject: more socket stuff
-Date: Wed, 26 Feb 2003 13:46:31 +0000
+From: "Richard B. Johnson" <root@chaos.analogic.com>
+Subject: Re: getprotobyname failure
+Date: Wed, 26 Feb 2003 08:56:18 -0500 (EST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030226134631.A23368@genestate.com>
+Message-ID: <Pine.LNX.3.95.1030226084926.2982A-100000@chaos>
+References: <001d01c2dd96$eac076f0$3002a8c0@yigitcan>
+Reply-To: root@chaos.analogic.com
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-md5;
-	protocol="application/pgp-signature"; boundary="XF85m9dhOBO43t/C"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <001d01c2dd96$eac076f0$3002a8c0@yigitcan>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Yigit Can <yigit.can@karel.com.tr>
+Cc: kernelnewbies <kernelnewbies@nl.linux.org>, linux c programming <linux-c-programming@vger.kernel.org>
 
+On Wed, 26 Feb 2003, Yigit Can wrote:
 
---XF85m9dhOBO43t/C
-Content-Type: multipart/mixed; boundary="CE+1k2dSO48ffgeK"
-Content-Disposition: inline
+> Hello,
+> 
+> I have a problem with getprotobyname() function.
+> 
+> I wrote a simple program that only uses getprotobyname function
 
+[SNIPPED...]
+getprotobyname() has nothing to do with linux-kernel so you should
+not have sent your inquiry to the linux-kernel list. This is one
+of the functions that is provided by your 'C' runtime library.
 
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here is an example of it working....
 
-i was just playing around with the sockets in an attempt to better understa=
-nd
-them when i found this.
+Script started on Wed Feb 26 08:46:40 2003
 
-i have a very simple client and server. the server is written in perl and w=
-as
-just there to print whatever the client sent it, and i works fine. However,
-when i send it the same data from the C app, i just messes me round. Below =
-is
-the output from the two commands.
+# cat xxx.c
 
-telnet:
-	NICK aurora aurora aurora aurora aurora
-	USER aurora
-
-C app:
-	USER aurora aurora aurora aurora aurora
-	=C04@`?@a=E9@?@`7=E5@9@1@=C04@?=F4=FF=BF=C7@=D1=C5@=D06@`=F3=FF=BF=D0B=E81=
-@JB=E81@rocr/=D0Bx4@=B8@=E81@
-	y=E9@=C04G@JB=D0B`=F3=FF=BF=A8=B2B=E81@=E0=F2=FF=BF=F3=FF=BF=C04@=E81@8=F4=
-=FF=BF]=CB@X      @H=F4=FF=BF7@=C04@=B8@p=F4=FF=BFP=F5=FF=BF=C0@=C0@=B5l@@@=
-=B8]=F8=F5=FF=BFl@=BD@=C04@=F8=F5=FF=BF@^=D1=C2d=F8 0@=D06@=C2U=C9=C2d=F8=
-=FF=FF=FF=FF=F1@=C04@(=F8=FF=BF=DB=DA@<=F6=FF=BF%=D8@=C2=F6=FF=BF=F4=F4=F4L=
-inuxmaiden.genestate.com2.4.18-3smpNICK aurora
-	urora aurora aurora aurora
-	=C04@`?@a=E9@?@`7=E5@9@1@=C04@?=F4=FF=BF=C7@=D1=C5@=D06@`=F3=FF=BF=D0B=E81=
-@JB=E81@rocr/=D0Bx4@=B8@=E81@
-	y=E9@=C04G@JB=D0B`=F3=FF=BF=A8=B2B=E81@=E0=F2=FF=BF=F3=FF=BF=C04@=E81@8=F4=
-=FF=BF]=CB@X      @H=F4=FF=BF7@=C04@=B8@p=F4=FF=BFP=F5=FF=BF=C0@=C0@=B5l@@@=
-=B8]=F8=F5=FF=BFl@=BD@=C04@=F8=F5=FF=BF@^=D1=C2d=F8 0@=D06@=C2U=C9=C2d=F8=
-=FF=FF=FF=FF=F1@=C04@(=F8=FF=BF=DB=DA@<=F6=FF=BF%=D8@=C2=F6=FF=BF=F4=F4=F4L=
-inuxmaiden.genestate.com2.4.18-3smp
-
-hm? is all that my fault. i have attached the client
-
-
---=20
-Mat Harris			OpenGPG Public Key ID: C37D57D9
-mat.harris@genestate.com	www.genestate.com=09
-
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename=socket
-Content-Transfer-Encoding: quoted-printable
-
-#define MAXDATASIZE 100   /* Max number of bytes of data */
-
-int start_socket()
-{
-  int fd, numbytes;       /* files descriptors */
-  char buf[MAXDATASIZE];  /* buf will store received text */
- =20
-  struct hostent *he;         /* structure that will get information about =
-remote host */
-  struct sockaddr_in server;  /* server's address information */
-
-  if ((he=3Dgethostbyname(SERVER))=3D=3DNULL){       /* calls gethostbyname=
-() */
-    printf("gethostbyname() error\n");
-    exit(-1);
-  }
-
-  if ((fd=3Dsocket(AF_INET, SOCK_STREAM, 0))=3D=3D-1){  /* calls socket() */
-    printf("socket() error\n");
-    exit(-1);
-  }
-
-  server.sin_family =3D AF_INET;
-  server.sin_port =3D htons(PORT); /* htons() is needed again */
-  server.sin_addr =3D *((struct in_addr *)he->h_addr);  /*he->h_addr passes=
- "*he"'s info to "h_addr" */
-  bzero(&(server.sin_zero),8);
-
-  if(connect(fd, (struct sockaddr *)&server,sizeof(struct sockaddr))=3D=3D-=
-1){ /* calls connect() */
-    perror("connect() error");
-    exit(-1);
-  }
-
-  return fd;
-}
-
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="conf.h"
-
-/***************************************************************************
-                  conf.h  -  Stores the config for aurora
-                             -------------------
-    begin                : Wed Feb 26 2003
-    copyright            : (C) 2003 by Mat Harris
-    email                : mat.harris@genestate.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-/* The server that aurora will connect to */
-#define SERVER "127.0.0.1"
-
-/* The port to connect to */
-#define PORT 8850
-
-/* The name to use when connecting -- PLEASE CHANGE THIS */
-#define BOTNICK "aurora"
-
-/* Which channel to connect to */
-#define CHANNEL "#cpg"
-
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="aurora.c"
-
-/***************************************************************************
-            aurora.c  -  The main code that holds aurora together
-                             -------------------
-    begin                : Wed Feb 26 2003
-    copyright            : (C) 2003 by Mat Harris
-    email                : mat.harris@genestate.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-/* Load up all the necessary system libraries */
 #include <stdio.h>
-#include <fcntl.h>
 #include <netdb.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <string.h>
 #include <netinet/in.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <errno.h>
 
-/* Load all my libraries and headers for this project */
-#include "conf.h"
-#include "socket"
+ int main(void){
 
-int main()
-{
-  int fdnet, count;
-  char readbuf[1024], wbuf[1024], scratch[1024];
+    struct protoent *protocol=NULL;
+    protocol=getprotobyname("tcp");
+    printf("\n RESULT : %02x \n",protocol->p_proto);
 
-  if ((fdnet = start_socket(PORT)) < 0)
-  {
-    perror("Socket Error");
-    exit(1);
-  }
-  else
-  {
-    printf ("Socket connected\n");
-    strcpy(wbuf, "USER ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, " ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, " ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, " ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, " ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, "\n");
-    write(fdnet, wbuf, sizeof(wbuf));
-    printf("Sent: %s\n", wbuf);
-
-    strcpy(wbuf, "NICK ");
-    strcat(wbuf, BOTNICK);
-    strcat(wbuf, "\n");
-    write(fdnet, wbuf, sizeof(wbuf));
-    printf("Sent: %s", wbuf);
-
-    read(fdnet, readbuf, sizeof(readbuf));
-    printf("%s", readbuf);
-
-/*    strcpy(scratch, readbuf[0]);
-    strcat(scratch, readbuf[1]);
-    strcat(scratch, readbuf[2]);
-    strcat(scratch, readbuf[3]);
-    pingreply(readbuf);
-
-    strcpy(wbuf, "JOIN ");
-    strcat(wbuf, CHANNEL);
-    strcat(wbuf, "\n\r");
-    write(fdnet, wbuf, sizeof(wbuf));*/
-  }
-
-  return 1;
+    return 0;
 }
 
---CE+1k2dSO48ffgeK--
+# gcc -Wall -o xxx -O2 xxx.c
+# xxx
 
---XF85m9dhOBO43t/C
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+ RESULT : 06 
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.6 (GNU/Linux)
-Comment: For info see http://www.gnupg.org
+# # Works. Now you can `strace` it to see why yours doesn't.
+# strace xxx
+execve("./xxx", ["xxx"], [/* 32 vars */]) = 0
+brk(0)                                  = 0x8049680
+open("/etc/ld.so.preload", O_RDONLY)    = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=0, ...}) = 0
+old_mmap(NULL, 0, PROT_READ|PROT_WRITE, MAP_PRIVATE, 3, 0) = 0
+close(3)                                = 0
+open("/lib/libc.so.6", O_RDONLY)        = 3
+old_mmap(NULL, 4096, PROT_READ, MAP_PRIVATE, 3, 0) = 0x4000c000
+munmap(0x4000c000, 4096)                = 0
+old_mmap(NULL, 644232, PROT_READ|PROT_EXEC, MAP_PRIVATE, 3, 0) = 0x4000c000
+mprotect(0x40097000, 74888, PROT_NONE)  = 0
+old_mmap(0x40097000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED, 3, 0x8b000) = 0x40097000
+old_mmap(0x4009d000, 50312, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x4009d000
+close(3)                                = 0
+mprotect(0x4000c000, 569344, PROT_READ|PROT_WRITE) = 0
+mprotect(0x4000c000, 569344, PROT_READ|PROT_EXEC) = 0
+personality(PER_LINUX)                  = 0
+getpid()                                = 2974
+brk(0)                                  = 0x8049680
+brk(0x8049a98)                          = 0x8049a98
+brk(0x804a000)                          = 0x804a000
+open("/etc/nsswitch.conf", O_RDONLY)    = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=1261, ...}) = 0
+old_mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x400aa000
+read(3, "#\n# /etc/nsswitch.conf\n#\n# An ex"..., 4096) = 1261
+brk(0x804b000)                          = 0x804b000
+read(3, "", 4096)                       = 0
+close(3)                                = 0
+munmap(0x400aa000, 4096)                = 0
+open("/lib/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/lib//libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/opt/intel/compiler50/ia32/lib/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/X11R6/lib/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/opt/Office50/lib/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/usr/java/lib/i686/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY)      = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=16707, ...}) = 0
+old_mmap(NULL, 16707, PROT_READ, MAP_PRIVATE, 3, 0) = 0x400aa000
+close(3)                                = 0
+open("/usr/local/lib/libnss_nisplus.so.1", O_RDONLY) = -1 ENOENT (No such file or directory)
+open("/lib/libnss_files.so.1", O_RDONLY) = 3
+old_mmap(NULL, 4096, PROT_READ, MAP_PRIVATE, 3, 0) = 0x400af000
+munmap(0x400af000, 4096)                = 0
+old_mmap(NULL, 35156, PROT_READ|PROT_EXEC, MAP_PRIVATE, 3, 0) = 0x400af000
+mprotect(0x400b7000, 2388, PROT_NONE)   = 0
+old_mmap(0x400b7000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED, 3, 0x7000) = 0x400b7000
+close(3)                                = 0
+mprotect(0x400af000, 32768, PROT_READ|PROT_WRITE) = 0
+mprotect(0x400af000, 32768, PROT_READ|PROT_EXEC) = 0
+open("/etc/protocols", O_RDONLY)        = 3
+fcntl(3, F_GETFD)                       = 0
+fcntl(3, F_SETFD, FD_CLOEXEC)           = 0
+fstat(3, {st_mode=S_IFREG|0644, st_size=715, ...}) = 0
+old_mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x400b8000
+read(3, "#\n# protocols\tThis file describe"..., 4096) = 715
+close(3)                                = 0
+munmap(0x400b8000, 4096)                = 0
+fstat(1, {st_mode=S_IFCHR|0600, st_rdev=makedev(3, 0), ...}) = 0
+old_mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x400b8000
+ioctl(1, TCGETS, {B38400 opost isig icanon echo ...}) = 0
+write(1, "\n", 1
+)                       = 1
+write(1, " RESULT : 06 \n", 14 RESULT : 06 
+)         = 14
+munmap(0x400b8000, 4096)                = 0
+_exit(0)                                = ?
+# exit
+exit
+Script done on Wed Feb 26 08:47:08 2003
 
-iD8DBQE+XMU2EsYvZsN9V9kRAtHzAJ9KEZtzisC+ZxjjuWzx1vHnXcdVfwCfWOlR
-AYWRQuv+hJEBmS2+EVSrdCw=
-=05mN
------END PGP SIGNATURE-----
 
---XF85m9dhOBO43t/C--
+If you are not running from an ix86 PC, you may need to
+link in another library when you compile the code. For instance,
+on my Sun workstation, I have to do...
+
+
+gcc -Wall -O2 -o xxx xxx.c -lsocket -lnsl
+
+... to load all the libraries I need for networking. It's just
+the same as when you do floating-point math, you need to load
+the math libraries with '-lm'
+
+
+
+Cheers,
+Dick Johnson
+Penguin : Linux version 2.4.18 on an i686 machine (797.90 BogoMips).
+Why is the government concerned about the lunatic fringe? Think about it.
+
+
