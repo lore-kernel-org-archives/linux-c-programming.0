@@ -1,61 +1,34 @@
-From: Ben Marsh <ben.marsh@bigpond.com>
-Subject: Re: a 'wrapper'
-Date: Sun, 30 Jun 2002 17:52:54 +1000
+From: jnf <xjnfx@doityourself.com>
+Subject: exploitable code?
+Date: Sun, 30 Jun 2002 20:38:59 -0700 (PDT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <62B425D4-8BFE-11D6-AB14-000A27B12CA4@bigpond.com>
-References: <20020629144908.GU17216@lug-owl.de>
-Mime-Version: 1.0 (Apple Message framework v482)
+Message-ID: <20020701033859.B54653ECC@sitemail.everyone.net>
+Reply-To: xjnfx@doityourself.com
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020629144908.GU17216@lug-owl.de>
+Content-Disposition: inline
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-<I have jumped in part way through since I just subscribed.>
+hi, ive got a question, is this code exploitable?
 
-On Sunday, June 30, 2002, at 12:49 AM, Jan-Benedict Glaw wrote:
+int main(int argc, char **argv) {
+char buf[256];
 
-> On Sat, 2002-06-29 05:25:02 -0500, xlp <xlp@emtel.net.co>
-> wrote in message <20020629052348.A50622@nietzsche>:
->> hi, i have been trying to let certain process working on a remote 
->> machine in this way:
->> nohup ./a.out >> /dev/null &
->> but when i log off, the process dies.
->> Can i code a certain process that fork itself, call setsid() and run 
->> a.out with system() or exec() ?
->> How can i deal with this situation? I want that the executable object 
->> a.out forget about terminal control and do its work without care about 
->> sdtin/stdout/stderr.
+strcpy(buf,argv[1]);
+exit(1);
+}
 
-As I understand it you can leave a process running on another machine 
-after you disconnect by using nohup(1).  I can only assume that it 
-didn't work because you try and take stdout and append to /dev/null.  
-The output of your command ./a.out is taken and added to nohup.out (see 
-man 1 nohup)
+everything i read says yes, but i cant seem to get it. I don't see any way of overwriting esp for ret, so as far as i can tell i must go into the exit function, and exit comes before leave, so i cant land to arb. code. So am I just dumb, or am I playing with code that isnt exploitable?
 
-The other way that I have found that you could go is to make a.out a 
-daemon.  This involves
+fyi, this isnt an actual program but a program created for educational purposes.
+thx
+j
 
-1 Chdir to /
-2 Close STDIN, STDOUT and STDERR.
-3  Forking a new process
-4 The parent exits and the child does setsid.
+_____________________________________________________________
+Sign up for FREE email from DoItYourself.com at http://doityourself.com
 
-
-> You should never ever use system(), is's insecure. Use exec*(). However,
-> you won't need that - try this:
->
-> 	nohup ./a.out > /dev/null 2>&1 < /dev/null &
-
-I believe that you should not need to use this command line.
-
-
-> It probably dies because of a SIGPIPE if it attempts to read something
-> from stdin or if it tries to write to stdout. You break this file
-> descriptors in the moment you log off...
-
-Now that might be it I guess.  Having the append >> on your commandline 
-may cause this.  When I use nohup the process does not exit but I don't 
-use '>> /dev/null'
-
+_____________________________________________________________
+Promote your group and strengthen ties to your members with email@yourgroup.org by Everyone.net  http://www.everyone.net/?btn=tag
