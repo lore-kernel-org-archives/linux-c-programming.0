@@ -1,61 +1,29 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: obstack_alloc & _obstack_newchunk
-Date: Wed, 23 Feb 2005 13:45:35 +0100 (CET)
-Message-ID: <Pine.LNX.4.21.0502231316180.1636-100000@hestia>
-Reply-To: linux-c-programming@vger.kernel.org
+From: Progga <abulfazl@juniv.edu>
+Subject: Re: clear the screen
+Date: Wed, 23 Feb 2005 18:54:57 +0600
+Message-ID: <20050223185457.A550@Imrashi.net.bd>
+References: <1108969688.5088.12.camel@localhost.localdomain> <16923.52084.408249.817998@gargle.gargle.HOWL>
 Mime-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <16923.52084.408249.817998@gargle.gargle.HOWL>; from glynn@gclements.plus.com on Wed, Feb 23, 2005 at 12:16:52AM +0000
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Wednesday, February 23
+On Wed, Feb 23, 2005 at 12:16:52AM +0000, Glynn Clements wrote:
+> 
+> See the manpage for setupterm() and tigetstr() for more information.
 
-Hello, I am looking into the GNU's obstack lib .
+ Should it be like this ? 
 
-Unfortunatly it segfaults. According to a backtrace of the program stack
-it goes down at obstack_newchunk_ . To be honest I am kind a stuck here.
 
-There is enough free memory available since I am able to write this
-message... The only thing I can come up with is that obstack_alloc trys
-to add new memory to the address of string_obstack, which isn't properly
-setup by moi.. ?
+<code>
+    char *area[100], bp[2048] ;
 
-#include <stdio.h>
-#include <string.h>
-#include <obstack.h>
+    tgetent( bp, getenv( "TERM" )) ;
+    puts( tgetstr( "cl", area )) ;
+</code>
 
-struct obstack string_obstack;
-
-char *copystring(char *string);
-
-int main(void) {
- char *orig = "to copy this string";
- char *str = NULL;
-
- str = copystring(orig);
- printf("%s\n", str);
-
- return 0;
-}
-
-char *copystring(char *string) {
- size_t len = 0;
- char *s = NULL;
-
- len = strlen(string) + 1;
-
- s = obstack_alloc(&string_obstack, len);
- memcpy(s, string, len);
-
- return s;
-}
-
-Thnkx..
-
-J.
-
---
-http://www.rdrs.net/
 
