@@ -1,15 +1,18 @@
 From: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
-Subject: about posix threads.
-Date: Tue, 20 May 2003 13:50:35 +0800
+Subject: about Posix Threads
+Date: Tue, 20 May 2003 14:51:51 +0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <3EC9C22B.9090100@hq.ntsp.nec.co.jp>
+Message-ID: <3EC9D087.3060804@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
+hello everyone. i am new here. i just would like to ask some
+questions regarding posix threads and i hope someone could help
+me.
 
 i made a pthread program and i am quite puzzled why my program
 spawns 4 threads.. when i view it in linux console.
