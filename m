@@ -1,28 +1,25 @@
-From: Vadiraj <vadiraj.cs@gmail.com>
-Subject: pthread stack limit.
-Date: Thu, 25 Nov 2004 13:04:01 +0530
-Message-ID: <6eee1c404112423345c1d792f@mail.gmail.com>
-Reply-To: Vadiraj <vadiraj.cs@gmail.com>
+From: Jagadeesh Bhaskar P <jbhaskar@hclinsys.com>
+Subject: Reading BIOS
+Date: Thu, 25 Nov 2004 14:04:32 +0530
+Message-ID: <1101371672.3795.36.camel@myLinux>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Linux C Programming <linux-c-programming@vger.kernel.org>
 
- Hi Folks,
-
-  Does any one has idea on how this thread stack limit is decided
-upon. I see different max stack limit for different pthread
-implementation. Is there a standard that is followed in deciding on
-thread stack size and number of threads?
-
- Thanks in advance.
-
-
-
-
+Hi,
+Is it possible to probe for, say, ide controllers from the BIOS, CMOS
+information with a C program? Is there any documentation available
+regarding the same??
 -- 
-cheers,
-Vadi
+With regards,
+
+Jagadeesh Bhaskar P
+R&D Engineer
+HCL Infosystems Ltd
+Pondicherry
+INDIA
+
