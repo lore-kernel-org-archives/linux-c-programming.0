@@ -1,61 +1,76 @@
 From: "K.Anantha Kiran" <ananth@cse.iitk.ac.in>
-Subject: Can i use dev_queue_xmit()
-Date: Mon, 12 Apr 2004 12:54:17 +0530 (IST)
-Sender: linux-net-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.44.0404121246040.5450-100000@csews104.cse.iitk.ac.in>
-References: <Pine.LNX.4.44.0404121223250.5450-100000@csews104.cse.iitk.ac.in>
+Subject: Re: Can i use dev_queue_xmit()
+Date: Mon, 12 Apr 2004 16:32:48 +0530 (IST)
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <Pine.LNX.4.44.0404121616450.11451-100000@csews110.cse.iitk.ac.in>
+References: <407A5773.1020603@iitk.ac.in>
 Mime-Version: 1.0
-Return-path: <linux-net-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.44.0404121223250.5450-100000@csews104.cse.iitk.ac.in>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <407A5773.1020603@iitk.ac.in>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-kernel@vger.kernel.org
-Cc: linux-net@vger.kernel.org, linux-c-programming@vger.kernel.org
+To: Anupam <anupamg@iitk.ac.in>
+Cc: linux-c-programming@vger.kernel.org
 
- 
 Hi,
- 
- 	We are printing the return value of dev_queue_xmit() and we 
- confirm that this will be NET_XMIT_DROP for dropped pkts.
- 
- 	in *dev_queue_xmit()* function , there is a call to  *enqueue()* 
- which is function pointer pointing to, /net/sched/sch_generic.c 
- pfifo_fast_enqueue() function. In this if the length of queue is greater 
- that the txqueuelen( a parameter of NIC ) then the packet is not queued 
- and DROPPED.
-  
- static int pfifo_fast_enqueue(struct sk_buff *skb, struct Qdisc* qdisc)
-     {
- 	
- 		struct sk_buff_head *list;
-    
-             list = ((struct sk_buff_head*)qdisc->data) +
-                    prio2band[skb->priority&TC_PRIO_MAX];
-    
-             if (list->qlen <= qdisc->dev->tx_queue_len) {
-                     __skb_queue_tail(list, skb);
-                     qdisc->q.qlen++;
-                     return 0;
-             }
-             qdisc->stats.drops++;
-             kfree_skb(skb);
-             return NET_XMIT_DROP;
-    }
- 
- 	We have tested this by printing the values of list->qlen and 
- checking for different values of txqueuelen ( def-100 upto 100000). still 
- the packets are being dropped after some time when the condition fails. 
- and this is continuing until the whole queue is empty, after this it is 
- again resuming to Xmit properly, this phenomenon is repeated.Actually we 
-sending 10 lakh pkts at 500 Mbps speed.  
- 
- 	The problem is that " is there any flag that tell the queue is 
- full and once it is full it will not take any pkts in and drops all 
- till the queue is empty". If so can u plz suggest a solution to this 
- problem.
- 
- 
- thanks,
- Ananth.
+
+  Sorry, we did not put our question in correct way. 
+  We came to know that whenever qdisc is full some flag is set and
+it will be unset only when qdisc is completely empty once again.
+  Because of this we are unable to enque packets in the qdisc even when 
+some space is available. What i want is to enqueue packets as soon as 
+qdisc has space for atleast one packet.
+  Even if i am increasing the qdisc length, then also after some time
+again the qdisc is getting full and packets are getting dropped.
+
+ Note: I am using gigabit ethernet cards.
+
+ Please help me in this matter.
+
+Thanks in advance,
+Regards,
+Ananth.
+
+
+On Mon, 12 Apr 2004, Anupam wrote:
+
+> Date: Mon, 12 Apr 2004 14:16:43 +0530
+> From: Anupam <anupamg@iitk.ac.in>
+> To: K.Anantha Kiran <ananth@cse.iitk.ac.in>
+> Subject: Re: Can i use dev_queue_xmit()
+> 
+> K.Anantha Kiran wrote:
+> >  	The problem is that " is there any flag that tell the queue is 
+> >  full and once it is full it will not take any pkts in and drops all 
+> >  till the queue is empty". If so can u plz suggest a solution to this 
+> >  problem.
+> 
+> 
+> Hi Anantha,
+> 
+>  From above description of yours, I presume that you're trying something 
+> that is called "Flush Queue", i.e., when a queue is overloaded, there is 
+>   option to drop all packets in queue. This means that all the adaptive 
+> flow should back-off. However it is quite inefficient since all the 
+> backed-off flows will startup again.
+> 
+> Anyways, I didn't get the chance to dig up the code myself, but my guess 
+> is that solution for you lies in: linux/net/sched/cls_api.c.
+> 
+> 
+> >  thanks,
+> >  Ananth.
+> 
+> 
+> Please do let me know how things go.
+> 
+> Regards,
+> 
+> Anupam Gupta, Ph.D.
+> mailto:anupamg@iitk.ac.in
+> Deptt. of EE,
+> Res. E1-315, Hall-4
+> IIT Kanpur.
+> 
 
