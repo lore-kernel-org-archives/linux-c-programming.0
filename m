@@ -1,54 +1,56 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Stephen Satchell <list@fluent2.pyramid.net>
 Subject: Re: strange behavious
-Date: Wed, 25 Dec 2002 13:58:19 +0000
+Date: Wed, 25 Dec 2002 13:39:44 -0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15881.47483.321140.757425@cerise.nosuchdomain.co.uk>
+Message-ID: <5.2.0.9.0.20021225132730.01d204d0@fluent2.pyramid.net>
 References: <5.2.0.9.0.20021224020627.01e09340@fluent2.pyramid.net>
-	<Pine.LNX.4.33.0212251757430.11856-100000@soochak.ncst.ernet.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.33.0212251757430.11856-100000@soochak.ncst.ernet.in>
+In-Reply-To: <Pine.LNX.4.33.0212251757430.11856-100000@soochak.ncst.erne
+ t.in>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
 To: Mohammed Khalid Ansari <khalid@ncst.ernet.in>
-Cc: Stephen Satchell <list@fluent2.pyramid.net>, linux c programming mailing list <linux-c-programming@vger.kernel.org>
+Cc: Glynn Clements <glynn.clements@virgin.net>, linux c programming mailing list <linux-c-programming@vger.kernel.org>
 
+At 05:58 PM 12/25/02 +0530, Mohammed Khalid Ansari wrote:
+> > Look at the type for string constants.  It is "const array of char".
+>
+>I haven't defined them to be const, please see above.
 
-Mohammed Khalid Ansari wrote:
+You misunderstand, the inherent type for string constants is "const array 
+of char".  Let's look at what you are doing.
 
-> > > > > #include <stdio.h>
-> > > > >
-> > > > > void parse (char **);
-> > > > > char        *words[] = {"mohammed", "khalid", "ansari"};
-> > > >
-> > > > While the array of pointers will be mutable, the strings themselves
-> > > > aren't; if you attempt to modify them, you will get a segmentation
-> > > > fault.
-> > > >
-> > >
-> > > Is this in ANSI C?  Will you please elaborate why is it so with this array
-> > > only and how it is different from the example you have given below because
-> > > ultimately both examples are same ie array of pointers.
-> > > 
-> > > As far as I know if there is an string in a code with sufficient memory,
-> > > it can be overwritten unless it is static.
-> > 
-> > Look at the type for string constants.  It is "const array of char".  
+the statement
 
-Actually, no; for backwards compatibility with K&R, string literals
-are treated as "char []" rather than "const char []".
+    char        *words[] = {"mohammed", "khalid", "ansari"};
 
-If they were implicitly qualified with "const", you would get a
-warning when you try to modify them or pass them to functions which
-might try to modify them.
+defines a array of three pointers to char, and initializes those pointer to 
+three strings which have the type "const array of char", which is promoted 
+to "pointer to const char".  A way to rewrite this statement so the result 
+is identical but shows the exact typing is this:
 
-> I haven't defined them to be const, please see above.
+   const char w1[9] = {'m','o','h','a','m','m','e','d',0};
+   const char w2[7] = {'k','h','a','l'.'i'.'d',0};
+   const char w3[7] = {'a','n','s','a','r','i',0};
 
-Stephen never suggested that you had defined them as "const"; he was
-saying that they are "const" automatically (which isn't technically
-the case; declaring something as "const" and storing it in a read-only
-segment are two different things).
+   char *words[3] = {w1, w2, w3};
 
--- 
-Glynn Clements <glynn.clements@virgin.net>
+That is what the "shorthand" in the first statement expands to, if you 
+apply the rules of ANSI to it.
+
+Just remember that constants have a type associated with them, and you HAVE 
+LITTLE CONTROL OF THE TYPE assigned to constants.  GCC allows you to say 
+whether a "plain" char is signed or unsigned, but not (to the best of my 
+knowledge) whether you can remove the "const" attribute from a constant 
+character.
+
+Investigate whether you can ask GCC to use the old Unix conventions for 
+strings...but I wouldn't recommend it for new programs, and would strongly 
+recommend doing the Right Thing(tm) and port the old code to the new 
+semantics, for they will keep you from going down a road that is full of 
+astonishment.
+
+Stephen
+
