@@ -1,38 +1,32 @@
-From: "Flavio de Ayra Mendes" <h4@locked.org>
+From: Graydon Smith <smithg@cogeco.ca>
 Subject: Re: Type conversion
-Date: Sat, 29 Jun 2002 08:09:30 -0300 (BRST)
+Date: Sat, 29 Jun 2002 09:30:10 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <26155.200.158.237.216.1025348970.squirrel@webmail.locked.org>
-References: <200206290211.g5T2B1832183@cs.annauniv.edu>
-Reply-To: h4@locked.org
+Message-ID: <3D1DB662.B2BF744B@cogeco.ca>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200206290211.g5T2B1832183@cs.annauniv.edu>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-> On Friday 28 June 2002 17:14, Adam Luchjenbroers wrote:
->  > > If you weren't aware of type casts, you probably need to get a
->  > >book on  C.
->  >
->  > Is there a good book you could recommend.
->  >
+Suriya Narayanan M S wrote:
 >
-> The  C Programming Language (or some other name)
-> by Brian W. Kernighan and Dennis M. Ritchie
+>C++ (I don;t know the name)
+>by Bjarne Stoustrup
 >
-> C++ (I don;t know the name)
-> by Bjarne Stoustrup
-(...)
+
+Surprisingly enough, it too is called:
 
 The C++ Programming Language
-by Bjarne Stroustrup
+by Bjarne Stroustrup.
 
+and I do believe the latest is the 3rd edition, but there maybe more.
 
+--
+Graydon Smith
 
-flv
-http://h4.locked.org
+"I never let my schooling interfere with my education."
+- Mark Twain
 
 
