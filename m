@@ -1,34 +1,57 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: GCC and Memory Organization
-Date: Thu, 11 Apr 2002 15:07:19 +0100
+From: Elias Athanasopoulos <eathan@otenet.gr>
+Subject: Re: start learning gcc ... how to ?
+Date: Fri, 12 Apr 2002 12:22:25 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15541.39063.416148.351041@cerise.nosuchdomain.co.uk>
-References: <3CB3039C.4070404@veritel.com.br>
-	<15539.26431.760192.203498@cerise.nosuchdomain.co.uk>
-	<3CB58E28.1030201@veritel.com.br>
+Message-ID: <20020412122224.B1132@neutrino.particles.org>
+References: <200204091150.g39Bo4825347@jupiter.centrin.net.id> <20020409130444.GA276@wotan> <1913993471.20020409230118@sby.centrin.net.id> <20020409193450.B1149@neutrino.particles.org> <1018533665.9524.5.camel@abodh.lan.deeproot.co.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3CB58E28.1030201@veritel.com.br>
+Content-Disposition: inline
+In-Reply-To: <1018533665.9524.5.camel@abodh.lan.deeproot.co.in>; from sushmita@deeproot.co.in on Thu, Apr 11, 2002 at 07:31:05PM +0530
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "William N. Zanatta" <william@veritel.com.br>
-Cc: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: sushmita roy <sushmita@deeproot.co.in>
+Cc: linux-c-programming@vger.kernel.org
 
-
-William N. Zanatta wrote:
-
-> > This isn't a compiler issue. The different layouts would require
-> > different source code. The former corresponds to a one-dimensional
-> > array, while the latter corresponds to a two-dimensional array.
-> > 
+On Thu, Apr 11, 2002 at 07:31:05PM +0530, sushmita roy wrote:
+> On Tue, 2002-04-09 at 22:04, Elias Athanasopoulos wrote:
 > 
-> I guess I found something. Looks like I'm talking about the concepts of 
-> segmentation and paging. Is that right?
+> > When your program uses functions that someone else has implemented
+> > for you, then you have to link the appropriate shared libraries. This
+> > can happen either statically, either dynamically.
+> 
+> Can anyone please highlight on the fact as how do we link libraries
+> statically or dynamically...
+> what's the difference exactly???
+> i usually compile my programs like -
+> 
+> gcc sys_monitor.c -lcgic -lflate -L(specify the path here).. -o
+> sys_monitor.o
 
-Maybe, but segmentation and paging are only really relevant if you're
-designing a CPU or an OS kernel. A program just sees a flat address
-space.
+By default, gcc forces dynamic linking, but you can use the -static
+switch to make an explicit static linking.
+
+Dynamic linking means that the elf of your app knows just what libraries
+depends on. It doesn't embed the actual code. Instead, the dynamic linker
+adds the required code whenever you run your application, by loading
+the correct libraries. Using dynamic linking you reduce the size of your
+executable, but you must be sure that you have the exact libraries needed
+in every machine that your application runs.
+
+Static linking means that the whole needed code would be added in the elf.
+This results to huge executables, but also able to run everywhere since
+they don't have any library depedencies.
+
+% echo "int main(void) {}" > foo.c
+% gcc foo.c -o foo
+% ls -l foo
+-rwxrwxr-x    1 anteater anteater    13592 Apr 12 12:18 foo
+% gcc foo.c -static -o foo
+% ls -l foo
+-rwxrwxr-x    1 anteater anteater  1673122 Apr 12 12:18 foo
+
+Elias
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
