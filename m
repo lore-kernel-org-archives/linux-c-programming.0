@@ -1,61 +1,94 @@
-From: "J." <mailing-lists@xs4all.nl>
-Subject: Re: *w[1]++ = solved... thnkx... ?
-Date: Mon, 24 Feb 2003 10:35:54 +0100 (CET)
+From: "IVAN DE JESUS DERAS TABORA" <i.deras@unitec.edu>
+Subject: Re: *w[1]++ = *[k[1]++; does not work .. ?
+Date: Mon, 24 Feb 2003 08:02:18 -0800
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <Pine.LNX.4.21.0302241032001.12074-100000@hestia>
-References: <20030224110552.C21636@neutrino.particles.org>
+Message-ID: <3E5A420A.5060203@unitec.edu>
+References: <Pine.LNX.4.21.0302231825450.10716-100000@hestia>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030224110552.C21636@neutrino.particles.org>
-List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.21.0302231825450.10716-100000@hestia>
+List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: "J." <mailing-lists@xs4all.nl>
+Cc: linux-c-programming@vger.kernel.org
 
-On Mon, 24 Feb 2003, Elias Athanasopoulos wrote:
+I think this is a common problem when you use arrays in C.  When you 
+declare an array in C, using the following code:
 
-> On Mon, Feb 24, 2003 at 08:55:16AM +0100, J. wrote:
-> > > On Sun, Feb 23, 2003 at 06:37:08PM +0100, J. wrote:
-> > > > I can print char by char like this: printf("%c", *w[1]++);
-> > > > but I can not copy char by char like this: *w[1]++ = *k[1]++;
-> > > 
-> > > It works.
-> > > 
-> > > >  while(*w[1] != '\0')
-> > > >   *k[1]++ = *w[1]++; 
-> > > 
-> > > You move the pointer while doing the copy, so after the loop it points to
-> > > the terminated null character.
-> > 
-> > Yes and then everything is copy'd, including the '\0' terminator just like
-> > strcpy(). So k[1] should point to the character string and *k[1] points
-> > to the first charater of the string ... ? 
-> 
-> *k[1] points nowhere since it's not a pointer; it's a character. Your pointer
-> is k[1] which is incremented in the loop, while making the contents of its
-> memory cells filled up with the characters belonging to w[1].
+int x[n];
 
-Now I understand!!!
+The array will contain indexes from 0 to n-1, then when you declare an 
+array char *k[1], it contain indexes from 0..0, when you try to access 
+index 1, is an error because it isn't part of the array!!!!
 
-> Try this (after the loop):
-> 
-> printf ("%c\n", *(k[1]-1)); 
-> 
-> It should print 'a'. The last char in jehova (if I'm spelling it right), before
-> the terminating '\0'.
-> 
-> Also, if you followed what I said, again after the loop:
-> 
-> printf ("%p %p\n", k[1], s);
-> 
-> You'll see how k[1] is different than s (remember before the loop they were pointing
-> in the exact mem address).
+I hope that this may be helpful.
 
-It suddenly all falls together and it makes sense...
+J. wrote:
 
-> Elias
-
-Great stuff.. Thankx.. again.. I'm going to fix right away..
-
-J.
+>Hello...
+>
+>I am trying to copy a string into the first element of an array of char
+>pointers.
+>
+>I can print char by char like this: printf("%c", *w[1]++);
+>but I can not copy char by char like this: *w[1]++ = *k[1]++;
+>
+>I dont understand ? If I can print it, it should also copy ..
+>
+>Strangly enough the compiler does not complain.
+>
+>I have inserted a small illustrative example in this e-mail.
+>
+>/* To illustrate the difference: This works */
+>#include <stdio.h>
+>#include <string.h>
+>
+>int main(void) {
+> char *w[1];
+> char str[] = "jehova";
+>
+> w[1] = strdup(str);
+>
+> while(*w[1] != '\0')
+>  printf("%c", *w[1]++);
+>
+> printf("\n");
+> return 0;
+>}
+>
+>/* But this does not work */
+>#include <stdio.h>
+>#include <stdlib.h>
+>#include <string.h>
+>
+>int main(void) {
+> char *w[1];
+> char *k[1];
+> char str[] = "jehova";
+>
+> w[1] = strdup(str);
+> k[1] = calloc(strlen(str) + 1, sizeof(char));
+>
+> while(*w[1] != '\0')
+>  *k[1]++ = *w[1]++; 
+>
+> printf("%s\n", w[1]);
+> return 0;
+>}
+>
+>Can someone explain what I am doing wrong ?
+>
+>Thankx a lot,...
+>
+>J.
+>
+>-
+>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+>the body of a message to majordomo@vger.kernel.org
+>More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
+>
+>  
+>
 
