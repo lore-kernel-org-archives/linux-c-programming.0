@@ -1,69 +1,66 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+From: =?iso-8859-1?q?szonyi=20calin?= <caszonyi@yahoo.com>
 Subject: Re: Multithreaded /sbin.init? Is it possible?
-Date: Sun, 14 Sep 2003 21:45:43 +0200
+Date: Mon, 15 Sep 2003 12:29:29 +0200 (CEST)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20030914194543.GB12661@lug-owl.de>
-References: <200309141240.55800.eric@cisu.net> <20030914182509.GZ12661@lug-owl.de> <200309141359.50596.eric@cisu.net>
+Message-ID: <20030915102929.8156.qmail@web40605.mail.yahoo.com>
+References: <200309141240.55800.eric@cisu.net>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="UEYxRAcbr7cS1UOX"
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200309141359.50596.eric@cisu.net>
+In-Reply-To: <200309141240.55800.eric@cisu.net>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: eric@cisu.net, linux-newbie@vger.kernel.org, linux-c-programming@vger.kernel.org
 
+ --- Eric <eric@cisu.net> a =E9crit=A0:=20
+> 	Wouldn't the Linux Boot process be speeded up if the init
+> program was=20
+> multithreaded?=20
 
---UEYxRAcbr7cS1UOX
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No
+Boot scripts _must_ be executed in a predefined order.
+I was playing a liitle with this and i can give you the=20
+following advice:
 
-On Sun, 2003-09-14 13:59:50 -0500, Eric <eric@cisu.net>
-wrote in message <200309141359.50596.eric@cisu.net>:
-> > However, I've done a little test with my laptop (P2-266, 128MB RAM).
-> > Groupwise parallelized, taking rc2 (not rcS) takes 5sec, vs. 20sec for
-> > the non-parallelized traversal. But screen output now is even less
-> > readable than before (Ever seen HP-UX starting?)...
->=20
-> 	I just had tought after sending my previous e-mail. Would it be possible=
- to=20
-> capture the output of the programs being run? Like each thread would capt=
-ure=20
-> the output of the program it runs without being printed to the screen and=
-=20
-> then when the thread terminates the main program writes it to the screen.=
-=20
-> That would make the entire message of the program being run atomic and th=
-us=20
-> eliminate odd echo's out of place and done messages conflicting with othe=
-rs.=20
-> Although the messages from each group might be printed in an undefined or=
-der,=20
-> you would still get the complete message.
+1. Bash is the most executed program in the init scripts
+to speed up boot process you must speedup bash.
+Some people suggest to make statically linked. This is=20
+my sugestion too. Loading every shared library takes time.
 
-That's not much of a problem. You can even get the messages in proper
-order...
+2. Use a script to start your daemons not 20.=20
+I use Slackware which has one script for each runlevel.=20
+Believe me. There _is_ a difference compared to Mandrake=20
+for example.=20
 
-MfG, JBG
+3. The disk load has an impact on speed also.
+If you start 5 processes in parralel they will start slower
+than 5 scripts sequentially because of the loading of every
+script in the same time.
 
---=20
-   Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481
-   "Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg
-    fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Ira=
-k!
-      ret =3D do_actions((curr | FREE_SPEECH) & ~(IRAQ_WAR_2 | DRM | TCPA));
+4. A bigger processor cache also helps a lot :-)
 
---UEYxRAcbr7cS1UOX
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+just my 2 cents.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
+Sorry for the off-topic answer in linux-c-programming
 
-iD8DBQE/ZMVnHb1edYOZ4bsRAlzaAJ4heTt2cNttS2mBArw9OSQIERpDGwCeILON
-+qmN5XAVPGMSDyfexT1nUkI=
-=QUKX
------END PGP SIGNATURE-----
+> ----------------------
+> Eric Bambach  =20
+> Eric (at) CISU (dot) net=20
+> ----------------------
 
---UEYxRAcbr7cS1UOX--
+Calin
+
+=3D=3D=3D=3D=3D
+--
+A mouse is a device used to point at=20
+the xterm you want to type in.
+Kim Alm on a.s.r.
+
+___________________________________________________________
+Do You Yahoo!? -- Une adresse @yahoo.fr gratuite et en fran=E7ais !
+Yahoo! Mail : http://fr.mail.yahoo.com
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
