@@ -1,98 +1,86 @@
-From: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Subject: Re: complex variable
-Date: Mon, 6 Sep 2004 18:37:01 +0200
+From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Subject: RE: complex variable
+Date: Tue, 7 Sep 2004 11:37:06 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <20040906163701.GD6985@lug-owl.de>
-References: <20040906134525.33692.qmail@web52908.mail.yahoo.com> <20040906162532.22345.qmail@web52904.mail.yahoo.com>
+Message-ID: <E3E30069B061524E90BCEE4417E30661138525@monm207.monmouth.army.mil>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="xugVLPVe/nLWwmIL"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20040906162532.22345.qmail@web52904.mail.yahoo.com>
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
 
---xugVLPVe/nLWwmIL
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>       1 #include<stdlib.h>
+>       2 #include<complex.h>
+>       3 #include<stdio.h>
+>       4
+>       5 int main()
+>       6 {
+>       7         FILE *fp;
+>       8         fp=fopen("test_data.dat","rb");
+>       9         int N=32,i=0;
+>      10         complex x,*in;
+>      11         in=malloc(sizeof(complex)*N);
+>      12         if (fread(in,16,32,fp) != 32)
+>      13          printf("error in reading from file
+> failed\n");
+>      14         else{
+>      15         for(i=0;i<N;i++)
+>      16           printf("%lf\t",*(in+i+0));
+>      17         }
+>      18         return 0;
+>      19 }
+> 
+> i am sorry but this code also gives the same error
+> 
+Hi,
 
-On Mon, 2004-09-06 17:25:32 +0100, Ankit Jain <ankitjain1580@yahoo.com>
-wrote in message <20040906162532.22345.qmail@web52904.mail.yahoo.com>:
-> >       1 #include<stdlib.h>
-> >       2 #include<complex.h>
-> >       3 #include<stdio.h>
-> >       4
-> >       5 int main()
-> >       6 {
-> >       7         FILE *fp;
-> >       8         fp=3Dfopen("test_data.dat","rb");
-> >       9         int N=3D32,i=3D0;
-> >      10         complex x,*in;
-> >      11         in=3Dmalloc(sizeof(complex)*N);
+In addition to the previously given suggestions, I would suggest checking
+the return 
+value of fopen (it can fail), as well as printing out the error codes.  For
+example,
+I would recode the above as (note - this is uncompiled/tested code but is
+should
+give an example of what I mean):
 
-You need to check the "in" pointer -- malloc() may fail!
+#include<stdlib.h>
+#include<complex.h>
+#include<stdio.h>
+#include<errno.h>
 
-> >      12         if (fread(in,16,32,fp) !=3D 32)
+int main()
+{
+    FILE* fp=NULL;
+    char  szName[] = "test_data.dat";
 
-"16" should read "sizeof (complex)". If you don't do that, you loose any
-portability (for no added value). Additionally, both "32" should be "N",
-since that's what you really want to read, what you really malloc()ed.
+    if(NULL != (fp = fopen(szName, "rb")))
+    {
+        int N=32, i=0;
+        complex x, *in = NULL;
+	  if(NULL != (in=malloc(sizeof(complex)*N)))
+        {
+            if(N == fread(in, sizeof(complex), N, fp))
+            {
+                for(i=0; i< N; i++)
+                    printf("%lf\t", in[i]);
+            }
+            else
+            {
+                fprintf(stderr, "Read failed. error: %d\n%s\n", errno,
+strerror(errno));
+            }
+        }
+        else
+        {
+            fprintf(stderr, "Failed to allocate space for buffer\n");
+        }
+    }
+    else
+    {
+        fprintf(stderr, "Failed to open %s. Error %d\n%s\n", 
+                szName, errno, strerror(errno));
+    }
 
-Also (from personal experience), I can only strongly advise you not to
-read in (or write out) numbers like that. All the data types may look
-different on different CPUs or operating systems, so better stick to an
-encoding that's common to all of them.
-
-Define an own encoding for those values (eg. printf() out their real and
-imaginary part as decimal floating-point values and translate these back
-to "complex" values). It's a real *nightmare*.
-
-> >      13          printf("error in reading from file
-> > failed\n");
-> >      14         else{
-> >      15         for(i=3D0;i<N;i++)
-> >      16           printf("%lf\t",*(in+i+0));
-
-Others would have used that as in[i] ... Easier to read:-)
-
-> >      17         }
-> >      18         return 0;
-> >      19 }
-> >=20
-> > i am sorry but this code also gives the same error
-> >=20
-> > error in reading from file failed
-
-Even while your programs "features" a good number of typical no-no's,
-it should probably work. Are you sure the file is long enough? Could you
-provide a strace from this program being run?
-
-MfG, JBG
-
---=20
-Jan-Benedict Glaw       jbglaw@lug-owl.de    . +49-172-7608481             =
-_ O _
-"Eine Freie Meinung in  einem Freien Kopf    | Gegen Zensur | Gegen Krieg  =
-_ _ O
- fuer einen Freien Staat voll Freier B=FCrger" | im Internet! |   im Irak! =
-  O O O
-ret =3D do_actions((curr | FREE_SPEECH) & ~(NEW_COPYRIGHT_LAW | DRM | TCPA)=
-);
-
---xugVLPVe/nLWwmIL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFBPJItHb1edYOZ4bsRArssAJ9bCZWA6pXGT6GUCezbCowi26uqggCfZbqM
-wE28UJB6+blgmy1oF3nLZ64=
-=RrNt
------END PGP SIGNATURE-----
-
---xugVLPVe/nLWwmIL--
+    return 0;
+}   
