@@ -1,49 +1,48 @@
-From: "Luciano Moreira - igLnx" <lucianolnx@ig.com.br>
-Subject: Re: (non-member) wait-notify mechanism in pthreads
-Date: Mon, 28 Apr 2003 14:02:36 -0300
+From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <dmarian@fi.uba.ar>
+Subject: Creating an NSS module
+Date: Mon, 28 Apr 2003 15:54:41 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <016801c30da7$fa4ebeb0$0b00a8c0@SPLUCIANO>
-References: <3EACE858.8000700@hq.ntsp.nec.co.jp> <16045.13129.643228.647757@cerise.nosuchdomain.co.uk>
+Message-ID: <3EAD78F1.9050408@fi.uba.ar>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Glynn Clements <glynn.clements@virgin.net>, ronkhu@ntsp.nec.co.jp
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"; 
+To: linux-c-programming@vger.kernel.org
 
-If you dont need to execute something while waiting a thread to exit, you
-can use only pthread API instead mutex, waiting a thread to join.
+  Hello:
+  I'm creating an NSS module for the passwd and group databases. I=20
+implemented the following functions:
 
-Luciano
+nss_status _nss_authon_setgrent()
+nss_status _nss_authon_endgrent()
+nss_status _nss_authon_getgrent_r (group * gr, char * buffer, size_t=20
+buflen, int * errnop)
+nss_status _nss_authon_getgrnam_r (const char * name, struct group * gr=
+,=20
+char * buffer, size_t buflen, int * errnop)
+nss_status _nss_authon_getgrgid_r (const gid_t gid, struct group * gr,=20
+char * buffer, size_t buflen, int *errnop)
 
------ Original Message ----- 
-From: "Glynn Clements" <glynn.clements@virgin.net>
-To: <ronkhu@ntsp.nec.co.jp>
-Cc: <linux-c-programming@vger.kernel.org>
-Sent: Monday, April 28, 2003 10:57 AM
-Subject: Re: (non-member) wait-notify mechanism in pthreads
+nss_status _nss_authon_setpwent()
+nss_status _nss_authon_endpwent()
+nss_status _nss_authon_getpwent_r (passwd * pw, char * buffer, size_t=20
+buflen, int * errnop)
+nss_status _nss_authon_getpwnam_r (const char * name, struct passwd *=20
+result, char * buffer, size_t buflen, int * errnop)
+nss_status _nss_authon_getpwuid_r (uid_t uid, passwd * result, char *=20
+buffer, size_t buflen, int * errnop)
 
+The libc functions getgrent(), getgrnam(), getgrgid() and the finger=20
+command work, but the groups command doesn't and also the chgrp doesn't=
+=20
+work for an user other than root. Any ideas on what happens? Am I=20
+missing some function?
+Thanks,
+            Dar=EDo
 
->
-> ronkhu wrote:
->
-> > Im not a member of this list but I've got a question:
-> > How does one go about implementing a wait-notify mechanism in pthreads
-> > in lieu of the
-> > busy-waiting approach( which tends to be a cpu-hog)?
->
-> Mutexes, condition variables, or POSIX semaphores. See the "POSIX
-> Threads" section in the "libc" Info file for more details.
->
-> -- 
-> Glynn Clements <glynn.clements@virgin.net>
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
-
-
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
