@@ -1,29 +1,28 @@
-From: dalgoda@ix.netcom.com (Mike Castle)
+From: Michael Taylor <michael.taylor@ec.gc.ca>
 Subject: Re: getline()
-Date: Sun, 24 Aug 2003 23:24:40 -0700
+Date: Mon, 25 Aug 2003 09:43:43 -0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <8mmo11x75q.ln2@thune.mrc-home.org>
-References: <20030824203653.A574@Imrashi.net.bd> <16201.12026.604756.905114@cerise.nosuchdomain.co.uk> <20030824215956.GF25257@schottelius.org>
+Message-ID: <3F4A047F.5030402@ec.gc.ca>
+References: <20030824203653.A574@Imrashi.net.bd>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: Progga <abulfazl@juniv.edu>
+Cc: linux-c-programming@vger.kernel.org
 
-In article <20030824215956.GF25257@schottelius.org>,
-Nico Schottelius  <nico-linux-c-programming@schottelius.org> wrote:
->> getline() is in libc. The prototype is in stdio.h, but you may need to
->> use -D_GNU_SOURCE to enable it.
->
->..and then you won't be able to use it with the dietlibc anymore...
+Progga wrote:
+>  Is there any 'C' lib which contains the getline() function ? I have found
+> a code similar to this:
 
-Why?  If you use getline(), you should be providing your own version for
-systems that don't have it.  If they have it, great, use the system
-version, if they don't, use yours.
+Getline is part of the GNU readline package, and is included in GNU libc, the
+standard libc used on GNU/Linux systems (as a GNU extension -- #define
+_GNU_SOURCE). Readline is include I believe in FreeBSD's libc, and available as
+a package for NetBSD. See: <http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html>
 
-mrc
+readline 4.3: <ftp://ftp.cwru.edu/pub/bash/readline-4.3.tar.gz>
+
 -- 
-     Mike Castle      dalgoda@ix.netcom.com      www.netcom.com/~dalgoda/
-    We are all of us living in the shadow of Manhattan.  -- Watchmen
-fatal ("You are in a maze of twisty compiler features, all different"); -- gcc
+Michael Taylor
+
