@@ -1,16 +1,20 @@
-From: "Ameer Armaly" <ameer@charter.net>
-Subject: intercepting alt key and arrows
-Date: Mon, 6 Sep 2004 11:43:02 -0400
+From: "heap" <heap@fbnet.org>
+Subject: dynamicly/staticly linked binaries
+Date: Mon, 6 Sep 2004 16:55:03 -0000 (GMT)
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <003101c49428$31be1500$0200a8c0@haneyhbmu5pv2g>
+Message-ID: <40450.212.113.164.104.1094489703.squirrel@www.fbnet.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Hi all.
-What is the best way to intercept the alt key as well as the arrow keys? as
-far as I know they don't have ascii values.
+Hello, could anyone tell me what's the difference between the dynamicly
+and staticly linked binaries? As far as I can tell, there are security
+risks implied, but I can't see in what way.
+
+ Thanks in advance.
+
+  -- heap
 
