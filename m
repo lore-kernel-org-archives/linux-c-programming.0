@@ -1,42 +1,35 @@
-From: "Mariano Moreyra" <moremari@aca.org.ar>
-Subject: RE: named structure members
-Date: Thu, 11 Sep 2003 12:35:24 -0300
+From: Matthew Harrison <matth@3d-computers.co.uk>
+Subject: Re: named structure members
+Date: Thu, 11 Sep 2003 16:28:18 +0100
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <000e01c3787a$52480260$0b04a8c0@aca.org.ar>
-References: <20030911152818.GF14403@3d-computers.co.uk>
-Reply-To: <mariano_moreyra@aca.org.ar>
+Message-ID: <20030911152818.GF14403@3d-computers.co.uk>
+References: <20030911142642.GD14403@3d-computers.co.uk> <000901c37872$ccc9fbe0$0b04a8c0@aca.org.ar>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="rWhLK7VZz0iBluhq"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20030911152818.GF14403@3d-computers.co.uk>
+Content-Disposition: inline
+In-Reply-To: <000901c37872$ccc9fbe0$0b04a8c0@aca.org.ar>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: 'Matthew Harrison' <matth@3d-computers.co.uk>
+To: Mariano Moreyra <moremari@aca.org.ar>
 Cc: linux-c-programming@vger.kernel.org
 
-Are you still getting that segfault??
-Send me the section of the code where the strcpy is (if you want ofcourse
-hehe)
 
-
------Mensaje original-----
-De: Matthew Harrison [mailto:matth@3d-computers.co.uk]
-Enviado el: Jueves, 11 de Septiembre de 2003 12:28
-Para: Mariano Moreyra
-CC: linux-c-programming@vger.kernel.org
-Asunto: Re: named structure members
-
+--rWhLK7VZz0iBluhq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 On Thu, Sep 11, 2003 at 11:41:34AM -0300, Mariano Moreyra wrote:
 > Ok... I understood that what you wanted was to name your structure members
 > dynamically.
 > But if you will only have those for members, that's a good approach
 > Now, are you allocating memory for your strings before doing a strcpy??
-> Because you defined your members like char pointers, you have to
-dynamically
+> Because you defined your members like char pointers, you have to dynamica=
+lly
 > allocate some memory form them before use.
-> You could define your members like arrays instead of char pointers (i.e
-char
+> You could define your members like arrays instead of char pointers (i.e c=
+har
 > db_host[256])
 >
 
@@ -52,13 +45,13 @@ typedef struct _CFG_struct
 
 but then i changed it to the below option while trying to debug.
 
->
+>=20
 > ------
->
+>=20
 > this is getting very complex.
->
+>=20
 > here is the struct that i want my config to go into:
->
+>=20
 > <snip>
 > typedef struct _CFG_struct
 > {
@@ -68,33 +61,33 @@ but then i changed it to the below option while trying to debug.
 >        char *db_user;
 > }CFG;
 > </snip>
->
+>=20
 > and I am doing the following (pseudo code)
->
+>=20
 > <snip>
-> for(i = 0; i <= array_of_config_items; i++)
+> for(i =3D 0; i <=3D array_of_config_items; i++)
 > {
-> 	keyword = array_of_config_items[i];
->
-> 	while (read_config_file != EOF)
+> 	keyword =3D array_of_config_items[i];
+>=20
+> 	while (read_config_file !=3D EOF)
 > 	{
 > 		check_return_value;
-> 		if keyword = 'item1'
+> 		if keyword =3D 'item1'
 > 		{
-> 			item1 = value;
+> 			item1 =3D value;
 > 		}
-> 		elsif keyword = 'item2'
+> 		elsif keyword =3D 'item2'
 > 		{
-> 			item2 = value;
+> 			item2 =3D value;
 > 		}
 > 		and_so_on();
 > 	}
 > }
 > </snip>
->
+>=20
 > i can sort it now with the multiple if's but now it segfaults on
 > a strcpy for some reason and i'm still learning how to use gdb.
->
+>=20
 > On Thu, Sep 11, 2003 at 11:03:59AM -0300, Mariano Moreyra wrote:
 > > > what i'm doing is stepping thru an array of different config options
 > > > calling the read_config_var on each one and checking the output.
@@ -102,8 +95,8 @@ but then i changed it to the below option while trying to debug.
 > > > a structure. for example i want the config options to be stored like
 > > > this:
 > >
-> > > config.db_host = 'maiden.genestate.com'
-> > > config.db_user = 'root'
+> > > config.db_host =3D 'maiden.genestate.com'
+> > > config.db_user =3D 'root'
 > >
 > > > you get the idea. my question is how do i dynamically assign a name
 > > > to a structure member. I have good_values[i] which contains the
@@ -129,7 +122,7 @@ but then i changed it to the below option while trying to debug.
 > >
 > >  so your code would look like this:
 > >
-> > for(i = 0; i < n_values; ++i)
+> > for(i =3D 0; i < n_values; ++i)
 > >         {
 > >                 strcpy(keyword, good_values[i]);
 > >
@@ -160,16 +153,29 @@ but then i changed it to the below option while trying to debug.
 > >
 > > --
 > > Mariano Moreyra <mariano_moreyra@aca.org.ar>
->
-> --
+>=20
+> --=20
 > Mat Harrison
 > Technical Developer
 > 3d Computer Systems Ltd.
 > matth@3d-computers.co.uk
 
---
+--=20
 Mat Harrison
 Technical Developer
 3d Computer Systems Ltd.
 matth@3d-computers.co.uk
 
+--rWhLK7VZz0iBluhq
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.2 (OpenBSD)
+
+iD8DBQE/YJSSmbMTrp/jhicRAi29AJwO/hm1Jhc+/yCUZtIorkFuXjWMOACghZX3
+/kS6o0K1Z2u6hEtdNPlB2+g=
+=Uode
+-----END PGP SIGNATURE-----
+
+--rWhLK7VZz0iBluhq--
