@@ -1,35 +1,41 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Start of the time slice
-Date: Mon, 5 Jul 2004 11:39:01 +0100
+From: kaushal <kaushal@rocsys.com>
+Subject: Boot code in C
+Date: 05 Jul 2004 19:19:29 +0530
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16617.12229.734613.647925@cerise.nosuchdomain.co.uk>
-References: <7F11C0CADA50AF4690BF42F715ABFBF86468B1@battaexch22.mol.hu>
+Message-ID: <1089035369.7299.48.camel@kaushal>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <7F11C0CADA50AF4690BF42F715ABFBF86468B1@battaexch22.mol.hu>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: =?iso-8859-2?Q?Nagy_Imre_=28Vecs=E9s=29?= <ImreNagy@MOL.hu>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
 
-Nagy Imre (Vecs=1B-B=E9s) wrote:=1B-A
+Hello  all,
+          I want to know if there is a way to  generate a binary file,
+from  a C program(Not from an assembly code)(can use any Linux
+tools)that can be burned on to a floppy and which ,say--  just prints a
+string on to the screen.
+I tried out to the following:
 
-> Excuse me, my English is limited, but I try to formulate clearly.
->=20
-> I would like to konw how many unexpired time is in my process. The no=
-rmal
-> time slice (10ms) is enough for me, but I want to get run my function=
- right
-> at the start of time slice.=20
 
-Try calling sched_yield(), or nanosleep() with a delay of 1ns.
+1.[kaushal@linuxbox]#cc Hello.c -static -o Hello
+  [kaushal@linuxbox]#strip Hello
+  [kaushal@linuxbox]#objcopy -O binary Hello Hello.bin
+  [kaushal@linuxbox]#dd if=Hello.bin of=/dev/floppy
 
---=20
-Glynn Clements <glynn.clements@virgin.net>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+2.[kaushal@linuxbox]#cc Hello.c -S 
+  [kaushal@linuxbox]#as Hello.s -o Hello
+  [kaushal@linuxbox]#strip Hello
+  [kaushal@linuxbox]#objcopy -O binary Hello Hello.bin
+  [kaushal@linuxbox]#dd if=Hello.bin of=/dev/floppy
+
+In the second case (2.)(Even if I don't give a "-static" switch for the
+first one(1.)) the Hello size is MUCH less than its counterpart of case
+(1.)
+Either way it did not work.I think the problem occurs because of absence
+of OS at boot time.So is there any way of atleast generating the
+required assembly code from the C code(The optimised one).
+
+
