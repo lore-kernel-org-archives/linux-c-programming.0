@@ -1,33 +1,32 @@
-From: Glynn Clements <glynn.clements@virgin.net>
-Subject: Re: Control key with Ncurses
-Date: Fri, 4 Jul 2003 15:47:56 +0100
+From: Elias Athanasopoulos <elathan@phys.uoa.gr>
+Subject: Re: Debug flag for libraries.
+Date: Wed, 2 Jul 2003 21:48:59 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <16133.37788.429091.741158@cerise.nosuchdomain.co.uk>
-References: <3F03D481.1080008@darya.nio.org>
-	<16131.55520.62578.551805@cerise.nosuchdomain.co.uk>
-	<3F055A89.4000401@darya.nio.org>
+Message-ID: <20030702214859.D1260@neutrino.particles.org>
+References: <DD9E117A8BE9F34FA4130376EC9C1F6A048B48B7@BANMLVEM01.e2k.ad.ge.com> <16129.27206.195388.670340@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3F055A89.4000401@darya.nio.org>
+Content-Disposition: inline
+In-Reply-To: <16129.27206.195388.670340@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Tue, Jul 01, 2003 at 12:02:30PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Vidya Kotamraju <vidyakr@darya.nio.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: "Ramanan, Venkat (MED)" <Venkat.ramanan@geind.ge.com>, linux-c-programming@vger.kernel.org
 
+On Tue, Jul 01, 2003 at 12:02:30PM +0100, Glynn Clements wrote:
+> > I need to compile a program with the debug flag "-g". The program uses
+> > some (static) libraries which have already been compiled without the
+> > "-g" flag. So, if I need all the debugging information ( line numbers
+> > etc. ) even from the libraries, do I need to recompile the libraries?
+> 
+> Yes.
 
-Vidya Kotamraju wrote:
-
-> I had enabled the keypad() along with the other graphics initializations.
-> Also, Control codes do work with getch().
-> But what i need to know is how to make use of a control key to exit out 
-> of a scanw input. (As control-D would work with scanf without needing to 
-> make use of getchar)
-
-You can't; getstr() (which scanw() uses) won't return until you press
-Return/Enter. If you want to be able to interrupt it, you would have
-to read the string manually using repeated calls to getch(), then use
-sscanf() to parse it.
+And pick the same debugging information format (stabs or dwarf) for both, 
+app and libs.
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+University of Athens			I bet the human brain 
+Physics Department				is a kludge --Marvin Minsky 
+
+	
