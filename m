@@ -1,73 +1,93 @@
-From: Robert Schiele <rschiele@uni-mannheim.de>
-Subject: Re: warnings appearing during preprocessor string concatenation (##)
-Date: Thu, 6 Mar 2003 14:10:47 +0100
-Sender: linux-newbie-owner@vger.kernel.org
-Message-ID: <20030306131047.GA17788@schiele.local>
-References: <b45mva$re8$2@main.gmane.org>
+From: David Wuertele <dave-gnus@bfnet.com>
+Subject: Why doesn't UNIX/DGRAM socket allow sending more than 11 bytes w/o
+ receiving?
+Date: Fri, 07 Mar 2003 17:39:20 -0800
+Sender: linux-c-programming-owner@vger.kernel.org
+Message-ID: <m3adg67i2f.fsf@bfnet.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-md5;
-	protocol="application/pgp-signature"; boundary="45Z9DzgjV8m4Oswq"
-Return-path: <linux-newbie-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <b45mva$re8$2@main.gmane.org>
+Return-path: <linux-c-programming-owner@vger.kernel.org>
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Jamie Risk <jamie_risk@yahoo.ca>
-Cc: linux-gcc@vger.kernel.org, linux-newbie@vger.kernel.org, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Question:  Why does this program crap out after 11 bytes?
+The UNIX/DGRAM receive buffer should be 64Kbytes.  I expect this
+program to be able to use it all before blocking.  But it blocks
+after only 11.
 
---45Z9DzgjV8m4Oswq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+// dgramtest.c
+// creates two unix/dgram sockets, connects them, sends a byte at a
+// time without recv()ing anything.  demonstrates strange behavior on
+// Linux 2.4.18 (RedHat 8.0)
 
-On Wed, Mar 05, 2003 at 03:34:39PM -0500, Jamie Risk wrote:
-> I have the following line in my code,
->=20
-> #define FEATURE(select)     feature_structure. ## select ## .member
->   ...
->    FEATURE(test);
->=20
-> and when I run it through the compiler (gcc 3.2.2 on Linux x86) I get the
-> _warning_
->=20
->   file.c:111:32: warning: pasting "." and "test" does not give a valid
-> preprocessing token
->   file.c:111:32: warning: pasting "test" and "." does not give a valid
-> preprocessing token
->=20
-> If I look at the preprocessor output, (gcc's -E option) it produces what =
-I'm
-> hoping for, although I'd like to avoid the warning.  Suggestions?
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
-Just remove the '##' operator.  The preprocessor is right here, there
-is nothing to concatenate to a token in your example.
+///////////////////////////////////////////////////////////////////////////////
+// module socktest #defines
+#define INPUT_SOCKET_NAME   "/tmp/sockinput"
+#define OUTPUT_SOCKET_NAME  "/tmp/sockoutput"
+#define BUFF_SIZE           (1)
 
-Robert
+///////////////////////////////////////////////////////////////////////////////
+// module socktest function Bail
+static int Bail(const char * pString)
+{
+    perror(pString);
+    return 1;
+}
 
---=20
-Robert Schiele			Tel.: +49-621-181-2517
-Dipl.-Wirtsch.informatiker	mailto:rschiele@uni-mannheim.de
+///////////////////////////////////////////////////////////////////////////////
+// module socktest function main
+int main(int argc, const char ** argv)
+{
+    sockaddr_un addressInput;
+    addressInput.sun_family = AF_UNIX;
+    strcpy(addressInput.sun_path, INPUT_SOCKET_NAME);
 
---45Z9DzgjV8m4Oswq
-Content-Type: application/pgp-signature
-Content-Disposition: inline
+    sockaddr_un addressOutput;
+    addressOutput.sun_family = AF_UNIX;
+    strcpy(addressOutput.sun_path, OUTPUT_SOCKET_NAME);
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
+    int sockInput = socket(PF_UNIX, SOCK_DGRAM, 0);
+    if (-1 == sockInput) return Bail("Failed to create input socket");
+    
+    int sockOutput = socket(PF_UNIX, SOCK_DGRAM, 0);
+    if (-1 == sockOutput) return Bail("Failed to create output socket");
+    
+    // name (bind) the 2 sockets
+    unlink(INPUT_SOCKET_NAME);
+    unlink(OUTPUT_SOCKET_NAME);
+    if (-1 == bind(sockInput, (const sockaddr *)&addressInput, sizeof(sockaddr_un))) return Bail("Failed to bind input socket");
+    if (-1 == bind(sockOutput, (const sockaddr *)&addressOutput, sizeof(sockaddr_un))) return Bail("Failed to bind output socket");
+ 
+    // connect the output socket to the input address
+    if (-1 == connect(sockOutput, (const sockaddr *)&addressInput, sizeof(sockaddr_un))) return Bail("Failed to connect output to input socket");
 
-iQEVAwUBPmdI18QAnns5HcHpAQE6awf+JpGHaD18oeDEdz0fgadM3jES0rJ7R/mp
-Q9NywLBh4qPtYCC+8dE2Zibtr5RT5RkwYyVMp7szucDBx6juWmgzgLIfk9F1ac9C
-cD12h3tk5NAUN0Y1wttDYs6ITQL9cSKQ0HpdSho2PL0x1uqgQB0zA2sCYK3LKVI6
-qUk38VbZR/p+DJrqGLqlOrb3vZl2USvMkZVsOj5NuuoOHyAnCS0W6aTmoT/RUOv2
-DVoOvXE4mkUQDgmGsNUV5sU0PsO0p9KicA23U9cU+82O+91LlLv1tSn2HT0x/4cG
-TPTv86bbGsY+V8L2XPi6vsqp1UTAMA1IO/H/p9N0K2LUojiSwkDRqQ==
-=1c79
------END PGP SIGNATURE-----
+    // now see how many sends we can do before send blocks
+    char buff[BUFF_SIZE];
+    int nNumBytes = 0;
+    int nNumSends = 0;
+    while (1)
+    {
+        if (sizeof(buff) != send(sockOutput, buff, sizeof(buff), 0)) break;
+        //DON'T RECEIVE!  This is the test.  We should crap out after
+        //getting 64K bytes.
+        //if (sizeof(buff) != recv(sockInput, buff, sizeof(buff), 0)) break;
+        nNumSends++; nNumBytes+= sizeof(buff);
+        printf("Send %d, %d total bytes\n", nNumSends, nNumBytes);  fflush(stdout);
+    }
 
---45Z9DzgjV8m4Oswq--
+    printf("Exiting after %d sends with %d total bytes\n", nNumSends, nNumBytes);
+    perror("Error");
+    return 0;
+}
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-Please read the FAQ at http://www.linux-learn.org/faqs
