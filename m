@@ -1,80 +1,43 @@
-From: michael young <mhyoung@valdosta.edu>
-Subject: Re: ioctl.h
-Date: Mon, 07 Mar 2005 09:45:53 -0500
-Message-ID: <422C6921.7080602@valdosta.edu>
-References: <4228B3B8.7020507@valdosta.edu>
- <d9def9db0503041355660768a0@mail.gmail.com>
+From: "Vineet Joglekar" <vintya@excite.com>
+Subject: Random number generator in Linux kernel
+Date: Mon,  7 Mar 2005 18:18:53 -0500 (EST)
+Message-ID: <20050307231853.9F661B6E7@xprdmailfe20.nwk.excite.com>
+Reply-To: vintya@excite.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-In-reply-to: <d9def9db0503041355660768a0@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Rechberger Markus <mrechberger@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, mailing-lists@xs4all.nl
+To: linux-kernel@vger.kernel.org
+Cc: linux-c-programming@vger.kernel.org
 
-kool
-thanks guys
-i think can run with the info i have
 
-Mike
+Hi all,
 
-Rechberger Markus wrote:
 
->hey Michael,
->
->here just an example:
->
->this small tool opens the cd tray
->
->#include <sys/types.h>
->#include <sys/ioctl.h>
->#include <fcntl.h>
->#include <linux/cdrom.h>
->
->int main(){
->    int cdrom;
->    if ((cdrom = open("/dev/cdrom",O_RDONLY | O_NONBLOCK)) < 0) {
->            perror("open");
->            exit(1);
->    }
->    if (ioctl(cdrom,CDROMEJECT,0)<0) {
->            perror("ioctl");
->            exit(1);
->    }
->    close(cdrom);
->    return(0);
->}
->
->simply build it with gcc tray.c -o tray
->
->look at cdrom.h for more defined operations, you will also find
->CDROMEJECT in there, 0 is an argument see the manpage (man ioctl) for
->more infos..
->
->Markus
->
->On Fri, 04 Mar 2005 14:15:04 -0500, michael young <mhyoung@valdosta.edu> wrote:
->  
->
->>Hi,
->>how do you use the ioctl.h?
->>there seems to be little info on it
->>on the web or in print. If you know
->>of anything on the web please let me
->>know.
->>
->>thank you,
->>Mike
->>
->>-
->>To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->>the body of a message to majordomo@vger.kernel.org
->>More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>
->>    
->>
->
->  
->
 
+Can someone please tell me where can I find and which random/pseudo-random number generator can I use inside the linux kernel? (2.4.28)
+
+
+
+I found out 1 function get_random_bytes() in linux/drivers/char/random.c but thats not what I want.
+
+
+
+I want a function where I will be supplying a seed to that function as an input, and will get a random number back. If same seed is used, same number should be generated again.
+
+
+
+Can anybody please help me with that?
+
+
+
+Thanks and regards,
+
+
+
+Vineet.
+
+_______________________________________________
+Join Excite! - http://www.excite.com
+The most personalized portal on the Web!
