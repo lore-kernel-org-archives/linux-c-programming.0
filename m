@@ -1,59 +1,49 @@
-From: Glynn Clements <glynn.clements@virgin.net>
+From: Elias Athanasopoulos <eathan@otenet.gr>
 Subject: Re: parsing with fscanf().
-Date: Wed, 11 Sep 2002 20:36:04 +0100
+Date: Wed, 11 Sep 2002 23:08:40 +0300
 Sender: linux-c-programming-owner@vger.kernel.org
-Message-ID: <15743.39716.721664.139238@cerise.nosuchdomain.co.uk>
-References: <20020911212428.A1167@neutrino.particles.org>
+Message-ID: <20020911230840.B1167@neutrino.particles.org>
+References: <20020911212428.A1167@neutrino.particles.org> <15743.39716.721664.139238@cerise.nosuchdomain.co.uk>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20020911212428.A1167@neutrino.particles.org>
+Content-Disposition: inline
+In-Reply-To: <15743.39716.721664.139238@cerise.nosuchdomain.co.uk>; from glynn.clements@virgin.net on Wed, Sep 11, 2002 at 08:36:04PM +0100
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Elias Athanasopoulos <eathan@otenet.gr>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn.clements@virgin.net>
+Cc: Elias Athanasopoulos <eathan@otenet.gr>, linux-c-programming@vger.kernel.org
 
-
-Elias Athanasopoulos wrote:
-
-> A really newbie question, but I have no time for research (my deadline
-> is counted in hours).
+On Wed, Sep 11, 2002 at 08:36:04PM +0100, Glynn Clements wrote:
+> fscanf() is worthless when the data doesn't adhere to a rigid format. 
+> One of the main problems is that, even when it isn't entirely
+> successful, it consumes some of the data from the stream.
 > 
-> I have to parse a text file, which has been exported from MS Excel (I
-> have no access to this thingie) using TABs as delimeters. The text
-> is like:
+> A better solution is to read whole lines (e.g. with fgets), then parse
+> it with sscanf(). That way, if sscanf() fails, you can try again with
+> the same data. E.g.
 > 
-> 4	3	2.0
-> 5		1.2
-> 4	3	2.4
-> 
-> I use fscanf() to insert the data to my structures, but the "gap" (between
-> 5 and 1.2) breaks the sequence. fscanf() places the 3rd column to the 2nd
-> field in my structure.
-> 
-> Is there a trivial way to bypass the problem using fscanf() or I have to do 
-> the parsing using read()?
+> 	for (;;)
+> 	{
+> 		char buff[81];
+> 		fgets(buff, sizeof(buff), fp);
+> 		if (sscanf(buff, "%d %d %f", &i1, &i2, &f) == 3)
+> 			continue;
+> 		if (sscanf(buff, "%d %f", &i1, &f) == 2)
+> 			continue;
+> 		error();
+> 	}
 
-fscanf() is worthless when the data doesn't adhere to a rigid format. 
-One of the main problems is that, even when it isn't entirely
-successful, it consumes some of the data from the stream.
+Thank you. I was up to write something like that, but I wasn't sure and
+was ready to give up and go traditionaly with read(). ANW, thanks for
+the above code, it helps a lot. :-)
 
-A better solution is to read whole lines (e.g. with fgets), then parse
-it with sscanf(). That way, if sscanf() fails, you can try again with
-the same data. E.g.
+> If you ever need to write a real parser, learn lex/yacc.
 
-	for (;;)
-	{
-		char buff[81];
-		fgets(buff, sizeof(buff), fp);
-		if (sscanf(buff, "%d %d %f", &i1, &i2, &f) == 3)
-			continue;
-		if (sscanf(buff, "%d %f", &i1, &f) == 2)
-			continue;
-		error();
-	}
+Nah... it is for a short report, a project that I want to spend as less
+time as I can. 
 
-If you ever need to write a real parser, learn lex/yacc.
+Elias
 
 -- 
-Glynn Clements <glynn.clements@virgin.net>
+http://gnewtellium.sourceforge.net			MP3 is not a crime.	
