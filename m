@@ -1,70 +1,55 @@
-From: Lei Yang <leiyang@nec-labs.com>
-Subject: Segmentation fault from free()
-Date: Tue, 24 Aug 2004 16:34:24 -0400
+From: Robert Schiele <rschiele@uni-mannheim.de>
+Subject: Re: Segmentation fault from free()
+Date: Tue, 24 Aug 2004 23:12:36 +0200
 Sender: linux-gcc-owner@vger.kernel.org
-Message-ID: <412BA650.6050305@nec-labs.com>
+Message-ID: <20040824211236.GB25368@schiele.dyndns.org>
+References: <412BA650.6050305@nec-labs.com>
+Reply-To: Robert Schiele <rschiele@uni-mannheim.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="8P1HSweYDcXXzwPJ"
 Return-path: <linux-gcc-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <412BA650.6050305@nec-labs.com>
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org, linux-gcc@vger.kernel.org
-Cc: Lei Yang <leiyang@nec-labs.com>
+To: Lei Yang <leiyang@nec-labs.com>
+Cc: linux-c-programming@vger.kernel.org, linux-gcc@vger.kernel.org
 
-Hi friends,
 
-I am writing a c code and have been bugged by this segmentation fault 
-for a while.
+--8P1HSweYDcXXzwPJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What I did is simply like:
+On Tue, Aug 24, 2004 at 04:34:24PM -0400, Lei Yang wrote:
+> Could anyone please point me out what could possibly be the reason?
 
------------------------------------------------------------------------------------------------------
-.........
-unsigned long blocksize = 2048;
-char *in_buffer
-char *out_buffer;
-if(( in_buffer= malloc(blocksize)) == NULL)
-{
-fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
-return NULL;
-}
+Cannot say something definitely with incomplete source code.
 
-if(( out_buffer= malloc(2*blocksize)) == NULL)
-{
-fprintf(stderr, "*** Can't malloc(%ld) forbuffer.\n",blocksize);
-free(in_buffer);
-return NULL;
-}
+The bug is not necessarily in the malloc/free pair of this construct.  Like=
+ly
+you destroyed the heap structure in earlier memory allocation/deallocation
+operations (e.g. during list processing).  You may want to check your progr=
+am
+with a memory debugger, e.g. valgrind for i386 platform.
 
-loop: until all the data are read from file
-{
-//read a block of data from a file to in_buffer
-// do some data processing with in_buffer
-//write the result to out_buffer
-//memcpy out_buffer to list
-}
+Robert
 
-free(in_buffer);
-free(out_buffer);
+--=20
+Robert Schiele			Tel.: +49-621-181-2517
+Dipl.-Wirtsch.informatiker	mailto:rschiele@uni-mannheim.de
 
-return list;
-......
------------------------------------------------------------------------------------------------------------------
+--8P1HSweYDcXXzwPJ
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-I've debugged with gdb to see where the segmentation fault happens, it 
-is at free(in_buffer).
-I've verified that the value for in_buffer after malloc() and before 
-free() is the same. Or in other words, in_buffer is a valid pointer 
-allocated by malloc.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.4 (GNU/Linux)
 
-And the SF only happens when the file is large, although block size 
-could be small.
-Means that for both small (2KB) and large(5MB) files, block size are the 
-same. However, only large files could cause SF.
+iD8DBQFBK69ExcDFxyGNGNcRAl4WAJ4w6pPl1nRlnuj0qAk6zNBn3h+rfgCfT/Jg
+LpSh8ZMxy+TjAWgwOqjP1ls=
+=g6JR
+-----END PGP SIGNATURE-----
 
-Could anyone please point me out what could possibly be the reason?
-BTW, pls cc me when you reply, since I am not able to receive emails 
-from this list. Thanks a lot!
+--8P1HSweYDcXXzwPJ--
 
-TIA!
-Lei
