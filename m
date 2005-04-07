@@ -1,95 +1,61 @@
-From: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
-Subject: Multithreading with C++
-Date: Thu, 7 Apr 2005 13:02:16 -0400
-Message-ID: <D2AA47A6FB2C1A48AF0526440C0F245CAA3676@monm207.nae.ds.army.mil>
+From: Eric Bambach <eric@cisu.net>
+Subject: Re: Multithreading with C++
+Date: Thu, 7 Apr 2005 11:36:11 -0500
+Message-ID: <200504071136.11219.eric@cisu.net>
+References: <D2AA47A6FB2C1A48AF0526440C0F245CAA3676@monm207.nae.ds.army.mil>
+Reply-To: eric@cisu.net
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <D2AA47A6FB2C1A48AF0526440C0F245CAA3676@monm207.nae.ds.army.mil>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: "Huber, George K RDECOM CERDEC STCD SRI" <George.K.Huber@us.army.mil>
+Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-All,
+On Thursday 07 April 2005 12:02 pm, you wrote:
+> All,
+>
+> This may be a little off topic, but I though I would try here first.
 
-This may be a little off topic, but I though I would try here first.
+Did you compile with -lpthread and -D_REENTRANT? If I remeber correctly=
+, this=20
+is something I had alot of trouble with when I started thread programmi=
+ng.=20
+Similiar error and everything. Compiled but the library calls weren't=20
+working. Make sure to include <pthread.h> too  ;)
 
-I am writting a multi-threaded program and would like to have each 
-thread `managed' by a class.  I have attempted to do this like this,
-using the pthreads library:
+> I am writting a multi-threaded program and would like to have each
+> thread `managed' by a class.  I have attempted to do this like this,
+> using the pthreads library:
 
-<code>
-====================begin cthread.h
+--snip--
 
-class CThread
-{
-public:
-    CThread(void*);
-    ~CThread();
+> Thanks,
+> George Huber
+>
 
-    ....
+--=20
+----------------------------------------
+--EB
 
-private:
-    static CThread*     m_pThis;
-    pthread_t             m_tid;
-    static void*           threadfun(void*);
+> All is fine except that I can reliably "oops" it simply by trying to =
+read
+> from /proc/apm (e.g. cat /proc/apm).
+> oops output and ksymoops-2.3.4 output is attached.
+> Is there anything else I can contribute?
 
-   ....
-}
+The latitude and longtitude of the bios writers current position, and
+a ballistic missile.
 
-==================== begin cthread.cpp
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
+r 08,2000=20
 
-CThread*  CThread::m_pThis = NULL;
-
-CThread::CThread(void* arg)
-{
-    int      ret;
-
-    m_pThis = this;
-    if(0 != (ret = pthread_create(&m_tid, NULL, threadfun, arg)))
-    {
-         fprintf(stderr, "Thread creation failed");
-   }
-}   
-
-void*  threadfun(void* arg)
-{
-     printf("Starting thread\n");
-     ....
-}
-
-</code>
-
-The code compiles without warnings or errors, except when I try and 
-run the application I get a segmentation fault at the pthread_create.  
-Trying to run under GDB, I am able to examine the value of the 
-variables and they seem consisten with what I would expect
-
-// stop on the pthread_create line in the constructor...
-
-(gdb) print m_pThis
-$1 = (CThread*) 0xfee756b0
-(gdb) print this
-$2 = (CThread*0xfee756b0
-(gdb) print m_tid
-$3 = 134514818               // to be expected because I have not initialized m_tid yet
-(gdb) print &m_tid
-$4 = (pthread_t*)0xfee756d8
-(gdb) print threadfun
-$5=&CThread::threadfun(void*)
-
-// attempt the pthread_create line ....
-
-Program received signal SIGSEGV, Segmenatation fault
-0x0000000 in ?? ()
-(gdb) where 
-#0 0x00000000 in ?? ( )
-#1 0x0804a6bb in CThread (this=0xfee756b0, args=0x0) at ....
-#2 0x08049aad in daemon_main(argc=3, argv=0xfeec42d4) at ....
-#3 0x08049193 in main(argc=3, argv=0xfeec42d3) at main.cpp: 83
-
-Any idea on what is going on, or how to fix?
-
-Thanks, 
-George Huber
-
+----------------------------------------
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
