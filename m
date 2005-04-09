@@ -1,21 +1,55 @@
-From: "Lewis Delaney" <eppdlinux-net-owner@vger.kernel.org>
-Subject: Phentermine CHEAPEST ON THE INTERNET
-Date: Fri, 08 Apr 2005 20:19:35 -0600
-Message-ID: <hLpxFOD5Ce4CL.squirrel__7545.23821310631$1113009597$gmane$org@220.176.225.118>
+From: lucianolnx <lucianolnx@ig.com.br>
+Subject: Re: Check if a process exists? (EXTENDING THE QUESTION)
+Date: Fri, 8 Apr 2005 22:50:10 -0300
+Message-ID: <20050409_015010_024210.lucianolnx@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1113011410"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-net-owner@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Get Popular Pain Meds Here -> http://www.glbrx.com/scripts/default.asp?idaff=92
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+--Message-Boundary-by-Mail-Sender-1113011410
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
+
+Today, what are the bests ways to know if a deamon is running without 
+knowing its PID ? 
+
+My old technique (used until now), is based on recovering the PID saved by 
+the own process in a special and known location (like a file), almost all 
+times persisted (PERSISTENCE IS A PROBLEM). 
+
+Luciano 
 
 
 
+On Tue, 1 Mar 2005, Hareesh Nagarajan wrote: 
 
+> Hi, 
+> 
+> Can a process check if a given PID exists or not? In other words can a 
+> process check if an unrelated process is alive? Is there any system 
+> call that does this? 
+> 
+Use kill() with a second argument being zero. 
 
+    if (kill(pid, 0) == -1) 
+    { 
+       /* Process is not there. */ 
+    } 
+    else 
+    { 
+       /* Process is alive. */ 
+    } 
 
+Holger 
 
-nothanks - http://www.glbpharma.com/aldfhsdlfh.asp
+--Message-Boundary-by-Mail-Sender-1113011410--
+
