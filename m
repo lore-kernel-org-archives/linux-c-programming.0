@@ -1,49 +1,54 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: how to the filename
-Date: Thu, 14 Apr 2005 22:10:15 +0100
-Message-ID: <16990.56375.187052.48678@gargle.gargle.HOWL>
-References: <1113472539.5952.62.camel@localhost.localdomain>
+From: kaushal <kaushal@rocsys.com>
+Subject: readline tab binding
+Date: Wed, 20 Apr 2005 12:47:39 +0530
+Message-ID: <1113981459.5041.39.camel@localhost.localdomain>
+Reply-To: kaushal@rocsys.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1113472539.5952.62.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kaushal@rocsys.com
-Cc: linux prg <linux-c-programming@vger.kernel.org>
+To: linux-c <linux-c-programming@vger.kernel.org>
+
+Hello all,
+	Iam new to the readline function.I used it to bind the tab key to my
+function.The function works fine .What I intend is:
+
+When tab key is pressed ,My function should print "hello" in the next
+line and in the subsequent line the prompt should showoff along with the
+partial command and should read from thereon.
+
+Iam getting the intended action and the display in xterm.But when I
+run this in the minicom,I find that after printing "hello",in the next
+line the prompt and the incomplete command are not being printed but
+actually the prompt along with the incomplete command is listening for
+sure.Something like the below:
 
 
-kaushal wrote:
+PROMPT:ls<TAB>
+HELLO
+<CURSOR BLINKS HERE BUT NO (PROMPT+COMMAND) DISPLAYED BUT READY TO TAKE
+INPUT.>
 
-> 	How can I get the filename/pathname given the open file descriptor?Does
-> fstat provide this feature internally?Can somebody give the code snippet
-> for this.
+intended:
 
-If a descriptor corresponds to a file, the kernel records the name
-under which the file was opened; the name is available via
-the link /proc/<pid>/fd/<descriptor#>. If the file is renamed, the
-link will be updated; if the file is deleted, " (deleted)" will be
-added to the link.
+PROMPT:ls<TAB>
+HELLO
+PROMPT:ls<CURSOR BLINKS HERE READY TO TAKE INPUT>
 
-Note that this is Linux-specific; it won't work on other Unices. Also,
-it won't work if the /proc filesystem doesn't exist.
 
-The historical behaviour is that any system calls which accept a
-filename as an argument (e.g. open(), stat() etc) immediately resolve
-the filename to a device/inode pair, then forget all about the
-filename.
+The problem occurs when I run this via minicom and its all fine in
+xterm.
 
-The only portable solution is to retrieve the device and inode numbers
-via fstat(), locate the mount point for the device, then scan the
-entire filesystem beneath the mount point until you find a file with
-the correct inode number. If you don't find such a file, it has been
-deleted since it was opened (programs which create temporary files
-often delete them as soon as they are opened so they don't get left
-around if the process terminates abnormally).
+The machine connected via minicom runs linux and is of same
+architecture.Iam using readline version 4.0
 
-[A deleted file will exist so long as it remains open, it just won't
-have a filename, so you can't use open(), stat() etc on it.]
+I tried out giving flushes at various places but it is not turning up.My
+box runs fedora core-1.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Any response would be greatly useful.
+Thanking in advance.
+
+-kaushal.
+
