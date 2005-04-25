@@ -1,50 +1,55 @@
-From: Luciano Moreira - ht <lucianomx@hotpop.com>
+From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
 Subject: Re: HOME directory
-Date: Mon, 25 Apr 2005 13:50:34 -0300
-Message-ID: <426D1FDA.2020709@hotpop.com>
-Reply-To: lucianolnx@ig.com.br
+Date: Tue, 26 Apr 2005 00:46:04 +0800
+Message-ID: <426D1ECC.3000307@hq.ntsp.nec.co.jp>
+References: <200504251826.36321.hitoc_mail@yahoo.it> <426D1DC8.2080900@hq.ntsp.nec.co.jp> <426D1E0B.6020307@hq.ntsp.nec.co.jp>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <426D1E0B.6020307@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Yeah ! You need to read the desired environment variable (like HOME), 
-using a API like "|char *getenv(const char */name/);".
+Ooops... inapplicable solution...
+scratch it...
 
-After read, you shall concatenate the 2 strings:
 
-char *pHome;
-char *pMyDir="mydir/mysubdir";
-char sFullPath[_MAX_PATH];
+Ron Michael Khu wrote:
 
-pHome = getenv("HOME");
-sprintf(sFullPath, "%s/%s", pHome, pMyDir);
-
-WARNING: "sprintf()" isn't the faster way to build a concatenated 
-string. If you'll need to repeat this in a long loop, try another way 
-using only a single call to "strcat()".
-
-Luciano
-|
-
-HIToC escreveu:
-
->Hello all!
->	I am writing a piece of code that makes files, open directories in my
->HOME directory. All worked well until I changed the name of my HOME dir.
->To make the code portable I tried with use of '~' character:
+> I dont know what specific system calls are used for retreiving the 
+> current user or home dir(if there are any).
+> But perhaps u can make use of the getenv() function to retrieve the 
+> value of $HOME and $USER
+> (it may not work on some shells, though, didnt test it)
 >
->	const char*	filename = "~/file.txt";
->	ofstream	 my_file(filename, ios::out);
 >
->but this solution does not work.
->Have you any suggestion to find the path of the current home directory or
->the current user name?
 >
->Thanks for any suggestion.
->  
 >
+> HIToC wrote:
+>
+>>> Hello all!
+>>>     I am writing a piece of code that makes files, open directories 
+>>> in my
+>>> HOME directory. All worked well until I changed the name of my HOME 
+>>> dir.
+>>> To make the code portable I tried with use of '~' character:
+>>>
+>>>     const char*    filename = "~/file.txt";
+>>>     ofstream     my_file(filename, ios::out);
+>>>
+>>> but this solution does not work.
+>>> Have you any suggestion to find the path of the current home 
+>>> directory or
+>>> the current user name?
+>>>
+>>> Thanks for any suggestion.
+>>>  
+>>>
+>>
+>>
+>
+>
+
 
