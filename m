@@ -1,58 +1,50 @@
-From: Benjamin Machuletz <bmachuletz@mnetworx.de>
+From: Luciano Moreira - ht <lucianomx@hotpop.com>
 Subject: Re: HOME directory
-Date: Mon, 25 Apr 2005 18:43:15 +0200
-Message-ID: <200504251843.19843.bmachuletz@mnetworx.de>
-References: <200504251826.36321.hitoc_mail@yahoo.it>
+Date: Mon, 25 Apr 2005 13:50:34 -0300
+Message-ID: <426D1FDA.2020709@hotpop.com>
+Reply-To: lucianolnx@ig.com.br
 Mime-Version: 1.0
-Content-Type: multipart/signed;
-  boundary="nextPart1386421.6beQcUVYeC";
-  protocol="application/pgp-signature";
-  micalg=pgp-sha1
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200504251826.36321.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
---nextPart1386421.6beQcUVYeC
-Content-Type: text/plain;
-  charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+Yeah ! You need to read the desired environment variable (like HOME), 
+using a API like "|char *getenv(const char */name/);".
 
-hi,
+After read, you shall concatenate the 2 strings:
 
-if you rename your home-directory, you have to change your /etc/passwd to=20
-point your user entry to the new home-directory.
+char *pHome;
+char *pMyDir="mydir/mysubdir";
+char sFullPath[_MAX_PATH];
 
-benjamin,
+pHome = getenv("HOME");
+sprintf(sFullPath, "%s/%s", pHome, pMyDir);
 
+WARNING: "sprintf()" isn't the faster way to build a concatenated 
+string. If you'll need to repeat this in a long loop, try another way 
+using only a single call to "strcat()".
 
-On Monday 25 April 2005 18:27, HIToC wrote:
-> Hello all!
->  I am writing a piece of code that makes files, open directories in my
-> HOME directory. All worked well until I changed the name of my HOME dir.
-> To make the code portable I tried with use of '~' character:
+Luciano
+|
+
+HIToC escreveu:
+
+>Hello all!
+>	I am writing a piece of code that makes files, open directories in my
+>HOME directory. All worked well until I changed the name of my HOME dir.
+>To make the code portable I tried with use of '~' character:
 >
->  const char* filename =3D "~/file.txt";
->  ofstream  my_file(filename, ios::out);
+>	const char*	filename = "~/file.txt";
+>	ofstream	 my_file(filename, ios::out);
 >
-> but this solution does not work.
-> Have you any suggestion to find the path of the current home directory or
-> the current user name?
+>but this solution does not work.
+>Have you any suggestion to find the path of the current home directory or
+>the current user name?
 >
-> Thanks for any suggestion.
+>Thanks for any suggestion.
+>  
+>
 
---nextPart1386421.6beQcUVYeC
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQBCbR4nxOTOZUwH/CsRAlpBAJ9f3UveosDCxqJyT7y3s7m4Ji6eJQCfQDh4
-sOnfk8rnMz13oM/LV9i0Z4o=
-=O3AP
------END PGP SIGNATURE-----
-
---nextPart1386421.6beQcUVYeC--
