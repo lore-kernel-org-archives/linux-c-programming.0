@@ -1,57 +1,39 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Adam Dyga <adeon@tlen.pl>
 Subject: Re: HOME directory
-Date: Mon, 25 Apr 2005 18:06:00 +0100
-Message-ID: <17005.9080.214244.56172@gargle.gargle.HOWL>
-References: <200504251826.36321.hitoc_mail@yahoo.it>
+Date: Tue, 26 Apr 2005 13:26:19 +0200
+Message-ID: <426E255B.3050805@tlen.pl>
+References: <200504251826.36321.hitoc_mail@yahoo.it>	 <6a00c8d50504251005110319f2@mail.gmail.com> <426D38D3.5060901@tlen.pl> <6a00c8d505042511529bd72c8@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200504251826.36321.hitoc_mail@yahoo.it>
+In-Reply-To: <6a00c8d505042511529bd72c8@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: HIToC <hitoc_mail@yahoo.it>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Steve Graegert wrote:
 
-HIToC wrote:
+>On 4/25/05, Adam Dyga <adeon@tlen.pl> wrote:
+>  
+>
+>>>All SUSv2/3 compliant systems know the system call getpwnam() to
+>>>obtain information about a given user by querying the passwd database.
+>>>The following (untested) code snippet  demonstrates its usage.  Hope
+>>>this is what you're lookin' for.
+>>>
+>>>      
+>>>
+>>Note that for security reasons this way much better.
+>>    
+>>
+>Relying on the shell environment is
+>usually a bad idea since it can be manipulated and tweaked in many
+>different ways.
+>
+That's exactly what I meant ;)
 
-> 	I am writing a piece of code that makes files, open directories in my
-> HOME directory. All worked well until I changed the name of my HOME dir.
-> To make the code portable I tried with use of '~' character:
-> 
-> 	const char*	filename = "~/file.txt";
-> 	ofstream	 my_file(filename, ios::out);
-> 
-> but this solution does not work.
-> Have you any suggestion to find the path of the current home directory or
-> the current user name?
+Cheers
+AD
 
-The "~" syntax is part of the shell; library functions won't expand
-it. In the shell, "~/..." is equivalent to "$HOME/...".
-
-If you want to respect $HOME (which is usually the case), use e.g.:
-
-	const char *home = getenv("HOME");
-	const char *file = "file.txt";
-	char *path = alloca(strlen(home) + strlen(file) + 2);
-
-	sprintf(path, "%s/%s", home, file);
-
-	ofstream my_file(filename, ios::out);
-
-If you want to always use the user's home directory from /etc/passwd
-instead of $HOME (e.g. for setuid programs), use getpwuid(), e.g.:
-
-	struct passwd *pw = getpwuid(getuid());
-	if (!pw)
-		fatal_error("user not listed in /etc/passwd");
-	const char *home = pw->pw_dir;
-
-	...
-
-Similarly, the ~user syntax for a specific user's home directory is
-implemented using getpwnam().
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+PS: Sorry, my previous reply should have gone to the group....
