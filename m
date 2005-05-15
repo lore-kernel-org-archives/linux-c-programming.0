@@ -1,31 +1,22 @@
-From: HIToC <hitoc_mail@yahoo.it>
-Subject: Re: HOME directory
-Date: Thu, 28 Apr 2005 14:28:18 +0200 (CEST)
-Message-ID: <20050428122818.221.qmail@web25704.mail.ukl.yahoo.com>
+From: gumbold <gumbold@bonbon.net>
+Subject: data structure question
+Date: Sun, 15 May 2005 12:32:04 +0300
+Message-ID: <42871714.5060007@bonbon.net>
+Reply-To: gumbold@bonbon.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-Thank you for every suggestion!
+Hi
 
-
-
-
-
-HIToC
-
-
-	=09
-___________________________________=20
-Nuovo Yahoo! Messenger: E' molto pi=F9 divertente: Audibles, Avatar, We=
-bcam, Giochi, Rubrica=85 Scaricalo ora!=20
-http://it.messenger.yahoo.it
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+why somebody wants to write such thing
+struct abc {
+    __u16 a;
+    __u16 b;
+    char abc[0];
+} __attribute__((packed));
+Specialy for zerod array of chars.
