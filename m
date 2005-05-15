@@ -1,43 +1,55 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: gumbold <gumbold@bonbon.net>
 Subject: Re: data structure question
-Date: Sun, 15 May 2005 12:02:17 +0100
-Message-ID: <17031.11321.223828.203914@gargle.gargle.HOWL>
+Date: Sun, 15 May 2005 14:24:13 +0300
+Message-ID: <4287315D.3080802@bonbon.net>
 References: <42871714.5060007@bonbon.net>
+ <17031.11321.223828.203914@gargle.gargle.HOWL>
+Reply-To: gumbold@bonbon.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42871714.5060007@bonbon.net>
+In-reply-to: <17031.11321.223828.203914@gargle.gargle.HOWL>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: gumbold@bonbon.net
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Glynn Clements wrote:
 
-gumbold wrote:
-
-> why somebody wants to write such thing
-> struct abc {
->     __u16 a;
->     __u16 b;
->     char abc[0];
-> } __attribute__((packed));
-> Specialy for zerod array of chars.
-
-A structure which ends with a zero-length array is intended for use as
-the "header" for a variable-sized block of data, e.g.:
-
-	struct abc *new_abc(__u16 a, __u16 b, const char *string)
-	{
-		int len = strlen(string);
-		struct abc *p = malloc(sizeof(struct abc) + len + 1);
-	
-		p->a = a;
-		p->b = b;
-		memcpy(p->abc, string, len + 1);
-	
-		return p;
-	}
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+>gumbold wrote:
+>
+>  
+>
+>>why somebody wants to write such thing
+>>struct abc {
+>>    __u16 a;
+>>    __u16 b;
+>>    char abc[0];
+>>} __attribute__((packed));
+>>Specialy for zerod array of chars.
+>>    
+>>
+>
+>A structure which ends with a zero-length array is intended for use as
+>the "header" for a variable-sized block of data, e.g.:
+>
+>	struct abc *new_abc(__u16 a, __u16 b, const char *string)
+>	{
+>		int len = strlen(string);
+>		struct abc *p = malloc(sizeof(struct abc) + len + 1);
+>	
+>		p->a = a;
+>		p->b = b;
+>		memcpy(p->abc, string, len + 1);
+>	
+>		return p;
+>	}
+>
+>  
+>
+So if my compiler can't handle such code, can i change it to
+struct abc {
+    __u16 a;
+    __u16 b;
+    char abc[1];
+} __attribute__((packed));
