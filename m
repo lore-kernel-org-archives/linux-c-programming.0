@@ -1,69 +1,61 @@
-From: gumbold <gumbold@bonbon.net>
-Subject: Re: data structure question
-Date: Mon, 16 May 2005 21:31:56 +0300
-Message-ID: <4288E71C.2060400@bonbon.net>
-References: <42871714.5060007@bonbon.net>
- <17031.11321.223828.203914@gargle.gargle.HOWL> <4287315D.3080802@bonbon.net>
- <17031.23394.834533.766062@gargle.gargle.HOWL> <42881ADE.2010009@bonbon.net>
- <17032.48134.349409.976254@gargle.gargle.HOWL>
-Reply-To: gumbold@bonbon.net
+From: Anand Chug <anand.chug@gmail.com>
+Subject: throw()...Clarification
+Date: Tue, 17 May 2005 00:28:48 +0530
+Message-ID: <ed9edacc05051611583f3cd958@mail.gmail.com>
+Reply-To: Anand Chug <anand.chug@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-reply-to: <17032.48134.349409.976254@gargle.gargle.HOWL>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-Glynn Clements wrote:
+Hi
 
->gumbold wrote:
->
->  
->
->>So char abc[0] actualy pointer to chat?
->>    
->>
->
->No, it's an array of char.
->
->  
->
->>It should be 4 byte long on x86. I can't see it with sizeof.
->>    
->>
->
->It's zero bytes long.
->
->If you had:
->
->	struct abc {
->	    __u16 a;
->	    __u16 b;
->	    char abc[4];
->	};
->
->then sizeof(struct abc) would be 8 and the offset of abc from the
->beginning of the structure would be 4.
->
->With:
->
->	struct abc {
->	    __u16 a;
->	    __u16 b;
->	    char abc[0];
->	};
->
->sizeof(struct abc) would be 4 and the offset of abc from the beginning
->of the structure would still be 4 (i.e. p->abc refers to the first
->byte after the structure).
->
->  
->
-I understand. But if you doing `p->abc = (char *)malloc(111)' so you 
-copy 4 bytes to the place
-started from p->abc, but it is out of struct abc memory (it is only 4 
-byte). Should be error?
+void f();
+means that any type of exception may be thrown from the function. If you say
+void f() throw();
+it means that no exceptions are thrown from a function
 
+So suppose i write a code like this
+
+#include<iostream>
+using namespace std;
+
+class A
+{
+public:
+    A(int x1,int y1):x(x1),y(y1){} ;
+    int calc () throw();
+   
+private:
+    int x,y;
+};
+
+
+int A::calc ()
+{
+    int temp;
+    temp=x-y;
+    if(temp<0)
+        throw 0;
+    return temp;
+}
+int main()
+{
+    A a(4,5);
+    try{
+        a.calc ();
+    }catch(...)
+    {
+        cout<<"Exception"<<endl;
+    }
+    return 0;
+}
+
+According to the definition of throw()
+calc() function should not throw any exception.
+But while executing the above code in am getting "Exception" as output..
+Any ideas...???
