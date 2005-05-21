@@ -1,28 +1,30 @@
-From: =?iso-8859-1?Q?H=E5kon?= Hallingstad <hakon@ion.no>
-Subject: Re: To control the use of max. processor capacity (system call ?)
-Date: Sat, 21 May 2005 10:30:29 +0200
-Message-ID: <20050521083029.GA12733@hydrogen.ion.no>
-References: <428E8373.3060809@gmail.com>
+From: Adam Dyga <adeon@tlen.pl>
+Subject: CPU/disk usage
+Date: Sat, 21 May 2005 16:09:59 +0200
+Message-ID: <428F4137.40001@tlen.pl>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <428E8373.3060809@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: linux C programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-> Maybe it's a priority approach, but I m looking for something differe=
-nt.=20
-> Does it exist ?
+Hello,
 
-It _is_ solved by adjusting scheduling priorities. Why are you looking
-for something different?
+What's the best way to:
+1. Get the percent cpu usage (as in top)
+2. Get disk activity (eg. number of bytes read/written from/to disk 
+during some period of time).
 
-H=E5kon Hallingstad
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Ad1) I know I could find the cpu usage in top sources, but unfortunately 
+I don't have enough time
+to do it currently - maybe some of you did this already.
+There is sysinfo() system call that returns average loads during the 
+last 1, 5, and 15
+minutes but average load, AFAIK, is a average number of tasks waiting 
+for cpu, so it's not
+exactly what I want.
+
+Cheers
+AD
