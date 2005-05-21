@@ -1,55 +1,33 @@
-From: Akbar Ali <kaberjobs@yahoo.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: CPU/disk usage
-Date: Sat, 21 May 2005 10:12:19 -0700 (PDT)
-Message-ID: <20050521171219.18783.qmail@web50807.mail.yahoo.com>
+Date: Sat, 21 May 2005 21:27:43 +0100
+Message-ID: <17039.39359.737772.996298@gargle.gargle.HOWL>
+References: <428F4137.40001@tlen.pl>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: 6667
+In-Reply-To: <428F4137.40001@tlen.pl>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Adam Dyga <adeon@tlen.pl>, linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Adam Dyga <adeon@tlen.pl>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Why not just take a quick look at the top source code
-?
-btw, if you find out tell me, cause i'm intersted in
-that data as well..
 
---- Adam Dyga <adeon@tlen.pl> wrote:
-> Hello,
-> 
+Adam Dyga wrote:
+
 > What's the best way to:
 > 1. Get the percent cpu usage (as in top)
-> 2. Get disk activity (eg. number of bytes
-> read/written from/to disk 
-> during some period of time).
-> 
-> Ad1) I know I could find the cpu usage in top
-> sources, but unfortunately 
-> I don't have enough time
-> to do it currently - maybe some of you did this
-> already.
-> There is sysinfo() system call that returns average
-> loads during the 
-> last 1, 5, and 15
-> minutes but average load, AFAIK, is a average number
-> of tasks waiting 
-> for cpu, so it's not
-> exactly what I want.
-> 
-> Cheers
-> AD
-> -
-> To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at 
-> http://vger.kernel.org/majordomo-info.html
-> 
 
+The way that ps does it is to obtain the process start time and amount
+of user and system time used from /proc/<pid>/stat, and the number of
+seconds since boot from /proc/uptime, then compute the CPU usage as
+the ratio of the total time used (user + system) to the time the
+process has been running (system uptime - process start time).
 
-		
-Discover Yahoo! 
-Get on-the-go sports scores, stock quotes, news and more. Check it out! 
-http://discover.yahoo.com/mobile.html
+Note that this gives the average CPU usage over the lifetime of the
+process. If you want a current figure, measure the change in the total
+usage over a given interval and divide by the interval.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
