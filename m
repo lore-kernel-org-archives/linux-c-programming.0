@@ -1,49 +1,32 @@
-From: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <mariani.dario@gmail.com>
-Subject: Re: quick effective encryption
-Date: Mon, 23 May 2005 10:03:32 -0300
-Message-ID: <84bd26ef0505230603769c8cf5@mail.gmail.com>
-References: <20050523054304.87567.qmail@web50809.mail.yahoo.com>
-Reply-To: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <mariani.dario@gmail.com>
+From: Ram S <linux_guy_76@yahoo.com>
+Subject: Good book
+Date: Mon, 23 May 2005 20:47:49 -0700 (PDT)
+Message-ID: <20050524034750.70100.qmail@web51307.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050523054304.87567.qmail@web50809.mail.yahoo.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Akbar Ali <kaberjobs@yahoo.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-  Some time ago I found Botan (http://botan.randombit.net/), but did
-not have the time and need to test or use it.
+Hi,
+I am a new to linux. While going through the kernel
+code, I saw couple of routines beginning with __ e.g
+ __init free_all_bootmem_core (in mm/bootmem.c). Any 
+specific reason why it is so ? I know this may be a 
+very basic thing that I am asking and I need to to
+read more. Can you point to me some good book which
+I can refer and get some of the basic doubts 
+clarified ?
 
-         Dar=EDo
+Thanks,
+Ram.
 
-On 5/23/05, Akbar Ali <kaberjobs@yahoo.com> wrote:
-> Any of you know a good encryption library to use that
-> doesnt' require you to pad. Somethign along the routes
-> of
-> SetKey("yourkey");
-> EncryptString(string, encryptedstring);
->=20
-> ...Besides OpenSSL
->=20
-> Appreciated,
-> -akbar
->=20
-> __________________________________________________
-> Do You Yahoo!?
-> Tired of spam?  Yahoo! Mail has the best spam protection around
-> http://mail.yahoo.com
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+		
+__________________________________ 
+Do you Yahoo!? 
+Yahoo! Small Business - Try our new Resources site
+http://smallbusiness.yahoo.com/resources/
