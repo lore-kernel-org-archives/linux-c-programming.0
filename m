@@ -1,58 +1,56 @@
-From: "Amit Dang" <amit_dang@intersolutions.stpn.soft.net>
-Subject: Issue "address of local variable returned"
-Date: Wed, 25 May 2005 12:57:12 +0530
-Message-ID: <013a01c560fb$37b16e80$9736a8c0@ispl091>
+From: Steven Smith <sos22@cantab.net>
+Subject: Re: kerel level threads
+Date: Wed, 25 May 2005 10:06:21 +0100
+Message-ID: <20050525090621.GA1453@cam.ac.uk>
+References: <20050524034750.70100.qmail@web51307.mail.yahoo.com> <42942467.9060805@cse.iitk.ac.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="yrj/dFKFPuw6o+aM"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <42942467.9060805@cse.iitk.ac.in>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: "K. Anantha Kiran" <ananth@cse.iitk.ac.in>
+Cc: linux-c-programming@vger.kernel.org, sos22@srcf.ucam.org
 
-Hi All,
-    I am facing following issue
-(g++ compiler  "g++ (GCC) 3.2.3 20030502 (Red Hat Linux 3.2.3-20)" is being
-used for compilation.)
 
-Following piece of code gives warning: "address of local variable `op'
-returned"
-#################################
-#include<iostream>
-using namespace std;
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-struct s {
-    char op[24];
-    int j;
-};
+>    Does pthread_create() create kernel level threads?
+Undefined.  Whether the kernel knows about the threads is up to the
+implementation of the threading library.  Usually, on Linux, there is
+one kernel thread for every user thread.
 
-char* fun()
-{
-    struct s op;
-    strcpy(op.op, "898898898\0");
-    return op.op;
-}
+> My observation is that either both of the threads be Kernel level
+> threads or pthread library has given wrapper functions for blocking
+> calls(for example, sleep system call in our case) which stop all of
+> the threads to be blocked.
+Either would be an acceptable implementation.  Linux pthreads takes
+the former approach.
 
-int main()
-{
-    cout << fun() << endl;
-    return 0;
-}
-#################################
-But when the structure is change no warning is issued
-Following is the new structure
-#################################
-struct s {
-        int j;
-        char op[24];
-};
-#################################
+> I read in text books that pthread libray is for creating user level
+> threads(threads about which kernel is not aware of).
+There are (at least) two different meanings of user-level threads.
+pthread_create creates a user-level thread in the sense that it runs
+user-level code, but the details of who makes the scheduling decisions
+are left up to the implementation.
 
-Obviously I know that "op.op" should not be returned.
+Steven.
 
-g++ compiler  "g++ (GCC) 3.2.3 20030502 (Red Hat Linux 3.2.3-20)" is being
-used for compilation.
+--yrj/dFKFPuw6o+aM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
 
-Thanks in advance,
-Amit Dang
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.5 (GNU/Linux)
 
+iD8DBQFClEANO4S8/gLNrjcRAmGwAJ9yKv1JfFfFyOQCEoqv+bx+2hrYGACfbqIU
+vjRB8nRw7zhBdpQiW1M6NoA=
+=TPyt
+-----END PGP SIGNATURE-----
+
+--yrj/dFKFPuw6o+aM--
