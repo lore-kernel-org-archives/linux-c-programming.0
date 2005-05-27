@@ -1,49 +1,115 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: kerel level threads
-Date: Wed, 25 May 2005 12:57:28 +0100
-Message-ID: <17044.26664.197333.797165@gargle.gargle.HOWL>
-References: <20050524034750.70100.qmail@web51307.mail.yahoo.com>
-	<42942467.9060805@cse.iitk.ac.in>
-	<17044.26026.165790.767334@gargle.gargle.HOWL>
+From: "Amit Dang" <amit_dang@intersolutions.stpn.soft.net>
+Subject: Re: Issue "address of local variable returned"
+Date: Fri, 27 May 2005 09:24:56 +0530
+Message-ID: <011d01c5626f$e7bdba70$9736a8c0@ispl091>
+References: <013a01c560fb$37b16e80$9736a8c0@ispl091> <2ab8d39a05052610175e3d7018@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17044.26026.165790.767334@gargle.gargle.HOWL>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "K. Anantha Kiran" <ananth@cse.iitk.ac.in>, linux-c-programming@vger.kernel.org
+To: krzaq <krzakers@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
+
+Hi Karol,
+    Thanks a lot for your reply. I am aware that memory for local variable
+is allocated on stack and so its address should not be returned.
+My problem is compiler warning. For two different structs, compiler warning
+change.
+
+If following struct is used, compiler flashes a warning
+struct s {
+     char op[24];
+     int j;
+ };
+
+but if int is moved before char no warning is flashed by the compiler.
+struct s {
+         int j;
+         char op[24];
+ };
+
+For details, refer text of original mail attached below.
+Regards,
+Amit Dang
+
+----- Original Message ----- 
+From: "krzaq" <krzakers@gmail.com>
+To: "Amit Dang" <amit_dang@intersolutions.stpn.soft.net>
+Sent: Thursday, May 26, 2005 10:47 PM
+Subject: Re: Issue "address of local variable returned"
 
 
-Glynn Clements wrote:
+> On 5/25/05, Amit Dang <amit_dang@intersolutions.stpn.soft.net> wrote:
+> > Hi All,
+> >     I am facing following issue
+> > (g++ compiler  "g++ (GCC) 3.2.3 20030502 (Red Hat Linux 3.2.3-20)" is
+being
+> > used for compilation.)
+> >
+> > Following piece of code gives warning: "address of local variable `op'
+> > returned"
+> > #################################
+> > #include<iostream>
+> > using namespace std;
+> >
+> > struct s {
+> >     char op[24];
+> >     int j;
+> > };
+> >
+> > char* fun()
+> > {
+> >     struct s op;
+> >     strcpy(op.op, "898898898\0");
+> >     return op.op;
+> ^^----------------- char* "op" is valid in the visibility context
+> of struct "op", which is the body of function fun().
+> Struct "op" is created on stack and gets "deleted" after returning
+> from function fun().
+> Try something like this:
+>
+> struct s* op;
+> op = (struct s*) malloc(sizeof(struct s));
+> strcpy(op->op, "898898898\0");
+> return op->op;
+>
+> > }
+> >
+> > int main()
+> > {
+> >     cout << fun() << endl;
+> >     return 0;
+> > }
+> > #################################
+> > But when the structure is change no warning is issued
+> > Following is the new structure
+> > #################################
+> > struct s {
+> >         int j;
+> >         char op[24];
+> > };
+> > #################################
+> >
+> > Obviously I know that "op.op" should not be returned.
+> >
+> > g++ compiler  "g++ (GCC) 3.2.3 20030502 (Red Hat Linux 3.2.3-20)" is
+being
+> > used for compilation.
+> >
+> > Thanks in advance,
+> > Amit Dang
+> >
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> >
+>
+>
+> -- 
+> Regards
+> Karol Krzak
 
-> >     Point me to appropiate group if this question doesnt fit here.
-> >     Does pthread_create() create kernel level threads?
-> >     I have created two threads A and B. Thread A was written to print 
-> > some statement in an infinite loop, while Thread B was written to be 
-> > blocked for some time(I have used sleep system call to block Thread B). 
-> > If at all pthread_create() creates user level threads, Blocking of 
-> > Thread B will also make Thread A to be blocked.  But  in my output, 
-> > Thread A was continously printing even when Thread B was blocked.  My 
-> > observation is that either both of the threads be Kernel level threads 
-> > or pthread library has given wrapper functions for blocking calls(for 
-> > example, sleep system call in our case) which stop all of the threads to 
-> > be blocked.  I read in text books that pthread libray is for creating 
-> > user level threads(threads about which kernel is not aware of).
-> 
-> libpthread creates kernel threads.
-
-By which I mean that the kernel creates additional "tasks" using
-clone(). The new tasks have their own kernel-level data (signal masks
-etc) and are scheduled by the kernel.
-
-There are threading libraries which don't require any support from the
-kernel, but are implemented entirely in user-space. That isn't how the
-pthread library is implemented.
-
-On Linux, the term "kernel thread" can also refer to threads which
-execute entirely within the kernel. The pthread library doesn't have
-anything to do with those.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
