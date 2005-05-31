@@ -1,92 +1,92 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: curious about whether i can count on certain features of C
-Date: Mon, 30 May 2005 14:24:44 +0100
-Message-ID: <17051.5148.70041.231276@gargle.gargle.HOWL>
-References: <Pine.LNX.4.61.0505291517130.31836@localhost.localdomain>
+From: "M.Baris Demiray" <baris@labristeknoloji.com>
+Subject: fprintf() and duplicate IP addresses
+Date: Tue, 31 May 2005 02:19:03 +0000
+Message-ID: <429BC997.6000909@labristeknoloji.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="------------040903090408060400080808"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.61.0505291517130.31836@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
+
+This is a multi-part message in MIME format.
+--------------040903090408060400080808
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-Robert P. J. Day wrote:
+Hello,
+I have encountered with a strange problem using fprintf(). I'm
+working on a packet sniffer using raw sockets and printing header
+details as usual. But when I try to print source and destination IP
+addresses, if I use a single fprintf() they're printed as duplicates.
+But if I separate them into two fprintf()s everything is OK. Here are
+some code snippets and corresponding outputs.
 
->   i just inherited a sizable C-based project and, perusing the code,
-> i've come across a number of in-house defined constructs that would
-> seem to already be supported in standard (C99?) C, and i'm wondering
-> if there's a reason the previous developer felt he needed to define
-> these features himself.
-> 
->   first, there's the definition of "offsetof":
-> 
-> #ifndef offsetof
-> # define offsetof(type, field) \
->     ( (char *) &( ((type *) 0)[0].field ) - (char *) &( ((type *) 0)[0] ) )
-> #endif
-> 
->   using any modern definition of C, can i safely assume that this
-> function/macro is just part of the language (stddef.h)?
+First; with one fprintf():
 
-If you require C99, you can rely upon the presence of offsetof.
-However, I wouldn't make code C99-only for this reason alone. Reasons
-for not requiring C99 include:
+fprintf(stdout, "%s:%d -> %s:%d  ", \
+         inet_ntoa(*(struct in_addr *)&ip_header->ip_src.s_addr), \
+         ntohs(tcp_header->source), \
+         inet_ntoa(*(struct in_addr *)&ip_header->ip_dst.s_addr), \
+         ntohs(tcp_header->dest));
 
-1. You might want to compile your code on a system where there isn't a
-stable C99 compiler.
+And output after tapping Enter key on a ssh session opened at
+10.0.0.50..
 
-2. You might want to use a third-party library whose headers aren't
-compatible with C99 (C99 isn't entirely backward-compatible with C89).
+TCP IPv4 10.0.0.50:22 -> 10.0.0.50:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.50:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.50:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.50:34001
 
-> and, at the
-> very least, is there a reason it's defined in such an obscure way
-> rather than just
-> 
->   #define offsetof(type,memb) ((size_t)&((type *)0) -> memb)   ???
-> 
-> that first definition might be technically correct but i'm really
-> trying to simplify things and i don't see any obvious need to keep
-> that local definition around.
+Second; with two fprintf()s:
 
-1. Some compilers may complain about an explicit dereference of a null
-pointer.
+fprintf(stdout, "%s:%d ", \
+         inet_ntoa(*(struct in_addr *)&ip_header->ip_src.s_addr),
+         ntohs(tcp_header->source));
+fprintf(stdout, "-> %s:%d  ", \
+         inet_ntoa(*(struct in_addr *)&ip_header->ip_dst.s_addr),
+         ntohs(tcp_header->dest));
 
-2. On some systems, casting the base address of the structure to
-size_t may not yield zero.
+And tapping in remote session again.. (Connected from 10.0.0.23)
 
->   next, booleans.  based on my copy of "harbison and steele" (5th
-> ed.), can i reasonably assume the existence of a boolean data type
-> (stdbool.h)?  i don't have much interest in supporting legacy
-> compilers, and booleans appear to be part of the C99 definition, so
-> i'd be really tempted to ditch the following enum type i found:
-> 
->     enum TCS_bool_Type {
->         TCS_bool_FALSE = 0, /**< false/no state */
->         TCS_bool_TRUE /**< true/yes state */
->     } GCC_PACKED;                       /* enum TCS_bool_Type */
-> 
->   next, there are a number of typedefs for fixed-width data types:
-> 
->     typedef signed char TCS_int8_t; /**< signed 8-bit integer */
->     typedef unsigned char TCS_u_int8_t; /**< unsigned 8-bit integer */
->     typedef signed short TCS_int16_t; /**< signed 16-bit integer */
->     typedef unsigned short TCS_u_int16_t; /**< unsigned 16-bit integer */
->     typedef signed int TCS_int32_t; /**< signed 32-bit integer */
->     typedef unsigned int TCS_u_int32_t; /**< unsigned 32-bit integer */
->     typedef TCS_int8_t TCS_tiny_t; /**< signed tiny integer */
->     typedef TCS_u_int8_t TCS_u_tiny_t; /**< unsigned tiny integer
-> 
-> is there any compelling reason why i can't just use the types defined
-> in /usr/include/stdint.h?  that is, int8_t, uint32_t, and so on?  is
-> there any rationale for someone wanting to do this themselves, apart
-> from perhaps legacy compiler support?
+TCP IPv4 10.0.0.50:22 -> 10.0.0.23:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.23:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.23:34001
+TCP IPv4 10.0.0.50:22 -> 10.0.0.23:34001
 
-Just portability. In the real world, not everyone uses a bleeding-edge
-compiler.
+That's weird. Missing something?
+
+As extra information; I'm using ip struct in netinet/ip.h and
+getting IP header from raw data as below:
+
+         memcpy((struct ip *)ip_header, buffer, SIZE_IP_HDR);
+
+And using gcc-3.2.3 and glibc-2.3.4.
+
+Any idea?
+
+Regards,
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+"You have to understand, most of these people are not ready to be
+unplugged. And many of them are no inert, so hopelessly dependent
+on the system, that they will fight to protect it."
+                                                         Morpheus
+
+--------------040903090408060400080808
+Content-Type: text/x-vcard; charset=utf-8;
+ name="baris.vcf"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="baris.vcf"
+
+YmVnaW46dmNhcmQNCmZuOk0uQmFyaXMgRGVtaXJheQ0KbjpEZW1pcmF5O00uQmFyaXMNCm9y
+ZzpMYWJyaXMgVGVrbm9sb2ppDQphZHI6OztUZWtub2tlbnQgU2lsaWtvbiBCaW5hIE5vOjI0
+IE9EVFU7QW5rYXJhOzswNjUzMTtUdXJrZXkNCmVtYWlsO2ludGVybmV0OmJhcmlzQGxhYnJp
+c3Rla25vbG9qaS5jb20NCnRpdGxlOllhemlsaW0gR2VsaXN0aXJtZSBVem1hbmkNCnRlbDt3
+b3JrOis5MDMxMjIxMDE0OTANCnRlbDtmYXg6KzkwMzEyMjEwMTQ5Mg0KeC1tb3ppbGxhLWh0
+bWw6RkFMU0UNCnVybDpodHRwOi8vd3d3LmxhYnJpc3Rla25vbG9qaS5jb20NCnZlcnNpb246
+Mi4xDQplbmQ6dmNhcmQNCg0K
+--------------040903090408060400080808--
