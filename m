@@ -1,36 +1,31 @@
-From: Thorsten Alge <mail@thorsten-alge.de>
-Subject: ULI M5289 Chipset
-Date: Fri, 03 Jun 2005 23:49:03 +0200
-Message-ID: <1117835343.4477.7.camel@localhost.localdomain>
+From: "Robert P. J. Day" <rpjday@mindspring.com>
+Subject: Re: looking for a recommendation for C logging library
+Date: Fri, 3 Jun 2005 19:25:06 -0400 (EDT)
+Message-ID: <Pine.LNX.4.61.0506031924020.16283@localhost.localdomain>
+References: <Pine.LNX.4.61.0506031306450.29227@localhost.localdomain>
+ <73a776530506031320617c40ac@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <73a776530506031320617c40ac@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Linux Newbie <linux-newbie@vger.kernel.org>, Linux C Programming <linux-c-programming@vger.kernel.org>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Jason Sallis <jsallis@gmail.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
-Hi,
+On Fri, 3 Jun 2005, Jason Sallis wrote:
 
-ive some trouble with getting an ali/uli sata chipset running. ive got
-the m5289 chipset but it wont work on debian linux. it works fine on
-suse 9.3 but i cant figure out wich patch they use. after testing all
-patches and the newest kernel source ive no ideas how the get it
-working. if anybody has an idea or a hint how the get it running or find
-the right patch, please let me know...
+> I've never personally tried it, but log4c
+> (http://log4c.sourceforge.net/) might be worth checking out.  I've
+> worked with both log4j and log4net extensively and since this project
+> is based on log4j, I would assume that it would meet your needs.
+>
+> j-sa
 
-thx,
+in fact, that's the very one i started looking at, having found it at
+freshmeat.  my only concern is that this is going to be part of an
+embedded system so space will be an issue.  as long as it isn't a
+space hog, it's a possibility.
 
-
-Thorsten
-                                  ,,,,,
-                                 ( o ~ )
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~.oooO~~(_)~~Oooo.~~~
-
------BEGIN GEEK CODE BLOCK-----
-Version: 3.12
-GCM d+ s-: a-- C++ UL+++ P+++ L+++ E--- W++ N* o K- w--- 
-O-- M+ V PS++ PE Y++ PGP++ t 5- X++ R tv- b++ DI D- 
-G e h+ r y+ 
-------END GEEK CODE BLOCK------
-
+rday
