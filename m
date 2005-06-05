@@ -1,31 +1,23 @@
-From: "Robert P. J. Day" <rpjday@mindspring.com>
-Subject: Re: looking for a recommendation for C logging library
-Date: Fri, 3 Jun 2005 19:25:06 -0400 (EDT)
-Message-ID: <Pine.LNX.4.61.0506031924020.16283@localhost.localdomain>
-References: <Pine.LNX.4.61.0506031306450.29227@localhost.localdomain>
- <73a776530506031320617c40ac@mail.gmail.com>
+From: "David L. Martin" <dlmarti@kc2lcf.net>
+Subject: Automatic library init
+Date: Sat, 04 Jun 2005 21:34:31 -0400
+Message-ID: <1117935271.4561.3.camel@localhost.localdomain>
+Reply-To: dlmarti@kc2lcf.net
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <73a776530506031320617c40ac@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Jason Sallis <jsallis@gmail.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: C programming list <linux-c-programming@vger.kernel.org>
 
-On Fri, 3 Jun 2005, Jason Sallis wrote:
+I am updating a whole set of libraries at work, one of the complaints I
+am dealing with is the need to initialize the library.
 
-> I've never personally tried it, but log4c
-> (http://log4c.sourceforge.net/) might be worth checking out.  I've
-> worked with both log4j and log4net extensively and since this project
-> is based on log4j, I would assume that it would meet your needs.
->
-> j-sa
+Back in the day (Borland days), there used to be a pragma directive that
+could be used to automatically call a function with-in the library on
+startup.  I know something like this must exist in gcc but I can't find
+it.
 
-in fact, that's the very one i started looking at, having found it at
-freshmeat.  my only concern is that this is going to be part of an
-embedded system so space will be an issue.  as long as it isn't a
-space hog, it's a possibility.
+Does anyone have info?
 
-rday
