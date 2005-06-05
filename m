@@ -1,23 +1,25 @@
-From: "David L. Martin" <dlmarti@kc2lcf.net>
-Subject: Automatic library init
-Date: Sat, 04 Jun 2005 21:34:31 -0400
-Message-ID: <1117935271.4561.3.camel@localhost.localdomain>
-Reply-To: dlmarti@kc2lcf.net
+From: Ankit Jain <ankitjain1580@yahoo.com>
+Subject: Printf and scanf
+Date: Sun, 5 Jun 2005 13:21:05 +0100 (BST)
+Message-ID: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: C programming list <linux-c-programming@vger.kernel.org>
+To: linux prg <linux-c-programming@vger.kernel.org>, newbie <linux-newbie@vger.kernel.org>
 
-I am updating a whole set of libraries at work, one of the complaints I
-am dealing with is the need to initialize the library.
+hi
 
-Back in the day (Borland days), there used to be a pragma directive that
-could be used to automatically call a function with-in the library on
-startup.  I know something like this must exist in gcc but I can't find
-it.
+this is a simple problem which somebody asked me and i
+am not able to solve. if somebody here can help me out
 
-Does anyone have info?
+i just want to know how scanf function can be used on
+the place of printf and vice versa
 
+thanks
+
+ankit
+
+Send instant messages to your online friends http://uk.messenger.yahoo.com 
