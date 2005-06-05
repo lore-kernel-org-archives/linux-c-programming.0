@@ -1,53 +1,32 @@
-From: Steven Smith <sos22@cantab.net>
-Subject: Re: Automatic library init
-Date: Sun, 5 Jun 2005 14:50:08 +0100
-Message-ID: <20050605135008.GA1880@localhost>
-References: <1117935271.4561.3.camel@localhost.localdomain>
+From: Arturas Moskvinas <arturas.moskvinas@gmail.com>
+Subject: Re: Printf and scanf
+Date: Sun, 5 Jun 2005 16:54:13 +0300
+Message-ID: <4a618d0805060506545a4337be@mail.gmail.com>
+References: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
+Reply-To: Arturas Moskvinas <arturas.moskvinas@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="BOKacYhQ+x31HxR3"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
 Content-Disposition: inline
-In-Reply-To: <1117935271.4561.3.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: "David L. Martin" <dlmarti@kc2lcf.net>
-Cc: C programming list <linux-c-programming@vger.kernel.org>, sos22@srcf.ucam.org
+Content-Type: text/plain; charset="us-ascii"
+To: Ankit Jain <ankitjain1580@yahoo.com>
+Cc: linux prg <linux-c-programming@vger.kernel.org>, newbie <linux-newbie@vger.kernel.org>
 
+> hi
+> 
+> this is a simple problem which somebody asked me and i
+> am not able to solve. if somebody here can help me out
+> 
+> i just want to know how scanf function can be used on
+> the place of printf and vice versa
 
---BOKacYhQ+x31HxR3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Scanf reads from STDIN and printf writes into STDOUT. I do not think
+there is any way to change reading operation with writing... Of course
+some alchemy might help you :)
 
-> Back in the day (Borland days), there used to be a pragma directive that
-> could be used to automatically call a function with-in the library on
-> startup.  I know something like this must exist in gcc but I can't find
-> it.
-I think the approved method is to use constructor functions:
+I think you misinterpreted something...
 
-void cons_func(void) __attribute__((constructor));
-
-void cons_func(void)
-{
-	/* Do initialisation stuff here */
-}
-
-Note that it isn't hugely well defined what order constructor
-functions get called in, so be careful when calling other libraries.
-
-Steven.
-
---BOKacYhQ+x31HxR3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.5 (GNU/Linux)
-
-iD8DBQFCowMQO4S8/gLNrjcRApHDAKCp6T3mLqZHOPsbwMytDa5SpJei+QCeJHxt
-GXk1h9bzIUhf7wM/++VEqyE=
-=1UK0
------END PGP SIGNATURE-----
-
---BOKacYhQ+x31HxR3--
+Arturas Moskvinas
