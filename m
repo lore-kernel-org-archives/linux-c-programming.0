@@ -1,76 +1,39 @@
-From: "Robert P. J. Day" <rpjday@mindspring.com>
-Subject: library routine wrappers and serious overkill
-Date: Sun, 5 Jun 2005 17:34:41 -0400 (EDT)
-Message-ID: <Pine.LNX.4.61.0506051727540.5731@localhost.localdomain>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: using compile-time "assertions"
+Date: Mon, 6 Jun 2005 02:08:46 +0100
+Message-ID: <17059.41502.432000.929857@gargle.gargle.HOWL>
+References: <Pine.LNX.4.61.0506051632530.5573@localhost.localdomain>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.61.0506051632530.5573@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: "Robert P. J. Day" <rpjday@mindspring.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
 
-  yet another curious feature of this code base that i'm now looking
-after.  apparently, the original author was a big believer in
-robustness, given that he wrapped numerous simple library routines
-with assertions and dbug.h macros, as in:
+Robert P. J. Day wrote:
 
-===========================
+>   another question (one of undoubtedly many) regarding the code i
+> inherited.  in this code, there is liberal use of the following macro:
+> 
+> #define INVARIANT(e) \
+>   do { \
+>     struct whatever { char static_assertion[(e) ? 1 : -1]; }; \
+>     } while (0)
+> 
+> which i recognize as a *compile-time* assertion/invariant.  is this a
+> common construct?  just curious.  or is there a more popular variant
+> of this sort of thing?  i recognize its value but, geez, there's
+> hundreds of these things in the code. :-P
 
-void
-my_str_copy(char *const dest_p,
-		size_t dest_size,
-		char const *const source_p,
-		size_t const source_size)
-{
-    DBUG_ENTER(__FUNCTION__);
+I've never seen that one before. It's more common to just use e.g.:
 
-    my_CONDITION(dest_p || dest_size == 0);
-    my_CONDITION(source_p || source_size == 0);
+	#if !expression
+	#error expression
+	#endif
 
-    if (dest_p && 0 < dest_size) {
-        if (source_p == 0) {
-            dest_size = 1;
-        } else if (source_size < dest_size) {
-            dest_size = source_size + 1;
-        }
-
-        strncpy(dest_p, source_p, --dest_size);
-        dest_p[dest_size] = 0;
-    }
-
-    DBUG_VOID_RETURN;
-}
-
-==============================
-
-  now, i'm as big a fan as the next guy of good debugging (the
-my_CONDITION macro is a local implementation of assert() with hooks to
-a logging library -- yeesh) but, seriously, there has to be a limit to
-just how much debugging you're going to apply to each and every
-string-related library routine.  it does get kind of absurd after a
-while:
-
-===============================
-
-char
-my_str_ch2upper(char const ch)
-{
-    DBUG_ENTER(__FUNCTION__);
-
-    if (isascii(ch) && islower(ch)) {
-        DBUG_RETURN(toupper(ch));
-    }
-    DBUG_RETURN(ch);
-}
-
-
-===============================
-
-  is this what you'd call best practice?  am i just being too
-critical?  is there a more established combination of
-debugging/assertions/logging that people use?  based on a previous
-posting, i'm looking hard at "log4c" for the logging part.
-
-rday
+-- 
+Glynn Clements <glynn@gclements.plus.com>
