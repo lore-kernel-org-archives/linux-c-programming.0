@@ -1,96 +1,73 @@
 From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: variable length function
-Date: Tue, 14 Jun 2005 21:14:14 +0200
-Message-ID: <6a00c8d505061412142f93e234@mail.gmail.com>
-References: <20050614174356.58804.qmail@web52910.mail.yahoo.com>
+Subject: Re: union versus bit manipulation
+Date: Tue, 14 Jun 2005 22:03:17 +0200
+Message-ID: <6a00c8d5050614130372a5a289@mail.gmail.com>
+References: <Pine.LNX.4.61.0506140858190.18849@localhost.localdomain>
 Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050614174356.58804.qmail@web52910.mail.yahoo.com>
+In-Reply-To: <Pine.LNX.4.61.0506140858190.18849@localhost.localdomain>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Ankit Jain <ankitjain1580@yahoo.com>
+To: "Robert P. J. Day" <rpjday@mindspring.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On 6/14/05, Ankit Jain <ankitjain1580@yahoo.com> wrote:
-> hi
+On 6/14/05, Robert P. J. Day <rpjday@mindspring.com> wrote:
 > 
-> if somebody can tell me what is exactly variable
-> length functions and how the compilers are able to
-> identify them.............?
+>   looking for advice on the following issue.  some code i've inherited
+> defines an unsigned 16-bit value that's meant to be interpreted in the
+> following way in terms of the internal bit structure:
 > 
-> also, if somebody can tell me how can i perform the
-> operation of printf from scanf?
+>   1-bit         class
+>   2-bit         type
+>   13-bit        value
 > 
-> also, if what is the default return type and value of
-> main function in C in gcc, ansi C and turbo C?
+> however, in addition to needing to access the individual components of
+> this object, the code (sadly) also needs to treat the whole thing as
+> an unsigned 16-bit value to use as a key into a larger data structure.
+> 
+>   at the moment, defining the whole thing as an unsigned 16-bit object
+> and using bit operations works fine, but i was considering redefining
+> the type to use a union thusly:
+> 
+> union thing {
+>         uint16_t thingval ;
+>         struct S {
+>                 unsigned val    : 13 ;
+>                 unsigned type   : 2 ;
+>                 unsigned class  : 1 ;
+>         } s ;
+> } ;
+> 
+> 
+>   the major problems i see are that 1) i'd obviously need to guarantee
+> that the fields in the struct are packed to make sure they still
+> correspond to the appropriate 16-bit value, and 2) i need to make it
+> portable across different endian architectures (i'm compiling the code
+> on am x86 for a Power PC board).
+> 
+>   given the cautions associated with structure packing and alignment,
+> as well as endianness, is it even worth the trouble to think of
+> something like this?  or should i just leave the object as a uint16_t
+> and stick with the bit operations?
+> 
+> rday
+> 
+> p.s.  i can guarantee that i'll be using gcc to compile, which has
+> some support for forcing packing, but i'm not sure at this point it's
+> worth the trouble.  thoughts?
 
+Robert,
 
-Question 1:
-I suppose you mean functions with variable argument lists, which are
-usually indicated by three dots (...) in their synopsis like the
-following:
+I can't see a benefit in a transition from uint16_t to a "union
+thing".  You already mentioned important issues and since bit fields
+are not universally portable I don't think its worth the effort.  Bit
+operations on simple types are a convenient solution.
 
-	void func(const char *fmt, ...)
-
-A typical example is the family of printf() functions.  Variable
-length means that the number of arguments the function can take is not
-fixed.  As with printf(), you can pass a myriad of arguments to a
-function with a variable argument list (as long as the function is
-able to process them).
-
-A typical application of this kind of functions is to dump error
-messages.  At first you create wrapper that takes the variable
-argument list, processes it and call a function that does all the
-work:
-
-	void log(const char *fmt, ...) {
-		va_list args;
-		
-		va_start(args, fmt);      /* initialize */
-		__process_msg(fmt, args); /* process this message */
-		va_end(args);             /* clean up */
-	}
-	
-	void __process_msg(const char *fmt, va_list args) {
-		int error = errno;
-		
-		vfprintf(stderr, fmt, args); /* here: output to stderr */
-		if (error != 0) {
-			fprintf(stderr, ": %s", strerror(error));
-			putc('\n', stderr);
-		}
-	}
-
-As you can see, a couple of functions/macros and data types help to
-process the variable argument list.  Consult man va_start or something
-similar to read more on that topic.  Processing a variable argument
-list is easy, but the implementation is highly complicated.
-
-
-Question 2:
-There is nothing magic with variable argument lists and compilers. 
-Some sophisticated library functions do all the processing.  The
-compiler is not involved in this process.
-
-
-Question 3:
-Please refer to message
-<20050605122105.1865.qmail@web52905.mail.yahoo.com> where your
-question has already been discussed (or answered at least).
-
-
-Question 4:
-ISO C99 suggests the return type of main() to be of type int.  There
-is a never ending debate among some professionals whether void is
-equally legal.  Some compilers behave like ANSI C that allows
-declaration of type void but return int implicitly.  In other words:
-stick to int.
-
-
+ 
 Kind Regards
 
     \Steve
