@@ -1,66 +1,63 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: union versus bit manipulation
-Date: Wed, 15 Jun 2005 03:35:12 +0100
-Message-ID: <17071.37856.199720.87469@gargle.gargle.HOWL>
-References: <Pine.LNX.4.61.0506140858190.18849@localhost.localdomain>
+From: Steve Graegert <graegerts@gmail.com>
+Subject: Re: variable length function
+Date: Wed, 15 Jun 2005 08:33:06 +0200
+Message-ID: <6a00c8d50506142333197a5b0@mail.gmail.com>
+References: <20050614174356.58804.qmail@web52910.mail.yahoo.com>
+	 <6a00c8d505061412142f93e234@mail.gmail.com>
+	 <17071.37179.269117.890201@gargle.gargle.HOWL>
+Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.61.0506140858190.18849@localhost.localdomain>
+In-Reply-To: <17071.37179.269117.890201@gargle.gargle.HOWL>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+To: Glynn Clements <glynn@gclements.plus.com>
+Cc: Ankit Jain <ankitjain1580@yahoo.com>, linux-c-programming@vger.kernel.org
 
-
-Robert P. J. Day wrote:
-
->   looking for advice on the following issue.  some code i've inherited
-> defines an unsigned 16-bit value that's meant to be interpreted in the
-> following way in terms of the internal bit structure:
+On 6/15/05, Glynn Clements <glynn@gclements.plus.com> wrote:
 > 
->   1-bit       class
->   2-bit       type
->   13-bit      value
+> Steve Graegert wrote:
 > 
-> however, in addition to needing to access the individual components of
-> this object, the code (sadly) also needs to treat the whole thing as
-> an unsigned 16-bit value to use as a key into a larger data structure.
+> > > also, if what is the default return type and value of
+> > > main function in C in gcc, ansi C and turbo C?
 > 
->   at the moment, defining the whole thing as an unsigned 16-bit object
-> and using bit operations works fine, but i was considering redefining
-> the type to use a union thusly:
+> > Question 4:
+> > ISO C99 suggests the return type of main() to be of type int.  There
+> > is a never ending debate among some professionals whether void is
+> > equally legal.  Some compilers behave like ANSI C that allows
+> > declaration of type void but return int implicitly.  In other words:
+> > stick to int.
 > 
-> union thing {
->         uint16_t thingval ;
->         struct S {
->                 unsigned val    : 13 ;
->                 unsigned type   : 2 ;
->                 unsigned class  : 1 ;
->         } s ;
-> } ;
-> 
-> 
->   the major problems i see are that 1) i'd obviously need to guarantee
-> that the fields in the struct are packed to make sure they still
-> correspond to the appropriate 16-bit value, and 2) i need to make it
-> portable across different endian architectures (i'm compiling the code
-> on am x86 for a Power PC board).
-> 
->   given the cautions associated with structure packing and alignment,
-> as well as endianness, is it even worth the trouble to think of
-> something like this?
+> The value returned from main is used as the process' exit code. If you
+> declare main() as returning void, and return from it, the process is
+> likely to have a random exit code (e.g. whatever happens to be in the
+> EAX register upon return from main()).
 
-No.
+Yes, another important issue.  The most reliable way to return a valid
+and correct value I am aware of is returning a value explicitly. 
+You're right. just declaring int does not imply the return code to be
+the expected one, though being valid.  It is __not__ guaranteed that
+the return type is not some random integer value unless it is returned
+explicitly.
 
-> or should i just leave the object as a uint16_t and stick with the
-> bit operations?
+Another point that comes to mind are compilers with distinct calling
+conventions for int and void functions and job control for example. 
+This can cause headaches when main() does not push a return value on
+the stack, as being the case with void, and the caller tries to pop an
+int which obviously is not found.  It __may__ lead to subtle crashes
+later on.
 
-Yes.
 
-Apart from layout issues, you risk introducing aliasing bugs if your
-code is compiled with optimisation.
+Kind Regards
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+    \Steve
+
+--
+
+Steve Graegert <graegerts@gmail.com> || <http://www.technologies.de/~sg/>
+Independent Software Consultant {C/C++ && Java && .NET}
+Mobile: +49 (176)  21 24 88 69
+Office: +49 (9131) 71 26 40 9
