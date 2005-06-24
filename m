@@ -1,7 +1,7 @@
 From: James Colannino <james@colannino.org>
 Subject: Re: comparing char to other known char's
-Date: Thu, 23 Jun 2005 16:58:21 -0700
-Message-ID: <42BB4C9D.5030309@colannino.org>
+Date: Thu, 23 Jun 2005 17:25:08 -0700
+Message-ID: <42BB52E4.5090504@colannino.org>
 References: <42B9F2C7.2030205@colannino.org> <200506231610.55260.adix@vendio.ro> <42BB1E25.1050500@colannino.org> <200506231757.58518.eric@cisu.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -21,7 +21,32 @@ Eric Bambach wrote:
 > charsets and input methods that you might not have thought of that could 
 > wreck havoc in your program.
 
-You're right.  I didn't think of that.  Thanks for the warning.
+Here's what I've whipped up based on your suggestion that I should look
+for legal characters instead of the other way around:
+
+<CODE>
+
+/* This function returns 1 if the character being checked is legal and 0
+if it isn't. */
+
+int legal_characters(char character_to_check) {
+
+	int index;
+	legal_characters[] =
+"abcdefghijklmnopqrstuvwxyzAVCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
+
+	int number_of_legal_chars = sizeof(legal_characters) / sizeof(char);
+
+	for (index = 0; index < number_of_legal_chars; ++index) {
+		if (character_to_check == legal_characters[index])
+			return 1;
+	}
+
+	return 0;
+
+</CODE>
+
+How does this function look?
 
 James
 -- 
