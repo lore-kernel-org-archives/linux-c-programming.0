@@ -1,69 +1,38 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: comparing char to other known char's
-Date: Fri, 24 Jun 2005 09:32:31 +0100
-Message-ID: <17083.50463.358080.49397@gargle.gargle.HOWL>
-References: <42B9F2C7.2030205@colannino.org>
-	<200506231610.55260.adix@vendio.ro>
-	<42BB1E25.1050500@colannino.org>
-	<200506231757.58518.eric@cisu.net>
-	<42BB52E4.5090504@colannino.org>
+From: Hendrik Visage <hvjunk@gmail.com>
+Subject: Re: Printf and scanf
+Date: Fri, 24 Jun 2005 23:20:35 +0200
+Message-ID: <d93f04c70506241420114b28da@mail.gmail.com>
+References: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
+Reply-To: Hendrik Visage <hvjunk@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42BB52E4.5090504@colannino.org>
-Sender: linux-c-programming-owner@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Return-path: <linux-newbie-owner@vger.kernel.org>
+In-Reply-To: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
+Content-Disposition: inline
+Sender: linux-newbie-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: James Colannino <james@colannino.org>
-Cc: linux-c-programming@vger.kernel.org
+To: Ankit Jain <ankitjain1580@yahoo.com>
+Cc: linux prg <linux-c-programming@vger.kernel.org>, newbie <linux-newbie@vger.kernel.org>
 
+On 6/5/05, Ankit Jain <ankitjain1580@yahoo.com> wrote:
 
-James Colannino wrote:
+> i just want to know how scanf function can be used on
+> the place of printf and vice versa
 
-> > Generally speaking (in terms of input validation), its better practice to 
-> > check against a LEGAL set of characters rather than an illegal set. That way 
-> > you can get all the characters you need, but everything else is blocked. If 
-> > you block illegal ones you're bound to miss a few or even ones from extended 
-> > charsets and input methods that you might not have thought of that could 
-> > wreck havoc in your program.
-> 
-> Here's what I've whipped up based on your suggestion that I should look
-> for legal characters instead of the other way around:
-> 
-> <CODE>
-> 
-> /* This function returns 1 if the character being checked is legal and 0
-> if it isn't. */
-> 
-> int legal_characters(char character_to_check) {
-> 
-> 	int index;
+In the Obfuscated C contest one of the first/early entries is one that
+states "Using read to write" (Or something to similar extend, or
+perhaps even using scanf to print). Reading that code is hackery, and
+from my first glance at the code, it was don't with quote and macro
+hackery.
 
-> 	legal_characters[] =
-
-Should be preceded by "char", i.e.
-
-	char legal_characters[] =
-
-Better still, make it static and constant:
-
-	static const char legal_characters[] =
-
-> "abcdefghijklmnopqrstuvwxyzAVCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
-                              ^
-Typo; should be "B".
-
-> 	int number_of_legal_chars = sizeof(legal_characters) / sizeof(char);
-> 
-> 	for (index = 0; index < number_of_legal_chars; ++index) {
-> 		if (character_to_check == legal_characters[index])
-> 			return 1;
-> 	}
-
-> How does this function look?
-
-You can replace the loop with a call to strchr(). But using a lookup
-table as suggested by Eric would be significantly more efficient.
+Thus you could #define scanf __prinf and #define printf __scanf... or
+something with similar confusing
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+Hendrik Visage
+-
+To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Please read the FAQ at http://www.linux-learn.org/faqs
