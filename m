@@ -1,22 +1,25 @@
-From: "J." <mailing-lists@xs4all.nl>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: comparing char to other known char's
-Date: Fri, 24 Jun 2005 09:57:19 +0200 (CEST)
-Message-ID: <Pine.LNX.4.21.0506240936200.565-100000@hestia>
-References: <42BB52E4.5090504@colannino.org>
-Reply-To: linux-c-programming@vger.kernel.org
+Date: Fri, 24 Jun 2005 09:32:31 +0100
+Message-ID: <17083.50463.358080.49397@gargle.gargle.HOWL>
+References: <42B9F2C7.2030205@colannino.org>
+	<200506231610.55260.adix@vendio.ro>
+	<42BB1E25.1050500@colannino.org>
+	<200506231757.58518.eric@cisu.net>
+	<42BB52E4.5090504@colannino.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <42BB52E4.5090504@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: James Colannino <james@colannino.org>
+Cc: linux-c-programming@vger.kernel.org
 
-On Thu, 23 Jun 2005, James Colannino wrote:
 
-> Eric Bambach wrote:
-> 
+James Colannino wrote:
+
 > > Generally speaking (in terms of input validation), its better practice to 
 > > check against a LEGAL set of characters rather than an illegal set. That way 
 > > you can get all the characters you need, but everything else is blocked. If 
@@ -35,55 +38,20 @@ On Thu, 23 Jun 2005, James Colannino wrote:
 > int legal_characters(char character_to_check) {
 > 
 > 	int index;
+
 > 	legal_characters[] =
+
+Should be preceded by "char", i.e.
+
+	char legal_characters[] =
+
+Better still, make it static and constant:
+
+	static const char legal_characters[] =
+
 > "abcdefghijklmnopqrstuvwxyzAVCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
-
-I'm not going to repeat all the answers you already had, but you know the
-#include <ctype.h> ? 
-
-The above [abcdef... ABC. etc..] `man ascii' e.g.
-
-uppercase alpha (c >= 65 && c <= 90) , 
-lowercase alpha (c >= 97 && c <= 122),
-numerals ... (c >= 48 && c <= 57) etc..
-
-or with ctype.h ... isdigit(), isalnum() .....
-
-#include <stdio.h>
-#include <ctype.h>
-
-int legal_characters(char ch) {
- register int retv = -1;
-
- if(isalpha(ch) || isdigit(ch) || ch == '-' || ch == '_')
-  retv = 1;
- else
-  retv = 0;
-
- return retv;
-}
-
-int main(void) {
- char c;
-
- while((c = getchar()) != EOF) {
-  if(legal_characters(c))
-   putchar(c);
- }
-
- return 0;
-}
-
-You could also use the ctype macro's grouped together in your own defined
-macro..
-
-Maybe it's good to point out that the users of your program can also 
-be chinese users and other `foreign' users that use different character 
-sets that do not fit into the 1 byte character..
-
-Cheers..
-
-J.
+                              ^
+Typo; should be "B".
 
 > 	int number_of_legal_chars = sizeof(legal_characters) / sizeof(char);
 > 
@@ -91,8 +59,11 @@ J.
 > 		if (character_to_check == legal_characters[index])
 > 			return 1;
 > 	}
-> 
-> 	return 0;
-> 
-> </CODE>
 
+> How does this function look?
+
+You can replace the loop with a call to strchr(). But using a lookup
+table as suggested by Eric would be significantly more efficient.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
