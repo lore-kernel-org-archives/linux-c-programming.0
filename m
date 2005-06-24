@@ -1,35 +1,27 @@
 From: James Colannino <james@colannino.org>
-Subject: How to prototype functions that return pointers
-Date: Fri, 24 Jun 2005 14:25:35 -0700
-Message-ID: <42BC7A4F.60304@colannino.org>
+Subject: Re: How to prototype functions that return pointers
+Date: Fri, 24 Jun 2005 14:50:59 -0700
+Message-ID: <42BC8043.9030904@colannino.org>
+References: <42BC7A4F.60304@colannino.org> <op.ssv8s2eyizdgzp@mail.nairnconsulting.ca>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <op.ssv8s2eyizdgzp@mail.nairnconsulting.ca>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Ok, so this is a very embarassing question.  I tried googling for the
-answer but haven't figured it out yet, and everything I've tried results
-in compilation errors. I want to prototype a function that takes nothing
-as an argument but returns a pointer to a character.
+Richard Nairn wrote:
+> Believe the correct decleration is (char *) readline();
+> 
+> Order of ops.
 
-I've tried the following:
-
-char * readline();
-char *readline();
-
-These first two result in 4 errors, each one identical and each one
-telling me "error: two or more data types in declaration of 'readline' "
-
-*char readline();
-* char readline();
-
-These second two result in "error: syntax error before 'char' "
-
-I know this should be so simple, but I can't for the life of me figure
-this out.  Thanks very much in advance.
+That was the next one I tried.  That yielded a syntax error.  I found
+out though that the "two or more data types" error was the result of a
+more difficult bug to find that had to do with something in another
+header file.  Once I fixed that, the declaration char * readline();
+worked.  Needless to say I'm very embarassed now... :-P
 
 James
 -- 
