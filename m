@@ -1,38 +1,40 @@
-From: Hendrik Visage <hvjunk@gmail.com>
-Subject: Re: Printf and scanf
-Date: Fri, 24 Jun 2005 23:20:35 +0200
-Message-ID: <d93f04c70506241420114b28da@mail.gmail.com>
-References: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
-Reply-To: Hendrik Visage <hvjunk@gmail.com>
+From: James Colannino <james@colannino.org>
+Subject: How to prototype functions that return pointers
+Date: Fri, 24 Jun 2005 14:25:35 -0700
+Message-ID: <42BC7A4F.60304@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Return-path: <linux-newbie-owner@vger.kernel.org>
-In-Reply-To: <20050605122105.1865.qmail@web52905.mail.yahoo.com>
-Content-Disposition: inline
-Sender: linux-newbie-owner@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-c-programming-owner@vger.kernel.org>
+Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Ankit Jain <ankitjain1580@yahoo.com>
-Cc: linux prg <linux-c-programming@vger.kernel.org>, newbie <linux-newbie@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-On 6/5/05, Ankit Jain <ankitjain1580@yahoo.com> wrote:
+Ok, so this is a very embarassing question.  I tried googling for the
+answer but haven't figured it out yet, and everything I've tried results
+in compilation errors. I want to prototype a function that takes nothing
+as an argument but returns a pointer to a character.
 
-> i just want to know how scanf function can be used on
-> the place of printf and vice versa
+I've tried the following:
 
-In the Obfuscated C contest one of the first/early entries is one that
-states "Using read to write" (Or something to similar extend, or
-perhaps even using scanf to print). Reading that code is hackery, and
-from my first glance at the code, it was don't with quote and macro
-hackery.
+char * readline();
+char *readline();
 
-Thus you could #define scanf __prinf and #define printf __scanf... or
-something with similar confusing
+These first two result in 4 errors, each one identical and each one
+telling me "error: two or more data types in declaration of 'readline' "
 
+*char readline();
+* char readline();
+
+These second two result in "error: syntax error before 'char' "
+
+I know this should be so simple, but I can't for the life of me figure
+this out.  Thanks very much in advance.
+
+James
 -- 
-Hendrik Visage
--
-To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-Please read the FAQ at http://www.linux-learn.org/faqs
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+" Those who would give up essential Liberty, to purchase a little
+temporary Safety, deserve neither Liberty nor Safety." --Benjamin Franklin
