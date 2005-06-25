@@ -1,71 +1,116 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: How to prototype functions that return pointers
-Date: Sat, 25 Jun 2005 08:56:52 +0200
-Message-ID: <6a00c8d50506242356dd6717a@mail.gmail.com>
-References: <42BC7A4F.60304@colannino.org>
-Reply-To: Steve Graegert <graegerts@gmail.com>
+From: HIToC <hitoc_mail@yahoo.it>
+Subject: Re: comparing char to other known char's
+Date: Sat, 25 Jun 2005 13:58:53 +0200
+Message-ID: <200506251323.31271.hitoc_mail@yahoo.it>
+References: <42B9F2C7.2030205@colannino.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42BC7A4F.60304@colannino.org>
-Content-Disposition: inline
+In-Reply-To: <42B9F2C7.2030205@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: James Colannino <james@colannino.org>
-Cc: linux-c-programming@vger.kernel.org
+Cc: Linux C programming <linux-c-programming@vger.kernel.org>
 
-On 6/24/05, James Colannino <james@colannino.org> wrote:
-> Ok, so this is a very embarassing question.  I tried googling for the
-> answer but haven't figured it out yet, and everything I've tried results
-> in compilation errors. I want to prototype a function that takes nothing
-> as an argument but returns a pointer to a character.
-> 
-> I've tried the following:
-> 
-> char * readline();
-> char *readline();
-
-I can't see a problem with this declaration, thus I am not able to
-reproduce the error(s).  What I see here is a function taking an
-arbitrary number of arguments returning a pointer to a char.
-
-> These first two result in 4 errors, each one identical and each one
-> telling me "error: two or more data types in declaration of 'readline' "
-> 
-> *char readline();
-> * char readline();
-
-This is obviously wrong because you're trying to dereference a data
-type, not an identifier. Everything else that follows in this line is
-discarded by the parser.
-
-I have compiled three different function declarations that all have a
-different meaning to help you understand what could have been wrong:
-
-/* pointer to func() returning a char */
-char (*func)();
-
-/* function taking a char pointer and returning char-pointer */
-char* f(char *);
-
-/* 
- * pointer to a function taking pointer to a char,
- * returning a pointer to a char
- */
-char* (*fp)(char *);
-
-Hope this clarifies the relations between pointers and functions and
-their arguments.
+On Thursday 23 June 2005 01:22, James Colannino wrote:
+> Hey everyone.  I hope this isn't a stupid question.  I've been googling
+> around trying to find a function that I can use but haven't been
+> successful.  Here's what I want to be able to do:
+>
+> let's say I have a char called 'character.'  I want to compare
+> 'character' to see if it's any one of the characters in a list.  For
+> example, maybe I would want to test character to see if it's either 'e',
+> 'r', '*', etc.
+>
+> Is this easy enough to implement?  I could do if (character == 'e' ||
+> character == [...] and so on and so forth, but this seems much to
+> tedious and unreadable to be my only solution.  If anyone has any ideas
+> I'd be extremely grateful :)  Thanks very much in advance.
+>
+> James
 
 
-Kind Regards
+If you prefer a Object Oriented solution, take the example:
 
-    \Steve
 
---
+/*	char.cpp
 
-Steve Graegert <graegerts@gmail.com> || <http://www.technologies.de/~sg/>
-Independent Software Consultant {C/C++ && Java && .NET}
-Mobile: +49 (176)  21 24 88 69
-Office: +49 (9131) 71 26 40 9
+	Author:	HIToC
+	E-mail:	hitoc_mail@yahoo.it
+	Date:	06/25/2005
+
+
+
+
+	Purpose:	Example
+*/
+
+
+
+
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <list>
+
+
+class	valid_char {
+	list<char>	char_list;
+
+public:
+	valid_char(const string&);
+
+	bool	find_char(char);
+	bool	operator()(char c) { return find_char(c); }
+
+	~valid_char() { }
+};
+
+valid_char::valid_char(const string& s)
+: char_list()
+{
+	for(string::const_iterator i = s.begin(); i != s.end(); i++)
+		char_list.push_back(*i);
+}
+
+bool valid_char::find_char(char c)
+{
+	if(find(char_list.begin(), char_list.end(), c) != char_list.end())
+		return true;
+	else return false;
+}
+
+
+
+
+int main(int argc, char* argv[])
+{
+	const char*	alpha = "QWERTY";
+	valid_char	vchar(alpha);
+	string		str;
+	char		c;
+
+	if(argc != 2) {
+		cerr <<"Usage: char <string>\n";
+		return 1;
+	 }
+
+	str = argv[1];
+	for(int i = 0; i < str.size(); i++) {
+		c = str[i];
+		cout <<"Character [" <<c <<"]:\t";
+		if(vchar(c)) cout <<"FOUND!\n";
+		else cout <<"NOT found!\n";
+	}
+
+	return 0;
+}
+
+
+-- 
+With regards,
+
+
+					HIToC
+					hitoc_mail@yahoo.it
