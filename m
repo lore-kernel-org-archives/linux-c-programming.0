@@ -1,45 +1,71 @@
-From: wwp <subscript@free.fr>
+From: Steve Graegert <graegerts@gmail.com>
 Subject: Re: How to prototype functions that return pointers
-Date: Sat, 25 Jun 2005 08:22:18 +0200
-Message-ID: <20050625082218.344489e9@localhost.localdomain>
+Date: Sat, 25 Jun 2005 08:56:52 +0200
+Message-ID: <6a00c8d50506242356dd6717a@mail.gmail.com>
 References: <42BC7A4F.60304@colannino.org>
-	<op.ssv8s2eyizdgzp@mail.nairnconsulting.ca>
-	<42BC8043.9030904@colannino.org>
+Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42BC8043.9030904@colannino.org>
+In-Reply-To: <42BC7A4F.60304@colannino.org>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: James Colannino <james@colannino.org>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello James,
-
-
-On Fri, 24 Jun 2005 14:50:59 -0700 James Colannino <james@colannino.org>
-wrote:
-
-> Richard Nairn wrote:
-> > Believe the correct decleration is (char *) readline();
-> > 
-> > Order of ops.
+On 6/24/05, James Colannino <james@colannino.org> wrote:
+> Ok, so this is a very embarassing question.  I tried googling for the
+> answer but haven't figured it out yet, and everything I've tried results
+> in compilation errors. I want to prototype a function that takes nothing
+> as an argument but returns a pointer to a character.
 > 
-> That was the next one I tried.  That yielded a syntax error.  I found
-> out though that the "two or more data types" error was the result of a
-> more difficult bug to find that had to do with something in another
-> header file.  Once I fixed that, the declaration char * readline();
-> worked.  Needless to say I'm very embarassed now... :-P
+> I've tried the following:
+> 
+> char * readline();
+> char *readline();
 
-Moreover, the following ones are (should be) identical towards the C parser,
-spaces between those tokens are not mandatory or can be repeated, and depend
-on the coding style and recommendation/standard you follow:
+I can't see a problem with this declaration, thus I am not able to
+reproduce the error(s).  What I see here is a function taking an
+arbitrary number of arguments returning a pointer to a char.
 
-char * readline();
-char *readline();
+> These first two result in 4 errors, each one identical and each one
+> telling me "error: two or more data types in declaration of 'readline' "
+> 
+> *char readline();
+> * char readline();
+
+This is obviously wrong because you're trying to dereference a data
+type, not an identifier. Everything else that follows in this line is
+discarded by the parser.
+
+I have compiled three different function declarations that all have a
+different meaning to help you understand what could have been wrong:
+
+/* pointer to func() returning a char */
+char (*func)();
+
+/* function taking a char pointer and returning char-pointer */
+char* f(char *);
+
+/* 
+ * pointer to a function taking pointer to a char,
+ * returning a pointer to a char
+ */
+char* (*fp)(char *);
+
+Hope this clarifies the relations between pointers and functions and
+their arguments.
 
 
-Regards,
+Kind Regards
 
--- 
-wwp
+    \Steve
+
+--
+
+Steve Graegert <graegerts@gmail.com> || <http://www.technologies.de/~sg/>
+Independent Software Consultant {C/C++ && Java && .NET}
+Mobile: +49 (176)  21 24 88 69
+Office: +49 (9131) 71 26 40 9
