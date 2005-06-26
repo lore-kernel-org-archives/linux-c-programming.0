@@ -1,116 +1,49 @@
-From: HIToC <hitoc_mail@yahoo.it>
-Subject: Re: comparing char to other known char's
-Date: Sat, 25 Jun 2005 13:58:53 +0200
-Message-ID: <200506251323.31271.hitoc_mail@yahoo.it>
-References: <42B9F2C7.2030205@colannino.org>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: How to prototype functions that return pointers
+Date: Sun, 26 Jun 2005 04:36:46 +0100
+Message-ID: <17086.8910.710433.444595@gargle.gargle.HOWL>
+References: <42BC7A4F.60304@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42B9F2C7.2030205@colannino.org>
+In-Reply-To: <42BC7A4F.60304@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: James Colannino <james@colannino.org>
-Cc: Linux C programming <linux-c-programming@vger.kernel.org>
-
-On Thursday 23 June 2005 01:22, James Colannino wrote:
-> Hey everyone.  I hope this isn't a stupid question.  I've been googling
-> around trying to find a function that I can use but haven't been
-> successful.  Here's what I want to be able to do:
->
-> let's say I have a char called 'character.'  I want to compare
-> 'character' to see if it's any one of the characters in a list.  For
-> example, maybe I would want to test character to see if it's either 'e',
-> 'r', '*', etc.
->
-> Is this easy enough to implement?  I could do if (character == 'e' ||
-> character == [...] and so on and so forth, but this seems much to
-> tedious and unreadable to be my only solution.  If anyone has any ideas
-> I'd be extremely grateful :)  Thanks very much in advance.
->
-> James
+Cc: linux-c-programming@vger.kernel.org
 
 
-If you prefer a Object Oriented solution, take the example:
+James Colannino wrote:
 
+> Ok, so this is a very embarassing question.  I tried googling for the
+> answer but haven't figured it out yet, and everything I've tried results
+> in compilation errors. I want to prototype a function that takes nothing
+> as an argument but returns a pointer to a character.
 
-/*	char.cpp
+	char *myfunc(void);
 
-	Author:	HIToC
-	E-mail:	hitoc_mail@yahoo.it
-	Date:	06/25/2005
+> I've tried the following:
+> 
+> char * readline();
+> char *readline();
 
+Both of these declare a function taking unspecified arguments and
+returning a char*. If the function takes no arguments, the argument
+list should be declared as "void".
 
+> These first two result in 4 errors, each one identical and each one
+> telling me "error: two or more data types in declaration of 'readline' "
 
+That error isn't related to your prototypes, but the context in which
+they occur. In your follow-up, you note:
 
-	Purpose:	Example
-*/
+> I found
+> out though that the "two or more data types" error was the result of a
+> more difficult bug to find that had to do with something in another
+> header file.
 
-
-
-
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <list>
-
-
-class	valid_char {
-	list<char>	char_list;
-
-public:
-	valid_char(const string&);
-
-	bool	find_char(char);
-	bool	operator()(char c) { return find_char(c); }
-
-	~valid_char() { }
-};
-
-valid_char::valid_char(const string& s)
-: char_list()
-{
-	for(string::const_iterator i = s.begin(); i != s.end(); i++)
-		char_list.push_back(*i);
-}
-
-bool valid_char::find_char(char c)
-{
-	if(find(char_list.begin(), char_list.end(), c) != char_list.end())
-		return true;
-	else return false;
-}
-
-
-
-
-int main(int argc, char* argv[])
-{
-	const char*	alpha = "QWERTY";
-	valid_char	vchar(alpha);
-	string		str;
-	char		c;
-
-	if(argc != 2) {
-		cerr <<"Usage: char <string>\n";
-		return 1;
-	 }
-
-	str = argv[1];
-	for(int i = 0; i < str.size(); i++) {
-		c = str[i];
-		cout <<"Character [" <<c <<"]:\t";
-		if(vchar(c)) cout <<"FOUND!\n";
-		else cout <<"NOT found!\n";
-	}
-
-	return 0;
-}
-
+That seems likely.
 
 -- 
-With regards,
-
-
-					HIToC
-					hitoc_mail@yahoo.it
+Glynn Clements <glynn@gclements.plus.com>
