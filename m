@@ -1,49 +1,46 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: How to prototype functions that return pointers
-Date: Sun, 26 Jun 2005 04:36:46 +0100
-Message-ID: <17086.8910.710433.444595@gargle.gargle.HOWL>
-References: <42BC7A4F.60304@colannino.org>
+From: Andriot <andriot@6wind.com>
+Subject: Re: Printf and scanf
+Date: Mon, 27 Jun 2005 20:11:03 +0200
+Message-ID: <20050627181103.ABFB324F@eagle.6wind.com>
+References: <20050605122105.1865.qmail@web52905.mail.yahoo.com> <d93f04c70506241420114b28da@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42BC7A4F.60304@colannino.org>
+In-Reply-To: <d93f04c70506241420114b28da@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: James Colannino <james@colannino.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Hendrik Visage <hvjunk@gmail.com>
+Cc: Ankit Jain <ankitjain1580@yahoo.com>, linux prg <linux-c-programming@vger.kernel.org>, newbie <linux-newbie@vger.kernel.org>
+
+Hendrik Visage wrote:
+
+>On 6/5/05, Ankit Jain <ankitjain1580@yahoo.com> wrote:
+>
+>  
+>
+>>i just want to know how scanf function can be used on
+>>the place of printf and vice versa
+>>    
+>>
+>
+>In the Obfuscated C contest one of the first/early entries is one that
+>states "Using read to write" (Or something to similar extend, or
+>perhaps even using scanf to print). Reading that code is hackery, and
+>from my first glance at the code, it was don't with quote and macro
+>hackery.
+>
+>Thus you could #define scanf __prinf and #define printf __scanf... or
+>something with similar confusing
+>  
+>
+
+Of course, it is not possible to use directly printf like a scanf ;)
+But you can use printf to write some values into arguments when you call 
+the function. This uses special caracters you put in the format string. 
+And this should prevent you to call printf with a string the user wrote, 
+because this is a very big security hole.
+
+JP
 
 
-James Colannino wrote:
-
-> Ok, so this is a very embarassing question.  I tried googling for the
-> answer but haven't figured it out yet, and everything I've tried results
-> in compilation errors. I want to prototype a function that takes nothing
-> as an argument but returns a pointer to a character.
-
-	char *myfunc(void);
-
-> I've tried the following:
-> 
-> char * readline();
-> char *readline();
-
-Both of these declare a function taking unspecified arguments and
-returning a char*. If the function takes no arguments, the argument
-list should be declared as "void".
-
-> These first two result in 4 errors, each one identical and each one
-> telling me "error: two or more data types in declaration of 'readline' "
-
-That error isn't related to your prototypes, but the context in which
-they occur. In your follow-up, you note:
-
-> I found
-> out though that the "two or more data types" error was the result of a
-> more difficult bug to find that had to do with something in another
-> header file.
-
-That seems likely.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
