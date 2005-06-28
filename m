@@ -1,80 +1,31 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
+From: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
 Subject: Re: ternary operator
-Date: Wed, 29 Jun 2005 01:44:30 +0800
-Message-ID: <42C18C7E.6030100@hq.ntsp.nec.co.jp>
-References: <6eee1c405062810224f4db7e5@mail.gmail.com>
+Date: Tue, 28 Jun 2005 14:15:34 -0300
+Message-ID: <42C185B6.4020005@conectiva.com.br>
+References: <6eee1c405062810224f4db7e5@mail.gmail.com> <6a00c8d50506281049335e427d@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6eee1c405062810224f4db7e5@mail.gmail.com>
+In-Reply-To: <6a00c8d50506281049335e427d@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Vadiraj <vadiraj.cs@gmail.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+To: Steve Graegert <graegerts@gmail.com>
+Cc: Vadiraj <vadiraj.cs@gmail.com>, linux-c-programming <linux-c-programming@vger.kernel.org>
 
-i dont know the reason but the problem could be shrink down to
+Steve Graegert wrote:
 
-func2()
-{
-}
+> Just take a look at our discussion about implicit return values on
+> int- and void-valued functions a week or two ago.  If no return value
+> is given explicitly it is undefined and in most cases not zero,
+> therfore not yielding false.  It's chosen randomly.
 
-func1()
-{
-  printf( "%d\n", func2() );
-}
+Yes, but note that this happens because the default return value
+for functions is 'int'. So, if you change func2()'s prototype to
+return 'void', the compiler will give you a warning.
 
-int main()
-{
-  printf( "%d\n", func2() );
-  printf("%d\n",func1() ) ;
-}
+PS: This is not the case for the arguments, in that case func2() it's
+able to accept anything (IIRC).
 
-u will notice that the return value from func2(which does not specify 
-any explicit return value)
-differs when called from main() and from func1()..
-
-this is not a problem about the ternary operator..
-this is an issue about the use of implicit/explicit return values...
-why are u not  making use of explicit return? and explicit use of int as 
-the return type in the
-function declarations??
-
-
-Vadiraj wrote:
-
->Hi List,
->
-> I'm confused with the behavior of this program..
->
->func4()
->{
->    return 3;
->}
->func3()
->{
->    return 2;
->}
->func2()
->{
->}
->
->func1()
->{
->    return(func2()?func3():func4()) ;
->}
->int main()
->{
->     
->     printf("%d\n",func1() ) ;                       // this prints 3
->     printf("%d\n",func2()?func3():func4()) ;  // this prints 2
->}
->
-> I dont understand whats making the two statements to behave differently.
->
->
->
->  
->
-
-
+-- 
+Luiz Fernando N. Capitulino
