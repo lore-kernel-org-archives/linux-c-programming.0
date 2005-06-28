@@ -1,69 +1,80 @@
-From: Steve Graegert <graegerts@gmail.com>
+From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
 Subject: Re: ternary operator
-Date: Tue, 28 Jun 2005 19:49:11 +0200
-Message-ID: <6a00c8d50506281049335e427d@mail.gmail.com>
+Date: Wed, 29 Jun 2005 01:44:30 +0800
+Message-ID: <42C18C7E.6030100@hq.ntsp.nec.co.jp>
 References: <6eee1c405062810224f4db7e5@mail.gmail.com>
-Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <6eee1c405062810224f4db7e5@mail.gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Vadiraj <vadiraj.cs@gmail.com>
 Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On 6/28/05, Vadiraj <vadiraj.cs@gmail.com> wrote:
-> Hi List,
-> 
->  I'm confused with the behavior of this program..
-> 
-> func4()
-> {
->     return 3;
-> }
-> func3()
-> {
->     return 2;
-> }
-> func2()
-> {
-> }
-> 
-> func1()
-> {
->     return(func2()?func3():func4()) ;
-> }
-> int main()
-> {
-> 
->      printf("%d\n",func1() ) ;                       // this prints 3
->      printf("%d\n",func2()?func3():func4()) ;  // this prints 2
-> }
-> 
->  I dont understand whats making the two statements to behave differently.
+i dont know the reason but the problem could be shrink down to
 
-I am not able to recreate this behaviour, since both printf()s give
-"2" on my console and this is exactly what I expected to take place. 
-Just take a look at our discussion about implicit return values on
-int- and void-valued functions a week or two ago.  If no return value
-is given explicitly it is undefined and in most cases not zero,
-therfore not yielding false.  It's chosen randomly.
+func2()
+{
+}
 
-In this case the :? operator says:  if func2() returns true, call
-func3() else call func4().  In most cases func2() is true.  Nothing
-magic here.
+func1()
+{
+  printf( "%d\n", func2() );
+}
 
--- 
-Kind Regards
+int main()
+{
+  printf( "%d\n", func2() );
+  printf("%d\n",func1() ) ;
+}
 
-    \Steve
+u will notice that the return value from func2(which does not specify 
+any explicit return value)
+differs when called from main() and from func1()..
 
---
+this is not a problem about the ternary operator..
+this is an issue about the use of implicit/explicit return values...
+why are u not  making use of explicit return? and explicit use of int as 
+the return type in the
+function declarations??
 
-Steve Graegert <graegerts@gmail.com> || <http://www.technologies.de/~sg/>
-Independent Software Consultant {C/C++ && Java && .NET}
-Mobile: +49 (176)  21 24 88 69
-Office: +49 (9131) 71 26 40 9
+
+Vadiraj wrote:
+
+>Hi List,
+>
+> I'm confused with the behavior of this program..
+>
+>func4()
+>{
+>    return 3;
+>}
+>func3()
+>{
+>    return 2;
+>}
+>func2()
+>{
+>}
+>
+>func1()
+>{
+>    return(func2()?func3():func4()) ;
+>}
+>int main()
+>{
+>     
+>     printf("%d\n",func1() ) ;                       // this prints 3
+>     printf("%d\n",func2()?func3():func4()) ;  // this prints 2
+>}
+>
+> I dont understand whats making the two statements to behave differently.
+>
+>
+>
+>  
+>
+
+
