@@ -1,42 +1,32 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Problem with pointer to external function
-Date: Fri, 1 Jul 2005 17:41:01 +0100
-Message-ID: <17093.29213.526059.430091@gargle.gargle.HOWL>
-References: <20050701103026.GA2965@paktahn.black.cat>
+From: Beau <beau@superiorss.com>
+Subject: JOB: CONTRACT TELECOMMUTE: (C/HTML/JavaScript) in Linux
+Date: Sat, 2 Jul 2005 01:26:53 +0000 (UTC)
+Message-ID: <42E8DEA1.3000300@superiorss.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050701103026.GA2965@paktahn.black.cat>
+Date: Thu, 28 Jul 2005 09:33:21 -0400
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: leslie.polzer@gmx.net
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+JOB: CONTRACT TELECOMMUTE: (C/HTML/JavaScript) in Linux
 
-leslie.polzer@gmx.net wrote:
+My client is looking to bring on a consultant (2-4 month assignment 
+which may become F/T) who has solid programming experience 
+(C/HTML/JavaScript) in Linux. The ideal candidate would have 5-7 years 
+of experience and can work with little supervision.
 
-> why do it get the segfault below? What's wrong?
-> 
-> 
-> [sky@paktahn ~/code/cbtest]% cat main.c      
-> #include <stdio.h>
-> 
-> typedef void (*callback)();
-> 
-> extern callback cb;
+If you are interested in this contract opportunity and have relevant
+experience please send a PLAIN TEXT resume within the body of your
+email to beau@superiorss.com
 
-Is "cd" really a pointer to a function? Or is it a function? If it's
-the latter, you need to create a variable of type "callback" and then
-make it point to the function, e.g.:
+**CANDIDATE CAN WORK FROM ANY USA LOCATION
+**US CITIZENS OR GC HOLDERS ONLY
 
-	typedef void (*callback)();
-	extern void cb();
+Thank you,
+Beau Gould
 
-	static callback cbp = &cb;
-
-More generally, you have to ensure that the types of "extern"
-declarations are correct. The compiler can't check it for you.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+www.superiorss.com
+beau@superiorss.com
