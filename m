@@ -1,7 +1,7 @@
-From: sumit kalra <i_am_sumit_kalra@yahoo.com>
+From: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
 Subject: Re: process information
-Date: Thu, 7 Jul 2005 05:46:24 +0100 (BST)
-Message-ID: <20050707044624.54935.qmail@web61015.mail.yahoo.com>
+Date: Thu, 07 Jul 2005 09:09:54 -0300
+Message-ID: <42CD1B92.1070806@conectiva.com.br>
 References: <a3c4234105070613154993e652@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
@@ -9,39 +9,31 @@ Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <a3c4234105070613154993e652@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: =?iso-8859-1?q?Mat=EDas=20Aguirre?= <matiasaguirre@gmail.com>, linux prg <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: =?ISO-8859-1?Q?Mat=EDas_Aguirre?= <matiasaguirre@gmail.com>
+Cc: linux prg <linux-c-programming@vger.kernel.org>
 
-"ps --ppid <parent-pid>" may help you.
-man ps
+Hi Mat=EDas,
 
-Regards,
-Sumit
---- Mat=EDas Aguirre <matiasaguirre@gmail.com> wrote:
+Mat=EDas Aguirre wrote:
+> a little question, is there any way to get a process current children=
+ count?
 
-> a little question, is there any way to get a process
-> current children count?
->=20
-> thanks
->=20
-> --=20
-> Mat=EDas Aguirre
-> -
-> To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at=20
-> http://vger.kernel.org/majordomo-info.html
->=20
+ Yes, there is. But I can only think in a 'brute force' way: you can sc=
+an the
+/proc file-system.
 
+ Let's say you want to know how many children the X process has. You op=
+en
+each '/proc/PID/status' and read the 'Ppid' field. If it's equals X, yo=
+u
+count it.
 
+ As I said, it's ugly, but I cannot think in another solution.
 
-=09
-=09
-	=09
-___________________________________________________________=20
-Yahoo! Messenger - NEW crystal clear PC to PC calling worldwide with vo=
-icemail http://uk.messenger.yahoo.com
+ You can try to read the code of 'pstree' program, but I guess it
+scans the /proc file-system too.
+
 -
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
