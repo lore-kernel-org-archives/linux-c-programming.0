@@ -1,7 +1,7 @@
 From: raja <vnagaraju@effigent.net>
-Subject: error func:
-Date: Fri, 08 Jul 2005 14:32:42 +0530
-Message-ID: <42CE4132.9090407@effigent.net>
+Subject: error func
+Date: Fri, 08 Jul 2005 16:11:44 +0530
+Message-ID: <42CE5868.8@effigent.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
