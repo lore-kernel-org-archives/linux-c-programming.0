@@ -1,40 +1,23 @@
-From: Rechberger Markus <mrechberger@gmail.com>
-Subject: Re: hi
-Date: Mon, 11 Jul 2005 11:24:09 +0200
-Message-ID: <d9def9db050711022416230425@mail.gmail.com>
-References: <42D23006.6060506@effigent.net>
-Reply-To: Rechberger Markus <mrechberger@gmail.com>
+From: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
+Subject: Re: variable type
+Date: Mon, 11 Jul 2005 08:57:19 -0300
+Message-ID: <42D25E9F.6030101@conectiva.com.br>
+References: <42D21123.2090306@effigent.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42D23006.6060506@effigent.net>
-Content-Disposition: inline
+In-Reply-To: <42D21123.2090306@effigent.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: raja <vnagaraju@effigent.net>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: raja <vnagaraju@effigent.net>
+Cc: linux-c-programming@vger.kernel.org
 
-hi Raja,
+raja wrote:
+> hi,
+>  If i have given a variable name that is declared previously.
+> Is there any way to knoe the type of the variable.
 
-Check out the C-faq http://www.faqs.org/faqs/C-faq/faq/ 
+ No there isn't. But you can know how bytes long the variable
+is with the 'sizeof' operator.
 
-section 15.4 How can I write a function that takes a variable number
-of	arguments?
-
-Markus
-
-On 7/11/05, raja <vnagaraju@effigent.net> wrote:
-> Hi,
->      How can i find the number of arguments that the given fiunction
-> contains.
-> for ex : If I have given a function that is
->                      func(arg1,arg2);
-> how can i find the number of arguments as 2?
-> 
-> thanking you,
-> Raja.V
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
