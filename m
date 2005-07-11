@@ -1,23 +1,28 @@
-From: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
-Subject: Re: variable type
-Date: Mon, 11 Jul 2005 08:57:19 -0300
-Message-ID: <42D25E9F.6030101@conectiva.com.br>
-References: <42D21123.2090306@effigent.net>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: canonical byte swap macros?
+Date: Mon, 11 Jul 2005 20:23:39 +0100
+Message-ID: <17106.51003.40109.464025@gargle.gargle.HOWL>
+References: <Pine.LNX.4.63.0507102100500.9524@localhost.localdomain>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42D21123.2090306@effigent.net>
+In-Reply-To: <Pine.LNX.4.63.0507102100500.9524@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: raja <vnagaraju@effigent.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: "Robert P. J. Day" <rpjday@mindspring.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
-raja wrote:
-> hi,
->  If i have given a variable name that is declared previously.
-> Is there any way to knoe the type of the variable.
 
- No there isn't. But you can know how bytes long the variable
-is with the 'sizeof' operator.
+Robert P. J. Day wrote:
 
+>   is there a standard set of byte swap macros/functions for doing
+> big/little endian conversion?  i have no interest in re-inventing the
+> wheel and i'm sure there's a universally-recognized set of macros for
+> this, no?
+
+glibc has bswap_{16,32,64} in byteswap.h, but I don't think that they
+are specified by any standard.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
