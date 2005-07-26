@@ -1,55 +1,51 @@
-From: Holger Kiehl <Holger.Kiehl@dwd.de>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: Unsigned off_t?
-Date: Mon, 25 Jul 2005 09:00:28 +0000 (GMT)
-Message-ID: <Pine.LNX.4.61.0507250858480.3913@praktifix.dwd.de>
+Date: Tue, 26 Jul 2005 06:24:35 +0100
+Message-ID: <17125.51475.763052.283552@cerise.gclements.plus.com>
 References: <Pine.LNX.4.61.0507250842380.3913@praktifix.dwd.de>
- <6.2.3.4.0.20050725025009.042ad5f0@no.incoming.mail>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6.2.3.4.0.20050725025009.042ad5f0@no.incoming.mail>
+In-Reply-To: <Pine.LNX.4.61.0507250842380.3913@praktifix.dwd.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
-Content-Transfer-Encoding: 7bit
-To: Jeff Woods <Kazrak+kernel@cesmail.net>
+Content-Type: text/plain; charset="us-ascii"
+To: Holger Kiehl <Holger.Kiehl@dwd.de>
 Cc: linux-c-programming@vger.kernel.org
 
-On Mon, 25 Jul 2005, Jeff Woods wrote:
 
-> At 7/25/2005 08:47 +0000, Holger Kiehl wrote:
->> I would like to have an unsigned off_t, what is the best and portable way 
->> to define this? Currently I use the following code:
->> 
->>    #if SIZEOF_OFF_T == 4
->>    typedef unsigned long       u_off_t;
->>    #else
->>    typedef unsigned long long  u_off_t;
->>    #endif
->> 
->> SIZEOF_OFF_T is returned from the gnu autoconfig tools.
->> 
->> Is this the correct way of doing this? Or is there some better more 
->> portable way?
->
-> Does the following do what you want?
->
->        typedef unsigned off_t u_off_t;
->
-No, this is what I tried first but does not compile. Try the following code:
+Holger Kiehl wrote:
 
-    #include <stdio.h>
-    #include <sys/types.h>
+> I would like to have an unsigned off_t, what is the best and portbale way
+> to define this? Currently I use the following code:
+> 
+>     #if SIZEOF_OFF_T == 4
+>     typedef unsigned long       u_off_t;
+>     #else
+>     typedef unsigned long long  u_off_t;
+>     #endif
+> 
+> SIZEOF_OFF_T is returned from the gnu autoconfig tools.
+> 
+> Is this the correct way of doing this?
 
-    typedef unsigned off_t u_off_t;
+There isn't any "correct" way of doing it.
 
-    int
-    main(void)
-    {
-       u_off_t a;
+> Or is there some better more portable way?
 
-       return 0;
-    }
+Using the types from stdint.h (uint32_t, uint64_t etc) would be more
+portable than making assumptions about the sizes of "long", "long long"
+etc. Alternatively:
 
-Thanks,
-Holger
+	#if SIZEOF_OFF_T == SIZEOF_INT
+	typedef unsigned int off_t
+	#elif SIZEOF_OFF_T == SIZEOF_LONG
+	typedef unsigned long off_t
+	#elif SIZEOF_OFF_T == SIZEOF_LONG_LONG
+	typedef unsigned long long off_t
+	#endif
 
+Out of curiosity, why do you want an unsigned off_t anyhow?
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
