@@ -1,48 +1,109 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: "Nanakos Chrysostomos" <nanakos@wired-net.gr>
 Subject: Re: superblock & inode's
-Date: Wed, 27 Jul 2005 08:24:58 +0100
-Message-ID: <17127.14026.575904.182205@cerise.gclements.plus.com>
+Date: Wed, 27 Jul 2005 21:53:27 +0300 (EEST)
+Message-ID: <57497.62.1.12.61.1122490407.squirrel@webmail.wired-net.gr>
 References: <Pine.LNX.4.61.0507250842380.3913@praktifix.dwd.de>
-	<17125.51475.763052.283552@cerise.gclements.plus.com>
-	<Pine.LNX.4.61.0507260638110.22613@praktifix.dwd.de>
-	<40710.62.1.10.61.1122396787.squirrel@webmail.wired-net.gr>
+    <17125.51475.763052.283552@cerise.gclements.plus.com>
+    <Pine.LNX.4.61.0507260638110.22613@praktifix.dwd.de>
+    <40710.62.1.10.61.1122396787.squirrel@webmail.wired-net.gr>
+    <17127.14026.575904.182205@cerise.gclements.plus.com>
+Reply-To: nanakos@wired-net.gr
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <40710.62.1.10.61.1122396787.squirrel@webmail.wired-net.gr>
+In-Reply-To: <17127.14026.575904.182205@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: nanakos@wired-net.gr
-Cc: linux-c-programming@vger.kernel.org
+To: Glynn Clements <glynn@gclements.plus.com>
+Cc: nanakos@wired-net.gr, linux-c-programming@vger.kernel.org
+
+I looked the sources and the programs use the libext2fs library.I found it
+in the sources but it is loss of time reading it just to understand and
+retrieve some simple things.So i finally did this below,but i am stack
+only in one thing.How to parse the information for a data block that
+contains the info for the dir's & files , e.g / directory.Please check the
+code below.
+The data block allocates 8 blocks ( in my machine 4096 bytes ),the data
+are struct ext2_dir_entry_2 structures.But the name lenght isn't always
+the same so i cant parse it just knowing the sizeof the structure.Maybe an
+iteration with llseek will help.Can someone help me with this algorithm???
+Have you got sth to propose????
 
 
-Nanakos Chrysostomos wrote:
+#include <ext2fs/ext2_fs.h>
+#include <fcntl.h>
+#include <math.h>
 
-> i want to read the superblock & inode for a block device.
-> I dont want to use readdir to get the inode and dir name.I want to do it
-> like the skeleton below,can someone help me??
-> 
-> 
-> #include <sys/types.h>
-> #include <stdio.h>
-> 
-> int main()
-> {
-> 
-> struct what_struct d; /* What struct to use for inode*/
-> struct what_struct_sb sb; /*What struct to use for superblock */
-> int fd;
-> 
-> fd=open("/dev/hda1",0);
-> lseek(fd,4096L,0); /* Is this the first inode?? Where is the next one?*/
-> /*Where is the superblock allocated in the disk */
 
-The layout of a filesystem depends entirely upon the filesystem type
-(ext2, vfat etc).
+int main()
+{
+	int fd,of;
+	char buf[8*4096];
+	int count=0;
+	struct ext2_super_block s;
+	struct ext2_group_desc g;
+	struct ext2_inode i;
+	struct ext2_dir_entry_2 dir;
+	int block_size,is=0,dir_entry_size;
 
-You should look at the source code for filesystem specific tools (e.g.
-e2fsprogs, dosfstools etc) for example code.
+	fd = open("/dev/hdb2",O_RDONLY);
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+	lseek(fd,1024L,0);
+
+	read(fd,&s,sizeof(s));
+
+	printf("%d inodes (%d free)\n",s.s_inodes_count,s.s_free_inodes_count);
+	printf("%d blocks (%d free)\n",s.s_blocks_count,s.s_free_blocks_count);
+
+
+	block_size = s.s_log_block_size;
+
+	block_size = pow(2,block_size)*1024;
+
+	printf("Block size: %d\n",block_size);
+
+	printf("Volume name: %s\n",s.s_volume_name);
+	printf("Inode size : %d\n",s.s_inode_size);
+
+
+	lseek(fd,4096L,0);
+
+	read(fd,&g,sizeof(g));
+
+	printf("Inodes Table Block:%d\n",g.bg_inode_table);
+
+
+	lseek(fd,4*4096L+128L,0); /*inode 2 */
+
+	read(fd,&i,sizeof(i));
+
+
+	printf("Pointer to data block:%d\n",i.i_block[0]);
+	printf("Data blocks occupied:%d\n",i.i_blocks);
+
+
+	dir_entry_size = sizeof(dir);
+
+	printf("%d\n",dir_entry_size);
+
+	/* Read data block and retrieve directory & file information */
+	lseek(fd,i.i_block[0]*4096L,0);
+	is += read(fd,&dir,12);
+	printf("name:%s inode:%d name_len:%d rec_len:%d
+file_type:%d\n",dir.name,dir.inode,dir.name_len,dir.rec_len,dir.file_type);
+
+
+	is += read(fd,&dir,19);
+	printf("name:%s inode:%d name_len:%d rec_len:%d
+file_type:%d\n",dir.name,dir.inode,dir.name_len,dir.rec_len,dir.file_type);
+
+	is += read(fd,&dir,12);
+	printf("name:%s inode:%d name_len:%d rec_len:%d
+file_type:%d\n",dir.name,dir.inode,dir.name_len,dir.rec_len,dir.file_type);
+
+	close(fd);
+
+	return 0;
+}
+
