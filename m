@@ -1,111 +1,48 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Unsigned off_t?
-Date: Wed, 27 Jul 2005 08:23:10 +0100
-Message-ID: <17127.13918.931421.884967@cerise.gclements.plus.com>
+Subject: Re: superblock & inode's
+Date: Wed, 27 Jul 2005 08:24:58 +0100
+Message-ID: <17127.14026.575904.182205@cerise.gclements.plus.com>
 References: <Pine.LNX.4.61.0507250842380.3913@praktifix.dwd.de>
 	<17125.51475.763052.283552@cerise.gclements.plus.com>
 	<Pine.LNX.4.61.0507260638110.22613@praktifix.dwd.de>
+	<40710.62.1.10.61.1122396787.squirrel@webmail.wired-net.gr>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.61.0507260638110.22613@praktifix.dwd.de>
+In-Reply-To: <40710.62.1.10.61.1122396787.squirrel@webmail.wired-net.gr>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Holger Kiehl <Holger.Kiehl@dwd.de>
+To: nanakos@wired-net.gr
 Cc: linux-c-programming@vger.kernel.org
 
 
-Holger Kiehl wrote:
+Nanakos Chrysostomos wrote:
 
-> The problem I have with this is how do I use this with printf() or fprintf()?
-> What do I use: %u, %lu or %llu? Does C99 provide a solution here?
-
-       7.8  Format conversion of integer types <inttypes.h>
-
-       [#1] The header <inttypes.h> includes the header  <stdint.h>
-       and extends it with additional facilities provided by hosted
-       implementations.
-
-       [#2] It  declares  four  functions  for  converting  numeric
-       character  strings  to greatest-width integers and, for each
-       type declared in <stdint.h>, it defines corresponding macros
-       for   conversion  specifiers  for  use  with  the  formatted
-       input/output functions.169)
-
-       Forward references:  integer types <stdint.h> (7.18).
-
-       7.8.1  Macros for format specifiers
-
-       [#1] Each of the following object-like macros170) expands to
-       a   character   string   literal   containing  a  conversion
-       specifier, possibly modified by a length modifier,  suitable
-       for   use   within   the  format  argument  of  a  formatted
-       input/output  function  when  converting  the  corresponding
-       integer  type.   These  macro names have the general form of
-       PRI (character string literals for the  fprintf  family)  or
-       SCN (character string literals for the fscanf  family),171)
-       followed  by  the  conversion  specifier, followed by a name
-       corresponding  to  a  similar  type  name  in  7.18.1.   For
-       example,  PRIdFAST32 can be used in a format string to print
-       the value of an integer of type int_fast32_t.
-
-       [#2] The fprintf macros for signed integers are:
-
-           PRId8          PRId16         PRId32         PRId64
-           PRIdLEAST8     PRIdLEAST16    PRIdLEAST32    PRIdLEAST64
-           PRIdFAST8      PRIdFAST16     PRIdFAST32     PRIdFAST64
-           PRIdMAX        PRIdPTR
-
-           PRIi8          PRIi16         PRIi32         PRIi64
-           PRIiLEAST8     PRIiLEAST16    PRIiLEAST32    PRIiLEAST64
-           PRIiFAST8      PRIiFAST16     PRIiFAST32     PRIiFAST64
-           PRIiMAX        PRIiPTR
-
-       [#3] The fprintf macros for unsigned integers are:
-
-           PRIo8          PRIo16         PRIo32         PRIo64
-           PRIoLEAST8     PRIoLEAST16    PRIoLEAST32    PRIoLEAST64
-           PRIoFAST8      PRIoFAST16     PRIoFAST32     PRIoFAST64
-           PRIoMAX        PRIoPTR
-
-           PRIu8          PRIu16         PRIu32         PRIu64
-           PRIuLEAST8     PRIuLEAST16    PRIuLEAST32    PRIuLEAST64
-           PRIuFAST8      PRIuFAST16     PRIuFAST32     PRIuFAST64
-           PRIuMAX        PRIuPTR
-
-           PRIx8          PRIx16         PRIx32         PRIx64
-           PRIxLEAST8     PRIxLEAST16    PRIxLEAST32    PRIxLEAST64
-           PRIxFAST8      PRIxFAST16     PRIxFAST32     PRIxFAST64
-           PRIxMAX        PRIxPTR
-
-           PRIX8          PRIX16         PRIX32         PRIX64
-           PRIXLEAST8     PRIXLEAST16    PRIXLEAST32    PRIXLEAST64
-           PRIXFAST8      PRIXFAST16     PRIXFAST32     PRIXFAST64
-           PRIXMAX        PRIXPTR
-
-> Besides, what do I use for uint64_t in printf()?
-
-The PRIu64 macro.
-
-> > Out of curiosity, why do you want an unsigned off_t anyhow?
+> i want to read the superblock & inode for a block device.
+> I dont want to use readdir to get the inode and dir name.I want to do it
+> like the skeleton below,can someone help me??
 > 
-> I use it to store the number of bytes I have send to a certain host.
-> If this is unsigned there is no need to worry about an overflow and I can
-> always just add each file size transmitted. Just when I want to calculate
-> the transfer rate I need to watch out for an overflow.
+> 
+> #include <sys/types.h>
+> #include <stdio.h>
+> 
+> int main()
+> {
+> 
+> struct what_struct d; /* What struct to use for inode*/
+> struct what_struct_sb sb; /*What struct to use for superblock */
+> int fd;
+> 
+> fd=open("/dev/hda1",0);
+> lseek(fd,4096L,0); /* Is this the first inode?? Where is the next one?*/
+> /*Where is the superblock allocated in the disk */
 
-Why not just use "long long" or "int64_t"?
+The layout of a filesystem depends entirely upon the filesystem type
+(ext2, vfat etc).
 
-If you're sending multiple files, I can't see any reason why the total
-amount of data sent would depend upon sizeof(off_t).
-
-If you're always using a 64-bit type, there isn't any reason to use
-unsigned. I'm fairly certain that you aren't going to be sending more
-than 2^63 bytes; even at 1Gbit/sec, that would take ~2000 years.
-
-If you're using a 32-bit type, overflow is a realistic possibility
-regardless of whether you use signed or unsigned.
+You should look at the source code for filesystem specific tools (e.g.
+e2fsprogs, dosfstools etc) for example code.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
