@@ -1,16 +1,44 @@
-From: "Amit Dang" <amit_dang@intersolutions.stpn.soft.net>
+From: "Suma Choudhary" <sumac@myw.ltindia.com>
 Subject: Re: fork + signal
-Date: Fri, 29 Jul 2005 10:12:27 +0530
-Message-ID: <022501c593f7$fc116210$9900a8c0@ispl091>
-References: <s2e9e5b6.077@EMAIL> <42E99C70.3090807@hq.ntsp.nec.co.jp>
+Date: Fri, 29 Jul 2005 13:25:25 +0530
+Message-ID: <s2ea2e62.091@EMAIL>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Suma Choudhary <sumac@myw.ltindia.com>, linux-c-programming <linux-c-programming@vger.kernel.org>
+To: amit_dang@intersolutions.stpn.soft.net, linux-c-programming@vger.kernel.org
 
+hi all
+The parent process gets a message from FIFO . There was one more signal(when a card is inserted) whose signal handler opens the FIFO(O_WRONLY)to msg to itself while  it has not opened it for reading (busy somewhere else)........so a deadlock!
+Thanks for the help otherwise I wud never have read (and re -read) for the FIFO man pages !
+
+regards
+suma
+ps:check the pseudo code here ........hope I've tracked down the problem right!
+
+The code of parent will be:
+main()
+{
+register signal handlers;
+ for(;;)
+ {
+    open(fifo);
+    wait for a msg;
+    close(fifo);
+    spawn_process;/*was here when the process was opening fifo in signal handler*/
+    
+  }
+}
+signal_handler()
+{
+  open(fifo,O_WRONLY);/*blocked here */
+  write(the msg );
+  close(fifo);
+}
+>>> "Amit Dang" <amit_dang@intersolutions.stpn.soft.net> 07/29/05 10:13 AM >>>
 It seems that the main process has not yet finished with the processing of
 "insert card" and it was interrupted by SIGCHLD (as pointed out by San Ron
 Michael Khu). I am assuming your code to be something like this
@@ -133,4 +161,9 @@ linux-c-programming" in
 linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
