@@ -1,43 +1,47 @@
-From: "Kirkwood, David A" <DAVID.A.KIRKWOOD@saic.com>
-Subject: X Windows debugging
-Date: Fri, 29 Jul 2005 13:15:31 -0400
-Message-ID: <CA0BCF3BED56294AB91E3AD74B849FD51F192E@us-arlington-0668.mail.saic.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: errno usage.
+Date: Sat, 30 Jul 2005 13:56:24 +0100
+Message-ID: <17131.30968.320224.626111@cerise.gclements.plus.com>
+References: <42EA448D.6080904@conectiva.com.br>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <42EA448D.6080904@conectiva.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
+To: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
+Cc: linux-c-programming@vger.kernel.org
 
-Thanks for the response. Now I have an additional complication. The separate
-windows communicate accross IPC structures, therefore asynchonously. Any
-ideas on how to set up debugging for this mechanism? At present the best I
-can do is attach to the window of interest, but messages appear and
-disappear into the netherworld of IPC.
 
-Thanks,
+Luiz Fernando Capitulino wrote:
 
-Dave
-> I need to debug an X windows program which goes through many levels of
-> windos on the screen. I tried using ddd but the ddd display captures all
-of
-> the window events instead of the application I'm trying to debug capturing
-> them. Is there some standard way to debug X apps or, is there some
-> particular debugger better suited to this requirement?  I'm using ddd. 
+>   I have a question about 'errno' which I'm postponing for some
+> time: is it a bad pratice to set 'errno' by hand in libraries
+> and even in ordinary programs?
+> 
+> I mean, AFAIK 'errno' was created to store error codes from system
+> calls, but it's widely used by several libraries. Sometimes is even
+> helpful to set 'errno' in the program itself, something like:
+> 
+> int get_foobar_info(char *value)
+> {
+> 	if (!value) {
+> 		errno = EINVAL;
+> 		return -1;
+> 	}
+> 
+> ...
+> 
+> 	return 0;
+> }
+> 
+> Is it a bad pratice? Is there a 'limit' for 'errno' usage?
 
-It may help to run the program being debugged on a separate X display
-to the debugging tools, so that you can more reliably control what
-events it receives. If you debug it on the same display, its hard to
-avoid the program receiving expose, enter/leave, focus etc events as
-you use the debugging tools.
+No; there's no reason you can't use errno for your own purposes.
 
-You don't need a second machine; an Xvnc session will do.
+Many library functions will set errno; even if they don't set it
+explicitly, they can call libc (etc) function which can set it.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
