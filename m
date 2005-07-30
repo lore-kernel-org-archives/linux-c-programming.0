@@ -1,47 +1,29 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: errno usage.
-Date: Sat, 30 Jul 2005 13:56:24 +0100
-Message-ID: <17131.30968.320224.626111@cerise.gclements.plus.com>
-References: <42EA448D.6080904@conectiva.com.br>
+Subject: Re: X Windows debugging
+Date: Sat, 30 Jul 2005 13:58:22 +0100
+Message-ID: <17131.31086.386697.708975@cerise.gclements.plus.com>
+References: <CA0BCF3BED56294AB91E3AD74B849FD51F192E@us-arlington-0668.mail.saic.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42EA448D.6080904@conectiva.com.br>
+In-Reply-To: <CA0BCF3BED56294AB91E3AD74B849FD51F192E@us-arlington-0668.mail.saic.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Luiz Fernando Capitulino <lcapitulino@conectiva.com.br>
-Cc: linux-c-programming@vger.kernel.org
+To: "Kirkwood, David A" <DAVID.A.KIRKWOOD@saic.com>
+Cc: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
 
 
-Luiz Fernando Capitulino wrote:
+Kirkwood, David A wrote:
 
->   I have a question about 'errno' which I'm postponing for some
-> time: is it a bad pratice to set 'errno' by hand in libraries
-> and even in ordinary programs?
-> 
-> I mean, AFAIK 'errno' was created to store error codes from system
-> calls, but it's widely used by several libraries. Sometimes is even
-> helpful to set 'errno' in the program itself, something like:
-> 
-> int get_foobar_info(char *value)
-> {
-> 	if (!value) {
-> 		errno = EINVAL;
-> 		return -1;
-> 	}
-> 
-> ...
-> 
-> 	return 0;
-> }
-> 
-> Is it a bad pratice? Is there a 'limit' for 'errno' usage?
+> Thanks for the response. Now I have an additional complication. The separate
+> windows communicate accross IPC structures, therefore asynchonously. Any
+> ideas on how to set up debugging for this mechanism? At present the best I
+> can do is attach to the window of interest, but messages appear and
+> disappear into the netherworld of IPC.
 
-No; there's no reason you can't use errno for your own purposes.
-
-Many library functions will set errno; even if they don't set it
-explicitly, they can call libc (etc) function which can set it.
+If the "windows" are distinct processes, you'll need to debug each one
+individually.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
