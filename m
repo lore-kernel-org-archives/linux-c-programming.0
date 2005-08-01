@@ -1,29 +1,28 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: X Windows debugging
-Date: Sat, 30 Jul 2005 13:58:22 +0100
-Message-ID: <17131.31086.386697.708975@cerise.gclements.plus.com>
-References: <CA0BCF3BED56294AB91E3AD74B849FD51F192E@us-arlington-0668.mail.saic.com>
+From: avinash pawar <lkmails@gmail.com>
+Subject: Query in C
+Date: Mon, 1 Aug 2005 11:40:15 +0530
+Message-ID: <d5b9712e05073123104617be93@mail.gmail.com>
+References: <6a00c8d505071515355f041394@mail.gmail.com>
+	 <20050716064421.85333.qmail@web31901.mail.mud.yahoo.com>
+	 <6eee1c405071709277b5568dd@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CA0BCF3BED56294AB91E3AD74B849FD51F192E@us-arlington-0668.mail.saic.com>
+In-Reply-To: <6eee1c405071709277b5568dd@mail.gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Kirkwood, David A" <DAVID.A.KIRKWOOD@saic.com>
-Cc: "'linux-c-programming@vger.kernel.org'" <linux-c-programming@vger.kernel.org>
+To: Vadiraj <vadiraj.cs@gmail.com>
+Cc: Vikas S <vikas_soolapani@yahoo.com>, Steve Graegert <graegerts@gmail.com>, Rechberger Markus <mrechberger@gmail.com>, linux-c-programming@vger.kernel.org
 
+Hello Everyone ,
 
-Kirkwood, David A wrote:
+   Can anyone of you please tell me..
 
-> Thanks for the response. Now I have an additional complication. The separate
-> windows communicate accross IPC structures, therefore asynchonously. Any
-> ideas on how to set up debugging for this mechanism? At present the best I
-> can do is attach to the window of interest, but messages appear and
-> disappear into the netherworld of IPC.
+       what does extern "C" int func(int *,foo) accomplish ?
 
-If the "windows" are distinct processes, you'll need to debug each one
-individually.
+   waiting for your reply.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+regards,
+Avinash
