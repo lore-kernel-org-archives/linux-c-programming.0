@@ -1,46 +1,50 @@
-From: Vadiraj <vadiraj.cs@gmail.com>
+From: Progga <abulfazl@juniv.edu>
 Subject: Re: Any pointer to Byte Alignment & Structure Padding?
-Date: Tue, 2 Aug 2005 16:51:21 +0530
-Message-ID: <6eee1c40508020421ceab653@mail.gmail.com>
-References: <014001c5968e$4e30ca70$9900a8c0@ispl091>
-	 <6eee1c40508010514517b5b90@mail.gmail.com>
-	 <6eee1c405080105164cfbbaaa@mail.gmail.com>
-	 <17134.43470.280296.644313@cerise.gclements.plus.com>
-Reply-To: Vadiraj <vadiraj.cs@gmail.com>
+Date: Tue, 2 Aug 2005 17:08:26 +0600
+Message-ID: <20050802170826.D276@Imrashi.net.bd>
+References: <014001c5968e$4e30ca70$9900a8c0@ispl091><6eee1c40508010514517b5b90@mail.gmail.com><015a01c59694$80662070$9900a8c0@ispl091><20050801161125.716db5ff@localhost.localdomain><003b01c59715$d3ffef00$9900a8c0@ispl091><6a00c8d5050801234267dd0f7f@mail.gmail.com><01dd01c5972f$5c3b62a0$9900a8c0@ispl091> <17135.20687.821822.269575@cerise.gclements.plus.com> <02c401c59745$2aaa0410$9900a8c0@ispl091>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="yudcn1FV7Hsu/q59"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17134.43470.280296.644313@cerise.gclements.plus.com>
 Content-Disposition: inline
+In-Reply-To: <02c401c59745$2aaa0410$9900a8c0@ispl091>; from amit_dang@intersolutions.stpn.soft.net on Tue, Aug 02, 2005 at 03:02:35PM +0530
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
-
-On 8/2/05, Glynn Clements <glynn@gclements.plus.com> wrote:
-> 
-> Vadiraj wrote:
-> 
-> > >    Can any body provide some light on Byte Alignment & Structure Padding
-> > > for gcc linux x86 32-bit?
-> >
-> >  The system expects the address of a variable to be multiple of
-> > its size. Meaning for 32 bit x86 int being 4 bytes. The address
-> > location of a int variable is expected to be at multiple of 4.
-> > ex 0 4 8 12 16. if  its double then its expected it to be multiple of 8.
-> > 0 8 16 ...
-> 
-> Incorrect; 8-byte quantities (double and long long) are only 4-byte
-> aligned, not 8-byte aligned.
-
- Depends on compiler and architecture. With GCC 3.3.3 on cygwin I get
-24 bytes for the same structe and also in Solaris system too.
-meaning 8 byte alligned. 
-
-True that Gcc 2.9 on linux is 4 byte alligned.
+To: Amit Dang <amit_dang@intersolutions.stpn.soft.net>
+Cc: linux-c-programming@vger.kernel.org
 
 
--- 
-cheers,
-Vadi
+--yudcn1FV7Hsu/q59
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Aug 02, 2005 at 03:02:35PM +0530, Amit Dang wrote:
+
+>     You are very right in saying that "there is no need for structures to
+> have same layout on different platform" until structures are being written
+> directly to the file system. But many time there is a requirement that the
+> data file can be moved across platforms.
+
+ In that case use __attribute__ ((packed)) after the structure definition.
+There'll be no alignment then and the size will always be the same.
+
+	struct hihi{
+		int a ;
+		char b ;
+	} __attribute__ ((packed)) ;
+
+
+--yudcn1FV7Hsu/q59
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (FreeBSD)
+
+iD8DBQFC71QqAjLUsitphWkRAvxUAKC+5VqXKWWH1Bzm14V0GFQh1MdRiwCgl3/r
+eoxB6nhZqO0G4WHZWkCM4yc=
+=hHAJ
+-----END PGP SIGNATURE-----
+
+--yudcn1FV7Hsu/q59--
