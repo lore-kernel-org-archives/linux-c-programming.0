@@ -1,28 +1,29 @@
-From: Steve Graegert <graegerts@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: regarding inode number
-Date: Tue, 2 Aug 2005 14:29:09 +0200
-Message-ID: <6a00c8d5050802052938bb3602@mail.gmail.com>
+Date: Tue, 2 Aug 2005 17:42:31 +0100
+Message-ID: <17135.41591.423996.3994@cerise.gclements.plus.com>
 References: <42EF6367.7000607@effigent.net>
-Reply-To: Steve Graegert <graegerts@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <42EF6367.7000607@effigent.net>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: raja <vnagaraju@effigent.net>
 Cc: linux-c-programming@vger.kernel.org
 
-On 8/2/05, raja <vnagaraju@effigent.net> wrote:
-> Hi,
->    Is there any way to get the file name if i-node number is known?
 
-This has been discussed several times in the past.  Please refer to
-http://www.mail-archive.com/linux-c-programming@vger.kernel.org/msg00196.html
-for the complete conversation.
+raja wrote:
 
-Regards
+>     Is there any way to get the file name if i-node number is known?
 
-        \Steve
+Recursively scan the entire filesystem on which the inode resides.
+
+Note that you aren't guaranteed to obtain a single filename. If the
+file has multiple hard links, there will be multiple filenames. If the
+file has been deleted (which can occur even if it's still open), you
+won't find any matching filenames.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
