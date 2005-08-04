@@ -1,41 +1,47 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: Any pointer to Byte Alignment & Structure Padding?
-Date: Thu, 4 Aug 2005 18:28:00 +0200
-Message-ID: <6a00c8d5050804092872284155@mail.gmail.com>
-References: <014001c5968e$4e30ca70$9900a8c0@ispl091>
-	 <6eee1c40508010514517b5b90@mail.gmail.com>
-	 <6eee1c405080105164cfbbaaa@mail.gmail.com>
-	 <673ac06405080402432d0feda3@mail.gmail.com>
-	 <6eee1c40508040823165f1df7@mail.gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: relationship between standard C and gcc compiler suite?
+Date: Thu, 4 Aug 2005 12:06:17 +0100
+Message-ID: <17137.63145.546985.316567@cerise.gclements.plus.com>
+References: <Pine.LNX.4.63.0508030942160.7360@localhost.localdomain>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6eee1c40508040823165f1df7@mail.gmail.com>
-Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.63.0508030942160.7360@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Vadiraj <vadiraj.cs@gmail.com>
-Cc: Prabhat Hegde <pubs.hegde@gmail.com>, linux-c-programming <linux-c-programming@vger.kernel.org>
+To: "Robert P. J. Day" <rpjday@mindspring.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
-On 8/4/05, Vadiraj <vadiraj.cs@gmail.com> wrote:
-> On 8/4/05, Prabhat Hegde <pubs.hegde@gmail.com> wrote:
 
-[snip]
+Robert P. J. Day wrote:
 
-> Arranging the structure as mentioned above will definitely remove
-> portablility issue
-> as for both 4 byte or 8 byte aligned compilers the size will be 16 bytes.
+>   according to my 5th ed. of H&S, C99 introduced the unsigned integer
+> type "_Bool" and refers to the corresponding header file stdbool.h.
+> but on my linux system, that header file is not in the standard
+> /usr/include directory, where i would have expected it.
+> 
+>   rather, it's included with gcc-4.0.1, and it's in this directory:
+> 
+> /usr/lib/gcc/i386-redhat-linux/4.0.1/include
+> 
+> i'm sure the end result is the same in that i can just
+> 
+>   #include <stdbool.h>
+> 
+>  but is there some kind of overall rationale as to what "standard"
+> header files would actually be supplied by gcc itself?  just trying to
+> figure out the pattern here.  obviously, this question generalizes to
+> more than just asking about the boolean file.
 
-What about endianess? 
+The rationale is essentially making things work on systems where the
+system's libc isn't GNU libc.
 
-Regards
+If a header is in gcc's private include directory, it usually
+indicates that the OS installs its own copy of the header in
+/usr/include, but that header won't work with gcc. gcc searches its
+private include directory before /usr/include, so gcc-specific headers
+override the system's versions.
 
-	\Steve
-
---
-
-Steve Graegert <graegerts@gmail.com>
-Software Consultancy {C/C++ && Java && .NET}
-Mobile: +49 (176)  21248869
-Office: +49 (9131) 7126409
+-- 
+Glynn Clements <glynn@gclements.plus.com>
