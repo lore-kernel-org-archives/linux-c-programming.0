@@ -1,56 +1,72 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: relationship between standard C and gcc compiler suite?
-Date: Wed, 3 Aug 2005 19:31:47 +0200
-Message-ID: <6a00c8d505080310317af26dc2@mail.gmail.com>
-References: <Pine.LNX.4.63.0508030942160.7360@localhost.localdomain>
-	 <6a00c8d5050803101241bcceb5@mail.gmail.com>
-	 <Pine.LNX.4.63.0508031319220.25465@localhost.localdomain>
+From: Vadiraj <vadiraj.cs@gmail.com>
+Subject: Re: Any pointer to Byte Alignment & Structure Padding?
+Date: Thu, 4 Aug 2005 20:53:55 +0530
+Message-ID: <6eee1c40508040823165f1df7@mail.gmail.com>
+References: <014001c5968e$4e30ca70$9900a8c0@ispl091>
+	 <6eee1c40508010514517b5b90@mail.gmail.com>
+	 <6eee1c405080105164cfbbaaa@mail.gmail.com>
+	 <673ac06405080402432d0feda3@mail.gmail.com>
+Reply-To: Vadiraj <vadiraj.cs@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.63.0508031319220.25465@localhost.localdomain>
+In-Reply-To: <673ac06405080402432d0feda3@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+To: Prabhat Hegde <pubs.hegde@gmail.com>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On 8/3/05, Robert P. J. Day <rpjday@mindspring.com> wrote:
-> On Wed, 3 Aug 2005, Steve Graegert wrote:
+On 8/4/05, Prabhat Hegde <pubs.hegde@gmail.com> wrote:
+> According to what you have said, dont you think it depnds from which
+> address your affset begins.
+>   Considring your last example,
+>    struct temp
+> > {
+> >       char c;   /* 1 byte lenght */
+> >       int i;      /* 4 byte length */
+> >       long long d /* 8 bytes  lenght */
+> >       char c1;
+> > };
 > 
-> > In case of GCC, including <stdbool.h> cleans up #defines and allows
-> > C++ compilation.  It is therefore recommended to #define these
-> > identifiers only when _needed_ and after including <stdbool.h>.
-> > <stdbool.h> is provided as an extension and, for this reason, not
-> > placed into the include directory of the C standard library.
-> 
-> ok, this is where i might be having my difficulty.  in H&S (5th ed),
-> p. 325, i read (emphasis added):
-> 
-> "Certain Standard C libraries can be considered part of the language.
-> The provide standard definitions and parameterization that help make C
-> programs more portable... These core libraries consist of the header
-> files ... stdbool.h, ..."
-> 
-> my reading of this is that stdbool.h is not an extension, it's a part
-> of the core.  what am i mnisreading here?
+>   Since char (1 byte ) can start anywhere withour padding,
+>   Lets take x to be at address X wherein (X mod 4 = 3), then in that
+> case "i" will have no padding since char (1 byte ) will make the
+> starting address of the int to agree with a 4 byte boundary.
+>   Now again the next long having a 8 byte boundary willl be/ may not
+> be padded depanding on the starting address.
+>  So what i feel is that begin the variable which has the maximum byte
+> boundary requirement. Now since all nos divisible by 8 are divisible
+> by 4, we will be cutting out the padding for int. Char can come in the
+> last.
 
-It is not an extension to the standard, namely C99, but an extension
-of GCC in order to allow native C code to be compiled as C++ in a
-clean way.  So you're reading was absolutely correct.  Almost every
-vendor ships with <stdbool.h>, sometimes it is placed in the include
-directory for the compiler (on Linux/GNU systems at least), but HP,
-for example, puts it in /usr/include.  It's just a Linux thing to put
-it elsewhere.
+  The starting address is assured to be 4 byte boundary. Some
+compilers provide 8 byte boundary too. They never start with 1 byte
+boundary.
 
-Regards
+That is the reason why the structure gets padded even at the end. To make it 
+4 bytes alligned.
 
-	\Steve
 
---
+>   hence what if the structure is like the below:
+>    struct temp{
+>        long lond d;   // x + padding if required to suffice 8 byte boundary
+>        int i;             // no padding
+>        char c;         // no padding
+>        char c1;       // no padding
+>        };
 
-Steve Graegert <graegerts@gmail.com>
-Software Consultancy {C/C++ && Java && .NET}
-Mobile: +49 (176)  21248869
-Office: +49 (9131) 7126409
+  For this example the size should come to 8+4+1+1=14 bytes. But when
+you check it will be 16 bytes. Due to padding, to make it 4/8 byte
+boundry.
+ 
+Take it for granted you get either 4 byte or 8 byte boundry but never 1 byte. 
+
+Arranging the structure as mentioned above will definitely remove
+portablility issue
+as for both 4 byte or 8 byte aligned compilers the size will be 16 bytes.
+
+-- 
+cheers,
+Vadi
