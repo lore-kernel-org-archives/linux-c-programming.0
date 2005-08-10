@@ -1,32 +1,28 @@
-From: r_zaca <r_zaca@ig.com.br>
-Subject: Shared Library
-Date: Tue, 9 Aug 2005 17:07:35 -0300
-Message-ID: <20050809_200735_017781.r_zaca@ig.com.br>
+From: Arvind Kalyan <base16@gmail.com>
+Subject: Re: Shared Library
+Date: Wed, 10 Aug 2005 08:04:28 +0530
+Message-ID: <90c25f2705080919349b2a611@mail.gmail.com>
+References: <20050809_200735_017781.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="Message-Boundary-by-Mail-Sender-1123618053"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20050809_200735_017781.r_zaca@ig.com.br>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-This message is in MIME format. Since your mail reader does not understand
-this format, some or all of this message may not be legible.
+On 8/10/05, r_zaca <r_zaca@ig.com.br> wrote:
 
---Message-Boundary-by-Mail-Sender-1123618053
-Content-type: text/plain; charset=ISO-8859-1
-Content-description: Mail message body
-Content-transfer-encoding: 8bit
-Content-disposition: inline
+>   Is it possible to check what shared libraries a program is using or what
+> shared libraries is available to a program inside the code?
+>   I mean, I need to be sure that a function in a shared library is available
+> before I call this function.
 
-  Hello all, 
 
-  Is it possible to check what shared libraries a program is using or what 
-shared libraries is available to a program inside the code? 
-  I mean, I need to be sure that a function in a shared library is available 
-before I call this function. 
+$ man 1 ldd
 
-  Thanks. 
-
---Message-Boundary-by-Mail-Sender-1123618053--
-
+-- 
+Arvind Kalyan
+http://www.devforge.net/~arv
