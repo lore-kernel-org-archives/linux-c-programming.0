@@ -1,54 +1,30 @@
-From: "linux-os \(Dick Johnson\)" <linux-os@analogic.com>
-Subject: Re: __init()
-Date: Thu, 11 Aug 2005 08:47:38 -0400
-Message-ID: <Pine.LNX.4.61.0508110835480.14365@chaos.analogic.com>
+From: "Nanakos Chrysostomos" <nanakos@wired-net.gr>
+Subject: fdisk & LBA
+Date: Fri, 12 Aug 2005 22:29:13 +0300 (EEST)
+Message-ID: <47285.62.1.10.150.1123874953.squirrel@webmail.wired-net.gr>
 References: <42FB435E.2070607@effigent.net>
-Reply-To: "linux-os \(Dick Johnson\)" <linux-os@analogic.com>
+    <Pine.LNX.4.61.0508110835480.14365@chaos.analogic.com>
+Reply-To: nanakos@wired-net.gr
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42FB435E.2070607@effigent.net>
-Content-class: urn:content-classes:message
+In-Reply-To: <Pine.LNX.4.61.0508110835480.14365@chaos.analogic.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: raja <vnagaraju@effigent.net>
-Cc: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Hi all,i want to retrieve the partition table of a primary extended
+partition.
+My MBR partition table ,says that the LBA Partition Start sector for the
+extended partition is 10281600.It is the same that i find with my C code
+and through fdisk usage.
+How can i use this value to seek(lseek) to this point through the main
+block file (/dev/hda or /dev/hdb) and read the partition table of the
+logical partition?
 
 
-On Thu, 11 Aug 2005, raja wrote:
 
-> Hi,
->     Is there any way to execute my own __init() instead of default
-> __init() while running an executable.
-> -
+Thanks in advance.
 
-Sure you link your object file with your own instead of using
-the default....
-
-     gcc -c -o myprog.o myprog.c
-     as -o start.o start.S
-
-     ld -o myprog myprog.o start.o /lib/libc.so.6
-                         |       |              |___ runtime lib
-                         |       |__________________ Your startup
-                         |__________________________ Your program
-
-Startup starts with a label _start. You may have to write it
-in assembly. It calls main() and must never return. Instead
-it calls exit() with whatever main() returned, to quit.
-
-__init() is some M$ thing. Linux executables start with
-_start().
-
-Cheers,
-Dick Johnson
-Penguin : Linux version 2.6.12 on an i686 machine (5537.79 BogoMips).
-Warning : 98.36% of all statistics are fiction.
-.
-I apologize for the following. I tried to kill it with the above dot :
-
-****************************************************************
-The information transmitted in this message is confidential and may be privileged.  Any review, retransmission, dissemination, or other use of this information by persons or entities other than the intended recipient is prohibited.  If you are not the intended recipient, please notify Analogic Corporation immediately - by replying to this message or by sending an email to DeliveryErrors@analogic.com - and destroy all copies of this information, including any attachments, without reading or disclosing them.
-
-Thank you.
