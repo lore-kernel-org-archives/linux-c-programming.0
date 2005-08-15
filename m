@@ -1,40 +1,52 @@
-From: Markus Rechberger <mrechberger@gmail.com>
+From: r_zaca <r_zaca@ig.com.br>
 Subject: Re: Dylibs
-Date: Sat, 13 Aug 2005 08:29:09 +0200
-Message-ID: <d9def9db0508122329de28262@mail.gmail.com>
-References: <42FD8493.2080704@effigent.net>
+Date: Mon, 15 Aug 2005 08:17:19 -0300
+Message-ID: <20050815_111719_052668.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/mixed;
+	boundary="Message-Boundary-by-Mail-Sender-1124104639"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <42FD8493.2080704@effigent.net>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: raja <vnagaraju@effigent.net>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Hello Raja,
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
-there is an article about it on neworder.box.sk, it also covers a few
-other topics.
-http://neworder.box.sk/newsread.php?newsid=13727
+--Message-Boundary-by-Mail-Sender-1124104639
+Content-type: text/plain; charset=ISO-8859-1
+Content-description: Mail message body
+Content-transfer-encoding: 8bit
+Content-disposition: inline
 
-Markus
+  Hello, 
 
-On 8/13/05, raja <vnagaraju@effigent.net> wrote:
-> Hi,
->      While loading Dylibs i want to write my own __init,__fini
-> functions.Would you please tell me how to write those functions please.
+  These are construction of code that you can use before the return of 
+dlopen and after dlclose. For example: 
+
+void _init () 
+{ 
+   printf ("init print.\n"); 
+} 
+
+void _fini () 
+{ 
+   printf ("fini print.\n"); 
+} 
+
+  The code in _init function will be run before the return of dlopen to your 
+program and the code in _fini will be run before the return of dlopen to 
+your program. You just have to put the code you actually need inside these 
+functions. 
+
+  I hope it can help you. 
+  Good Luck. 
+
+>Hi, 
+>     While loading Dylibs i want to write my own __init,__fini 
+>functions.Would you please tell me how to write those functions >please. 
 > 
-> Raja
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
+>Raja 
 
+--Message-Boundary-by-Mail-Sender-1124104639--
 
--- 
-Markus Rechberger
-
-http://www.wikiservice.at/dse/wiki.cgi?MarkusRechberger
