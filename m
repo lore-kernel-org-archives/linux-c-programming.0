@@ -1,52 +1,52 @@
-From: r_zaca <r_zaca@ig.com.br>
+From: Steve Graegert <graegerts@gmail.com>
 Subject: Re: Dylibs
-Date: Mon, 15 Aug 2005 08:17:19 -0300
-Message-ID: <20050815_111719_052668.r_zaca@ig.com.br>
+Date: Mon, 15 Aug 2005 14:05:55 +0200
+Message-ID: <6a00c8d505081505057c579fbf@mail.gmail.com>
+References: <20050815_111719_052668.r_zaca@ig.com.br>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="Message-Boundary-by-Mail-Sender-1124104639"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <20050815_111719_052668.r_zaca@ig.com.br>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: r_zaca <r_zaca@ig.com.br>
+Cc: linux-c-programming@vger.kernel.org
 
-This message is in MIME format. Since your mail reader does not understand
-this format, some or all of this message may not be legible.
+On 8/15/05, r_zaca <r_zaca@ig.com.br> wrote:
+>  Hello,
 
---Message-Boundary-by-Mail-Sender-1124104639
-Content-type: text/plain; charset=ISO-8859-1
-Content-description: Mail message body
-Content-transfer-encoding: 8bit
-Content-disposition: inline
+[snipped some code]
 
-  Hello, 
+The use of _init() and _fini() is strongly discouraged.  Both are
+obsolete and their use can lead to some strange behaviour.  Some even
+consider them as dangerous.
 
-  These are construction of code that you can use before the return of 
-dlopen and after dlclose. For example: 
+Instead, you should rely on function attribute constructors and destructors:
 
-void _init () 
-{ 
-   printf ("init print.\n"); 
-} 
+        void __attribute__ ((constructor)) my_init(void);
+        void __attribute__ ((destructor)) my_fini(void);
 
-void _fini () 
-{ 
-   printf ("fini print.\n"); 
-} 
+Please note: when compiling shared libs with gcc, you _must_ omit the
+arguments -nostartfiles or -nostdlib, otherwise the declared routines
+will not be executed.
 
-  The code in _init function will be run before the return of dlopen to your 
-program and the code in _fini will be run before the return of dlopen to 
-your program. You just have to put the code you actually need inside these 
-functions. 
+Regards
 
-  I hope it can help you. 
-  Good Luck. 
+        \Steve
 
->Hi, 
->     While loading Dylibs i want to write my own __init,__fini 
->functions.Would you please tell me how to write those functions >please. 
+
 > 
->Raja 
+> >Hi,
+> >     While loading Dylibs i want to write my own __init,__fini
+> >functions.Would you please tell me how to write those functions >please.
+> >
+> >Raja
+> 
+> 
 
---Message-Boundary-by-Mail-Sender-1124104639--
-
+Steve Graegert <graegerts@gmail.com>
+Software Consultancy {C/C++ && Java && .NET}
+Mobile: +49 (176)  21248869
+Office: +49 (9131) 7126409
