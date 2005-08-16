@@ -1,7 +1,7 @@
-From: Markus Rechberger <mrechberger@gmail.com>
+From: Steve Graegert <graegerts@gmail.com>
 Subject: Re: Program execution
-Date: Tue, 16 Aug 2005 16:48:34 +0200
-Message-ID: <d9def9db0508160748102e34ed@mail.gmail.com>
+Date: Tue, 16 Aug 2005 17:16:09 +0200
+Message-ID: <6a00c8d5050816081662861713@mail.gmail.com>
 References: <20050816_143050_024141.r_zaca@ig.com.br>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -11,27 +11,8 @@ Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: r_zaca <r_zaca@ig.com.br>, linux-c-programming@vger.kernel.org
-
-Hello,
-
-first enable coredumps
-# ulimit -c unlimited
-# ./yourfaultyapp
-
-open another shell and kill the process using kill -SIGSEGV then it
-should say core dumped (also compile your application with -g .. there
-are a few other debugging options but that one might already help you)
-
-afterwards run your application with gdb (should look like the following line)
-
-# gdb ./yourfaultyapp coredumpfile
-> bt // for a backtrace, last functions which got called and so
-> frame #<framenumber> // inspect a frame
-> list // show the sourcecode which is connected to that frame
-
-hope this helps,
-Markus
+To: r_zaca <r_zaca@ig.com.br>
+Cc: linux-c-programming@vger.kernel.org
 
 On 8/16/05, r_zaca <r_zaca@ig.com.br> wrote:
 >   Hello all,
@@ -40,15 +21,28 @@ On 8/16/05, r_zaca <r_zaca@ig.com.br> wrote:
 > going on. Does anyone know how this kind of problem shoud be solved. I've
 > already read something about core dump memory, but I don't know how to make
 > it, or instruct my program to do that. Can anyone help me?
-> 
-> p.s.) My program runs on a Linux machine.
-> 
->   Thanks.
-> 
-> 
 
+When a (UNIX) program exits abnormally it usally has received a signal
+and probably has, depending on the signal (SIGSEGV, for example),
+written a core dump.  You can then examine the core dump by running
+gdb:
 
--- 
-Markus Rechberger
+        $ gdb myapp core.1234
 
-http://www.wikiservice.at/dse/wiki.cgi?MarkusRechberger
+gdb usually jumps straight to the line where the crash occured.
+
+If your program does not generate a core dump you can force it to do
+so by calling abort().  A better solution is to provide an error
+handler that automatically writes a core dump.
+
+ 
+Regards
+
+	\Steve
+
+--
+
+Steve Graegert <graegerts@gmail.com>
+Software Consultancy {C/C++ && Java && .NET}
+Mobile: +49 (176)  21248869
+Office: +49 (9131) 7126409
