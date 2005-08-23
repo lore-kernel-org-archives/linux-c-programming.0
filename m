@@ -1,45 +1,63 @@
-From: "Nanakos Chrysostomos" <nanakos@wired-net.gr>
+From: kranthi <kranthi@effigent.net>
 Subject: Re: time conversion
-Date: Tue, 23 Aug 2005 10:42:55 +0300 (EEST)
-Message-ID: <56285.62.1.10.221.1124782975.squirrel@webmail.wired-net.gr>
+Date: Tue, 23 Aug 2005 14:07:56 -0000
+Message-ID: <opsvyr7isqcqhltn@effigent.org>
 References: <430AD085.7070004@hq.ntsp.nec.co.jp>
-Reply-To: nanakos@wired-net.gr
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 8bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <430AD085.7070004@hq.ntsp.nec.co.jp>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; format="flowed"; delsp="yes"; charset="us-ascii"
 To: "Lejanson C. Go" <lejanson@ntsp.nec.co.jp>
 Cc: linux-c-programming@vger.kernel.org
+
+
+
+
+
+
+
+I think this may serve u  r purpose
 
 #include <stdio.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 
-void print_time ()
-{
-        struct timeval tv;
-        struct tm* ptm;
-        char time_string[40];
-        long milliseconds;
 
-        gettimeofday (&tv, NULL);
-        ptm = localtime (&tv.tv_sec);
-        strftime (time_string, sizeof (time_string), "%Y-%m-%d %H:%M:%S",
-ptm);
-        milliseconds = tv.tv_usec / 1000;
-        printf ("%s.%03ld\n", time_string, milliseconds);
+
+int main()
+{
+	time_t t;  //Number in Unsigned format
+  	printf("% u \n ",t);
+	time(&t);
+	printf("%s",ctime(&t)); //  Time in Human readable format
+	return 0;
 }
 
 
-main()
-{
-        print_time();
-}
+On Tue, 23 Aug 2005 15:30:13 +0800, Lejanson C. Go  
+<lejanson@ntsp.nec.co.jp> wrote:
 
-I hope this helps.
+> Hi,
+>
+> I had searched the net on how to convert unsigned long timestamp
+> to human readable format or maybe in struct timeval format. Any sample  
+> code that you can share would be greatly appreciated.
+> Thanks.
+>
+> Lejanson
+>
+>
+> -
+> To unsubscribe from this list: send the line "unsubscribe  
+> linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
 
+
+-- 
+Using Opera's revolutionary e-mail client: http://www.opera.com/m2/
