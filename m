@@ -1,83 +1,82 @@
-From: Ronaldo.Afonso@cyclades.com
-Subject: Re: Just now join this group
-Date: Mon, 29 Aug 2005 09:10:05 -0300
-Message-ID: <OF48AA7E6B.7EB5658D-ON8325706C.004245F6-8325706C.0042D768@Cyclades.com>
-References: <opsv85omlccqhltn@effigent.org>
+From: "Sagar Shinde" <sagar.shinde@patni.com>
+Subject: Error in Makefile for multiple files
+Date: Mon, 29 Aug 2005 20:38:05 +0530
+Message-ID: <EGEELICONHJFEACGEOAICEPCCJAA.sagar.shinde@patni.com>
+Reply-To: <sagar.shinde@patni.com>
 Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="----------=_1125328380-25608-219"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <opsv85omlccqhltn@effigent.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
+
+This is a multi-part message in MIME format...
+
+------------=_1125328380-25608-219
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-To: kranthi <kranthi@effigent.net>
-Cc: "linux-kernel@vger.kernel.org" <linux-c-programming@vger.kernel.org>, linux-c-programming-owner@vger.kernel.org
+Content-Disposition: inline
+
+
+Hi all,
+
+I have a module with 3 C files: smarthook.c restore.c backup.c
+
+My Makefile code is:
+-----------------------------------------------------
+INCLUDEDIR = /usr/src/kernels/linux-2.6.12.1/include
+
+CFLAGS = -D__KERNEL__ -DMODULE
+CFLAGS += -I$(INCLUDEDIR)
+
+TARGET = smarthook
+OBJS = $(TARGET).o
+SRC = smarthook.c backup.c restore.c
+
+all: .depend $(TARGET).o
+
+$(TARGET).o: $(SRC:.c=.o)
+	$(LD) -r $^ -o $@
+
+depend .depend dep:
+	$(CC) $(CFLAGS) -M *.c > $@
+-----------------------------------------------------
+
+now though I am giving proper dependencies
+ why am I not able to access global variables defined in one file
+(smarthook.c)
+ from other files, inspite of these variables being declared extern in other
+files.
+
+any suggestions?
+
+Thanks in Advance.
+
+Thanks n Regards,
+Sagar Shinde
 
 
 
 
 
-Hello,
-
-I'm not a very often Linex kernel programmer but I think I can recomend you
-a book, in fact, two:
-
-1) Understanding The Linux Kernel
-2) Linux Device Drivers
-
-Besides theses tow books you can look at
-"http://www.tldp.org/guides.html". There you can find some guides about
-Linux programming in general.
-I hope this information be useful for you.
-
-
-Ronaldo Z. Afonso
-Projetista de Software
-Cyclades Brasil
-ronaldo.afonso@cyclades.com.br
-
-Phone: 55 11 5033-3361
-Fax: 55 11 5033-3388
-www.cyclades.com.br
-
-
-                                                                           
-             kranthi                                                       
-             <kranthi@effigent                                             
-             .net>                                                      To 
-             Sent by:                  "linux-kernel@vger.kernel.org"      
-             linux-c-programmi         <linux-c-programming@vger.kernel.or 
-             ng-owner@vger.ker         g>                                  
-             nel.org                                                    cc 
-                                                                           
-                                                                   Subject 
-             08/29/2005 01:35          Just now join this group            
-             AM                                                            
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-                                                                           
 
 
 
 
+http://www.patni.com
+World-Wide Partnerships. World-Class Solutions.
+_____________________________________________________________________
 
-Hi ,
+This e-mail message may contain proprietary, confidential or legally
+privileged information for the sole use of the person or entity to
+whom this message was originally addressed. Any review, e-transmission
+dissemination or other use of or taking of any action in reliance upon
+this information by persons or entities other than the intended
+recipient is prohibited. If you have received this e-mail in error
+kindly delete  this e-mail from your records. If it appears that this
+mail has been forwarded to you without proper authority, please notify
+us immediately at netadmin@patni.com and delete this mail. 
+_____________________________________________________________________
 
-             Just now join  in this group.
-
-             I am very much interested to learn kernal programming.
-
-             please suggest some useful links and books.
-
-             Thank u.
---
-Using Opera's revolutionary e-mail client: http://www.opera.com/m2/
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
+------------=_1125328380-25608-219--
