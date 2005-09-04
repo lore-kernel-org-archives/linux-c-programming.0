@@ -1,69 +1,31 @@
-From: Ronaldo.Afonso@cyclades.com
-Subject: Re: Shared Object
-Date: Thu, 1 Sep 2005 08:49:39 -0300
-Message-ID: <OF4BF6ACC0.87C9FA4F-ON8325706F.0040B593-8325706F.0040F88F@Cyclades.com>
-References: <4316802D.4030309@effigent.net>
+From: Karol Banczyk <car-los@tlen.pl>
+Subject: ophan child process to take standard input
+Date: Sun, 04 Sep 2005 20:49:38 +0200
+Message-ID: <dfffk2$fp8$1@sea.gmane.org>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4316802D.4030309@effigent.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: raja <vnagaraju@effigent.net>
-Cc: linux-c-programming@vger.kernel.org, linux-c-programming-owner@vger.kernel.org
-
-
-
-
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
 Hello,
+	I'm solving an exercise from my school. Not to go into details - the
+task is to create a initiating process which in turn starts three new
+processes  and then finishes its work. The three processes are to
+communicate with pipes. There's no problem till this stage. But there's
+the catch. The first of the three processes has to get its input from
+the standard input and this works only as long as the parent
+(initiating) process is alive. When the parent finishes the standard
+input goes back to bash and the orphaned processes are adopted by the
+init process having no access to stdin.
 
-You could use the following command line: objdump -t "yourlib.so". In order
-to see the symbols, your lib mustn't be stripped.
-For more information "man objdump".
-Good luck.
-
-Ronaldo Z. Afonso
-Projetista de Software
-Cyclades Brasil
-ronaldo.afonso@cyclades.com.br
-
-Phone: 55 11 5033-3361
-Fax: 55 11 5033-3388
-www.cyclades.com.br
+	What do you think? Is it a bug in the exercise or is there really a
+(non-cosmic) way to achive the goal.
 
 
-                                                                           
-             raja                                                          
-             <vnagaraju@effige                                             
-             nt.net>                                                    To 
-             Sent by:                  linux-c-programming@vger.kernel.org 
-             linux-c-programmi                                          cc 
-             ng-owner@vger.ker                                             
-             nel.org                                               Subject 
-                                       Shared Object                       
-                                                                           
-             09/01/2005 01:14                                              
-             AM                                                            
-                                                                           
-                                                                           
-                                                                           
+Thanx in advance
 
-
-
-
-Hi,
-    Can anyone help me how to see list of object files that are in a
-shared object.(.so file)
-
-
-thanking you,
-Raja
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
+KB
 
