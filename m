@@ -1,14 +1,15 @@
 From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: weird structure definition in header file
-Date: Wed, 7 Sep 2005 02:17:54 +0100
-Message-ID: <17182.16322.491753.986518@cerise.gclements.plus.com>
+Date: Wed, 7 Sep 2005 02:20:37 +0100
+Message-ID: <17182.16485.673249.957074@cerise.gclements.plus.com>
 References: <Pine.LNX.4.63.0509061510210.24485@vericenter>
 	<20050906192324.GA10879@hmsreliant.homelinux.net>
 	<Pine.LNX.4.63.0509061526130.24776@vericenter>
+	<Pine.LNX.4.63.0509061538530.24984@vericenter>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.63.0509061526130.24776@vericenter>
+In-Reply-To: <Pine.LNX.4.63.0509061538530.24984@vericenter>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
@@ -18,45 +19,35 @@ Cc: nhorman@tuxdriver.com, C programming list <linux-c-programming@vger.kernel.o
 
 Robert P. J. Day wrote:
 
-> > >   i'm looking at some legacy code and, in a header file, i find the
-> > > following (paraphrased for brevity):
-> > >
-> > > typedef struct {
-> > > 	... stuff ...
-> > > } Widgets ;
-> > >
-> > > extern Widgets Widget ;
-> > >
-> > >
-> > >   huh?  i can see why a header file would want to define a structure
-> > > but i'm confused why the *header* file would then refer to an external
-> > > object of that type.  that's a new one on me -- typically, i'd expect
-> > > a *source* file to define such a thing and other *source* files to
-> > > contain the "extern" declaration.
-> > >
-> > >   is this some subtle programming cleverness of which i am unaware?
-> > > thanks.
-> > 
-> > This is done quite frequently when a data structure needs to be
-> > referenced from multiple locations.  They're not necessicarily
-> > consecutive like that, but its rather a common practice to extern a
-> > instance of a type in a header file.  The kernel source tree does
-> > this very frequently, check include/net/ipv4 for lots of examples.
+> also, i'm assuming that some source file must eventually include an
+> actual definition of a "Widget" for the purposes of linking, as in:
 > 
-> ok, so what it represents is just a shortcut so that each source file
-> doesn't have to have its own extern, it just comes along with the
-> header file.
+>   #include "widgets.h"
+>   ...
+>   Widgets Widget ;
 
-Yep.
+Correct.
 
-> all right, i guess i can live with that although it strikes me as
-> just a little bit sleazy. oh, well.
+> however, given the inclusion of the header file, doesn't this give me
+> both a referencing declaration and a defining declaration of that
+> object in the same file?
 
-Huh? That's what header files are for. Or do you have stuff like:
+It gives you both a declaration and a definition in the same
+compilation unit.
 
-	extern int strcmp(const char *s1, const char *s2);
+> is there no problem with that?
 
-at the top of all of your source files?
+No.
+
+If there was, you wouldn't be able to have forward declarations, and
+thus wouldn't be able to define mutually-recursive functions.
+
+>  i was under
+> the impression that common practise was to have a single defining
+> declaration and all the *remaining* be referencing declarations.
+
+You shouldn't define a symbol more than once in any compilation unit,
+but you can declare it as many times as you like.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
