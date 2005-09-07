@@ -1,89 +1,31 @@
-From: Ronaldo.Afonso@cyclades.com
-Subject: Re: weird structure definition in header file
-Date: Tue, 6 Sep 2005 17:24:06 -0300
-Message-ID: <OFBC99D5D5.A42E7C48-ON83257074.006F5B56-83257074.0070120F@Cyclades.com>
-References: <Pine.LNX.4.63.0509061510210.24485@vericenter>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: copy program
+Date: Wed, 7 Sep 2005 02:14:20 +0100
+Message-ID: <17182.16108.753135.462745@cerise.gclements.plus.com>
+References: <1125987925.3348.66.camel@kaushal>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.63.0509061510210.24485@vericenter>
+In-Reply-To: <1125987925.3348.66.camel@kaushal>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>, linux-c-programming-owner@vger.kernel.org
+To: kaushal@rocsys.com
+Cc: linux-c-programming@vger.kernel.org
 
 
+kaushal wrote:
 
+>           The default copy program in the linux or windows will not
+> create a file,if the copy process aborts at say the last 5 seconds.Lets
+> say the file size is 700MB and the copy process failed after copying
+> 695MB and aborted,then we don't have the 695MB file on the hdd.If alone
+> the copy is successful till 100%we can have it.
 
+That's because the cp command deletes the destination if there is an
+error.
 
-I'm not sure if I understood your doubt but  just think a little bit, you
-can put all the variables declaration inside a header file, be those
-variables extern or not, and your source.c file (or source.c files) could
-just "include" that header file. Beside of this, you could have other
-modules where those variables are "really" declared. A extern variable
-informs to the compiler that this variable is not is that module, just
-that. The link must do the hard work.
-I hope this information worths for you.
-Good luck.
+If you don't want this, copy it using "dd".
 
-Ronaldo Z. Afonso
-Projetista de Software
-Cyclades Brasil
-ronaldo.afonso@cyclades.com.br
-
-Phone: 55 11 5033-3361
-Fax: 55 11 5033-3388
-www.cyclades.com.br
-
-
-                                                                           
-             "Robert P. J.                                                 
-             Day"                                                          
-             <rpjday@mindsprin                                          To 
-             g.com>                    C programming list                  
-             Sent by:                  <linux-c-programming@vger.kernel.or 
-             linux-c-programmi         g>                                  
-             ng-owner@vger.ker                                          cc 
-             nel.org                                                       
-                                                                   Subject 
-                                       weird structure definition in       
-             09/06/2005 04:13          header file                         
-             PM                                                            
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-
-
-
-
-
-  i'm looking at some legacy code and, in a header file, i find the
-following (paraphrased for brevity):
-
-typedef struct {
-             ... stuff ...
-} Widgets ;
-
-extern Widgets Widget ;
-
-
-  huh?  i can see why a header file would want to define a structure
-but i'm confused why the *header* file would then refer to an external
-object of that type.  that's a new one on me -- typically, i'd expect
-a *source* file to define such a thing and other *source* files to
-contain the "extern" declaration.
-
-  is this some subtle programming cleverness of which i am unaware?
-thanks.
-
-rday
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
+-- 
+Glynn Clements <glynn@gclements.plus.com>
