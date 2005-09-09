@@ -1,42 +1,50 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: copy program
-Date: Fri, 9 Sep 2005 13:39:36 +0100
-Message-ID: <17185.33416.382095.755145@cerise.gclements.plus.com>
-References: <1125987925.3348.66.camel@kaushal>
-	<17184.26166.478692.480203@cerise.gclements.plus.com>
-	<1126242561.4506.64.camel@kaushal>
+Subject: Re: default function parameters
+Date: Fri, 9 Sep 2005 13:43:58 +0100
+Message-ID: <17185.33678.421304.142260@cerise.gclements.plus.com>
+References: <dfr8v1$kn7$1@sea.gmane.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1126242561.4506.64.camel@kaushal>
+In-Reply-To: <dfr8v1$kn7$1@sea.gmane.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: kaushal@rocsys.com
+To: _z33 <timid.Gentoo@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-kaushal wrote:
+_z33 wrote:
 
->          Is it going to matter if it is vcd or data cd?If yes then I
-> want to copy both the kinds.
+>    I had a wierd doubt today morning. If a function's return type is not 
+> defined, "C" takes it as returning "int". Now, what does it do when I 
+> don't specify the arguments of the function. Something like this -
+> 
+>    void sampleFunc ()
+>    {
+> 	/* ... */
+>    }
+> 
+>    Is this equivalent to saying,
+> 
+>    void sampleFunc (void)
+>    {
+> 	/* ... */
+>    }
 
-Yes.
+The former declares a function taking unspecified arguments, while the
+latter declares a function taking no arguments.
 
-Like audio CDs, VCDs use mode-2 sessions, which have less error
-correction than data CDs (but can store more data, e.g. a standard
-80-minute CD-R can hold 700MB as a data CD but 800MB as a VCD or audio
-CD).
+You can pass arguments to the former (although it can't use them), but
+you will get an error if you try to pass arguments to the latter.
 
-To copy mode-2 CDs, you will want software which doesn't abort on an
-I/O error (and, ideally, prevents or limits retries within the CD
-drive itself).
+Nowadays, the main use of the former is for declaring a variable or
+field which can hold a pointer to arbitrary functions, e.g.
 
-Try some of the links found from:
+	int (*foo)();
 
-	http://www.google.com/search?q=VCD%20%22mode%202%22
-
-for more information.
+declares a variable which can hold a pointer to any function which
+returns int, regardless of its argument types.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
