@@ -1,72 +1,115 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: default function parameters
-Date: Fri, 9 Sep 2005 12:20:49 +0200
-Message-ID: <6a00c8d505090903206f2506f3@mail.gmail.com>
-References: <dfr8v1$kn7$1@sea.gmane.org>
-	 <6a00c8d505090823472706ba98@mail.gmail.com>
-	 <dfrc52$rro$1@sea.gmane.org>
-	 <6a00c8d505090900364f76dcfd@mail.gmail.com>
-	 <dfri55$cse$1@sea.gmane.org>
-	 <6a00c8d505090902345d74646c@mail.gmail.com>
-	 <dfrlh3$mqv$1@sea.gmane.org>
-Reply-To: graegerts@gmail.com
+From: _z33 <timid.Gentoo@gmail.com>
+Subject: Re: typecasting - explain
+Date: Fri, 09 Sep 2005 15:52:08 +0530
+Message-ID: <dfrnos$tnv$1@sea.gmane.org>
+References: <dfrckc$ts5$1@sea.gmane.org> <6a00c8d505090902462df47aa4@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <dfrlh3$mqv$1@sea.gmane.org>
-Content-Disposition: inline
+In-Reply-To: <6a00c8d505090902462df47aa4@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: _z33 <timid.Gentoo@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-On 9/9/05, _z33 <timid.Gentoo@gmail.com> wrote:
-> Steve Graegert wrote:
-> > I have modified the code to clarify my thoughts:
-> >
-> >       #include <stdio.h>
-> >
-> >       /* prototype */
-> >       void add(); /* call with arbitrary number of arguments */
-> >
-> >       void add (int a, int b, int c) {
-> >               printf ("inside function: add(%d, %d)\n", a, b);
-> >               return;
-> >       }
-> >
-> >       int main (void) {
-> >               /* call function add with some parameters */
-> >               add(5, 1);
-> >               getc(stdin);
-> >
-> >               return (0);
-> >       }
-> >
-> > Do you see the difference?  No warning is issued, because there is
-> > nothing wrong with it (it is not recommended by ANSI C99 but still
-> > valid).
-> >
+Steve Graegert wrote:
 > 
->   Inside "main", did you mean to write the function call as " add (5,
-> 1, <some number>); ". Cos' when I copy the code, and try to run it, it
-> throws me this error message during compilation.
->   - too few arguments to function `add'-
-
-No, the code given is exactly what I wanted to show. (The code you
-provided was Windows code and I tested it under Windows without
-complaints.)
-
-Unfortunately, under Linux you cannot switch to "traditional" since it
-would clash with libc which is an ISO C library.  Under Solaris
-(SPARCWorx) you may want to try -traditional and -fd.  As far as I
-know only SunOS and HP-UX (besides Windows) come with a native K&R C
-compiler.  All others do prototype checking.
-
-> >>  Am I fundamentally going wrong in my understanding of functions?
-> >
-> >
-> > No you're not.  You're just curious :-)
+> 	char *s;
+> 	int  *i;
 > 
-> Thanks!
->
+> 	s = (int *)malloc(128 * sizeof(char));
+> 	i = (char *)malloc(128 * sizeof(int));
+> 
+> 	s = "malloc is cool!";
+> 	printf("s: %s\n", s);
+> 	printf("s: %d\n", s);
+> 
+> 	i = "malloc is cool!";
+> 	printf("i: %s\n", i);
+> 	printf("i: %d\n", i);
+> 
+> This piece of code prints:
+> 
+> 	s: malloc is cool!
+> 	s: 4350328
+> 	i: malloc is cool!
+> 	i: 4350328
+> 
+
+   The illustration was too simple and good, for me to understand.
+   Thanks :)
+
+> You see, casting changes the interpretation of bits when they are
+> read.  The assigment of a particular type to a variable of another
+> type destroys the original type information (i.e. loss of precision).
+> 
+
+   destroys the original type information? Couldn't understand this part.
+   You are still able to recover the string, regardless of what kind of 
+datatype you store in. The only disadvantage I that, this obscures the 
+logic of the program.
+
+> Yes function pointers are legal.  ANSI C99 says:
+> 
+> "J.5.7 Function pointer casts
+> 1 A pointer to an object or to void may be cast to a pointer to a
+> function, allowing data to be invoked as a function (6.5.4).
+> 2 A pointer to a function may be cast to a pointer to an object or to
+> void, allowing a
+> function to be inspected or modified (for example, by a debugger) (6.5.4)."
+> 
+> A function name is just a pointer to the memory location where the
+> function is found at runtime.  It can be queried, modified and cast to
+> other types.  It behaves like a variable.  Take a look at the
+> sigaction structure:
+> 
+> 	struct sigaction {
+> 		/* SIG_DFL, SIG_IGN or pointer to function */
+> 		void (*sa_handler)(int); 
+> 		... /* some other fields */
+> 	};
+> 
+> You can define sigaction as follows:
+> 
+> 	void handler(int signo) {
+> 		doneflag = 1;
+> 	}
+> 
+> 	struct sigaction sa;
+> 	sa.sa_handler = handler;
+> 	...
+> 
+> Here, sa_handler is registered as a function to be called when the
+> specified signal occurrs.
+> 
+> Just handle function pointers as simple pointer variables.
+
+   Have still one silly question ---
+     since you say function pointers are similar to simple pointer 
+variables, and that's why the typecast works, what would the following 
+code mean?
+
+   void handler1 (int a) {
+
+     /* body of handler - 1 */
+     printf ("HANDLER - 1 \n");
+
+   }
+
+   void handler2 (int a) {
+
+     /* body of handler - 2 */
+     printf ("HANDLER - 2 \n");
+
+   }
+
+   struct sigaction sa;
+   sa.sa_handler = (handler2 *) handler1;
+
+   Is this possible? if so, what does it mean?
+
+
+_z33
+-- 
+I love TUX; well... that's an understatement :)
+
