@@ -1,199 +1,42 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: typecasting - explain
-Date: Fri, 9 Sep 2005 13:29:49 +0200
-Message-ID: <6a00c8d50509090429592d0cbe@mail.gmail.com>
-References: <dfrckc$ts5$1@sea.gmane.org>
-	 <6a00c8d505090902462df47aa4@mail.gmail.com>
-	 <dfrnos$tnv$1@sea.gmane.org>
-	 <6a00c8d5050909034955f92d21@mail.gmail.com>
-	 <dfrqjs$72c$1@sea.gmane.org>
-Reply-To: graegerts@gmail.com
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: copy program
+Date: Fri, 9 Sep 2005 13:39:36 +0100
+Message-ID: <17185.33416.382095.755145@cerise.gclements.plus.com>
+References: <1125987925.3348.66.camel@kaushal>
+	<17184.26166.478692.480203@cerise.gclements.plus.com>
+	<1126242561.4506.64.camel@kaushal>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <dfrqjs$72c$1@sea.gmane.org>
-Content-Disposition: inline
+In-Reply-To: <1126242561.4506.64.camel@kaushal>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: _z33 <timid.Gentoo@gmail.com>
+To: kaushal@rocsys.com
 Cc: linux-c-programming@vger.kernel.org
 
-On 9/9/05, _z33 <timid.Gentoo@gmail.com> wrote:
-> Steve Graegert wrote:
-> > On 9/9/05, _z33 <timid.Gentoo@gmail.com> wrote:
-> >
-> >>Steve Graegert wrote:
-> >>
-> >>>      char *s;
-> >>>      int  *i;
-> >>>
-> >>>      s = (int *)malloc(128 * sizeof(char));
-> >>>      i = (char *)malloc(128 * sizeof(int));
-> >>>
-> >>>      s = "malloc is cool!";
-> >>>      printf("s: %s\n", s);
-> >>>      printf("s: %d\n", s);
-> >>>
-> >>>      i = "malloc is cool!";
-> >>>      printf("i: %s\n", i);
-> >>>      printf("i: %d\n", i);
-> >>>
-> >>>This piece of code prints:
-> >>>
-> >>>      s: malloc is cool!
-> >>>      s: 4350328
-> >>>      i: malloc is cool!
-> >>>      i: 4350328
-> >>>
-> >>
-> >>  The illustration was too simple and good, for me to understand.
-> >>  Thanks :)
-> >>
-> >>
-> >>>You see, casting changes the interpretation of bits when they are
-> >>>read.  The assigment of a particular type to a variable of another
-> >>>type destroys the original type information (i.e. loss of precision).
-> >>>
-> >>
-> >>  destroys the original type information? Couldn't understand this part.
-> >>  You are still able to recover the string, regardless of what kind of
-> >>datatype you store in. The only disadvantage I that, this obscures the
-> >>logic of the program.
-> >
-> >
-> > Didn't mean this specific example, but when casting a float or double
-> > to int then you loose some information which can not be restored
-> > afterwards.
-> >
-> >
-> >>>Yes function pointers are legal.  ANSI C99 says:
-> >>>
-> >>>"J.5.7 Function pointer casts
-> >>>1 A pointer to an object or to void may be cast to a pointer to a
-> >>>function, allowing data to be invoked as a function (6.5.4).
-> >>>2 A pointer to a function may be cast to a pointer to an object or to
-> >>>void, allowing a
-> >>>function to be inspected or modified (for example, by a debugger) (6.5.4)."
-> >>>
-> >>>A function name is just a pointer to the memory location where the
-> >>>function is found at runtime.  It can be queried, modified and cast to
-> >>>other types.  It behaves like a variable.  Take a look at the
-> >>>sigaction structure:
-> >>>
-> >>>      struct sigaction {
-> >>>              /* SIG_DFL, SIG_IGN or pointer to function */
-> >>>              void (*sa_handler)(int);
-> >>>              ... /* some other fields */
-> >>>      };
-> >>>
-> >>>You can define sigaction as follows:
-> >>>
-> >>>      void handler(int signo) {
-> >>>              doneflag = 1;
-> >>>      }
-> >>>
-> >>>      struct sigaction sa;
-> >>>      sa.sa_handler = handler;
-> >>>      ...
-> >>>
-> >>>Here, sa_handler is registered as a function to be called when the
-> >>>specified signal occurrs.
-> >>>
-> >>>Just handle function pointers as simple pointer variables.
-> >>
-> >>  Have still one silly question ---
-> >>    since you say function pointers are similar to simple pointer
-> >>variables, and that's why the typecast works, what would the following
-> >>code mean?
-> >>
-> >>  void handler1 (int a) {
-> >>
-> >>    /* body of handler - 1 */
-> >>    printf ("HANDLER - 1 \n");
-> >>
-> >>  }
-> >>
-> >>  void handler2 (int a) {
-> >>
-> >>    /* body of handler - 2 */
-> >>    printf ("HANDLER - 2 \n");
-> >>
-> >>  }
-> >>
-> >>  struct sigaction sa;
-> >>  sa.sa_handler = (handler2 *) handler1;
-> >>
-> >>  Is this possible? if so, what does it mean?
-> >
-> >
-> > In this case you are trying to cast to a __name__ rather than a type.
-> 
-> 
-> 
-> > If you write
-> >
-> >       sa.sa_handler = (void *)handler1;
-> >
-> > it would be OK, but nothing would happen.  Why?  Because no
-> > typecasting takes place (handler1 is of type void already) and
-> > therefore nothing changes.  handler1 would be associated to
-> > sa_handler.
-> >
-> 
-> hmm.. fine
-> 
-> > A final example:
-> 
->   .."final"..
->   Got scared seeing this :-O
->   my silly questions are annoying you???
 
-No, of course not.  Just hoped that I now can make myself as clear as
-prossible to answer all your questions with a "final" example.  No
-reason to be scared.  No stupid questions to be asked.
+kaushal wrote:
 
-> >
-> >       #include <stdio.h>
-> >
-> >       void func1(int);
-> >       void func2(int);
-> >
-> >       void func1(int i) {
-> >               printf("func1: %d\n", i);
-> >       }
-> >
-> >       void func2(int i) {
-> >               printf("func2: %d\n", i);
-> >       }
-> >
-> >       int main (void) {
-> >               void (*f1)(int) = (void *)func1;
-> >               /* the same as above */
-> >               void (*f1)(int) = func1;
-> >               void (*f2)(int) = func2;
-> >               f1(1);
-> >               f2(2);
-> >
-> >               getc(stdin);
-> >
-> >               return (0);
-> >       }
-> >
-> > Everything fine now?
-> 
-> yes :)
-> 
+>          Is it going to matter if it is vcd or data cd?If yes then I
+> want to copy both the kinds.
 
-Cool then.  Don't forget: never stop asking!
- 
-Regards
+Yes.
 
-	\Steve
+Like audio CDs, VCDs use mode-2 sessions, which have less error
+correction than data CDs (but can store more data, e.g. a standard
+80-minute CD-R can hold 700MB as a data CD but 800MB as a VCD or audio
+CD).
 
---
+To copy mode-2 CDs, you will want software which doesn't abort on an
+I/O error (and, ideally, prevents or limits retries within the CD
+drive itself).
 
-Steve Graegert <graegerts@gmail.com>
-Software Consultancy {C/C++ && Java && .NET}
-Mobile: +49 (176)  21248869
-Office: +49 (9131) 7126409
+Try some of the links found from:
+
+	http://www.google.com/search?q=VCD%20%22mode%202%22
+
+for more information.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
