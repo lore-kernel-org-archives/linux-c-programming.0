@@ -1,75 +1,87 @@
-From: kaushal <kaushal@rocsys.com>
-Subject: Re: copy program
-Date: Mon, 12 Sep 2005 11:28:59 +0530
-Message-ID: <1126504740.3338.24.camel@kaushal>
-References: <20050911082545.96519.qmail@web52915.mail.yahoo.com>
-Reply-To: kaushal@rocsys.com
+From: _z33 <timid.Gentoo@gmail.com>
+Subject: Re: Confusing Prototype
+Date: Mon, 12 Sep 2005 18:00:22 +0530
+Message-ID: <dg3sd3$cd7$1@sea.gmane.org>
+References: <432470B7.7050609@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20050911082545.96519.qmail@web52915.mail.yahoo.com>
+In-Reply-To: <432470B7.7050609@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: szonyi calin <caszonyi@yahoo.com>
-Cc: _z33 <timid.Gentoo@gmail.com>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-hello list,
+James Colannino wrote:
+> Hey everyone.  I was looking at the prototype for fgets and noticed the 
+> following:
+> 
+> char *fgets(char *s, int size, FILE *stream);
+> 
+> I'm confused because it says that it returns a pointer to a character, 
+> but at the same time it stores a string at the address pointed to by 
+> char *s, so why does it also need to return a pointer?  I'm confused.  
 
-          thank you all for the support.
-regards-
-kaushal
+   please correct me if I'm wrong. As far as I know, you need a 
+mechanism to find out if fgets, executed perfectly or not, and that's 
+the primary reason it returns a value. When fgets fails to read from the 
+stream specified it returns a null pointer to indicate the error. The 
+string in the argument list of the function however, will have the value 
+till which execution proceeded without error. (hope I'm right about this)
 
-On Sun, 2005-09-11 at 10:25 +0200, szonyi calin wrote:
-> --- _z33 <timid.Gentoo@gmail.com> a =C3=A9crit :
->=20
-> > kaushal wrote:
-> > Earlier I have
-> > > posted a question about a problem in copying CDs in
-> > linux.Whenever I try
-> > > to copy a CD from linux it fails giving the seek error
-> > message.But
-> > > without mounting the cd if I play it using mplayer command,
-> > it plays.
-> > > 		(mplayer vcd:// )
-> > >  while I copy the same CD in windows on the same machine it
-> > > succeeds .
-> >=20
-> > I still face the same problem in Linux while copying something
-> > from a=20
-> > CD. It succeeds in windoze , but fails in Linux :(
-> >=20
->=20
-> Linux had no support for video cd's. That's why you can't use a
-> vcd disk as a normal disk in Linux.
-> You can use mplayer's stream dump facility to dump the video
-> from the CD
->=20
->=20
->=20
-> --
-> A mouse is a device used to point at=20
-> the xterm you want to type in.
-> Kim Alm on a.s.r.
->=20
->=20
-> =09
->=20
-> =09
-> 	=09
-> _____________________________________________________________________=
-______=20
-> Appel audio GRATUIT partout dans le monde avec le nouveau Yahoo! Mess=
-enger=20
-> T=C3=A9l=C3=A9chargez cette version sur http://fr.messenger.yahoo.com
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+   If in case the returning pointer, was avoided, then the error 
+couldn't be properly indicated. And the only way will be to modify the 
+input string container itself. This could create an ambiguity, if the 
+input file or stream had nothing but a null value. The programmer might 
+not be able to differentiate whether an error occured or whether input 
+was null.
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+#include <stdio.h>
+
+int main (int argc, char *argv[])
+{
+     /* for file access */
+     FILE *fp;
+
+     /* array to store some 5 characters */
+     char array[5] = {'\0'};
+
+     /* to store the return value */
+     char *status;
+
+     /* open the file for reading */
+     if ((fp = fopen ("testFile.txt", "r")) == NULL)
+     {
+         /* display error information and exit */
+         fprintf (stderr, "Error: file read failed. \n");
+         exit (1);
+     }
+
+     /* read twice */
+     status = fgets (array, sizeof (array), fp);
+     status = fgets (array, sizeof (array), fp);
+
+     /*
+      * without the return value fgets can't display the error
+      * encountered.
+      * the input string passed is never touched when an error occurs.
+      */
+
+     /* close file */
+     fclose (fp);
+
+     /* display the array value */
+     printf ("array: %s \n", array);
+
+     /* display the status returned */
+     printf ("status: %s \n", status);
+
+     return (0);
+}
+
+Sorry, if I have confused you.
+
+_z33
+-- 
+I love TUX; well... that's an understatement :)
+
