@@ -1,44 +1,41 @@
-From: "Suma Choudhary" <sumac@myw.ltindia.com>
-Subject: Re: just curious!
-Date: Mon, 10 Oct 2005 07:55:08 +0530
-Message-ID: <s34a1e7f.028@EMAIL>
+From: Ronaldo.Afonso@cyclades.com
+Subject: GDB - remote debuging
+Date: Mon, 10 Oct 2005 17:21:53 -0200
+Message-ID: <OF19D28C0B.1DDD8999-ON83257096.0069E195-83257096.006A5FFA@Cyclades.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: glynn@gclements.plus.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-Thanks a lot.....
 
-I got to know about the utmp file and the terminal device from the strace and ltrace as suggested by David Eduardo.Could even write  a small code to emulate "write".
 
-Didnt know about "mesg" though.
 
-Thanks again
-suma
 
->>> Glynn Clements <glynn@gclements.plus.com> 10/08/05 12:54 PM >>>
+Hello all,
 
-Suma Choudhary wrote:
+I'm trying to debug a embedded system with remote gdb feature and in the
+client gdb, when I'm connecting to the gdbserver, I just receive the
+following message:
 
-> I was curious to know how the "write" command works.Any IPCs used?
+(gdb) target remote /dev/ttyS0
 
-It determines the terminal(s) on which the specified user is logged in
-from the utmp file, opens the terminal device for writing, and writes
-to it.
+Remote debugging using /dev/ttyS0
+Couldn't establish connection to remote target
+Remote sent bad register number 40: 30012e68;
+Packet: 'T0501:7ffffd40;40:30012e68;'
 
-Note that the terminal device must be group-writeable (normally
-controlled using "mesg y" or "mesg n"). The write command itself is
-setgid tty.
+Does anybody know what it is?
+Thanks.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Ronaldo Z. Afonso
+Projetista de Software
+Cyclades Brasil
+ronaldo.afonso@cyclades.com.br
+
+Phone: 55 11 5033-3361
+Fax: 55 11 5033-3388
+www.cyclades.com.br
 
