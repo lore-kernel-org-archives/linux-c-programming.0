@@ -1,14 +1,29 @@
-From: Ronaldo.Afonso@cyclades.com
-Subject: GDB - remote debuging
-Date: Mon, 10 Oct 2005 17:21:53 -0200
-Message-ID: <OF19D28C0B.1DDD8999-ON83257096.0069E195-83257096.006A5FFA@Cyclades.com>
+From: "Awasthi, Atul" <atul.awasthi@siemens.com>
+Subject: RE: GDB - remote debuging
+Date: Wed, 12 Oct 2005 13:26:50 +0200
+Message-ID: <9C04C4589B6701468A7F8AFAFA432DC42FAB53@BRU0038A.ww018.siemens.net>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
+
+ You have to start the debugging server on the specific port on the
+embedded system first,
+And then you can connect to that specific port.
+:( I hope this can solve something.
+
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of
+Ronaldo.Afonso@cyclades.com
+Sent: maandag 10 oktober 2005 21:22
+To: linux-c-programming@vger.kernel.org
+Subject: GDB - remote debuging
 
 
 
@@ -39,3 +54,8 @@ Phone: 55 11 5033-3361
 Fax: 55 11 5033-3388
 www.cyclades.com.br
 
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
