@@ -1,7 +1,7 @@
-From: Lawrence Bowie <ldb@ldb-jab.org>
+From: Lawrence Bowie <thesource@ldb-jab.org>
 Subject: Re: Problem with Native POSIX Thread Library
-Date: Sun, 16 Oct 2005 09:49:09 -0400
-Message-ID: <43525A55.5010703@ldb-jab.org>
+Date: Sun, 16 Oct 2005 09:43:48 -0400
+Message-ID: <43525914.3070302@ldb-jab.org>
 References: <20051016105800.2454.qmail@web53712.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -13,14 +13,11 @@ Content-Type: text/plain; charset="us-ascii"
 To: Mikado <mikado4vn@yahoo.com>
 Cc: linux-c-programming@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
-
 These modifications below might shed some light on your issue.
 
 LDB
 
-- ------------------- CODE ---------------------------
+------------------- CODE ---------------------------
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -57,7 +54,7 @@ int main(void)
 
     pthread_exit(NULL);
 }
-- ----------------------- CODE -------------------------------
+----------------------- CODE -------------------------------
 
 Mikado wrote:
 > Hi all,
@@ -119,11 +116,3 @@ Mikado wrote:
 > the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
 > 
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.0 (GNU/Linux)
-
-iD8DBQFDUlpVXk+Xn2ZNlsQRAohvAJsGJzArWNoqVIgxOM3eotvqzZW6DQCfcNWj
-XwulOScx1yPWEtN5ZXHgmLU=
-=Yl1x
------END PGP SIGNATURE-----
