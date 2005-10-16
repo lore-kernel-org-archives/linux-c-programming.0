@@ -1,83 +1,150 @@
-From: Eric Bambach <eric@cisu.net>
-Subject: Re: access & dump framebuffer
-Date: Sun, 16 Oct 2005 12:49:02 -0500
-Message-ID: <200510161249.02632.eric@cisu.net>
-References: <Pine.LNX.4.21.0510161257350.737-100000@hestia>
-Reply-To: eric@cisu.net
+From: Mikado <mikado4vn@yahoo.com>
+Subject: Re: Problem with Native POSIX Thread Library
+Date: Sun, 16 Oct 2005 10:53:26 -0700 (PDT)
+Message-ID: <20051016175326.70266.qmail@web53704.mail.yahoo.com>
+References: <43525914.3070302@ldb-jab.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.21.0510161257350.737-100000@hestia>
-Content-Disposition: inline
+In-Reply-To: <43525914.3070302@ldb-jab.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: "J." <mailing-lists@xs4all.nl>
+Content-Type: text/plain; charset="us-ascii"
+To: Lawrence Bowie <thesource@ldb-jab.org>
 Cc: linux-c-programming@vger.kernel.org
 
-J.
+Thank Lawrence, I've got this error message:
 
-I haven't done this before but perhaps I can get you started.
+Error creating thread 382: Cannot allocate memory
+Error creating thread 383: Cannot allocate memory
+Error creating thread 384: Cannot allocate memory
+Error creating thread 385: Cannot allocate memory
+Error creating thread 386: Cannot allocate memory
+Error creating thread 387: Cannot allocate memory
+................
 
-I wouldnt try to do it from the kernel becuase drivers have already bee=
-n=20
-written to do that. In order to display an image the kernel will have t=
-o be=20
-compiled with FrameBuffer support for whichever videocard the machine h=
-as.=20
+It always begins at thread 382. My RAM is 256+128 MB, isn't it enough???? hm... still in trouble
+now.
 
-Next, I would look into the bootsplash packages and how that uses the=20
-framebuffer device for displaying images. There are also vaious librari=
-es=20
-that you can link traditional X programs against so they can be used in=
- an=20
-environment without X. They use the framebuffer device instead. I seem =
-to=20
-recall that people have even gotten the mozilla browser to open up in a=
- cli=20
-environment. Search for those libraries and see how they do it.
 
-My main point is that you want to do is find out how to use the video=20
-framebuffer device once you know the machine's kernel supports it.=20
+--- Lawrence Bowie <thesource@ldb-jab.org> wrote:
 
- Hope that gets you started!
+> These modifications below might shed some light on your issue.
+> 
+> LDB
+> 
+> ------------------- CODE ---------------------------
+> #include <stdio.h>
+> #include <unistd.h>
+> #include <pthread.h>
+> #include <errno.h>
+> #include <string.h>
+> 
+> #define MAX 10000
+> 
+> void print_msg(void * msg);
+> int main(void);
+> 
+> void print_msg(void * arg)
+> {
+>     pthread_detach(pthread_self());
+>     sleep(10);
+>     pthread_exit(NULL);
+> }
+> 
+> int main(void)
+> {
+>     pthread_t thread_id[MAX];
+>     int i, ret, err;
+> 
+>     for (i = 0; i < MAX; i++)
+>     {
+>           ret = pthread_create(&thread_id[i], NULL, (void *)&print_msg,
+> (void *)0);
+> 
+>           if (ret) {
+>               err = errno;
+>               printf("Error creating thread %d: %s\n", i,strerror(err));
+>           }
+>      }
+> 
+>     pthread_exit(NULL);
+> }
+> ----------------------- CODE -------------------------------
+> 
+> Mikado wrote:
+> > Hi all,
+> > 
+> > I'm using 2.6 kernel with NPTL support in kernel and libc but I cannot create more than 400
+> > threads with NPTL. In the past, I used 2.4 kernel and I can create about 1500 threads. I dont
+> want
+> > to use traditional LinuxThread because I dont like the way it pthread_detach() (it "clone"s
+> too
+> > many processes). Reading some documents about NPTL, I thought it can creates many threads but
+> it's
+> > not true in my case. I need somebody's help. Thanks in adv.
+> > 
+> > System info:
+> > - Kernel: 2.6.13.4
+> > - RAM: 256 + 128
+> > - CPU: PentiumIII 937.939MHz
+> > 
+> > My code is below:
+> > 
+> > ===== CODE =====
+> > #include <stdio.h>
+> > #include <unistd.h>
+> > #include <pthread.h>
+> > 
+> > #define MAX 10000
+> > 
+> > void print_msg(void * msg);
+> > int main(void);
+> > 
+> > void print_msg(void * arg)
+> > {
+> >         pthread_detach(pthread_self());
+> >         sleep(10);
+> >         pthread_exit(NULL);
+> > }
+> > 
+> > int main(void)
+> > {
+> >         pthread_t thread_id[MAX];
+> >         int i, ret;
+> > 
+> >         for (i = 0; i < MAX; i++)
+> >         {
+> >                 ret = pthread_create(&thread_id[i], NULL, (void *)&print_msg, (void *)0);
+> >                 if (ret)
+> >                         printf("Error creating thread %d\n", i);
+> >         }
+> > 
+> >         pthread_exit(NULL);
+> > }
+> > ===== CODE =====
+> > 
+> > 
+> > 
+> > 		
+> > __________________________________ 
+> > Start your day with Yahoo! - Make it your home page! 
+> > http://www.yahoo.com/r/hs
+> > -
+> > To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> > the body of a message to majordomo@vger.kernel.org
+> > More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> > 
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> 
 
-On Sunday 16 October 2005 06:01 am, J. wrote:
-> Sunday, October 16 12:57:35
->
-> Hi ..
->
-> Question - I was thinking about writing a program that creates a
-> screendump [image] only from the cli. [not X]. Where should I access
-> the data that is displayed on the screen? Directly from the hardware,=
- or
-> from the kernel somewhere or .. ?
->
-> Any comments, thoughts or hints are appreciated.
->
-> Thankx.
->
-> J.
 
---=20
-----------------------------------------
---EB
 
-> All is fine except that I can reliably "oops" it simply by trying to =
-read
-> from /proc/apm (e.g. cat /proc/apm).
-> oops output and ksymoops-2.3.4 output is attached.
-> Is there anything else I can contribute?
-
-The latitude and longtitude of the bios writers current position, and
-a ballistic missile.
-
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0--Alan Cox LKML-Decembe=
-r 08,2000=20
-
-----------------------------------------
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+		
+__________________________________ 
+Yahoo! Music Unlimited 
+Access over 1 million songs. Try it free.
+http://music.yahoo.com/unlimited/
