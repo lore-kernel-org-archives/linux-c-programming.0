@@ -1,31 +1,27 @@
-From: fabio <fabio@crearium.com>
-Subject: displaying time_t values
-Date: Sat, 22 Oct 2005 17:27:20 -0600
-Message-ID: <435ACAD8.8090909@crearium.com>
+From: Michael Iatrou <m.iatrou@freemail.gr>
+Subject: Re: displaying time_t values
+Date: Sun, 23 Oct 2005 13:07:45 +0300
+Message-ID: <200510231307.45916.m.iatrou@freemail.gr>
+References: <435ACAD8.8090909@crearium.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <435ACAD8.8090909@crearium.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-hello,
+When the date was Sunday 23 October 2005 02:27, fabio wrote:
 
-I would like to know how to display the full seconds and miliseconds 
-transacurrent since 2 points in a program.
+> I would like to know how to display the full seconds and miliseconds
+> transacurrent since 2 points in a program.
 
-main()
-{
-    time_t t1_t2;
-    (void)time(&t1);
-    cpu_intensive_function();
-    (void)time(&t2);
-    printf("the full time spent in the process is:");
-    // how should i display it ? ej: 51,56745 seconds ot 1024,04546 seconds
+difftime(t2, t1)
+But time won't give you msec resolution. 
 
-}
-
-Thanks,
-
-fabolo
+-- 
+ Michael Iatrou
+ Electrical and Computer Engineering Dept.
+ University of Patras, Greece
