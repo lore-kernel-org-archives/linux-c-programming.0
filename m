@@ -1,45 +1,62 @@
-From: kaushal <kaushal@rocsys.com>
-Subject: Re: displaying time_t values
-Date: Mon, 24 Oct 2005 12:36:54 +0530
-Message-ID: <1130137614.3683.24.camel@kaushal>
-References: <435ACAD8.8090909@crearium.com>
-Reply-To: kaushal@rocsys.com
+From: fabio <fabio@crearium.com>
+Subject: MIsc C programming questions
+Date: Mon, 24 Oct 2005 03:02:43 -0600
+Message-ID: <435CA333.3010904@crearium.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <435ACAD8.8090909@crearium.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: fabio <fabio@crearium.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
+
+Hello,
+
+I have some questions about C programming not exactly on Linux but
+Solaris, I hope you can help me:
+
+- Why I cant include this __asm___ lines on a C program and compile it
+on Sun cc on Solaris 10?
+
+-bash-3.00$ cat ret.c; cc ret.c
+/*
+
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/systeminfo.h>
 
 
-In case u find the function is over in shorer time,simply run the same
-function in a loop for n times and later divide the total time by n.Hope
-that was useful.
-On Sat, 2005-10-22 at 17:27 -0600, fabio wrote:
-> hello,
-> 
-> I would like to know how to display the full seconds and miliseconds 
-> transacurrent since 2 points in a program.
-> 
-> main()
-> {
->     time_t t1_t2;
->     (void)time(&t1);
->     cpu_intensive_function();
->     (void)time(&t2);
->     printf("the full time spent in the process is:");
->     // how should i display it ? ej: 51,56745 seconds ot 1024,04546 seconds
-> 
-> }
-> 
-> Thanks,
-> 
-> fabolo
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+/*
+*
+*/
+int
+main() {
+    int ret;
+    ret = get_sp();
+    printf("Stack Pointer is: 0x%x\n",ret);
+    char platform[257],release[257];
+    sysinfo(SI_PLATFORM, platform, sizeof(platform) - 1);
+    sysinfo(SI_RELEASE, release, sizeof(release) - 1);
+    printf("Platform: %s (%s)\n", platform, release);
+    return (EXIT_SUCCESS);
+}
+
+int
+get_sp(){
+    __asm__("mov %sp,%g1");
+    __asm__("mov %g1,%o1");
+}
+"ret.c", line 16: warning: implicit function declaration: get_sp
+"ret.c", line 27: warning: implicit function declaration: __asm__
+Undefined                       first referenced
+symbol                             in file
+__asm__                             ret.o
+ld: fatal: Symbol referencing errors. No output written to a.out
+-bash-3.00$
+
+Any workaround?
+
+Thanks
 
