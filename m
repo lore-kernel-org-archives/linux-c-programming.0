@@ -1,37 +1,65 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: displaying time_t values
-Date: Mon, 24 Oct 2005 12:11:55 +0100
-Message-ID: <17244.49531.11868.354784@cerise.gclements.plus.com>
-References: <435ACAD8.8090909@crearium.com>
+From: Henry Margies <henry.margies@gmx.de>
+Subject: setenv and dlopen
+Date: Tue, 25 Oct 2005 19:52:04 +0200
+Message-ID: <1130262724.7414.14.camel@localhost.localdomain>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <435ACAD8.8090909@crearium.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: fabio <fabio@crearium.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+Hi all,
+
+I have a problem using dlopen and setting the LD_LIBRARY_PATH with
+putenv or setenv. 
 
 
-fabio wrote:
+Here is my test code:
 
-> I would like to know how to display the full seconds and miliseconds 
-> transacurrent since 2 points in a program.
-> 
-> main()
-> {
->     time_t t1_t2;
->     (void)time(&t1);
->     cpu_intensive_function();
->     (void)time(&t2);
->     printf("the full time spent in the process is:");
->     // how should i display it ? ej: 51,56745 seconds ot 1024,04546 seconds
-> 
-> }
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+#include <unistd.h>
 
-time() only provides second resolution. You need to use gettimeofday()
-to get better resolution.
+int main(int argn, char** argv)
+{
+        void* handle;
+        int   ret;
+
+        putenv("LD_LIBRARY_PATH=.");
+        putenv("PATH=.");
+
+        handle = dlopen("libmylib.so", RTLD_LAZY);
+
+        if (NULL == handle) {
+                printf("error: %s\n", dlerror());
+        }
+
+        if (2 == argn)
+                return 0;
+
+        ret = execlp("dltest", "dltest", "break", NULL);
+
+        if (ret)
+                perror("Error in starting dltest: ");
+	return ret;
+}
+
+
+I also tried setenv and absolute path-names for LD_LIBRARY_PATH. Setting
+LD_LIBRARY_PATH on the console works perfectly. And as you can see,
+setting the PATH variable using putenv is also working for execlp.
+
+
+Any suggestions?
+
+
+Henry
+
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+Hi! I'm a .signature virus! Copy me into your
+~/.signature to help me spread!
+
