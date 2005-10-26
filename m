@@ -1,38 +1,29 @@
-From: Christoph Bussenius <busseniu@cip.physik.uni-muenchen.de>
-Subject: Re: setenv and dlopen
-Date: Tue, 25 Oct 2005 20:20:07 +0200
-Message-ID: <20051025182007.GC6673@opaque.pepe>
-References: <1130262724.7414.14.camel@localhost.localdomain>
+From: fabio <fabio@crearium.com>
+Subject: gcc -static -ggdb not working
+Date: Tue, 25 Oct 2005 23:39:33 -0600
+Message-ID: <435F1695.3050206@crearium.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <1130262724.7414.14.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Henry Margies <henry.margies@gmx.de>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-On Tue, Oct 25, 2005 at 07:52:04PM +0200, Henry Margies wrote:
-> Hi all,
+Hello, I wonder why I cant dbug C programs on Solaris/sparc with gcc:
 
-Hi Henry,
+-bash-3.00$ cat 1.c;\gcc -static -ggdb 1.c -o 1
+main(){
+        printf("hello world\n");
+}
+ld: fatal: library -lc: not found
+ld: fatal: library -lc: not found
+ld: fatal: File processing errors. No output written to 1
+collect2: ld returned 1 exit status
+-bash-3.00$
 
-> I have a problem using dlopen and setting the LD_LIBRARY_PATH with
-> putenv or setenv. 
+I use the "\" to avoid bash aliases.
 
-I think this is because putenv does not really modify your process'es
-environment (which is not possible afaik), but rather remembers the
-given variable until you call some exec* function.  libc will then pass
-the new environment to execve so that the new program will have the
-modified environment.
+Thanks for the help,
 
-Regards,
-Christoph
-
--- 
-``There's no dark side of the moon, really
-Matter of fact, it's all dark''
-
---Pink Floyd
+fabio
