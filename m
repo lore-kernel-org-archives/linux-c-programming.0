@@ -1,26 +1,29 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: setenv and dlopen
-Date: Wed, 26 Oct 2005 15:46:33 +0100
-Message-ID: <17247.38601.989240.506155@cerise.gclements.plus.com>
-References: <1130262724.7414.14.camel@localhost.localdomain>
+From: Fabio Andres Miranda <fabiomiranda@racsa.co.cr>
+Subject: Pointers to int
+Date: Fri, 28 Oct 2005 07:19:26 -0600
+Message-ID: <4362255E.90303@racsa.co.cr>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1130262724.7414.14.camel@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Henry Margies <henry.margies@gmx.de>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Hello,
 
-Henry Margies wrote:
+Can anyone explain to the list how this pointers to int work:
+    int *p;
+    p = (int *)(array);
+    for (i = 0; i < arraysize - 1; i += 4)
+        *p++ = j - 8;
+    *p = 0x0;
 
-> I have a problem using dlopen and setting the LD_LIBRARY_PATH with
-> putenv or setenv. 
+P is defined as a pointer to a int. Then, it points to (the beginning ? 
+) a char array.
+What is the result of perform the instruction: *p++; ?
+First, what is it? It adds 1 to what?
 
-ld-linux.so.2 reads the value into a variable at startup, and uses the
-stored value thereafter.
+Thanks for a detailed explanation,
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+fabolo
