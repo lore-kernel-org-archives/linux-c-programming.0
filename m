@@ -1,29 +1,23 @@
-From: ework0 <ework0@gmail.com>
-Subject: pointers
-Date: Sun, 30 Oct 2005 02:11:03 -0600
-Message-ID: <43648017.7040700@gmail.com>
+From: Rajat Jain <rajat.noida.india@gmail.com>
+Subject: Detecting whether a Message Queue with a given qid exists?
+Date: Mon, 31 Oct 2005 16:11:25 +0900
+Message-ID: <b115cb5f0510302311ma397fb1k65ec88a605f33adf@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hello,
+Hi,
 
-I would like to know what are the advantages of use pointers to 
-insert/modify values in an array of characters for example.
+This is the reagrding the message queue mecahnism of sys V IPC.
 
-char myword[2];
-*myword = 'h';
-*(myword + 1)='i';
+Is there a way to find out that whether a message queue with a
+particular qid exists?
 
-why would i use this ( the intruction: *(myword + offset))?
-what is the advantages of use this manipulation of array with these 
-pointers ?
-In the last line, do I increment the address that contains what s points 
-to right ??
-Why I increment it in '1' instead of a memory word concept?
+Thanks,
 
-Thanks
+Rajat
