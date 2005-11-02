@@ -1,29 +1,31 @@
-From: fabio <fabio@crearium.com>
-Subject: Misc debugging questions
-Date: Wed, 02 Nov 2005 05:03:02 -0600
-Message-ID: <43689CE6.9090301@crearium.com>
+From: Steve Graegert <graegerts@gmail.com>
+Subject: Re: Misc debugging questions
+Date: Wed, 2 Nov 2005 13:14:14 +0100
+Message-ID: <6a00c8d50511020414h207287c1h8bfdf27dbdccffcb@mail.gmail.com>
+References: <43689CE6.9090301@crearium.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <43689CE6.9090301@crearium.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hello,
+On 11/2/05, fabio <fabio@crearium.com> wrote:
+> Hello,
+>
+> I would like to know what represents the addresses found in objdump of a
+> binary? Are these the address where the file will be eventually mapped
+> to? or are these addresses the organization inside the binary file?
 
-I would like to know what represents the addresses found in objdump of a 
-binary? Are these the address where the file will be eventually mapped 
-to? or are these addresses the organization inside the binary file?
+[snip]
 
-When a file is executed the address space assigned to it is equal from 
-process to process, is this information contained in the binary file or 
-it is generated/assigned by the operational system?
+> In general terms, what does a ELF executable file contain? anyone can
+> point to a website with a graphical view of this format?
 
-In general terms, what does a ELF executable file contain? anyone can 
-point to a website with a graphical view of this format?
+Quick overview: http://www2.linuxjournal.com/article/1060
+Detailed infos: http://www.skyfree.org/linux/references/ELF_Format.pdf
 
-Thanks,
-
-
-
+	\Steve
