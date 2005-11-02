@@ -1,33 +1,29 @@
-From: Rajat Jain <rajat.noida.india@gmail.com>
-Subject: Re: Detecting whether a Message Queue with a given qid exists?
-Date: Wed, 2 Nov 2005 12:00:50 +0900
-Message-ID: <b115cb5f0511011900w73d1f0bej4dc429286a734a76@mail.gmail.com>
-References: <b115cb5f0510302311ma397fb1k65ec88a605f33adf@mail.gmail.com>
-	 <6a00c8d50510302330m193cdc91v93b745be3b2f456f@mail.gmail.com>
-	 <b115cb5f0510312222q14d4d717y5723a75f8848d4d9@mail.gmail.com>
-	 <6a00c8d50511010111r23756139i92f675a3a865e69@mail.gmail.com>
+From: fabio <fabio@crearium.com>
+Subject: Misc debugging questions
+Date: Wed, 02 Nov 2005 05:03:02 -0600
+Message-ID: <43689CE6.9090301@crearium.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6a00c8d50511010111r23756139i92f675a3a865e69@mail.gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Steve Graegert <graegerts@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
->
-> Try msgctl with the IPC_STAT command:
->
->        #include <sys/msg.h>
->        int msgctl(int msqid, int cmd, struct msqid_ds *buf);
->
-> If the queue ID is not valid this call fails with EINVAL and buf is not filled.
->
->        \Steve
->
+Hello,
 
-Thanks a lot. I think it would solve my problem
+I would like to know what represents the addresses found in objdump of a 
+binary? Are these the address where the file will be eventually mapped 
+to? or are these addresses the organization inside the binary file?
 
-:-)
+When a file is executed the address space assigned to it is equal from 
+process to process, is this information contained in the binary file or 
+it is generated/assigned by the operational system?
+
+In general terms, what does a ELF executable file contain? anyone can 
+point to a website with a graphical view of this format?
+
+Thanks,
+
+
+
