@@ -1,31 +1,35 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: Misc debugging questions
-Date: Wed, 2 Nov 2005 13:14:14 +0100
-Message-ID: <6a00c8d50511020414h207287c1h8bfdf27dbdccffcb@mail.gmail.com>
-References: <43689CE6.9090301@crearium.com>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+From: "jywang" <jywang@cnic.cn>
+Subject: how to replace a skb in NF_IP_LOCAL_OUT hook
+Date: Fri, 4 Nov 2005 08:20:10 +0800
+Message-ID: <006101c5e0d5$84c13e80$060ae29f@javaboy>
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43689CE6.9090301@crearium.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-On 11/2/05, fabio <fabio@crearium.com> wrote:
-> Hello,
+This question belongs on the developer list I think.
+
+On Wed, 2 Nov 2005, jywang wrote:
+
+> i want to replace the skb with my own, and in my skb i will change the
+data
+> in it.
 >
-> I would like to know what represents the addresses found in objdump of a
-> binary? Are these the address where the file will be eventually mapped
-> to? or are these addresses the organization inside the binary file?
+> How to do it?
+>
+> what i do as below:
+>
+> cp = skb_copy_expand(*skb, skb_headroom(*skb)+12, skb_tailroom(*skb),
+GFP_ATOMIC);
+> //change the skb->data here
+> skb_set_owner_w(cp, (*skb)->sk);
+> *skb = cp;
+> return NF_ACCEPT;
+>
+> but, it can't work.
 
-[snip]
 
-> In general terms, what does a ELF executable file contain? anyone can
-> point to a website with a graphical view of this format?
 
-Quick overview: http://www2.linuxjournal.com/article/1060
-Detailed infos: http://www.skyfree.org/linux/references/ELF_Format.pdf
-
-	\Steve
