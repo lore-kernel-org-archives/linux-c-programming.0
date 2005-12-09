@@ -1,36 +1,53 @@
-From: "Robert P. J. Day" <rpjday@mindspring.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: type qualifiers on function return types?
-Date: Fri, 9 Dec 2005 14:04:09 -0500 (EST)
-Message-ID: <Pine.LNX.4.63.0512091403170.30902@localhost.localdomain>
+Date: Fri, 9 Dec 2005 19:25:54 +0000
+Message-ID: <17305.55874.776271.548409@cerise.gclements.plus.com>
 References: <Pine.LNX.4.63.0512080728490.10304@localhost.localdomain>
- <6a00c8d50512080858n70ef1937n8ccc2c96b9eb799c@mail.gmail.com>
- <Pine.LNX.4.63.0512081257140.7428@localhost.localdomain>
- <17305.54523.539369.296130@cerise.gclements.plus.com>
+	<6a00c8d50512080858n70ef1937n8ccc2c96b9eb799c@mail.gmail.com>
+	<001401c5fc1e$d7963110$8e01a8c0@Nate>
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17305.54523.539369.296130@cerise.gclements.plus.com>
+In-Reply-To: <001401c5fc1e$d7963110$8e01a8c0@Nate>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: Steve Graegert <graegerts@gmail.com>, C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: Nate Jenkins <nate@uniwest.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
-On Fri, 9 Dec 2005, Glynn Clements wrote:
 
-> Did you mean to declare the pointers as "volatile", rather than the
-> function's return value?
->
-> Pointer qualifiers go after the "*", e.g.
->
-> 	typedef struct blah {
-> 	  void           (**volatile start_address)(void);
-> 	  char*          volatile stack;
-> 	  void           (**volatile manual_start_address)(void);
-> 	  ...
+Nate Jenkins wrote:
 
-it wasn't what *i* was declaring, this was code i inherited from
-elsewhere and it was exactly as i posted it earlier, so i think we've
-established that, yes, it was silly code.
+> I am sure I am not the only one here wondering what "type qualifiers"=
+ are.
+> Could someone expound on what they are and why one would use them?
 
-rday
+=46or a precise definition, see =A76.7.3 of the C99 draft, at:
+
+	http://www.open-std.org/jtc1/sc22/open/n2794/n2794.txt
+
+The most useful is "const", which tells the compiler to generate a
+warning if anything tries to modify the target. Also, if a function
+argument is a pointer to a const target, the compiler can assume that
+the target will not be modified.
+
+The "volatile" qualifier indicates that any reads or writes must be
+performed exactly as indicated by the code, and cannot be optimised
+away (e.g. caching the value in a register).
+
+It is used if the target can be read or written by mechanisms which
+aren't visible to the compiler (hardware, other threads, signal
+handlers, etc).
+
+The "restrict" qualifier is new in C99 and allows additional
+optimisations. It only applies to pointers, and asserts that the
+location to which the pointer points will only be read or written
+through that pointer.
+
+--=20
+Glynn Clements <glynn@gclements.plus.com>
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
