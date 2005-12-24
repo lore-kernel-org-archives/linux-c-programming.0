@@ -1,33 +1,30 @@
-From: "Robert P. J. Day" <rpjday@mindspring.com>
-Subject: what is the current status of "stdint.h"?
-Date: Fri, 23 Dec 2005 06:27:03 -0500 (EST)
-Message-ID: <Pine.LNX.4.63.0512230621170.4326@localhost.localdomain>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: what is the current status of "stdint.h"?
+Date: Sat, 24 Dec 2005 12:38:39 +0000
+Message-ID: <17325.16719.188587.51455@cerise.gclements.plus.com>
+References: <Pine.LNX.4.63.0512230621170.4326@localhost.localdomain>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.63.0512230621170.4326@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: "Robert P. J. Day" <rpjday@mindspring.com>
+Cc: C programming list <linux-c-programming@vger.kernel.org>
 
 
-  (perhaps a bit off-topic, a combination of a C and gcc and glibc
-question.)
+Robert P. J. Day wrote:
 
-  perusing the GCC manual, i notice that a freestanding C99
-implementation is supposed to include both <stdbool.h> and <stdint.h>.
-i notice that the most recent version of gcc *does* include stdbool.h,
-but doesn't include stdint.h, which matches what you read here:
+>   is the plan for stdint.h to evetually be moved out of glibc-headers
+> and into gcc to conform with the official definition of C99?  or is
+> that glibc-headers file "/usr/include/stdint.h" unrelated to the
+> eventual C99 support for stdint.h?  or what?
 
-http://gcc.gnu.org/c99status.html
+That would have to be addressed to the gcc developers. There is some
+discussion of the issue in the thread starting at:
 
-  *howeever*, on my linux system (FC4), the package glibc-headers
-*does* include /usr/include/stdint.h, which certainly seems to match
-what i imagine stdint.h should eventually contain.
+	http://gcc.gnu.org/ml/gcc/2004-11/msg00248.html
 
-  is the plan for stdint.h to evetually be moved out of glibc-headers
-and into gcc to conform with the official definition of C99?  or is
-that glibc-headers file "/usr/include/stdint.h" unrelated to the
-eventual C99 support for stdint.h?  or what?
-
-rday
+-- 
+Glynn Clements <glynn@gclements.plus.com>
