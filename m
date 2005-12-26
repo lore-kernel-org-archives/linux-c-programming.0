@@ -1,30 +1,26 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: what is the current status of "stdint.h"?
-Date: Sat, 24 Dec 2005 12:38:39 +0000
-Message-ID: <17325.16719.188587.51455@cerise.gclements.plus.com>
-References: <Pine.LNX.4.63.0512230621170.4326@localhost.localdomain>
+From: Mikado <mikado4vn@yahoo.com>
+Subject: How to obtain process ID that created a packet
+Date: Mon, 26 Dec 2005 08:22:18 -0800 (PST)
+Message-ID: <20051226162218.78162.qmail@web53704.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.63.0512230621170.4326@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+To: linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
+
+Hi,
+
+Is there any way to catch REAL pid that generated a packet from 'struct sk_buff', 'struct sock',
+'struct socket',
+'struct file' or etc... ? direct/indirect ways are accepted.
+
+Thank you!
 
 
-Robert P. J. Day wrote:
-
->   is the plan for stdint.h to evetually be moved out of glibc-headers
-> and into gcc to conform with the official definition of C99?  or is
-> that glibc-headers file "/usr/include/stdint.h" unrelated to the
-> eventual C99 support for stdint.h?  or what?
-
-That would have to be addressed to the gcc developers. There is some
-discussion of the issue in the thread starting at:
-
-	http://gcc.gnu.org/ml/gcc/2004-11/msg00248.html
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+	
+		
+__________________________________ 
+Yahoo! for Good - Make a difference this year. 
+http://brand.yahoo.com/cybergivingweek2005/
