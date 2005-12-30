@@ -1,36 +1,61 @@
-From: Jan Engelhardt <jengelh@linux01.gwdg.de>
-Subject: Re: How to obtain process ID that created a packet
-Date: Tue, 27 Dec 2005 19:03:49 +0100 (MET)
-Message-ID: <Pine.LNX.4.61.0512271903180.3068@yvahk01.tjqt.qr>
-References: <20051227014710.43609.qmail@web53708.mail.yahoo.com>
- <Pine.LNX.4.61.0512270925020.10069@yvahk01.tjqt.qr> <43B11D9C.6000601@tls.msk.ru>
+From: "mail-lists" <mail-lists@stev.org>
+Subject: RE: malloc with size 0
+Date: Fri, 30 Dec 2005 14:16:35 -0000
+Message-ID: <200512301423.jBUENrJ12120@stev.org>
+References: <1f5f62170512212043w17e1c8e7v3781e0dc72845efc@mail.gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43B11D9C.6000601@tls.msk.ru>
+In-Reply-To: <1f5f62170512212043w17e1c8e7v3781e0dc72845efc@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Michael Tokarev <mjt@tls.msk.ru>
-Cc: Mikado <mikado4vn@yahoo.com>, linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: 'Suma C' <gsumac@gmail.com>, 'C programming list' <linux-c-programming@vger.kernel.org>
+
+Hi,
+
+This was  a strange problem I came across about 2 years ago.
+Some systems return NULL some return a valid result.
+I would treat it as a case where you would not try to alloc a size of 0 its
+kind of unpredictable depending on lib version and which system your on.
+
+	James
+
+> -----Original Message-----
+> From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
+> programming-owner@vger.kernel.org] On Behalf Of Suma C
+> Sent: 22 December 2005 04:44
+> To: C programming list
+> Subject: malloc with size 0
+> 
+> Hi all
+> 
+> When  a 0 is passed to malloc, I get a valid pointer instead of a NULL
+> .What does this mean?
+> 
+> thanks  in advance
+> 
+> regards
+> suma
+> 
+> PS:
+> code:
+> #include <stdio.h>
+> #include <stdlib.h>
+> 
+> int main()
+> {
+>         char  *ptr = NULL;
+>         ptr = malloc(0);
+>         printf("ptr :%u \n",ptr);
+>         strcpy(ptr,"abcdefghijkl");
+>         printf("%s\n",ptr);  //no seg fault here????
+>         return 0;
+> }
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-
+> programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
 
->In current 2.6 kernel, net/ipv4/netfilter/ipt_owner.c:checkentry() :
->
->        if (info->match & (IPT_OWNER_PID|IPT_OWNER_SID|IPT_OWNER_COMM)) {
->                printk("ipt_owner: pid, sid and command matching "
->                       "not supported anymore\n");
->                return 0;
->        }
->
->So... even netfilter, breaking backward compatibility, does not support
->pid match anymore...
-
-Because they do not work on SMP. That's the reason they are disabled.
-
-
-
-Jan Engelhardt
--- 
-| Alphagate Systems, http://alphagate.hopto.org/
-| jengelh's site, http://jengelh.hopto.org/
