@@ -1,67 +1,98 @@
-From: Patrick Leslie Polzer <leslie.polzer@gmx.net>
-Subject: Re: Resend: Netlink socket problem
-Date: Sun, 8 Jan 2006 13:05:33 +0100
-Message-ID: <20060108130533.4cf244af.leslie.polzer@gmx.net>
-References: <20060108092505.62484.qmail@web53702.mail.yahoo.com>
+From: "Reuben D. Budiardja" <techlist@pathfinder.phys.utk.edu>
+Subject: Passing pointer as member of struct to function
+Date: Tue, 10 Jan 2006 09:05:08 -0500
+Message-ID: <200601100905.08338.techlist@pathfinder.phys.utk.edu>
 Mime-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature";
- micalg="PGP-SHA1";
- boundary="Signature=_Sun__8_Jan_2006_13_05_33_+0100_tiMiR_NrPL2qCZp."
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20060108092505.62484.qmail@web53702.mail.yahoo.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Mikado <mikado4vn@yahoo.com>
-Cc: linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
-
---Signature=_Sun__8_Jan_2006_13_05_33_+0100_tiMiR_NrPL2qCZp.
-Content-Type: text/plain; charset=US-ASCII
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
 
-Hi Mikado,
+Hello,
+I have the following problem, which probably best explained if I give the 
+sample code first:
 
-On Sun, 8 Jan 2006 01:25:05 -0800 (PST)
-Mikado <Mikado <mikado4vn@yahoo.com>> wrote:
+testNuclei.c:
+---------------------
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
- | Is there anything wrong in my codes? I think the problem is the
- | netlink_unicast(), because when I didn't call it, everything work well.
-Check whether nl_sk equals NULL.
-I don't know whether there's an assert() macro available for you, so try th=
-is:
-
-/* [...] */
-    if (nl_sk =3D=3D NULL)
+typedef struct nucleiType
     {
-        printk(KERN_ALERT "nltest: nl_sk is NULL!");
-        goto return_free;
-    }
+    char nucleiName[5];
+    int protonNumber; 
+    int neutronNumber;
+    } nucleiType;
 
-    netlink_unicast(nl_sk, nl_skb, pid, 0);
-return_free:
-    kfree_skb(nl_skb);
-}
+typedef struct reaclibType
+    {
+    int reactionType;           
+    nucleiType * leftNuclei[2]; 
+    nucleiType * rightNuclei[2];
+    double QValue;
+    } reaclibType;
 
-A gdb backtrace of the user space part won't give you much, since you
-found out the problem lies in kernel space.
+int setNuclei(nucleiType * nuclei);
+char * getNucleiName(nucleiType * nuclei);
 
-What does netlink_unicast() do?
+int main(int argc, char ** argv)
+  {
+  reaclibType reactionRates[100];
+  nucleiType * myNuclei;
+  
+  /* Let's set the leftNuclei using the setNuclei function.  
+     We want leftNuclei to point to a valid nuclei (which is 
+     set in the function) */   
+  setNuclei(reactionRates[1].leftNuclei[0]);
+  
+    /* Now let's see if the leftNuclei has been set */
+  myNuclei = reactionRates[1].leftNuclei[0];
+  printf("reactionRate leftNuclei: %s\n", myNuclei->nucleiName);
 
-Leslie
+  return 0;
+  }
 
---=20
-gpg --keyserver pgp.mit.edu --recv-keys 0x52D70289
+/* Function to set the nuclei in the reaclibType */
 
---Signature=_Sun__8_Jan_2006_13_05_33_+0100_tiMiR_NrPL2qCZp.
-Content-Type: application/pgp-signature
+int setNuclei(nucleiType * nuclei)
+  {
+  nucleiType * newNuclei;
+  
+   /* Create new nuclei 
+    (in the real program this is defined elsewhere 
+     and read from data file 
+  */ 
+  newNuclei = (nucleiType *) malloc(sizeof(nucleiType));
+  strcpy(newNuclei->nucleiName, "sc32");
+  newNuclei->protonNumber = 21; 
+  newNuclei->neutronNumber = 11;
+  
+  // Now trying to set the passed nuclei to this newNuclei 
+  nuclei = newNuclei;
+  
+  return 0;
+  }
+------------------------------------------------------------------------------------
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
+As you can probably guess already, my problem is that I want to be able to set 
+the leftNuclei[i], which is a member of a struct reaclibType in the main 
+program through a function. When I run this program, the output that I get 
+is:
+$ ./a.out 
+reactionRate leftNuclei: (null)
 
-iD8DBQFDwQAQn/ep3VLXAokRAlaFAKDAkvHMtO3BeJG///dsMYWq5AzcGACgq5Xz
-6f8LevCfKagdybzIaaWfkj8=
-=M3ZU
------END PGP SIGNATURE-----
+What I really want is to get the following output:
 
---Signature=_Sun__8_Jan_2006_13_05_33_+0100_tiMiR_NrPL2qCZp.--
+$ ./a.out 
+reactionRate leftNuclei: sc32
+
+Any help on this ? Am I confusing something ? Help would be greatly 
+appreciated. Thanks in advance.
+RDB
+-- 
+Reuben D. Budiardja
