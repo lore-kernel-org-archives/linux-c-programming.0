@@ -1,81 +1,50 @@
-From: "James Stevenson" <james@stev.org>
-Subject: RE: Read from log file - daemon - how?
-Date: Thu, 12 Jan 2006 02:14:45 -0000
-Message-ID: <000001c6171d$f55e3480$6a00ac0a@hughesit.local>
-References: <43C59379.4010907@zg.t-com.hr>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Double values - what precision do I use for fprintf?
+Date: Thu, 12 Jan 2006 18:00:19 +0530
+Message-ID: <200601121800.19678.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43C59379.4010907@zg.t-com.hr>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: 'Nikola Vlahovic' <root.admin1@zg.t-com.hr>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Have a look at the already open source program called tail.
-It should already be a program install on your system.
+Please observe the following printf output of eighteen double variables:
 
-Try something like
+First I tried using "%20.15f" as the format string:
 
-Tail -f /var/log/messages
+ 268.229220252114942    1.018511211250181
+  66.833038547989787   12.450505533056681
+  20.512170161382819    0.334923179252419
+ 259.358845955701327    1.571934717666495
+ 201.111247720862963    0.139476171219810
+ 270.658029698352152   -0.612280599380678
+ 105.175902698424665   -0.076345132989225
+ 343.809699615507384   -0.219206370786681
 
-	James
+Then I used "%30.25f":
 
-> -----Original Message-----
-> From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
-> programming-owner@vger.kernel.org] On Behalf Of Nikola Vlahovic
-> Sent: 11 January 2006 23:24
-> To: linux-c-programming@vger.kernel.org
-> Subject: Read from log file - daemon - how?
-> 
-> Hi,
-> 
-> I would like to make daemon in C  for watching and processing log files
-> (GPL of course :)))))
-> and I have some problems......
-> 
-> 1) if I open some log file like /var/log/messages for read with fopen
-> ...how do I get new changes
->     that are generated in time.....like new system messages or soemthing
-> else......
-> 
-> 2)if I open file for reading and don't append any kind of lock to that
-> file (log is the file...) are there
->    any implications....(problems for log-generating daemon or
-> soemthing...)
-> 
-> 3) what is prefered way , used functions , else.......to approach this
-> problem......
-> 
-> 
-> my daemon would be used for creating large database of information on
-> some kind of RD (like mysql)
-> from all kinds of log files, messages , httpd , mail and others.....and
-> then processed and used for
-> creating automated defence policy methods based on this info , like
-> creating IPTABLES entry for
-> host that is generating too much aggressive traffic like scanning, mail
-> accout hacking , enumeration or
-> soemthing else.....
-> 
-> I intend to make such system for use in small or medium networks for
-> automating defend procedure using
-> several hosts......
-> 
-> If one system detects attack and creates database entry and sends
-> message , other system can use this info
-> and protect themselfs against attack , later database information can be
-> used for creating attack statistics,
-> attack prediction, attacker habbits (usual times of attack and
-> similar....)
-> 
-> 
-> tnx,
-> nikola.
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-
-> programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+ 268.2297152740335377529845573    1.0185111507334088098986058
+  66.8390907719954157073516399   12.4504269834231084956854829
+  20.5123328842112115921736404    0.3349264346316725426966343
+ 259.3596100022817267927166540    1.5719383906021777708161835
+ 201.1113154335791932680876926    0.1394751696317115263745734
+ 270.6577319741974747557833325   -0.6122834912138217511312632
+ 105.1758654981413201312534511   -0.0763454696609412730712307
+ 343.8095929658045974974811543   -0.2192182978826520134418843
 
+Ignoring the small differences in the two sets of data (longitude and speed of 
+eight celestial bodies computer at two different instants) I wonder - if I 
+keep increasing the number of decimal places where will it end?
 
+-- 
+
+Shriramana Sharma  http://samvit.org
+Running SUSE Linux 10.0 with KDE 3.5
+
+-- 
+
+Penguin #395953 resides at http://samvit.org
+subsisting on SUSE Linux 10.0 with KDE 3.5
