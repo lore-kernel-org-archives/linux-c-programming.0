@@ -1,69 +1,35 @@
-From: "Nate Jenkins" <nate@uniwest.com>
+From: Scott <drmemory@3rivers.net>
 Subject: Re: Double values - what precision do I use for fprintf?
-Date: Thu, 12 Jan 2006 13:22:56 -0800
-Message-ID: <012101c617be$5b7afe10$8e01a8c0@Nate>
+Date: Thu, 12 Jan 2006 14:57:29 -0700
+Message-ID: <20060112215728.GB1339@drmemory.local>
 References: <200601121800.19678.samjnaa@gmail.com> <6a00c8d50601121051n691ee179kef3298829025e973@mail.gmail.com>
-Reply-To: "Nate Jenkins" <nate@uniwest.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <6a00c8d50601121051n691ee179kef3298829025e973@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"; reply-type="original"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
->> Please observe the following printf output of eighteen double variables:
->>
->> First I tried using "%20.15f" as the format string:
->>
->>  268.229220252114942    1.018511211250181
->>  66.833038547989787   12.450505533056681
->>  20.512170161382819    0.334923179252419
->>  259.358845955701327    1.571934717666495
->>  201.111247720862963    0.139476171219810
->>  270.658029698352152   -0.612280599380678
->>  105.175902698424665   -0.076345132989225
->>  343.809699615507384   -0.219206370786681
->>
->> Then I used "%30.25f":
->>
->>  268.2297152740335377529845573    1.0185111507334088098986058
->>  66.8390907719954157073516399   12.4504269834231084956854829
->>  20.5123328842112115921736404    0.3349264346316725426966343
->>  259.3596100022817267927166540    1.5719383906021777708161835
->>  201.1113154335791932680876926    0.1394751696317115263745734
->>  270.6577319741974747557833325   -0.6122834912138217511312632
->>  105.1758654981413201312534511   -0.0763454696609412730712307
->>  343.8095929658045974974811543   -0.2192182978826520134418843
->>
->> Ignoring the small differences in the two sets of data (longitude and 
->> speed of
->> eight celestial bodies computer at two different instants) I wonder - if 
->> I
->> keep increasing the number of decimal places where will it end?
->
-> Shriramana,
->
+On Thu, Jan 12, 2006 at 07:51:08PM +0100, Steve Graegert wrote:
+> 
 > Double precision numbering format is standardized by IEEE 754 with an
 > 8 byte encoding.  1 bit is used for the sign, 11 bits for the exponent
 > and the remaining 52 bits are used for the precision, which means
 > precision "ends" at %.52f.
->
-> \Steve
->
+> 
+> 	\Steve
+> 
+> Steve Graegert <graegerts@gmail.com>
 
-If it is a 64-bit-floating-point data type, then isn't one supposed to use 
-the "long" modifier, i.e. "%.52f" -> "%.52lf"?  Or is that not portable?
+Ummm, I'm no expert and in fact completely out of my element here, but
+how would 52 bits yield 52 decimal numerals following the decimal
+point? Wouldn't it be true that 52 bits could represent at most an
+integer of 2^52 (4503599627370496)? So I am at a loss as to how such a
+format could accurately represent more than 16 significant decimal
+digits....
 
-I am not concerned so much about being portable.  However, I have always 
-followed the idea that "%f" is for 4 Byte floats and "%lf" is for 8 Byte 
-floats or doubles...
-
-Is that compiler specific or ????
-
-~ Nate
-
-
-"Do or do not or delegate to somebody else.  There is no try."
-
+Scott Swanson
 
