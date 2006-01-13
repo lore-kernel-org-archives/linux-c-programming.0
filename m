@@ -1,50 +1,100 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: Double values - what precision do I use for fprintf?
-Date: Fri, 13 Jan 2006 06:25:28 +0100
-Message-ID: <6a00c8d50601122125x32b9ed4avedadbe701975a13b@mail.gmail.com>
-References: <200601121800.19678.samjnaa@gmail.com>
-	 <6a00c8d50601121051n691ee179kef3298829025e973@mail.gmail.com>
-	 <20060112215728.GB1339@drmemory.local>
+From: wwp <subscript@free.fr>
+Subject: Re: argv[0]
+Date: Fri, 13 Jan 2006 10:52:44 +0100
+Message-ID: <20060113105244.53bda39b@localhost.localdomain>
+References: <200601130016.23410.a.biardi@tiscali.it>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/mixed; boundary=MP_Z99b.vNZAsRg99KrtJ3lngU
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20060112215728.GB1339@drmemory.local>
-Content-Disposition: inline
+In-Reply-To: <200601130016.23410.a.biardi@tiscali.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-On 1/12/06, Scott <drmemory@3rivers.net> wrote:
-> On Thu, Jan 12, 2006 at 07:51:08PM +0100, Steve Graegert wrote:
-> >
-> > Double precision numbering format is standardized by IEEE 754 with an
-> > 8 byte encoding.  1 bit is used for the sign, 11 bits for the exponent
-> > and the remaining 52 bits are used for the precision, which means
-> > precision "ends" at %.52f.
-> >
-> >       \Steve
-> >
-> > Steve Graegert <graegerts@gmail.com>
->
-> Ummm, I'm no expert and in fact completely out of my element here, but
-> how would 52 bits yield 52 decimal numerals following the decimal
-> point? Wouldn't it be true that 52 bits could represent at most an
-> integer of 2^52 (4503599627370496)? So I am at a loss as to how such a
-> format could accurately represent more than 16 significant decimal
-> digits....
+--MP_Z99b.vNZAsRg99KrtJ3lngU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-You're perfectly right, but that's not what I meant.  I just jumped on
-the printf analogy to make clear that it does not _print_ any numbers
-(except zero) beyond %.52f.  From this POV printf precision "ends"
-there, although we know that such numbers are not accurately displayed
-beyond 16 significant digits.
+Hello Andrea,
 
-	\Steve
 
---
+On Fri, 13 Jan 2006 00:16:23 +0100 a.biardi@tiscali.it wrote:
 
-Steve Graegert <graegerts@gmail.com>
-Software Consultant {C/C++ && Java && .NET}
-Office: +49 9131 7123988
-Mobile: +49 1520 9289212
+> 
+> Hi,
+> 
+> Is there any C function that can tell me what argv[0] is, outside 
+> main()?
+> 
+> I thought to use getpid() and then look at /proc/<pid>/cmdline but 
+> doesn't seem portable. Any hints?
+
+For instance, in main(), you can store argc and argv into global const
+pointers that you can use anywhere else.
+
+Here's an example (see the attached files):
+
+$ gcc main.c elsewhere.c
+$ ./a.out
+
+shows:
+main: 1 0xbf8526f4 './a.out'
+sample1: 1 0xbf8526f4 './a.out'
+sample2: 1 0xbf8526f4 './a.out'
+
+
+HTH,
+
+-- 
+wwp
+
+--MP_Z99b.vNZAsRg99KrtJ3lngU
+Content-Type: text/x-csrc; name=elsewhere.c
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=elsewhere.c
+
+#include <stdio.h>
+
+extern int prg_argc;
+extern char** prg_argv;
+
+void outside_from_main_2(void)
+{
+	printf("sample2: %d %p '%s'\n", prg_argc, prg_argv, prg_argv[0]);
+}
+
+--MP_Z99b.vNZAsRg99KrtJ3lngU
+Content-Type: text/x-chdr; name=elsewhere.h
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=elsewhere.h
+
+void outside_from_main_2(void);
+
+--MP_Z99b.vNZAsRg99KrtJ3lngU
+Content-Type: text/x-csrc; name=main.c
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=main.c
+
+#include <stdio.h>
+
+int prg_argc=0;
+char** prg_argv=NULL;
+
+void outside_from_main_1(void)
+{
+	printf("sample1: %d %p '%s'\n", prg_argc, prg_argv, prg_argv[0]);
+}
+
+int main(int argc, char** argv)
+{
+	printf("main: %d %p '%s'\n", argc, argv, argv[0]);
+	prg_argc=argc;
+	prg_argv=argv;
+	outside_from_main_1();
+	outside_from_main_2();
+
+	exit(0);
+}
+
+--MP_Z99b.vNZAsRg99KrtJ3lngU--
