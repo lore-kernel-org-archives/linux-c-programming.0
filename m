@@ -1,60 +1,103 @@
-From: Patrick Leslie Polzer <leslie.polzer@gmx.net>
+From: Steve Graegert <graegerts@gmail.com>
 Subject: Re: wcscat problem
-Date: Thu, 19 Jan 2006 19:24:21 +0100
-Message-ID: <20060119192421.2674b02a.leslie.polzer@gmx.net>
+Date: Thu, 19 Jan 2006 21:52:01 +0100
+Message-ID: <6a00c8d50601191252j326bdef1s9520ede0bfd27f70@mail.gmail.com>
 References: <20060119163800.1b45d984.leslie.polzer@gmx.net>
-	<d9def9db0601190957v78b9ca71yaac25a0c7ef43d09@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature";
- micalg="PGP-SHA1";
- boundary="Signature=_Thu__19_Jan_2006_19_24_21_+0100_=iNxDkEAi+I3l7.i"
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <d9def9db0601190957v78b9ca71yaac25a0c7ef43d09@mail.gmail.com>
+In-Reply-To: <20060119163800.1b45d984.leslie.polzer@gmx.net>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Markus Rechberger <mrechberger@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
---Signature=_Thu__19_Jan_2006_19_24_21_+0100_=iNxDkEAi+I3l7.i
-Content-Type: text/plain; charset=US-ASCII
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 1/19/06, Patrick Leslie Polzer <leslie.polzer@gmx.net> wrote:
+>
+> Hello list,
+>
+> why does wcscat not work like strcat does?
+> It seems to be leaving the null byte in (C99 source):
+>
+>
+> #define _GNU_SOURCE
+> #include <wchar.h>
+>
+>
+> int main (int ac, char** av)
+> {
+>         wchar_t* ws = malloc(8);
+>         wcscpy(ws, (wchar_t*)"abc");
+>         wcscat(ws, (wchar_t*)"def");
+>         printf("%s/%s\n", ws, (void*)ws+4); /* "abc/def" [*] */
+>
+>
+>         char* s = malloc(8);
+>         strcpy(s, "abc");
+>         strcat(s, "def");
+>         printf("%s/%s\n", s, s+4); /* "abcdef/ef" */
+>
+>         return 0;
+> }
+>
+> Why is this?  I also noticed the compiler (gcc4) takes "string steps"
+> when performing pointer arithmetics with wchar_t pointers, that's why
+> I needed to cast to void* in line [*].
 
-On Thu, 19 Jan 2006 18:57:57 +0100
-Markus Rechberger <Markus Rechberger <mrechberger@gmail.com>> wrote:
+Patrick,
 
- | some headers are missing within your source too.
-Obviously, but this was intended to be a minimal example, and
-most compilers will get it without the headers.
+as I've mailed you privately, I was not able to reproduce the results.
+ Running your code causes weird output due to (a) wrong qualifiers in
+printf (use %S or %ls instead of %s) and (b) wrong initialization of
+wide-character strings.  Do not simply cast to wchar_t *, use mbstowcs
+instead, which converts a character string to its wide-character
+equivalent.  The following code shows, that wcscat works perfectly
+well.
 
- | it should look like the code attached then it will work.
-I'm not sure whether you understood my problem.
-Perhaps I should have made myself clearer:
+BTW: compiling with -Wall, as suggested by Markus, shows, that wcscat
+does not like the semantic given in line [+].
 
-The code compiles and runs.
-The problem ist that the wcscat operation seems to not overwrite
-the terminating null byte of the first string "abc" and thus
-printf will only print "abc" instead of "abcdef".  To clarify this
-I added 4 to the string -- and lo, the missing half is there, but a
-null bytes separates both halves.
+--- START OF CODE ---
 
-So my question is: why does strcat remove the \0, but the wide char
-pendant does not?
+#define _GNU_SOURCE
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <wchar.h>
 
-Leslie
+int main (int argc, char **argv) {
+  wchar_t* ws = malloc(8);
+  wchar_t* ws2 = malloc(4);
 
---=20
-gpg --keyserver pgp.mit.edu --recv-keys 0x52D70289
+  /* works */
+  mbstowcs(ws, "abc", 4);
+  mbstowcs(ws2, "def", 4);
+  wcscat(ws, ws2);
+  printf("1: %S/%S\n", ws, ws + 4);
+  printf("1: %ls/%ls\n", ws, ws + 4);
 
---Signature=_Thu__19_Jan_2006_19_24_21_+0100_=iNxDkEAi+I3l7.i
-Content-Type: application/pgp-signature
+  /* does not work */
+  wcscpy(ws, (wchar_t *)"abc");
+  wcscat(ws, (wchar_t *)"def");
+  printf("2: %S/%S\n", ws, (void *)ws + 4); /* [+] */
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
+  /* works, of course */
+  char* s = malloc(8);
+  strcpy(s, "abc");
+  strcat(s, "def");
+  printf("3: %s/%s\n", s, s + 4);
 
-iD8DBQFDz9lXn/ep3VLXAokRAoDbAKCsVelHaiuXY4vLk237/2Zzkv4A5gCbBWkC
-IQNVJjfziTZkjT1ZvOsrALM=
-=loMZ
------END PGP SIGNATURE-----
+  return 0;
+}
 
---Signature=_Thu__19_Jan_2006_19_24_21_+0100_=iNxDkEAi+I3l7.i--
+--- END OF CODE ---
+
+	\Steve
+
+--
+
+Steve Graegert <graegerts@gmail.com>
+Software Consultant {C/C++ && Java && .NET}
+Office: +49 9131 7123988
+Mobile: +49 1520 9289212
