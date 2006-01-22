@@ -1,34 +1,69 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Help: need to prevent infinite loop
-Date: Sun, 22 Jan 2006 10:20:44 +0000
-Message-ID: <17363.23676.751524.480464@cerise.gclements.plus.com>
-References: <200601171006.36978.samjnaa@gmail.com>
-	<43CC996D.4050100@ajp-services.net>
+Subject: Re: wcscat problem
+Date: Sun, 22 Jan 2006 10:30:22 +0000
+Message-ID: <17363.24254.327246.930171@cerise.gclements.plus.com>
+References: <20060119163800.1b45d984.leslie.polzer@gmx.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43CC996D.4050100@ajp-services.net>
+In-Reply-To: <20060119163800.1b45d984.leslie.polzer@gmx.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: jesse@ajp-services.net
+To: Patrick Leslie Polzer <leslie.polzer@gmx.net>
 Cc: linux-c-programming@vger.kernel.org
 
 
-Jesse Ruffin wrote:
+Patrick Leslie Polzer wrote:
 
-> The problem is a general one that will affect many non digit characters.
+> why does wcscat not work like strcat does?
+
+Because it works on wide characters, not bytes.
+
+> It seems to be leaving the null byte in (C99 source):
+
+Wide character strings don't have a "null byte" they have a null wide
+character.
+
+> #define _GNU_SOURCE
+> #include <wchar.h>
 > 
-> scanf() on my computer returns 0, an early match error. But what you
-> probably don't expect, and I can't find in the info or man pages, is
-> that glibc scanf seems to unget() the input that it has read.
+> 
+> int main (int ac, char** av)
+> {
+>         wchar_t* ws = malloc(8);
 
-It doesn't "unget" anything, it simply doesn't consume anything.
+If you want a wide string with space for 8 wide characters, you need
+8*sizeof(wchar_t), or 32 bytes:
 
-More generally, [f]scanf() only consumes the data which actually
-matches the fields in the format string. The return value tells you
-how many fields were assigned; if the return value is zero, nothing is
-assigned and nothing is consumed.
+	wchar_t* ws = malloc(8*sizeof(wchar_t));
+
+>         wcscpy(ws, (wchar_t*)"abc");
+>         wcscat(ws, (wchar_t*)"def");
+
+This is completely bogus. The expression (wchar_t*)"abc" evaluates to
+a pointer to a wide string whose first wide character is either
+0x00636261 or 0x61626300 (depending upon endianness), and whose
+following wide characters are whatever was in memory after that point. 
+The wide string will terminate at the first completely null word,
+wherever that occurs.
+
+What you should probably be doing is:
+
+        wcscpy(ws, L"abc");
+        wcscat(ws, L"def");
+
+>         printf("%s/%s\n", ws, (void*)ws+4); /* "abc/def" [*] */
+
+Huh? "%s" is for a byte string, not a wide string. You need:
+
+	printf("%ls\n", ws);
+
+> Why is this?  I also noticed the compiler (gcc4) takes "string steps"
+> when performing pointer arithmetics with wchar_t pointers, that's why
+> I needed to cast to void* in line [*].
+
+I totally don't understand what you are saying here.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
