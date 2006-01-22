@@ -1,69 +1,50 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: wcscat problem
-Date: Sun, 22 Jan 2006 10:30:22 +0000
-Message-ID: <17363.24254.327246.930171@cerise.gclements.plus.com>
-References: <20060119163800.1b45d984.leslie.polzer@gmx.net>
+From: Jesse Ruffin <jesse@ajp-services.net>
+Subject: Re: Help: need to prevent infinite loop
+Date: Sun, 22 Jan 2006 06:28:45 -0500
+Message-ID: <43D36C6D.4080500@ajp-services.net>
+References: <200601171006.36978.samjnaa@gmail.com>	<43CC996D.4050100@ajp-services.net> <17363.23676.751524.480464@cerise.gclements.plus.com>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20060119163800.1b45d984.leslie.polzer@gmx.net>
+In-Reply-To: <17363.23676.751524.480464@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Patrick Leslie Polzer <leslie.polzer@gmx.net>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Patrick Leslie Polzer wrote:
+I had hoped to convey that the standard library uses an ungetc() like
+operation on the data it acquires, hence the quotes. This does not
+consume anything from the user's point of view, and my GNU libc (2.3.5)
+does use ungetc() for [f]scanf in a macro form.
 
-> why does wcscat not work like strcat does?
+I'll have to go read the standard to make sure, but I don't see anywhere
+that scanf has to put anything back after it gets it. My manual says
+this to say generally:
 
-Because it works on wide characters, not bytes.
+| If processing of a directive fails, no further input is read, and
+| scanf() returns. A "failure" can be either of the following: input
+| failure, meaning that input characters were unavailable, or matching
+| failure, meaning that the input was inappropriate (see below).
 
-> It seems to be leaving the null byte in (C99 source):
+This says (to me at least) that input is read, then matched. if there is
+no match it returns. I am curious if this non consumptive behavior is
+specified in the standard. I would prefer a non consumptive version
+myself as I assume that operations on a stream affect the state of the
+stream, whether  or not they succeed. You can always use the return code
+to seek yourself back if necessary. Consumption also makes more sense
+when applied to non seeking streams as the junk input (like in the code
+under discussion) will get thrown out.
 
-Wide character strings don't have a "null byte" they have a null wide
-character.
+Jesse Ruffin
+AJP Services
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2 (GNU/Linux)
 
-> #define _GNU_SOURCE
-> #include <wchar.h>
-> 
-> 
-> int main (int ac, char** av)
-> {
->         wchar_t* ws = malloc(8);
-
-If you want a wide string with space for 8 wide characters, you need
-8*sizeof(wchar_t), or 32 bytes:
-
-	wchar_t* ws = malloc(8*sizeof(wchar_t));
-
->         wcscpy(ws, (wchar_t*)"abc");
->         wcscat(ws, (wchar_t*)"def");
-
-This is completely bogus. The expression (wchar_t*)"abc" evaluates to
-a pointer to a wide string whose first wide character is either
-0x00636261 or 0x61626300 (depending upon endianness), and whose
-following wide characters are whatever was in memory after that point. 
-The wide string will terminate at the first completely null word,
-wherever that occurs.
-
-What you should probably be doing is:
-
-        wcscpy(ws, L"abc");
-        wcscat(ws, L"def");
-
->         printf("%s/%s\n", ws, (void*)ws+4); /* "abc/def" [*] */
-
-Huh? "%s" is for a byte string, not a wide string. You need:
-
-	printf("%ls\n", ws);
-
-> Why is this?  I also noticed the compiler (gcc4) takes "string steps"
-> when performing pointer arithmetics with wchar_t pointers, that's why
-> I needed to cast to void* in line [*].
-
-I totally don't understand what you are saying here.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+iD8DBQFD02xs8GGeAXLl3osRApIiAJ9Y9P+41L0yIPmp+DCyIvFNn0vX7QCfXfQW
++pqE6A8zCvgcgWQHSQp3mWo=
+=OGj+
+-----END PGP SIGNATURE-----
