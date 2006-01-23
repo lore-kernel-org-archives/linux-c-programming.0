@@ -1,73 +1,62 @@
-From: James Colannino <james@colannino.org>
+From: Jesse Ruffin <jesse@ajp-services.net>
 Subject: Re: Code critique: checking for syntax errors
-Date: Mon, 23 Jan 2006 11:47:34 -0800
-Message-ID: <43D532D6.9050204@colannino.org>
-References: <43D2870C.3030505@colannino.org> <43D35194.4050206@ajp-services.net>
+Date: Mon, 23 Jan 2006 17:37:04 -0500
+Message-ID: <43D55A90.7030501@ajp-services.net>
+References: <43D2870C.3030505@colannino.org> <43D35194.4050206@ajp-services.net> <43D532D6.9050204@colannino.org>
+Reply-To: linux-c-programming@vger.kernel.org
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43D35194.4050206@ajp-services.net>
+In-Reply-To: <43D532D6.9050204@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-Jesse Ruffin wrote:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-> If you can at all manage it, and most times you can, put all of your
-> variable declarations right at the beginning of the function. This also
-> implies moving your debug statements below them as they will be compiled
-> in sometime. Doing so will aid in portability to older, or more strict,
-> compilers.
+James Colannino wrote:
+| Do stricter and older compilers complain if variables aren't declared at
+| the beginning of the function?
+| Actually, I was banking on the C99 standard (I guess perhaps it would
+| have been wise for me to say so when I posted the code.)
 
+If you are using a C99 compiler it won't, but older C specifications do
+not allow variable definition anywhere but the beginning or between the
+function declaration and definition (K&R style). Although C99 is gaining
+a lot of ground, I believe that there still are some compilers that
+don't support it at all, and many that don't by default.
 
-Do stricter and older compilers complain if variables aren't declared at 
-the beginning of the function?
+| I can understand EXIT_FAILURE, but why do all the C books tell you to
+| return 0 instead of EXIT_SUCCESS?  I always thought that both return()
+| and exit() did the same basic thing, so I'm confused as to why a book
+| teaching how to write portable code would say to simply use 0 (that's
+| with return() and not exit().)  I have implemented exit(EXIT_FAILURE)
+| instead of exit(1).
 
-> And try extra hard to avoid variable declarations in the loop
-> definition, as this is often seen as an error by compilers unless you
-> are using the C99 standard.
+The man page for exit has this to say about EXIT_*:
 
+| The  use of EXIT_SUCCESS and EXIT_FAILURE is slightly more portable (to
+| non-Unix environments) than that of 0 and some non-zero value like 1 or
+| -1. In particular, VMS uses a different convention.
 
-Actually, I was banking on the C99 standard (I guess perhaps it would 
-have been wise for me to say so when I posted the code.)
+and the info pages on exit vs. return:
 
->
-> Multiple locations:
-> | if (ungetc(character, input) == NULL) {
->
-> ungetc() returns an EOF on error[...]
+| A process terminates normally when its program signals it is done by
+| calling `exit'.  Returning from `main' is equivalent to calling `exit',
+| and the value that `main' returns is used as the argument to `exit'.
 
+Hope that helps a bit.
+Also, #defines are almost always better than hard coded values. If
+nothing else they're more readable, and often centralize changes.
 
-You're right.  I changed that :)
+Jesse Ruffin
+AJP Services
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2 (GNU/Linux)
 
-> C defines two values, EXIT_SUCCESS and EXIT_FAILURE, that should be used
-> for the exit() value. These will pass the proper value to the host
-> environment. As that value may differ, you should use them to make your
-> code as portable as possible.
-
-
-I can understand EXIT_FAILURE, but why do all the C books tell you to 
-return 0 instead of EXIT_SUCCESS?  I always thought that both return() 
-and exit() did the same basic thing, so I'm confused as to why a book 
-teaching how to write portable code would say to simply use 0 (that's 
-with return() and not exit().)  I have implemented exit(EXIT_FAILURE) 
-instead of exit(1).
-
->
-> Once again, I think that this is good code overall. It's good to see
-> people being careful and using extra parenthesis and braces, rather than
-> hunting down logic bugs caused by a lack of them.
-
-
-Thanks.  I do try hard to be explicit and to comment when necessary.  I 
-still have a lot of work to do, but hopefully I'm getting there.
-
-James
-
--- 
-My blog: http://www.crazydrclaw.com/
-My homepage: http://james.colannino.org/
-
-"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
-
+iD8DBQFD1VqQ8GGeAXLl3osRApXRAJ9k1BzmmmB5prkONd2YDTn064lHewCfcZ5m
+S9uAmyjy7LXnYpDmp92H04o=
+=l0AT
+-----END PGP SIGNATURE-----
