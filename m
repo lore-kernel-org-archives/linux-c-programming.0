@@ -1,58 +1,73 @@
-From: Jesse Ruffin <jesse@ajp-services.net>
-Subject: Re: Help: need to prevent infinite loop
-Date: Mon, 23 Jan 2006 00:57:15 -0500
-Message-ID: <43D4703B.4030307@ajp-services.net>
-References: <200601171006.36978.samjnaa@gmail.com>	<43CC996D.4050100@ajp-services.net> <17363.23676.751524.480464@cerise.gclements.plus.com> <43D36C6D.4080500@ajp-services.net>
-Reply-To: linux-c-programming@vger.kernel.org
+From: James Colannino <james@colannino.org>
+Subject: Re: Code critique: checking for syntax errors
+Date: Mon, 23 Jan 2006 11:47:34 -0800
+Message-ID: <43D532D6.9050204@colannino.org>
+References: <43D2870C.3030505@colannino.org> <43D35194.4050206@ajp-services.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43D36C6D.4080500@ajp-services.net>
+In-Reply-To: <43D35194.4050206@ajp-services.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Jesse Ruffin wrote:
 
-The Standard I found, located at
-http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf
-does state in section 7.19.6.2 Sec. 9:
+> If you can at all manage it, and most times you can, put all of your
+> variable declarations right at the beginning of the function. This also
+> implies moving your debug statements below them as they will be compiled
+> in sometime. Doing so will aid in portability to older, or more strict,
+> compilers.
 
-An input item is read from the stream, unless the specification includes
-an n specifier. An input item is defined as the longest sequence of
-input characters which does not exceed any specified field width and
-which is, or is a prefix of, a matching input sequence (^245). The first
-character, if any, after the input item remains unread. If the length of
-the input item is zero, the execution of the directive fails; this
-condition is a matching failure unless end-of-file, an encoding error,
-or a read error prevented input from the stream, in which case it is an
-input failure.
 
-However, Footnote 245 says the following:
+Do stricter and older compilers complain if variables aren't declared at 
+the beginning of the function?
 
-245) fscanf pushes back at most one character onto the input stream.
-Therefore some sequences that are acceptable to strtod, strtol, etc. are
-unacceptable to fscanf.
+> And try extra hard to avoid variable declarations in the loop
+> definition, as this is often seen as an error by compilers unless you
+> are using the C99 standard.
 
-So, although it SHOULD be non-consumptive, it MAY not in all cases,
-although I haven't found one where it doesn't yet.
 
-The standard also recommended the following method for looping through
-stdin:
+Actually, I was banking on the C99 standard (I guess perhaps it would 
+have been wise for me to say so when I posted the code.)
 
-#include <stdio.h>
-/* ... */
-int count; float quant; char units[21]; char items[21];
-do {
-	count = fscanf(stdin, "%f%20s of %20s", &quant, units, items);
-	fscanf(stdin, "%*[^n]"); /* This junks all input remaining */
-} while (!feof(stdin) && !ferror(stdin));
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
+>
+> Multiple locations:
+> | if (ungetc(character, input) == NULL) {
+>
+> ungetc() returns an EOF on error[...]
 
-iD8DBQFD1HA78GGeAXLl3osRAuWHAKCAhXqVwMiQ2lC5NA+cdd1sg9g1vACZAZPi
-HN0wUvcR8Hp2aw5PFmMJnVY=
-=V96c
------END PGP SIGNATURE-----
+
+You're right.  I changed that :)
+
+> C defines two values, EXIT_SUCCESS and EXIT_FAILURE, that should be used
+> for the exit() value. These will pass the proper value to the host
+> environment. As that value may differ, you should use them to make your
+> code as portable as possible.
+
+
+I can understand EXIT_FAILURE, but why do all the C books tell you to 
+return 0 instead of EXIT_SUCCESS?  I always thought that both return() 
+and exit() did the same basic thing, so I'm confused as to why a book 
+teaching how to write portable code would say to simply use 0 (that's 
+with return() and not exit().)  I have implemented exit(EXIT_FAILURE) 
+instead of exit(1).
+
+>
+> Once again, I think that this is good code overall. It's good to see
+> people being careful and using extra parenthesis and braces, rather than
+> hunting down logic bugs caused by a lack of them.
+
+
+Thanks.  I do try hard to be explicit and to comment when necessary.  I 
+still have a lot of work to do, but hopefully I'm getting there.
+
+James
+
+-- 
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
+
