@@ -1,46 +1,49 @@
-From: Steve Graegert <graegerts@gmail.com>
-Subject: Re: Does GCC link only used functions?
-Date: Sun, 29 Jan 2006 17:23:44 +0100
-Message-ID: <6a00c8d50601290823g6f13fcdcw84f193881d735e4d@mail.gmail.com>
-References: <200601291438.17093.samjnaa@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Debugging
+Date: Sun, 29 Jan 2006 18:14:25 +0000
+Message-ID: <17373.1537.756816.193269@cerise.gclements.plus.com>
+References: <43DC5EFA.7010001@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200601291438.17093.samjnaa@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <43DC5EFA.7010001@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: James Colannino <james@colannino.org>
+Cc: linux-c-programming@vger.kernel.org
 
-On 1/29/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> Hello list. I am relative newbie to GCC.
->
-> I have a C program which #includes a header file which in turn #includes many
-> other header files. These header files are part of an open source library set
-> I got from the net.
->
-> Now I do not use all the functions in the various libraries, but the makefile
-> which came with the library of course has compile instructions for all the
-> libraries. I have modified the makefile to compile my program using those
-> libraries, but I did not remove the references to the libraries I knew I did
-> not use, for I feared that some error may be caused.
->
-> But later I experimented removing some of the superfluous ones from the
-> makefile and again "make"-d, and I got the same size executable as before.
->
-> So does this mean that GCC links only those functions from a library which I
-> call directly or indirectly through another called function in the course of
-> my program?
 
-Yes,  everything not needed for program execution is simply dropped in
-the stage of linking.
+James Colannino wrote:
 
-	\Steve
+> Hey everyone.  I have a small program that I had written a while ago in 
+> C to help me study for my Spanish class.  I decided to rewrite some code 
+> recently being that I have a little more experience, and found that the 
+> program does not function properly when I compile with -O2 optimizations 
+> (I'm using GCC.)  It works as it should, however, when there are no 
+> optimizations.  How exactly should I go about debugging this and 
+> figuring out what code is causing the problem?  I could compile it with 
+> the -g option and feed it to GDB, but then doesn't debugging not work 
+> very well when you've done optimizations?  Is -O2 a low enough level of 
+> optimization that I shouldn't have a problem?  Debugging is one of the 
+> many things I know extremely little about, so I'm very in the dark 
+> here.  Any input would be greatly appreciated :)  Thanks very much in 
+> advance.
 
---
+Debugging optimised code is hard, as many of the expressions and
+variables which appear in the source code simply don't exist in the
+optimised machine code.
 
-Steve Graegert <graegerts@gmail.com>
-Software Consultant {C/C++ && Java && .NET}
-Office: +49 9131 7123988
-Mobile: +49 1520 9289212
+One option is to identify exactly which optimisations are problematic
+by enabling or disabling specific optimisations using the various -f
+switches. That might give you some clues as to where the problems lie.
+
+Probably the most common reasons for code breaking when optimisation
+is enabled are aliasing bugs, i.e. where a storage location is
+referenced in multiple ways. This is particularly common if you use
+pointer type casts or "type-punning" (storing a value in one field of
+a union then reading from another field with a different type). Try
+using -fno-strict-aliasing to see if aliasing is the problem.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
