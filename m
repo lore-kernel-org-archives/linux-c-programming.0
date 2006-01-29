@@ -1,38 +1,34 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Code critique: checking for syntax errors
-Date: Tue, 24 Jan 2006 09:34:19 +0000
-Message-ID: <17365.62619.693499.239201@cerise.gclements.plus.com>
-References: <43D2870C.3030505@colannino.org>
-	<43D35194.4050206@ajp-services.net>
-	<43D532D6.9050204@colannino.org>
-	<43D55A90.7030501@ajp-services.net>
-	<43D55FEB.2070909@colannino.org>
-	<43D57873.10005@ajp-services.net>
+From: James Colannino <james@colannino.org>
+Subject: Debugging
+Date: Sat, 28 Jan 2006 22:21:46 -0800
+Message-ID: <43DC5EFA.7010001@colannino.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43D57873.10005@ajp-services.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
+Hey everyone.  I have a small program that I had written a while ago in 
+C to help me study for my Spanish class.  I decided to rewrite some code 
+recently being that I have a little more experience, and found that the 
+program does not function properly when I compile with -O2 optimizations 
+(I'm using GCC.)  It works as it should, however, when there are no 
+optimizations.  How exactly should I go about debugging this and 
+figuring out what code is causing the problem?  I could compile it with 
+the -g option and feed it to GDB, but then doesn't debugging not work 
+very well when you've done optimizations?  Is -O2 a low enough level of 
+optimization that I shouldn't have a problem?  Debugging is one of the 
+many things I know extremely little about, so I'm very in the dark 
+here.  Any input would be greatly appreciated :)  Thanks very much in 
+advance.
 
-Jesse Ruffin wrote:
-
-> If you want to see gcc do ANSI c, try:
-> 
-> gcc -Wall -ansi -pedantic
-> 
-> The pedantic is necessary to get some extra warnings about ANSI issues.
-
-BTW, when using -ansi, you need to explicitly define some feature-test
-macros (e.g. _GNU_SOURCE) to get any Unix-specific functions which are
-declared in ANSI headers.
-
-E.g. strdup() is declared in <string.h>, but isn't an ANSI function,
-so it won't be declared if you use -ansi without defining a suitable
-feature-test macro.
+James
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
+
