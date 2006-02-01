@@ -1,45 +1,65 @@
-From: James Colannino <james@colannino.org>
-Subject: Re: Debugging
-Date: Mon, 30 Jan 2006 11:21:10 -0800
-Message-ID: <43DE6726.9030407@colannino.org>
-References: <43DC5EFA.7010001@colannino.org> <20060129105131.6813f695.leslie.polzer@gmx.net> <43DE6555.7010806@colannino.org>
+From: Ken Nagorski <rocket@refriedgeeks.com>
+Subject: working with threads
+Date: Tue, 31 Jan 2006 22:19:01 -0500
+Message-ID: <43E028A5.2040406@refriedgeeks.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43DE6555.7010806@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-James Colannino wrote:
+Hi there,
 
->> Then go about finding the offending line(s) of code.
->> Watch out for obscure tricks, side-effects, wild pointers and illegal 
->> casts.
->> Compile with -Wall and, to enforce your discipline, treat every 
->> warning as
->> -Werror.
->
-> Without -Wall, I get no errors (I always do my best to get rid of 
-> warnings.)  I'll try it with -Wall though and see what happens.
+I have created a small IM client that talks to an IM server that I wrote 
+in java. It doesn't have a problem sending data however I am using a 
+pthread to call a listener function. It works OK but when I click back 
+on the program say to type some other text it just crashes. I have been 
+teaching myself C but I am having a problem understanding how to pass 
+control back to the main thread. That isn't a problem in java.
 
+forgive me if I am not even asking this right cause like I said. I am 
+teaching this to myself as my school doesn't offer C.
 
-*embarrased* using -Wall gave me the following error:
+below is the code maybe someone will be able to point me in the right 
+direction.
 
-database.c:68: warning: implicit declaration of function `close'
+how the thread is created.
+when the user clicks connect and if there is a successful sockfd 
+created... I call this
+listner_thread_id = pthread_create( &listner_thread, NULL, 
+message_listner, (void *)data_to_be_sent);
 
-That made me realize that I was trying to use the system call open 
-instead of the standard library function fclose.  Once I fixed that, the 
-code worked both when it was optimized and when it was not.  I think 
-from now on I'll be using -Wall ;)  Thanks to everyone who responded.  
-I'm glad I don't have to run this through a debugger....yet :)
+The message listener function
+static void *message_listner(void *data)
+{
+        struct Data_To_Be_Sent *data_to_be_sent;
+        data_to_be_sent = (Data_To_Be_Sent*)data;
+        gchar *text;
+        gchar *carriage_return = "\n";
+        GtkTextIter start, end;
+        int numbytes, ix=1;
 
-James
+        g_print("I am waiting for incoming data...\n");
+        while(1)
+        {
+                if((numbytes=recv(data_to_be_sent->sockfd, 
+data_to_be_sent->buffer, 255, 0)) == -1)
+                {
+                        printf("There was an error reciving data\n");
+                        exit(1);
+                } else {
+                        printf(((char *)data_to_be_sent->buffer));
+                        printf("\n%i\n", ix);
+                        wait(2);
+                }
+                ix++;
+        }
+}
 
--- 
-My blog: http://www.crazydrclaw.com/
-My homepage: http://james.colannino.org/
+Any ideas where I am going wrong?
 
-"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
+Thanks
+ken
 
