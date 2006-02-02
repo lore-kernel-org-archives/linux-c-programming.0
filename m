@@ -1,85 +1,44 @@
-From: Jean-Philippe Andriot <andriot@6WIND.com>
-Subject: Re: !! SPAM Suspect : SPAM-URL-DBL !!  working with threads
-Date: Thu, 02 Feb 2006 15:59:58 +0100
-Message-ID: <43E21E6E.4040007@6WIND.com>
-References: <43E028A5.2040406@refriedgeeks.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Does GCC link only used functions?
+Date: Thu, 2 Feb 2006 16:39:48 +0000
+Message-ID: <17378.13780.99415.165938@cerise.gclements.plus.com>
+References: <200601291438.17093.samjnaa@gmail.com>
+	<17373.1722.484465.747500@cerise.gclements.plus.com>
+	<d93f04c70602012117v6998ef94k3e87a9a3820a45f9@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43E028A5.2040406@refriedgeeks.com>
+In-Reply-To: <d93f04c70602012117v6998ef94k3e87a9a3820a45f9@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Ken Nagorski <rocket@refriedgeeks.com>
-Cc: linux-c-programming@vger.kernel.org
-
-Hi
-
-I think your use of 'wait' is invalid here
-
-JP
+Content-Type: text/plain; charset="us-ascii"
+To: Hendrik Visage <hvjunk@gmail.com>
+Cc: Shriramana Sharma <samjnaa@gmail.com>, Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 
-Ken Nagorski wrote:
-> Hi there,
-> 
-> I have created a small IM client that talks to an IM server that I wrote 
-> in java. It doesn't have a problem sending data however I am using a 
-> pthread to call a listener function. It works OK but when I click back 
-> on the program say to type some other text it just crashes. I have been 
-> teaching myself C but I am having a problem understanding how to pass 
-> control back to the main thread. That isn't a problem in java.
-> 
-> forgive me if I am not even asking this right cause like I said. I am 
-> teaching this to myself as my school doesn't offer C.
-> 
-> below is the code maybe someone will be able to point me in the right 
-> direction.
-> 
-> how the thread is created.
-> when the user clicks connect and if there is a successful sockfd 
-> created... I call this
-> listner_thread_id = pthread_create( &listner_thread, NULL, 
-> message_listner, (void *)data_to_be_sent);
-> 
-> The message listener function
-> static void *message_listner(void *data)
-> {
->        struct Data_To_Be_Sent *data_to_be_sent;
->        data_to_be_sent = (Data_To_Be_Sent*)data;
->        gchar *text;
->        gchar *carriage_return = "\n";
->        GtkTextIter start, end;
->        int numbytes, ix=1;
-> 
->        g_print("I am waiting for incoming data...\n");
->        while(1)
->        {
->                if((numbytes=recv(data_to_be_sent->sockfd, 
-> data_to_be_sent->buffer, 255, 0)) == -1)
->                {
->                        printf("There was an error reciving data\n");
->                        exit(1);
->                } else {
->                        printf(((char *)data_to_be_sent->buffer));
->                        printf("\n%i\n", ix);
->                        wait(2);
->                }
->                ix++;
->        }
-> }
-> 
-> Any ideas where I am going wrong?
-> 
-> Thanks
-> ken
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> 
-> 
+Hendrik Visage wrote:
 
+> > > So does this mean that GCC links only those functions from a library which I
+> > > call directly or indirectly through another called function in the course of
+> > > my program?
+> 
+> > For a static library (which is just an archive of object files), the
+> > linker will only use those object files which are necessary to satisfy
+> > any outstanding references.
+> 
+> That means that all the functions and everything in that object file
+> is included?
+
+Yes. The linker can't include specific portions of an object file.
+
+> thus given the lib.a contains obj1.o and obj2.o compiled from obj1.c &
+> obj2.c below,
+> the program main from main.c below, linked with lib.a will contain the
+> obj1.o part, which
+> will also include the superflouos int b() (That's the way I understood
+> it too), but not obj2 with c() & d().
+
+Correct.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
