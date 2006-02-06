@@ -1,44 +1,26 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Does GCC link only used functions?
-Date: Thu, 2 Feb 2006 16:39:48 +0000
-Message-ID: <17378.13780.99415.165938@cerise.gclements.plus.com>
-References: <200601291438.17093.samjnaa@gmail.com>
-	<17373.1722.484465.747500@cerise.gclements.plus.com>
-	<d93f04c70602012117v6998ef94k3e87a9a3820a45f9@mail.gmail.com>
+From: Senthil Nathan V <pingtosen@gmail.com>
+Subject: pthread_mutex_destroy call in nptl-2.3.4 thread libraries
+Date: Mon, 6 Feb 2006 21:50:54 +0530
+Message-ID: <8d1265000602060820t247b6f18kf79f72e3bb131cb8@mail.gmail.com>
+References: <8d1265000602060818n6a1c499che2828236645252f4@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <d93f04c70602012117v6998ef94k3e87a9a3820a45f9@mail.gmail.com>
+In-Reply-To: <8d1265000602060818n6a1c499che2828236645252f4@mail.gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Hendrik Visage <hvjunk@gmail.com>
-Cc: Shriramana Sharma <samjnaa@gmail.com>, Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
+Hi All,
+    I am learning multi-threaded programming in Linux. Locking a
+deleted mutex is possible in nptl threads.
 
-Hendrik Visage wrote:
+ Now my query is :
+ * Is there any possible way to check for destroyed mutex ?
 
-> > > So does this mean that GCC links only those functions from a library which I
-> > > call directly or indirectly through another called function in the course of
-> > > my program?
-> 
-> > For a static library (which is just an archive of object files), the
-> > linker will only use those object files which are necessary to satisfy
-> > any outstanding references.
-> 
-> That means that all the functions and everything in that object file
-> is included?
+ Thanks in advance.
 
-Yes. The linker can't include specific portions of an object file.
-
-> thus given the lib.a contains obj1.o and obj2.o compiled from obj1.c &
-> obj2.c below,
-> the program main from main.c below, linked with lib.a will contain the
-> obj1.o part, which
-> will also include the superflouos int b() (That's the way I understood
-> it too), but not obj2 with c() & d().
-
-Correct.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+-regards,
+  Senthil Nathan V
