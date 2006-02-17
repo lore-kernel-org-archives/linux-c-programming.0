@@ -1,59 +1,89 @@
-From: Ron Michael Khu <ronkhu@ntsp.nec.co.jp>
-Subject: Re: Socket and STDIN pooling
-Date: Wed, 15 Feb 2006 13:46:30 +0800
-Message-ID: <43F2C036.4000302@hq.ntsp.nec.co.jp>
-References: <43F16A09.8070807@hq.ntsp.nec.co.jp> <6a00c8d50602132236l2c7e5337v471ca48c8b8a4f79@mail.gmail.com> <43F2BC05.5030700@hq.ntsp.nec.co.jp>
-Reply-To: ronkhu@ntsp.nec.co.jp
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Compiling the NIST Time Client
+Date: Fri, 17 Feb 2006 08:00:59 +0530
+Message-ID: <200602170800.59429.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <43F2BC05.5030700@hq.ntsp.nec.co.jp>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Hello all.
 
- >I have a question about pooling 2 sockets and stdin.
- >I am currently making an application which accepts
- >input from the stdin.
+I downloaded the source code for the NIST Time Client from=20
+ftp://time-a.nist.gov/pub/daytime and compiled it using make. I made th=
+e=20
+following changes to the source code to make it compile without errors =
+but I=20
+want to verify here that I have not committed a blunder (though the pro=
+gram=20
+compiles and works properly).
 
- >It had a connection to a server connecting to 2ports.
- >If for example the stdin is a blocking descriptor and
- >the 2 other descriptors are to be checked real time
- >how can it be done without using threads?
+I got:
 
+samjnaa@linux:~/src/daytime> make nistime
+cc -o tcp.o -c tcp_time_client.c
+tcp_time_client.c: In function =E2=80=98main=E2=80=99:
+tcp_time_client.c:172: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:172: error: too few arguments to function =E2=80=98ex=
+it=E2=80=99
+tcp_time_client.c:203: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:203: error: too few arguments to function =E2=80=98ex=
+it=E2=80=99
+tcp_time_client.c:209: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:209: error: too few arguments to function =E2=80=98ex=
+it=E2=80=99
+tcp_time_client.c:228: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:242: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:247: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:255: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:308: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+tcp_time_client.c:310: warning: incompatible implicit declaration of bu=
+ilt-in=20
+function =E2=80=98exit=E2=80=99
+make: *** [tcp.o] Error 1
 
-pseudo-code for polling multiple file descriptors:
-( no error checking..)
+So I replaced all occurrences of:
 
-set STDIN in mySet
-set socket1 in mySet
-set socket2 in mySet
+exit(); with return;
+exit(0); with return 0;
+exit(1); with return 1;
 
-for( ; ; )
-{
-  copy mySet to mySet2
-  while ( select( largestFd, &mySet2, NULL, NULL, NULL ) > 0 )
-  {
-      for (  i=0; i<=largestFd; i++ )
-     {
-         if ( i is in mySet2)
-         {
-            <u can do a fork() here if u want>
-            switch( i )
-            {
-                 case STDIN:  <process input>; break;
-                 case socket1:  <process data>; break;
-                 case socket2:  <process data>; break;
-             }
-         }
-     }
-  }
-}
+after which I got a clean compile and the program seems to work fine.
 
-Of coure there are many ways of traversing thru an fdset...
+Converting exit to return seems a harmless operation but ever since I c=
+ame to=20
+Linux I am somewhat paranoid about hacking anything myself without=20
+guidance...
 
+Thanks.
 
+--=20
 
-
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-02-17 W07-5 UTC+0530
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
