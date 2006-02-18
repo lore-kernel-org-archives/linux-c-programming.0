@@ -1,33 +1,34 @@
-From: "James Colannino" <james@colannino.org>
-Subject: glibc detected - free(): invalid next size
-Date: Fri, 17 Feb 2006 20:59:27 -0800
-Message-ID: <43F6A9AF.8010309@colannino.org>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Re: Compiling the NIST Time Client
+Date: Sat, 18 Feb 2006 10:40:20 +0530
+Message-ID: <200602181040.20766.samjnaa@gmail.com>
+References: <200602170800.59429.samjnaa@gmail.com> <200602170803.17816.techlist@pathfinder.phys.utk.edu>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Class: urn:content-classes:message
+In-Reply-To: <200602170803.17816.techlist@pathfinder.phys.utk.edu>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hey everyone.  I have a quick question.  What does the following runtime 
-error mean?
+Friday, 17 February 2006 18:33 samaye, Reuben D. Budiardja alekhiit:
 
-*** glibc detected *** free(): invalid next size (fast): 0x0804a1c0 ***
+> exit() takes one argument. exit() is not the same as return. 'man 3 exit'
+> for details.
 
-Does this mean that the program attempted to free memory from a pointer 
-that wasn't allocated any memory?   I have a feeling that is what this 
-means, but the message itself is cryptic.
+All I can see is that exit mandatorily takes an argument whereas if return is 
+not given an argument the return status is that of the last command executed 
+in the function body.
 
-On a related note, does anyone know of a good source that describes 
-runtime errors such as this in detail?  It would help me greatly in my 
-debugging experience.  Thanks :)
+Further, exit is a function whereas return is a statement, not that that 
+really makes much of a difference (does it?).
 
-James
+Is there something else?
 
 -- 
-My blog: http://www.crazydrclaw.com/
-My homepage: http://james.colannino.org/
 
-
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-02-18 W07-6 UTC+0530
