@@ -1,60 +1,33 @@
-From: "Reuben D. Budiardja" <techlist@pathfinder.phys.utk.edu>
-Subject: Re: Compiling the NIST Time Client
-Date: Fri, 17 Feb 2006 08:03:15 -0500
-Message-ID: <200602170803.17816.techlist@pathfinder.phys.utk.edu>
-References: <200602170800.59429.samjnaa@gmail.com>
+From: "James Colannino" <james@colannino.org>
+Subject: glibc detected - free(): invalid next size
+Date: Fri, 17 Feb 2006 20:59:27 -0800
+Message-ID: <43F6A9AF.8010309@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200602170800.59429.samjnaa@gmail.com>
-Content-Disposition: inline
+Content-Class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-On Thursday 16 February 2006 21:30, Shriramana Sharma wrote:
-> Hello all.
->
-> I downloaded the source code for the NIST Time Client from
-> ftp://time-a.nist.gov/pub/daytime and compiled it using make. I made =
-the
-> following changes to the source code to make it compile without error=
-s but
-> I want to verify here that I have not committed a blunder (though the
-> program compiles and works properly).
->
-> I got:
->
-> samjnaa@linux:~/src/daytime> make nistime
-> cc -o tcp.o -c tcp_time_client.c
-> tcp_time_client.c: In function =E2=80=98main=E2=80=99:
-> tcp_time_client.c:172: warning: incompatible implicit declaration of
-> built-in function =E2=80=98exit=E2=80=99
+Hey everyone.  I have a quick question.  What does the following runtime 
+error mean?
 
-Is stdlib.h included ?
+*** glibc detected *** free(): invalid next size (fast): 0x0804a1c0 ***
 
-> tcp_time_client.c:172: error: too few arguments to function =E2=80=98=
-exit=E2=80=99
-<snip>
-> So I replaced all occurrences of:
->
-> exit(); with return;
-> exit(0); with return 0;
-> exit(1); with return 1;
+Does this mean that the program attempted to free memory from a pointer 
+that wasn't allocated any memory?   I have a feeling that is what this 
+means, but the message itself is cryptic.
 
-exit() takes one argument. exit() is not the same as return. 'man 3 exi=
-t' for=20
-details.
+On a related note, does anyone know of a good source that describes 
+runtime errors such as this in detail?  It would help me greatly in my 
+debugging experience.  Thanks :)
 
-RDB
---=20
-Reuben D. Budiardja
-Dept. Physics and Astronomy
-University of Tennessee, Knoxville, TN
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+James
+
+-- 
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+
