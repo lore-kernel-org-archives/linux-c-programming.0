@@ -1,31 +1,25 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: Compiling the NIST Time Client
-Date: Sat, 18 Feb 2006 10:40:20 +0530
-Message-ID: <200602181040.20766.samjnaa@gmail.com>
-References: <200602170800.59429.samjnaa@gmail.com> <200602170803.17816.techlist@pathfinder.phys.utk.edu>
+Subject: Cross-compiling for Windows under Linux
+Date: Sat, 18 Feb 2006 15:15:14 +0530
+Message-ID: <200602181515.14801.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200602170803.17816.techlist@pathfinder.phys.utk.edu>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Friday, 17 February 2006 18:33 samaye, Reuben D. Budiardja alekhiit:
+I am running SUSE Linux 10.0 and I would like to compile my programs for 
+32-bit Windows without booting to Windows. 
 
-> exit() takes one argument. exit() is not the same as return. 'man 3 exit'
-> for details.
+If I boot to Windows, I can use gcc and make that come with Cygwin or MinGW, 
+but I would like to avoid the hassle of booting to Windows at all.
 
-All I can see is that exit mandatorily takes an argument whereas if return is 
-not given an argument the return status is that of the last command executed 
-in the function body.
+Is there a way I can do this?
 
-Further, exit is a function whereas return is a statement, not that that 
-really makes much of a difference (does it?).
-
-Is there something else?
+Thanks in advance.
 
 -- 
 
