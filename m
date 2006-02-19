@@ -1,64 +1,42 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Tomas Janousek <tomi@nomi.cz>
 Subject: Re: Cross-compiling for Windows under Linux
-Date: Sat, 18 Feb 2006 18:48:17 +0000
-Message-ID: <17399.27633.946663.220962@cerise.gclements.plus.com>
+Date: Sun, 19 Feb 2006 11:26:18 +0100
+Message-ID: <dt9h4a$83i$1@sea.gmane.org>
 References: <200602181515.14801.samjnaa@gmail.com>
-	<17398.63456.306627.660842@cerise.gclements.plus.com>
-	<200602182120.54259.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200602182120.54259.samjnaa@gmail.com>
+In-Reply-To: <200602181515.14801.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Hello,
 
-Shriramana Sharma wrote:
+Shriramana Sharma napsal(a):
+> I am running SUSE Linux 10.0 and I would like to compile my programs =
+for=20
+> 32-bit Windows without booting to Windows.=20
+>=20
+> If I boot to Windows, I can use gcc and make that come with Cygwin or=
+ MinGW,=20
+> but I would like to avoid the hassle of booting to Windows at all.
+>=20
+> Is there a way I can do this?
 
-> > 	http://vmlinux.org/crash/mirror/www.objsw.com/CrossGCC/
-> 
-> It's far above my head. Can anyone please explain what they are doing?
+Look at these:
+http://www.mingw.org/MinGWiki/index.php/build%20a%20Win32%20x-compiler%=
+20for%20Linux
+http://www.mingw.org/MinGWiki/index.php/BuildMingwCross
 
-The FAQ explains how to compile versions of binutils and gcc which run
-on Linux but which generate binaries for other platforms (e.g. 
-Windows).
+--=20
+=2E---------    Tom=E1=9A Janou=9Aek   a.k.a. Liskni_si    ---------.
+: NOMI team, developer, http://tomi.nomi.cz/   tomi@nomi.cz :
+' JID:liskni_si@jabber.cz, ICQ#161807083, tel:+420608876277 '
 
-The GNU tools (gcc, as (the assembler), ld (the linker) etc) can
-generate code for a wide variety of platforms, including Linux and
-Windows. They are written in C, and can be compiled to run on a wide
-variety of platforms. The platform on which the compiler/linker/etc
-runs doesn't have anything to do with the platform for which it
-generates binaries.
-
-When you run the binutils/gcc/etc configure script, you use the
---target option to tell it which platform you want it to generate code
-for (if you don't use this switch, it assumes that you want it to
-generate code for the platform on which the compiler runs).
-
-E.g. if you want a compiler which generates Windows binaries, you
-would use --target=i686-pc-mingw32 (this worked the last time I built
-cross-gcc; check the installation instructions supplied with gcc for
-an up-to-date list of target names).
-
-> Are they suggesting GCC can be used as I have it in my system (4.02
-> BTW) to create Windows binaries?
-
-The normal gcc and binutils packages from your OS vendor won't be able
-to generate Windows binaries. You need versions which were built to
-generate Windows (rather than Linux) binaries.
-
-You might be able to get pre-compiled cross-gcc/binutils binaries for
-your system, otherwise you will need to build them from source.
-
-> There is some mention of a patch. Am I to build gcc myself from
-> sources after applying the patch?
-
-You shouldn't need any patches. The one mentioned in section 3 of the
-FAQ is specific to MS-DOS. You don't need it to generate Windows
-binaries.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
