@@ -1,28 +1,32 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: "strip"-ping Windows executables
-Date: Thu, 23 Feb 2006 14:08:45 +0000
-Message-ID: <17405.49645.378440.245634@cerise.gclements.plus.com>
-References: <200602231904.56673.samjnaa@gmail.com>
+From: James Colannino <james@colannino.org>
+Subject: X Clipboard programming
+Date: Thu, 23 Feb 2006 20:37:44 -0800
+Message-ID: <43FE8D98.8030008@colannino.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200602231904.56673.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Hey everyone.  I've been googling around, trying to find information 
+about interfacing with the X clipboard.  So far, I've been 
+unsuccessful.  The reason I ask is that I'm interested in writing a 
+clipboard manager (similar to KDE's klipper.)  Are there perhaps 
+functions in GTK2 that will allow me to interface with it at a higher 
+level, or do I have to use the X API?
 
-Shriramana Sharma wrote:
+Are there any good documents I could look at?  I wouldn't bother the 
+list with these questions except for the fact that I'm having some 
+trouble finding the information on my own.  Perhaps I'm not looking for 
+the right thing.  Thanks :)
 
-> I have compiled a C program I wrote on Linux using MinGW 3.42 on Windows XP -- 
-> I wonder if it is possible for me to strip that file using Linux command 
-> strip -- is it safe?
-
-You need a version of strip which was built to work on Windows
-binaries (i.e. cross-binutils). An ELF version of strip won't work on
-COFF/PE executables.
+James
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
+
