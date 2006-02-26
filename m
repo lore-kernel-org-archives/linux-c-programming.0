@@ -1,7 +1,7 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Making "make" auto-strip and auto-clean
-Date: Sun, 26 Feb 2006 09:35:27 +0530
-Message-ID: <200602260935.27292.samjnaa@gmail.com>
+Subject: A safe scanf function
+Date: Sun, 26 Feb 2006 13:47:20 +0530
+Message-ID: <200602261347.20494.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -11,18 +11,17 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-I would like make to always 
+If I am not wrong, a safe alternate for scanf could be (relatively) easily 
+written which simply uses getline and sscanf -- thereby replacing the 
+original scanf function.
 
-1. strip the executable it created
-2. remove the *.o files it created
+Why has not anyone written such a function and included it into the GNU C 
+library? Myself, I may write such a function for a specific case in my 
+program, but to modify the original library function I lack the know-how.
 
-after it has compiled the target executable. How do I do this? What do I add 
-to the makefile? The current default command I am using is: 
+I request one of the guru-s here to do this most helpful task.
 
-pan: pan.o libswe.a
-	gcc -g -O2 -o pan pan.o -L. -lswe -lm
-
-Thanks.
+Thank you.
 
 -- 
 
