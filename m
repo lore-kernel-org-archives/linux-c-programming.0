@@ -1,48 +1,29 @@
-From: a.biardi@tiscali.it
-Subject: Re: argv[0]
-Date: Fri, 24 Feb 2006 14:59:25 +0100
-Message-ID: <200602241459.25477.a.biardi@tiscali.it>
-References: <200601130016.23410.a.biardi@tiscali.it> <6a00c8d50601130426u2a9640evc14ee8c3d61c7925@mail.gmail.com>
+From: James Colannino <james@colannino.org>
+Subject: pointer arithmetic vs. arrays
+Date: Sat, 25 Feb 2006 18:05:51 -0800
+Message-ID: <44010CFF.5040806@colannino.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6a00c8d50601130426u2a9640evc14ee8c3d61c7925@mail.gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-On Friday 13 January 2006 13:26, you wrote:
+Hey everyone.  I've heard (and have also read in "The C Programming 
+Language") that pointer arithmetic in place of arrays is, in general, 
+faster.  However, I've also heard that modern compilers automatically 
+make optimizations that account for this difference.
 
-> On 1/13/06, a.biardi@tiscali.it <a.biardi@tiscali.it> wrote:
-> > Hi,
-> >
-> > Is there any C function that can tell me what argv[0] is, outside
-> > main()?
-> >
-> > I thought to use getpid() and then look at /proc/<pid>/cmdline
-> > but doesn't seem portable. Any hints?
->
-> The arguments are pushed on the stack upon process creation.  Once
-> the process is running there is little chance to get hands on them
-> except for the /proc approach.
->
-> 	\Steve
->
+In everyone's opinion, taking both readability and issues of speed into 
+account, what is better to use?  I'd imagine this would depend on the 
+situation.  Just trying to pick up better coding habits as I learn :)
 
-Just in case anybody needs it, I think I found something inside=20
-errno.h (GNU-only):
+James
 
-/* The full and simple forms of the name with which the program was
-   invoked.  These variables are set up automatically at startup based
-   on  the value of ARGV[0] (this works only if you use GNU ld). */
-extern char *program_invocation_name, *program_invocation_short_name;=B6
+-- 
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
 
-Bye,
-Andrea.
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+"If Carpenters made houses the way programmers design programs, the first woodpecker to come along would destroy all of civilization." --Computer Proverb
+
