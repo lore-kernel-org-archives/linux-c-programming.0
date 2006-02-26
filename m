@@ -1,30 +1,70 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: A safe scanf function
-Date: Sun, 26 Feb 2006 13:47:20 +0530
-Message-ID: <200602261347.20494.samjnaa@gmail.com>
+From: wwp <subscript@free.fr>
+Subject: Re: Making "make" auto-strip and auto-clean
+Date: Sun, 26 Feb 2006 09:56:22 +0100
+Message-ID: <20060226095622.3c65df9b@localhost.localdomain>
+References: <200602260935.27292.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary=Sig_cO+558bEp32.17eHTIXVXIs;
+ protocol="application/pgp-signature"; micalg=PGP-SHA1
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <200602260935.27292.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-If I am not wrong, a safe alternate for scanf could be (relatively) easily 
-written which simply uses getline and sscanf -- thereby replacing the 
-original scanf function.
+--Sig_cO+558bEp32.17eHTIXVXIs
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Why has not anyone written such a function and included it into the GNU C 
-library? Myself, I may write such a function for a specific case in my 
-program, but to modify the original library function I lack the know-how.
+Hello Shriramana Sharma,
 
-I request one of the guru-s here to do this most helpful task.
 
-Thank you.
+On Sun, 26 Feb 2006 09:35:27 +0530 Shriramana Sharma <samjnaa@gmail.com> wr=
+ote:
 
--- 
+> I would like make to always=20
+>=20
+> 1. strip the executable it created
+> 2. remove the *.o files it created
+>=20
+> after it has compiled the target executable. How do I do this? What do I
+> add to the makefile? The current default command I am using is:=20
+>=20
+> pan: pan.o libswe.a
+> 	gcc -g -O2 -o pan pan.o -L. -lswe -lm
 
-Tux #395953 resides at http://samvit.org
-playing with KDE 3.51 on SUSE Linux 10.0
-$ date [] CCE +2006-02-26 W08-7 UTC+0530
+First, if you always want to strip, no need to add -g.
+Then:
+
+all: pan strip clean
+
+pan: pan.o libswe.a
+	gcc -O2 -o $@ pan.o -L. -lswe -lm
+
+strip: pan
+	strip $<
+
+clean:
+	-rm -f pan.o
+
+Or something similar..
+
+
+Regards,
+
+--=20
+wwp
+
+--Sig_cO+558bEp32.17eHTIXVXIs
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Disposition: attachment; filename=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.7 (GNU/Linux)
+
+iD8DBQFEAW07adgnuQFKG88RAjGCAJ41+M7I46SfgZdetLKrmW7gcEuBoQCfaail
+4+/fv2DFGr1yceJTDV8DfOA=
+=ZSzR
+-----END PGP SIGNATURE-----
+
+--Sig_cO+558bEp32.17eHTIXVXIs--
