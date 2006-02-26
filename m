@@ -1,63 +1,36 @@
-From: leslie.polzer@gmx.net
-Subject: Re: Making "make" auto-strip and auto-clean
-Date: Sun, 26 Feb 2006 15:10:04 +0100
-Message-ID: <20060226141004.GA28946@wintermute>
-References: <200602260935.27292.samjnaa@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: pointer arithmetic vs. arrays
+Date: Sun, 26 Feb 2006 15:29:39 +0000
+Message-ID: <17409.51555.191516.793031@cerise.gclements.plus.com>
+References: <44010CFF.5040806@colannino.org>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <200602260935.27292.samjnaa@gmail.com>
+In-Reply-To: <44010CFF.5040806@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: James Colannino <james@colannino.org>
+Cc: linux-c-programming@vger.kernel.org
 
 
---mP3DRpeJDSE+ciuQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+James Colannino wrote:
 
+> Hey everyone.  I've heard (and have also read in "The C Programming 
+> Language") that pointer arithmetic in place of arrays is, in general, 
+> faster.  However, I've also heard that modern compilers automatically 
+> make optimizations that account for this difference.
+> 
+> In everyone's opinion, taking both readability and issues of speed into 
+> account, what is better to use?  I'd imagine this would depend on the 
+> situation.  Just trying to pick up better coding habits as I learn :)
 
-Hello Shiramana,
+In most cases, I'd recommend array indexing.
 
-On Sun, Feb 26, 2006 at 09:35:27AM +0530, Shriramana Sharma wrote:
+If something can reasonably be expressed in either form, array
+indexing is usually clearer (both to read and to debug), and compilers
+which don't optimise array access are rare enough not to be worth
+worrying about.
 
-> I would like make to always
->
-> 1. strip the executable
-> 2. remove the *.o files it created
->
-> after it has compiled the target executable. How do I do this? What  =20
-> do I add to the makefile? The current default command I am using is: =20
->
-> pan: pan.o libswe.a gcc -g -O2 -o pan pan.o -L. -lswe -lm
-I'm not sure I understand your question.
-  Here's my answer, though:
-
-pan: pan.o libswe.a
-        gcc -g -O2 -o pan pan.o -L. -lswe -lm
-        strip pan
-        rm -f *.o
-
-  Leslie
-
---=20
-gpg --keyserver pgp.mit.edu --recv-keys 0x52D70289
-http://nic-nac-project.de/~skypher/
-
---mP3DRpeJDSE+ciuQ
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
-
-iD8DBQFEAba8n/ep3VLXAokRAqbQAJoCGvNz809/SZW7PDvMZjWByJOYGQCcDuFB
-BgmuE6x2SEDkzV8OHIPXh78=
-=Y8zk
------END PGP SIGNATURE-----
-
---mP3DRpeJDSE+ciuQ--
+-- 
+Glynn Clements <glynn@gclements.plus.com>
