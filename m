@@ -1,36 +1,35 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: pointer arithmetic vs. arrays
-Date: Sun, 26 Feb 2006 15:29:39 +0000
-Message-ID: <17409.51555.191516.793031@cerise.gclements.plus.com>
-References: <44010CFF.5040806@colannino.org>
+Subject: Re: A safe scanf function
+Date: Sun, 26 Feb 2006 15:34:28 +0000
+Message-ID: <17409.51844.97168.392901@cerise.gclements.plus.com>
+References: <200602261347.20494.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <44010CFF.5040806@colannino.org>
+In-Reply-To: <200602261347.20494.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: James Colannino <james@colannino.org>
-Cc: linux-c-programming@vger.kernel.org
+To: Shriramana Sharma <samjnaa@gmail.com>
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 
-James Colannino wrote:
+Shriramana Sharma wrote:
 
-> Hey everyone.  I've heard (and have also read in "The C Programming 
-> Language") that pointer arithmetic in place of arrays is, in general, 
-> faster.  However, I've also heard that modern compilers automatically 
-> make optimizations that account for this difference.
-> 
-> In everyone's opinion, taking both readability and issues of speed into 
-> account, what is better to use?  I'd imagine this would depend on the 
-> situation.  Just trying to pick up better coding habits as I learn :)
+> If I am not wrong, a safe alternate for scanf could be (relatively) easily 
+> written which simply uses getline and sscanf -- thereby replacing the 
+> original scanf function.
 
-In most cases, I'd recommend array indexing.
+You can't /replace/ scanf() in the C library. It's a standard ANSI
+function, so it needs to be present and it needs to have its specified
+behaviour (which can include consuming either more or less than a line
+of input, depending on the format string).
 
-If something can reasonably be expressed in either form, array
-indexing is usually clearer (both to read and to debug), and compilers
-which don't optimise array access are rare enough not to be worth
-worrying about.
+> Why has not anyone written such a function and included it into the GNU C 
+> library?
+
+Probably because its trivial to write it yourself if that's what you
+really want.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
