@@ -1,65 +1,29 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Making "make" auto-strip and auto-clean
-Date: Sun, 26 Feb 2006 15:54:03 +0000
-Message-ID: <17409.53019.893568.840475@cerise.gclements.plus.com>
-References: <200602260935.27292.samjnaa@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Re: A safe scanf function
+Date: Mon, 27 Feb 2006 20:45:54 +0530
+Message-ID: <200602272045.54327.samjnaa@gmail.com>
+References: <200602261347.20494.samjnaa@gmail.com> <17409.51844.97168.392901@cerise.gclements.plus.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200602260935.27292.samjnaa@gmail.com>
+In-Reply-To: <17409.51844.97168.392901@cerise.gclements.plus.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Sunday, 26 February 2006 21:04 samaye tvayaa likhitam:
 
-Shriramana Sharma wrote:
+> Probably because its trivial to write it yourself if that's what you
+> really want.
 
-> I would like make to always 
-> 
-> 1. strip the executable it created
-> 2. remove the *.o files it created
-> 
-> after it has compiled the target executable. How do I do this? What do I add 
-> to the makefile?
-
-	CC = gcc
-	CFLAGS = -g -O2
-	LDFLAGS = -L.
-	LOADLIBES = -lswe -lm
-
-	default: pan strip clean
-	
-	pan: pan.o libswe.a
-		$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LOADLIBES)
-	
-	strip: pan
-		strip $<
-	
-	clean:
-		rm -f *.o
-
-That way, "make" with no arguments will build the executable, strip it
-and remove the object files, while you can perform individual steps by
-specifying specific targets. E.g. to build the executable without
-stripping or cleaning (once the project becomes non-trivial, you
-/will/ want to do this), you can use "make pan".
-
-A Makefile isn't supposed to just run a specific sequence of commands
-every time; you can use a script for that. It's meant to allow you to:
-
-+ Perform incremental recompilation (which requires leaving the
-object files around).
-
-+ Perform partial compilation (which requires breaking the
-build process into individual targets).
-
-+ Compile with non-default settings (which requires using variables
-instead of hardcoding programs and options into the commands).
-
-+ Handle large numbers of files without having to write a rule for
-every file (by using pattern rules and automatic variables).
+But instead of forcing every author of a C program to implement such a 
+function, I still feel a safe version should be included in the library 
+itself.
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-02-27 W09-1 UTC+0530
