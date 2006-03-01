@@ -1,28 +1,57 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
+From: wwp <subscript@free.fr>
 Subject: Re: Function call
-Date: Wed, 1 Mar 2006 16:24:04 +0530
-Message-ID: <200603011624.04553.samjnaa@gmail.com>
+Date: Wed, 1 Mar 2006 12:02:49 +0100
+Message-ID: <20060301120249.5e83e84b@localhost.localdomain>
 References: <50C05B7AA7D6924FB5E384EF14BC647B04D9A8A3@inba1mx2.corp.emc.com>
+	<200603011624.04553.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_=Yg88QHGHxvcU4Y47HTFJ1s";
+ protocol="application/pgp-signature"; micalg=PGP-SHA1
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <50C05B7AA7D6924FB5E384EF14BC647B04D9A8A3@inba1mx2.corp.emc.com>
-Content-Disposition: inline
+In-Reply-To: <200603011624.04553.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Wednesday, 01 March 2006 16:17 samaye, Honnavalli_Sreevathsa@emc.com alekhiit:
+--Sig_=Yg88QHGHxvcU4Y47HTFJ1s
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> The statement funckey; 'not wrong'. 
-> You can compile your program with -Wall option to see a warning message
-> saying this. 
+Hello Shriramana,
 
-fk.c:8: warning: statement with no effect
 
--- 
+On Wed, 1 Mar 2006 16:24:04 +0530 Shriramana Sharma <samjnaa@gmail.com> wro=
+te:
 
-Tux #395953 resides at http://samvit.org
-playing with KDE 3.51 on SUSE Linux 10.0
-$ date [] CCE +2006-03-01 W09-3 UTC+0530
+> Wednesday, 01 March 2006 16:17 samaye, Honnavalli_Sreevathsa@emc.com
+> alekhiit:
+>=20
+> > The statement funckey; 'not wrong'.=20
+> > You can compile your program with -Wall option to see a warning message
+> > saying this.=20
+>=20
+> fk.c:8: warning: statement with no effect
+
+I'm not sure w/ gcc, but a "statement with no effect" might not mean that t=
+he
+statement isn't compiled and generates code.. that will have no effect ;-).
+
+
+Regards,
+
+--=20
+wwp
+
+--Sig_=Yg88QHGHxvcU4Y47HTFJ1s
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Disposition: attachment; filename=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.7 (GNU/Linux)
+
+iD8DBQFEBX9ZadgnuQFKG88RAiDIAKCaqAfBLANp9ePFq+YWbN+Nt5pE+gCfYnj/
+ESpkEOvffOb7/VDFc9h/vBI=
+=svmX
+-----END PGP SIGNATURE-----
+
+--Sig_=Yg88QHGHxvcU4Y47HTFJ1s--
