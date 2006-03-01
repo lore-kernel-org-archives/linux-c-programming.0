@@ -1,69 +1,48 @@
-From: wwp <subscript@free.fr>
-Subject: Re: Function call
-Date: Wed, 1 Mar 2006 08:39:13 +0100
-Message-ID: <20060301083913.73d0fb2c@localhost.localdomain>
-References: <CB6A009F461BE24BA3E10DAC95A4B25E12CE1A73@kormail01.in.bosch.com>
+From: "Gvks Satish-A14577" <satish.k@motorola.com>
+Subject: Question on SIGSEGV / Stack growth
+Date: Wed, 1 Mar 2006 18:09:08 +0800
+Message-ID: <3100473D52017B48B9068E079BE2A6E664C821@ZMY16EXM67.ds.mot.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; boundary=Sig_NzGjDsmdewOSAj5RMwaMNfh;
- protocol="application/pgp-signature"; micalg=PGP-SHA1
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CB6A009F461BE24BA3E10DAC95A4B25E12CE1A73@kormail01.in.bosch.com>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
---Sig_NzGjDsmdewOSAj5RMwaMNfh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hello Subbulakshmi,
-
-
-On Wed, 1 Mar 2006 10:54:03 +0530 "Subbulakshmi Sadagopal (RBIN/EDS2) *" <S=
-ubbulakshmi.S@in.bosch.com> wrote:
-
->=20
-> Hello,
->=20
-> I have a doubt regarding the following code. There is a void function
-> funckey().
->=20
-> void funckey()
-> {
-> ;
-> }
->=20
-> void main()
-> {
-> funckey;
-> funckey();
-> }
->=20
-> During execution, the second statement calls the function funckey().
->=20
-> What does the compiler do in the first statement funckey?
-
-It evaluates the expression "funckey", which is just a pointer to a function
-(as char* foo; is a pointer to char). Function names can be used in some few
-situations (passed as parameter to some functions for signal/callback
-hooking for instance).
-
-
-Regards,
-
---=20
-wwp
-
---Sig_NzGjDsmdewOSAj5RMwaMNfh
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Disposition: attachment; filename=signature.asc
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.7 (GNU/Linux)
-
-iD8DBQFEBU+hadgnuQFKG88RApnlAJ9m85j9yT4F91yhnQ6llbP/h7Q65ACffX5t
-g/WlkPCMG8a/JzX13bKBd2s=
-=VW/4
------END PGP SIGNATURE-----
-
---Sig_NzGjDsmdewOSAj5RMwaMNfh--
+Hi ,
+ 
+I have a question regarding SIGSEGV in the context of process stack
+growth. I have the 
+following piece of code.
+ 
+#include<stdio.h>
+main()
+{
+    char *ptr;
+    char i=10;
+    int j;
+    ptr = &i;
+    for(j=0; j<3000; j++)
+        printf("%d -- %d\n",j, *(ptr+j));
+}
+ 
+ 
+I was expecting that the program will get a SIGSEGV immediately after
+the first iteration of the for loop, since that
+address doesn't belong to the process address space. But it didn't
+happen. Then I thought that the stack is allocated 
+in terms of pages and hence thought that I'll get SIGSEGV after a PAGE
+size. Even that didn't happen.
+ 
+The program got SIGSEGV at different values of j on different OS. On
+linux it occured at 1896. 
+ 
+I looked at the getrlimit value of stack size. Even that didn't match
+with the value where I got SIGSEGV.
+ 
+Any idea what's happening ?
+ 
+Thanks & Regards,
+Satish
