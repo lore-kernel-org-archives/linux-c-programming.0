@@ -1,57 +1,61 @@
-From: wwp <subscript@free.fr>
-Subject: Re: Function call
-Date: Wed, 1 Mar 2006 12:02:49 +0100
-Message-ID: <20060301120249.5e83e84b@localhost.localdomain>
-References: <50C05B7AA7D6924FB5E384EF14BC647B04D9A8A3@inba1mx2.corp.emc.com>
-	<200603011624.04553.samjnaa@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Question on SIGSEGV / Stack growth
+Date: Wed, 1 Mar 2006 16:37:19 +0000
+Message-ID: <17413.52671.115426.263908@cerise.gclements.plus.com>
+References: <3100473D52017B48B9068E079BE2A6E664C821@ZMY16EXM67.ds.mot.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_=Yg88QHGHxvcU4Y47HTFJ1s";
- protocol="application/pgp-signature"; micalg=PGP-SHA1
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603011624.04553.samjnaa@gmail.com>
+In-Reply-To: <3100473D52017B48B9068E079BE2A6E664C821@ZMY16EXM67.ds.mot.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
-
---Sig_=Yg88QHGHxvcU4Y47HTFJ1s
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hello Shriramana,
+Content-Type: text/plain; charset="us-ascii"
+To: Gvks Satish-A14577 <satish.k@motorola.com>
+Cc: linux-c-programming@vger.kernel.org
 
 
-On Wed, 1 Mar 2006 16:24:04 +0530 Shriramana Sharma <samjnaa@gmail.com> wro=
-te:
+Gvks Satish-A14577 wrote:
 
-> Wednesday, 01 March 2006 16:17 samaye, Honnavalli_Sreevathsa@emc.com
-> alekhiit:
->=20
-> > The statement funckey; 'not wrong'.=20
-> > You can compile your program with -Wall option to see a warning message
-> > saying this.=20
->=20
-> fk.c:8: warning: statement with no effect
+> I have a question regarding SIGSEGV in the context of process stack
+> growth. I have the 
+> following piece of code.
+>  
+> #include<stdio.h>
+> main()
+> {
+>     char *ptr;
+>     char i=10;
+>     int j;
+>     ptr = &i;
+>     for(j=0; j<3000; j++)
+>         printf("%d -- %d\n",j, *(ptr+j));
+> }
+>  
+> I was expecting that the program will get a SIGSEGV immediately after
+> the first iteration of the for loop, since that
+> address doesn't belong to the process address space.
 
-I'm not sure w/ gcc, but a "statement with no effect" might not mean that t=
-he
-statement isn't compiled and generates code.. that will have no effect ;-).
+It almost certainly does belong to the process' address space. Exactly
+what is at that address is undefined, but it's unlikely that it's
+actually invalid.
 
+> But it didn't
+> happen. Then I thought that the stack is allocated 
+> in terms of pages and hence thought that I'll get SIGSEGV after a PAGE
+> size. Even that didn't happen.
+>  
+> The program got SIGSEGV at different values of j on different OS. On
+> linux it occured at 1896. 
+>  
+> I looked at the getrlimit value of stack size. Even that didn't match
+> with the value where I got SIGSEGV.
+>  
+> Any idea what's happening ?
 
-Regards,
+The stack grows downward, but your loop is moving upward. The value of
+j when the segfault occurs will depend upon the position of i within
+main()'s stack frame, and how much stack was used prior to main()
+being entered.
 
---=20
-wwp
-
---Sig_=Yg88QHGHxvcU4Y47HTFJ1s
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Disposition: attachment; filename=signature.asc
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.7 (GNU/Linux)
-
-iD8DBQFEBX9ZadgnuQFKG88RAiDIAKCaqAfBLANp9ePFq+YWbN+Nt5pE+gCfYnj/
-ESpkEOvffOb7/VDFc9h/vBI=
-=svmX
------END PGP SIGNATURE-----
-
---Sig_=Yg88QHGHxvcU4Y47HTFJ1s--
+-- 
+Glynn Clements <glynn@gclements.plus.com>
