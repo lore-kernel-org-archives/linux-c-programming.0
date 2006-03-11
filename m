@@ -1,52 +1,185 @@
-From: Alan Bryan <icemanind@yahoo.com>
-Subject: Speaker Sound
-Date: Fri, 10 Mar 2006 11:33:29 -0800 (PST)
-Message-ID: <20060310193329.726.qmail@web51414.mail.yahoo.com>
+From: Progga <abulfazl@juniv.edu>
+Subject: Re: Speaker Sound
+Date: Sat, 11 Mar 2006 07:32:38 +0600
+Message-ID: <20060311013238.GA605@ju.Imrashi.net.bd>
+References: <20060310193329.726.qmail@web51414.mail.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="uQr8t48UFsdbeI+V"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20060310193329.726.qmail@web51414.mail.yahoo.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
+Cc: icemanind@yahoo.com
 
-Can someone tell me how, in linux, I could get a tone
-from the PC Speaker. In DOS or Windows, I would use
-something like the following code:
 
-void Sound(int, int);
+--uQr8t48UFsdbeI+V
+Content-Type: multipart/mixed; boundary="ZPt4rx8FFjLCG7dd"
+Content-Disposition: inline
 
-main ()
+
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> }
+>=20
+> The problem is, I'm not sure if I can just read and
+> output bytes from a port. Any alternate way would be
+> appreciated!
+
+Sample code attached.
+Mainly based on the Linux Programmer's Guide.
+Runs as suid root.
+Depends on ncurses.
+Press q-i buttons for various tones.
+
+
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="music.c++"
+
+
+   // Simple harmonium - needs root's privilege to run .
+
+
+#include<sys/ioctl.h>
+#include<sys/kd.h>
+#include<sys/types.h>
+#include<fcntl.h>
+#include<unistd.h>
+#include<cerrno>
+#include<cstdlib>
+#include<curses.h>
+#include<iostream>
+
+
+
+
+void
+main ( )
 {
-    Sound(1000, 100);
+
+  char ch ;
+  int freq, fd = open ("/dev/console", O_WRONLY);
+
+
+    initscr() ;
+
+
+
+
+    while( 1 ){
+
+
+          ch = getch() ;
+
+          switch( ch ){
+
+             case 'u' :
+
+             freq = 46   ;
+
+             break ;
+
+
+             case 'y' :
+
+             freq = 48   ;
+
+             break ;
+
+
+
+             case 't' :
+
+             freq = 53   ;
+
+             break ;
+
+
+             case 'r' :
+
+             freq = 59   ;
+
+             break ;
+
+
+
+             case 'e' :
+
+             freq = 65  ;
+
+             break ;
+
+
+
+             case 'w' :
+
+             freq =  70  ;
+
+             break ;
+
+
+
+             case 'q' :
+
+             freq =  80  ;
+
+             break ;
+
+
+
+             case 'i' :
+
+             freq = 90 ;
+
+             break ;
+
+
+             default:
+
+               freq = -1 ;
+
+                   }
+
+
+          if( freq == -1 )break ;
+
+          freq *=10 ;
+
+
+          ioctl (fd, KIOCSOUND, freq );
+
+          usleep ( 200000 );
+
+          ioctl( fd, KIOCSOUND, 0 ) ;
+
+                                 }
+
+
+
+  close (fd);
+
+  endwin() ;
+
 }
 
-void Sound(int hertz, int duration)
-{
-     unsigned divisor = 1193180L / hertz;
-     int portval;
-     
-     portval = inb( 0x61 );
-     portval |= 0x03;
-     outb( 0x61, portval );
-     outb( 0x43, 0xB6 );
-     outb( 0x42, divisor & 0xFF ) ;
-     outb( 0x42, divisor >> 8 ) ; 
-     sleep(duration);
-     portval = inb( 0x61 );
-     portval &= 0x03;
-     outb( 0x61, portval );
-     return;
-}
+--ZPt4rx8FFjLCG7dd--
 
-The problem is, I'm not sure if I can just read and
-output bytes from a port. Any alternate way would be
-appreciated!
+--uQr8t48UFsdbeI+V
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
-Thanks
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.0 (FreeBSD)
 
+iD8DBQFEEii2AjLUsitphWkRAlTHAKDKNIj4x5aijIiJF7EeYpsGiY6FggCfRaoF
+8CY863LahD1qobUXgW1h49I=
+=nb4D
+-----END PGP SIGNATURE-----
 
-__________________________________________________
-Do You Yahoo!?
-Tired of spam?  Yahoo! Mail has the best spam protection around 
-http://mail.yahoo.com 
+--uQr8t48UFsdbeI+V--
