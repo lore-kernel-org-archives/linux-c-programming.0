@@ -1,20 +1,32 @@
-From: zavandi <zavandi@gmail.com>
-Subject: Re: How to detect if screensaver is active
-Date: Wed, 15 Mar 2006 17:44:35 +0200
-Message-ID: <321aa0d20603150744l17f2631do37cf8d965995f9bd@mail.gmail.com>
-References: <321aa0d20603150439m116ae2eajbdde5e8a8e7f5493@mail.gmail.com>
+From: Tomas Janousek <tomi@nomi.cz>
+Subject: Re: Significance of using + before function calls.
+Date: Wed, 15 Mar 2006 21:34:03 +0100
+Message-ID: <dv9tnr$oee$1@sea.gmane.org>
+References: <44180FBC.50703@wipro.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <321aa0d20603150439m116ae2eajbdde5e8a8e7f5493@mail.gmail.com>
-Content-Disposition: inline
+In-Reply-To: <44180FBC.50703@wipro.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-On 3/15/06, zavandi <zavandi@gmail.com> wrote:
-> This is not necessarily a C question: how can I detect if the
-> screensaver is active?
+Hello,
 
-All good, I discovered the _SCREENSAVER_STATUS property of the root window.
+Vamsi napsal(a):
+> Can somebody clarify wht does that + signify??
+
+It suppresses the warning about ignored returned value returned by=20
+splint, for example.
+
+--=20
+=2E---------    Tom=E1=9A Janou=9Aek   a.k.a. Liskni_si    ---------.
+: NOMI team, developer, http://tomi.nomi.cz/   tomi@nomi.cz :
+' JID:liskni_si@jabber.cz, ICQ#161807083, tel:+420608876277 '
+
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
