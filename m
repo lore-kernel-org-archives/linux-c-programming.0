@@ -1,34 +1,49 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Significance of using + before function calls.
-Date: Wed, 15 Mar 2006 13:11:45 +0100
-Message-ID: <6a00c8d50603150411i770b4e51j96c8647c26632aa5@mail.gmail.com>
-References: <44180FBC.50703@wipro.com>
-	 <6a00c8d50603142351u2def5e49vc6c40c221da40e5e@mail.gmail.com>
-	 <4417C928.6070008@computer.org>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: a problem about send() on socket programming
+Date: Wed, 15 Mar 2006 12:23:06 +0000
+Message-ID: <17432.1834.198830.761296@cerise.gclements.plus.com>
+References: <MAILCIqtQvAauNjVuMh000006ab@mail.ndsc.com.cn>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4417C928.6070008@computer.org>
-Content-Disposition: inline
+In-Reply-To: <MAILCIqtQvAauNjVuMh000006ab@mail.ndsc.com.cn>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: zxt@mail.ndsc.com.cn
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On 3/15/06, Per Jessen <per@computer.org> wrote:
-> Steve Graegert wrote:
-> >
-> > The unary plus operator returns the value of an expression.  Neither
-> > the unary plus nor unary minus operators produce lvalues and is of
-> > limited use.
->
-> So what might be the intention of someone using it like the OP
-> described?  It doesn't make much sense, right?
 
-I suppose it's there for a clean implementation of operators in C. 
-While the unary minus returns the negative of the operand the unary
-plus returns the value to avoid ambiguity, i.e. shall the unary plus
-return the positive of a negative operand, as the unary minus does? 
-IMHO, not a result I'd expect.
+Xueting Zhu wrote:
 
-	\Steve
+> I am studying socket programming. I have a problem about the function
+> send(). Generally it is thought that the calls return the number of
+> characters sent, or -1 if an error occurred. But when I practice
+> programming about udp socket, the server return 0 when it actually
+> sent data. I am really puzzled. Can anyone help me ? The program I
+> practice is as follows.
+
+>  *in line 38:count=sendto(sd,"test from server",sizeof("test from server"),0,(struct sockaddr *) &s_addr,sizeof(s_addr))<0)
+>  *when captured with etheral, it is found that the data has been sent, 
+>  *while the printed message shows that "0 byte send success!" 
+>  */
+
+> 		if(count=sendto(sd,bufftosend,sizeof(bufftosend),0,(struct sockaddr *) &s_addr,sizeof(s_addr))<0)
+
+sendto() isn't returning zero.
+
+The "<" operator has higher precedence than "=" (the only operator
+with a lower precedence than assignment operators is the sequencing
+operator ","), so the above call is equivalent to:
+
+	if (count = (sendto(...) < 0))
+
+I.e. "count" is being assigned the value of the expression (sendto(...) < 0),
+which will be 1 if sendto() returns a negative value and zero otherwise.
+
+To get the behaviour which you desire, you need additional parentheses, i.e.:
+
+	if ((count = sendto(...)) < 0)
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
