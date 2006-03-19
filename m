@@ -1,7 +1,7 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: const int f() and int f() const
-Date: Sun, 19 Mar 2006 20:48:08 +0530
-Message-ID: <200603192048.08780.samjnaa@gmail.com>
+Subject: Virtual functions and destructors
+Date: Sun, 19 Mar 2006 20:50:21 +0530
+Message-ID: <200603192050.22014.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -11,16 +11,12 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Suppose there is a function f() which returns an integer and does not change 
-any value of the class it belongs to, should I declare it as:
+I did not get what is intended to be conveyed by:
 
-const int f();
+http://charm.cs.uiuc.edu/users/olawlor/ref/examples/cpp/virtual.cpp
+http://charm.cs.uiuc.edu/users/olawlor/ref/examples/cpp/virtual_destructor.cpp
 
-or 
-
-int f() const;
-
-What is the difference? Thank you.
+Please elucidate. Thank you.
 
 -- 
 
