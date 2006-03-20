@@ -1,65 +1,43 @@
-From: "Uday Karan" <uday.karan@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: Syntax of constructor
-Date: Mon, 20 Mar 2006 09:04:31 +0530
-Message-ID: <4f2e7cd30603191934j468334eam34ecca31e49bf649@mail.gmail.com>
-References: <200603200841.16674.samjnaa@gmail.com>
+Date: Mon, 20 Mar 2006 13:47:20 +0530
+Message-ID: <200603201347.20132.samjnaa@gmail.com>
+References: <200603200841.16674.samjnaa@gmail.com> <4f2e7cd30603191934j468334eam34ecca31e49bf649@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603200841.16674.samjnaa@gmail.com>
+In-Reply-To: <4f2e7cd30603191934j468334eam34ecca31e49bf649@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>, linux-c-programming@vger.kernel.org
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-That's called the initializer list.  I suggest you get a book that
-explains these things.  C++ Primer or The C++ Programming Language
-would be good.
+Monday, 20 March 2006 09:04 samaye tvayaa likhitam:
 
-Here is a link that explains this particular topic:
-http://www.blueturnip.com/projects/edu/cs/cpp/initializer-lists.html
+> That's called the initializer list.  I suggest you get a book that
+> explains these things.  C++ Primer or The C++ Programming Language
+> would be good.
 
--Uday
+Thanks. I am reading/referring to a PDF copy of Thinking in C++ but of course 
+without knowing the name of this syntax "initializer list" I cannot search 
+through the PDF.
 
-On 3/20/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> A header file contains the following class declaration:
->
-> class CAA2DCoordinate
-> {
-> public:
-> //Constructors / Destructors
->         CAA2DCoordinate(): X(0), Y(0) {};
->
-> //member variables
->   double X;
->   double Y;
-> };
->
-> Now what I do not understand is the line:
->
->         CAA2DCoordinate(): X(0), Y(0) {};
->
-> I would have thought it would be:
->
-> CAA2DCoordinate() { X = 0; Y = 0; }
->
-> just like the QDate constructor:
->
->     QDate() { jd = 0; }
->
-> What is the meaning of the colon ":" here, and what are the (0) things, and
-> why are X and Y *outside* the braces?
->
-> Thanks for your patience.
->
-> --
->
-> Tux #395953 resides at http://samvit.org
-> playing with KDE 3.51 on SUSE Linux 10.0
-> $ date [] CCE +2006-03-20 W12-1 UTC+0530
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+Now what I would like to know is: Is
+
+> >         CAA2DCoordinate(): X(0), Y(0) {};
+
+much different from:
+
+> > CAA2DCoordinate() { X = 0; Y = 0; }
+
+? Seeing as X and Y are not const-s, I do not see the point in initializing 
+outside the (empty) braces. If they were const-s, TICP tells me that they 
+must be initialized before the *start* of the function so the X(0) syntax is 
+necessary. But here they are not const-s...
+
+-- 
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-03-20 W12-1 UTC+0530
