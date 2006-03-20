@@ -1,14 +1,14 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: const int f() and int f() const
-Date: Mon, 20 Mar 2006 13:01:01 +0000
-Message-ID: <17438.42893.739210.819722@cerise.gclements.plus.com>
-References: <200603192048.08780.samjnaa@gmail.com>
-	<6a00c8d50603190945u2c66339agbdb43c023a725097@mail.gmail.com>
-	<200603200529.47782.samjnaa@gmail.com>
+Subject: Re: Syntax of constructor
+Date: Mon, 20 Mar 2006 13:09:20 +0000
+Message-ID: <17438.43392.485814.611416@cerise.gclements.plus.com>
+References: <200603200841.16674.samjnaa@gmail.com>
+	<4f2e7cd30603191934j468334eam34ecca31e49bf649@mail.gmail.com>
+	<200603201347.20132.samjnaa@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603200529.47782.samjnaa@gmail.com>
+In-Reply-To: <200603201347.20132.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
@@ -18,50 +18,36 @@ Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 Shriramana Sharma wrote:
 
-> > By declaring a const return type you are promising that the original
-> > variable (inside the function's stack frame) will not be modified.
+> > That's called the initializer list.  I suggest you get a book that
+> > explains these things.  C++ Primer or The C++ Programming Language
+> > would be good.
 > 
-> But then this function would have to return the exact same value for each and 
-> every time it is called, no?
+> Thanks. I am reading/referring to a PDF copy of Thinking in C++ but of course 
+> without knowing the name of this syntax "initializer list" I cannot search 
+> through the PDF.
 > 
-> > Marks a function as const allowing it to be called by const objects
-> > (btw, const objects can only call const member functions).  This
-> > construct is usually found as part of member functions declarations,
-> > which are known to be immutable.
+> Now what I would like to know is: Is
 > 
-> OK so int f() const means function f() does not change any members of the 
-> class foo of which it is a member, and therefore it is safe for constant 
-> instances of the class foo to call this function f().
+> > >         CAA2DCoordinate(): X(0), Y(0) {};
 > 
-> OTOH, just putting const *before* the function name only means that the 
-> *output* of the function is a constant value, say for example the function
-
-Putting "const" before the *return type* means that the return value
-is a constant.
-
-In that situation, "const" is just a normal type qualifier, with the
-same meaning as when used in variable and parameter declarations.
-
-> const int one() { return 1; }
+> much different from:
 > 
-> and it does not assure the compiler that it is okay for a *non-const* instance 
-> of class foo to call this function.
+> > > CAA2DCoordinate() { X = 0; Y = 0; }
+> 
+> ? Seeing as X and Y are not const-s, I do not see the point in initializing 
+> outside the (empty) braces. If they were const-s, TICP tells me that they 
+> must be initialized before the *start* of the function so the X(0) syntax is 
+> necessary. But here they are not const-s...
 
-You can use *any* method on a mutable (non-const) instance.
+In which case, both forms are valid, and equivalent.
 
-The above indicates that one() returns a "const int", that's all.
+You also need to use an initialiser if you need to initialise the
+member variable through a constructor.
 
-> In this case, the compiler will *not* accept calls to the function one() as a 
-> member of a *non-const* instance of foo, even though the function does not 
-> change any member of foo, right?
-
-Wrong. It will not allow the method to be used on *const* instances,
-as the method itself isn't declared as "const".
-
-If a method doesn't modify the instance, you *should* declare it as
-"const". There is no reason not to; const methods can be used on both
-const and mutable instances, while methods which aren't declared const
-can only be used on mutable instances.
+Given that you have to use an initialiser in some cases, and you are
+allowed to use it in the other cases (i.e. non-const primitive types),
+you may as well *always* use initialisers to initialise member
+variables, rather than a mix of initialisers and assignments.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
