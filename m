@@ -1,48 +1,63 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Debugging ephemeris code
-Date: Wed, 22 Mar 2006 05:30:21 +0530
-Message-ID: <200603220530.21282.samjnaa@gmail.com>
+From: "openbsd shen" <openbsd.shen@gmail.com>
+Subject: Read /dev/kmem failed
+Date: Wed, 22 Mar 2006 09:29:18 +0800
+Message-ID: <6ff3e7140603211729s7c64b1f4n@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-In the LGPL ephcom library (53 KB) available from:=20
-http://ephemeris.com/software.html do I get an error when using make or=
-=20
-trying to compile ephcom.c directly:
+struct descriptor_idt {
+        unsigned short offset_low, seg_selector;
+        unsigned char reserved, flag;
+        unsigned short offset_high;
+};
 
-gcc -g -O2   -c -o ephcom.o ephcom.c
-ephcom.c: In function =E2=80=98ephcom_writebinary_block=E2=80=99:
-ephcom.c:1418: error: conflicting types for =E2=80=98ephcom_outdouble=E2=
-=80=99
-ephcom.c:1266: error: previous declaration of =E2=80=98ephcom_outdouble=
-=E2=80=99 was here
-ephcom.c: At top level:
-ephcom.c:1767: warning: =E2=80=98ephcom_cheby=E2=80=99 declared inline =
-after being called
-ephcom.c:1767: warning: previous implicit declaration of =E2=80=98ephco=
-m_cheby=E2=80=99 was=20
-here
-make: *** [ephcom.o] Error 1
+       .......
 
-So what shall I do to safely avert this error? (I don't want to mess up=
- things=20
-so I ask the experts here.)
+        struct descriptor_idt *descriptor;
+       .......
 
-Thank you very much in advance.
+        fd_kmem = open("/dev/kmem", O_RDWR);
+        ptr_idt = get_addr_idt();
+        descriptor = (struct descriptor_idt *) malloc(sizeof(struct
+descriptor_idt));
+        ......
+        readkmem(descriptor, ptr_idt + 8 * x, sizeof(struct descriptor_idt));
 
---=20
+        ......
 
-Tux #395953 resides at http://samvit.org
-playing with KDE 3.51 on SUSE Linux 10.0
-$ date [] CCE +2006-03-22 W12-3 UTC+0530
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+void readkmem(void *m, unsigned off, int size)
+{
+        int i;
+        if (lseek(fd_kmem, off, SEEK_SET) != off) {
+                fprintf(stderr, "Error lseek. Are you root? \n");
+                exit(-1);
+        }
+        if ((i = read(fd_kmem, m, size)) != size) {
+                fprintf(stderr, "Error read kmem, only read %d bytes\n",i);
+                perror("read");
+                exit(-1);
+        }
+}
+
+unsigned long get_addr_idt(void)
+{
+        unsigned char idtr[6];
+        unsigned long idt;
+        __asm__ volatile ("sidt %0":"=m" (idtr));
+        idt = *((unsigned long *) &idtr[2]);
+        return (idt);
+}
+----------------------------------------------------------------------
+When run it, the output is:
+
+Error read kmem, only read 0 bytes
+read: Success
+
+
+I don't know why read error?
