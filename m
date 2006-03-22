@@ -1,58 +1,83 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Debugging ephemeris code
-Date: Wed, 22 Mar 2006 15:39:32 +0000
-Message-ID: <17441.28596.565556.430774@cerise.gclements.plus.com>
-References: <200603220530.21282.samjnaa@gmail.com>
+Subject: Re: Read /dev/kmem failed
+Date: Wed, 22 Mar 2006 16:04:18 +0000
+Message-ID: <17441.30082.233664.689666@cerise.gclements.plus.com>
+References: <6ff3e7140603211729s7c64b1f4n@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603220530.21282.samjnaa@gmail.com>
+In-Reply-To: <6ff3e7140603211729s7c64b1f4n@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: openbsd shen <openbsd.shen@gmail.com>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
 
-Shriramana Sharma wrote:
+openbsd shen wrote:
 
-> In the LGPL ephcom library (53 KB) available from:=20
-> http://ephemeris.com/software.html do I get an error when using make =
-or=20
-> trying to compile ephcom.c directly:
->=20
-> gcc -g -O2   -c -o ephcom.o ephcom.c
-> ephcom.c: In function =1B-F=A1ephcom_writebinary_block=A2:=1B-A
-> ephcom.c:1418: error: conflicting types for =1B-F=A1ephcom_outdouble=A2=
-=1B-A
-> ephcom.c:1266: error: previous declaration of =1B-F=A1ephcom_outdoubl=
-e=A2 was here=1B-A
-> ephcom.c: At top level:
-> ephcom.c:1767: warning: =1B-F=A1ephcom_cheby=A2 declared inline after=
- being called=1B-A
-> ephcom.c:1767: warning: previous implicit declaration of =1B-F=A1ephc=
-om_cheby=A2 was =1B-A
-> here
-> make: *** [ephcom.o] Error 1
->=20
-> So what shall I do to safely avert this error? (I don't want to mess =
-up things=20
-> so I ask the experts here.)
+> struct descriptor_idt {
+>         unsigned short offset_low, seg_selector;
+>         unsigned char reserved, flag;
+>         unsigned short offset_high;
+> };
+> 
+>        .......
+> 
+>         struct descriptor_idt *descriptor;
+>        .......
+> 
+>         fd_kmem = open("/dev/kmem", O_RDWR);
+>         ptr_idt = get_addr_idt();
+>         descriptor = (struct descriptor_idt *) malloc(sizeof(struct descriptor_idt));
+>         ......
+>         readkmem(descriptor, ptr_idt + 8 * x, sizeof(struct descriptor_idt));
+> 
+>         ......
+> 
+> void readkmem(void *m, unsigned off, int size)
+> {
+>         int i;
+>         if (lseek(fd_kmem, off, SEEK_SET) != off) {
+>                 fprintf(stderr, "Error lseek. Are you root? \n");
+>                 exit(-1);
+>         }
+>         if ((i = read(fd_kmem, m, size)) != size) {
+>                 fprintf(stderr, "Error read kmem, only read %d bytes\n",i);
+>                 perror("read");
+>                 exit(-1);
+>         }
+> }
+> 
+> unsigned long get_addr_idt(void)
+> {
+>         unsigned char idtr[6];
+>         unsigned long idt;
+>         __asm__ volatile ("sidt %0":"=m" (idtr));
+>         idt = *((unsigned long *) &idtr[2]);
+>         return (idt);
+> }
+> ----------------------------------------------------------------------
+> When run it, the output is:
+> 
+> Error read kmem, only read 0 bytes
+> read: Success
+> 
+> 
+> I don't know why read error?
 
-Change line 1266 from:
+A return value of 0 from read indicates that you are trying to read
+beyond the end of the file.
 
-	double ephcom_outdouble(FILE *, double);
-to:
-	int ephcom_outdouble(FILE *, double);
+In this case, it's because you are interpreting the IDT address in the
+wrong address space. ptr_idt will be in the process' virtual address
+space; on x86, it will be above the 3Gb mark, and your /dev/kmem
+probably isn't that large (even if it was, you would be reading the
+wrong data).
 
-And report this issue to bugs@ephemeris.com.
+If you can translate it to a physical address, you can use that as an
+offset into /dev/mem, but I have no idea how to perform that
+translation from user-space.
 
-The return value is never used anyhow.
-
---=20
+-- 
 Glynn Clements <glynn@gclements.plus.com>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
