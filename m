@@ -1,57 +1,58 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Compile error caused by case of filename extension
-Date: Sat, 25 Mar 2006 13:33:49 +0530
-Message-ID: <200603251333.50127.samjnaa@gmail.com>
+From: B S Srinidhi <srinidhi-c@deeproot.co.in>
+Subject: Re: Compile error caused by case of filename extension
+Date: Sat, 25 Mar 2006 14:05:30 +0530
+Message-ID: <1143275731.18472.44.camel@avirat>
+References: <200603251333.50127.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <200603251333.50127.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-When the contents of TESTING.C are:
+Hi,
 
-#include "stdio.h"
-void main(void)
-{
-	printf("\n%d\n", ( -0.25 < 0) ? 2 : 4);
-}
+On Sat, 2006-03-25 at 13:33 +0530, Shriramana Sharma wrote:
+[..]
+> $ gcc -o TESTING TESTING.C
+> /tmp/ccEnQk4o.o:(.eh_frame+0x11): undefined reference to 
+> `__gxx_personality_v0'
+> collect2: ld returned 1 exit status
+> 
+> But if I change the input file name extension to testing.c or even TESTING.c 
+> (small letters) no problems were got. Why is this?
+> 
 
-Upon trying to compile:
+From the man page of gcc(1):
 
-$ gcc -o TESTING TESTING.C
-TESTING.C:3: error: =E2=80=98::main=E2=80=99 must return =E2=80=98int=E2=
-=80=99
+file.cc
+file.cp
+file.cxx
+file.cpp
+file.CPP
+file.c++
+file.C
+    C++ source code which must be preprocessed. Note that in .cxx, the
+last two letters must both be literally x.  Likewise, .C refers to a
+literal capital C.
 
-Then I changed the file to:
+That means, gcc will consider a source file with name TESTING.C to be a
+C++ source code. Thus trying to include / link with some special
+libraries. 
 
-#include "stdio.h"
-int main(void)
-{
-	printf("\n%d\n", ( -0.25 < 0) ? 2 : 4);
-	return 1;
-}
+To compile your TESTING.C, use something like:
 
-Then I got:
+$ g++ -o TESTING TESTING.C
 
-$ gcc -o TESTING TESTING.C
-/tmp/ccEnQk4o.o:(.eh_frame+0x11): undefined reference to=20
-`__gxx_personality_v0'
-collect2: ld returned 1 exit status
+It 'll compile correctly.
 
-But if I change the input file name extension to testing.c or even TEST=
-ING.c=20
-(small letters) no problems were got. Why is this?
+Hope this helps.
 
---=20
+Srinidhi.
+-- 
+ASCII ribbon campaign ( )         B S Srinidhi
+ - against HTML email  X          http://srinidhi.deeproot.co.in
+             & vCards / \         DeepRoot Linux
 
-Tux #395953 resides at http://samvit.org
-playing with KDE 3.51 on SUSE Linux 10.0
-$ date [] CCE +2006-03-25 W12-6 UTC+0530
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
