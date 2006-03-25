@@ -1,39 +1,57 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Runtime memory organization for a process
-Date: Fri, 24 Mar 2006 14:10:48 +0100
-Message-ID: <6a00c8d50603240510x3da819dck76ab142447d08e8f@mail.gmail.com>
-References: <3ce33f6c0603240444m39ffb49bk7540a291a0959ade@mail.gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Compile error caused by case of filename extension
+Date: Sat, 25 Mar 2006 13:33:49 +0530
+Message-ID: <200603251333.50127.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3ce33f6c0603240444m39ffb49bk7540a291a0959ade@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-On 3/24/06, Shrikanth Ramanath <shriek.007@gmail.com> wrote:
-> If I run a executable for a process ( say I have written a simple c
-> program and then compiled it to create a a.out executable), so on the
-> bash console I run ./a.out, now my query is can I use GDB and find out
-> variable stored in stack , heap, say more refined I want to see the
-> bss , global storage area for a process using gdb  ... how can I do
-> that ??
+When the contents of TESTING.C are:
 
-To attach to an already running process, enter "attach <PID>" in gdb,
-to specifiy a target to debug, enter "gdb a.out" on the console.
+#include "stdio.h"
+void main(void)
+{
+	printf("\n%d\n", ( -0.25 < 0) ? 2 : 4);
+}
 
-To view the current stack, enter "stacktrace" or "stacktrace n" to
-return only n innermost stack frames.  You can examine a stack frame
-by entering "frame n" where n is either a frame number or an address;
-use frame up/down to jump up and down the stack.  You may also want to
-try "info stack [n]" to view more info about the local variables among
-other things.
+Upon trying to compile:
 
-To examine use "info heap".
+$ gcc -o TESTING TESTING.C
+TESTING.C:3: error: =E2=80=98::main=E2=80=99 must return =E2=80=98int=E2=
+=80=99
 
-I recommend reading the official gdb manual for more infos and
-details. <http://physics.usask.ca/~angie/ep414/labmanual/GNUdoc/gdb/gdb_toc.html>.
+Then I changed the file to:
 
-	\Steve
+#include "stdio.h"
+int main(void)
+{
+	printf("\n%d\n", ( -0.25 < 0) ? 2 : 4);
+	return 1;
+}
+
+Then I got:
+
+$ gcc -o TESTING TESTING.C
+/tmp/ccEnQk4o.o:(.eh_frame+0x11): undefined reference to=20
+`__gxx_personality_v0'
+collect2: ld returned 1 exit status
+
+But if I change the input file name extension to testing.c or even TEST=
+ING.c=20
+(small letters) no problems were got. Why is this?
+
+--=20
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-03-25 W12-6 UTC+0530
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
