@@ -1,51 +1,31 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Need for const in function argument list
-Date: Sun, 26 Mar 2006 15:38:43 +0000
-Message-ID: <6a00c8d50603260738u2a0b35eau90fb22d93b16e289@mail.gmail.com>
-References: <200603261614.39708.samjnaa@gmail.com>
-	 <6a00c8d50603260257u18642532l7b88ae11c86e46cb@mail.gmail.com>
-	 <200603261908.36723.samjnaa@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Accessing a class' member functions
+Date: Sun, 26 Mar 2006 17:09:08 +0100
+Message-ID: <17446.48292.549427.996203@cerise.gclements.plus.com>
+References: <200603260931.05639.samjnaa@gmail.com>
+	<6a00c8d50603260015ud777b7fgfbfa02f567cf8b@mail.gmail.com>
+	<200603261809.18686.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603261908.36723.samjnaa@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <200603261809.18686.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Shriramana Sharma <samjnaa@gmail.com>
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-On 3/26/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> Sunday, 26 March 2006 16:27 samaye, Steve Graegert alekhiit:
+
+Shriramana Sharma wrote:
+
+> > Please note that static member functions can only access global data
+> > or static class data and can not be declared virtual.
 > 
-> > Because the format (the string to display) is provided as a constant
-> > expression and it is not being modified:
-> > 	printf("%s\n", "abc");
-> > 	printf("%s\n", mystring);
-> > In both cases the format argument is a constant string.
-> 
-> Why, the following works as well:
-> 
-> #include "stdio.h"
-> void main(void)
-> {
-> 	char s[10] = "\n%s\n\n";
-> 	printf(s, "hello");
-> }
-> 
-> Here s is not a const char *. It is a variable char *. That actually
-> compiled  and executed. 
+> So if I want some globally accessible function that is not limited to 
+> accessing global or static data what should I do?
 
-Yes, it compiles and why should it not do so?  It's a __string constant__, since it cannot be changed in any way.  It's effectively the same as the statement
+Huh? What other data do you want to access? To access the member
+variables of an instance, you need to actually /have/ an instance.
 
-	char *s = "\n%s\n\n"
-
-The situation is different with malloc(2).  It allows for dynamic allocation of memory, thus turning string constants into dynamic data structures:
-
-	char * s;
-	s = (char *) malloc(100);
-
-Every string inside double quotes (" ") is a character constant.
- 
-	\Steve
-
+-- 
+Glynn Clements <glynn@gclements.plus.com>
