@@ -1,42 +1,29 @@
-From: Jan Engelhardt <jengelh@linux01.gwdg.de>
-Subject: Re: Virtual Serial Port
-Date: Sun, 26 Mar 2006 11:31:19 +0200 (MEST)
-Message-ID: <Pine.LNX.4.61.0603261127580.22145@yvahk01.tjqt.qr>
-References: <442582B8.8040403@gmail.com> <Pine.LNX.4.61.0603251945100.29793@yvahk01.tjqt.qr>
- <4425FB22.7040405@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Need for const in function argument list
+Date: Sun, 26 Mar 2006 16:14:39 +0530
+Message-ID: <200603261614.39708.samjnaa@gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4425FB22.7040405@gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Mikado <mikado4vn@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
->> You could write a device driver implementing virtual serial ports. Then you 
->> just add an ioctl that connects/disconnects virtual ports to real ports if 
->> desired.
->> I do not quite see what this would be good for, but I am sure it's 
->> good for learning or for fun. :)
->
->My purpose is to provide serial interfaces for debugging. My real box
->acts as remote host connecting to VMWare box by a *virtual* serial cable
->so that I can set up a debugging environment.
->
-Ah! You don't want to have the X11 overhead of VMware. Quite an idea.
-If I get it right, your setup looks like:
+In the Qt constructor for the DateTime class, I see:
 
-  guest writes to /dev/ttyS0
-  vmware connects its virtual S0 to the host's ttyFakeS0
-  minicom on the host to ttyFakeS0
-or even
-  vmware S0 to host's ttyS0
-  other remote machine do minicom to ttyS0
+QDateTime::QDateTime(const QDate &date)
 
-The reason for FakeS0 is that vmware does not know about ptys, 
-unfortunately.
+what is the need for the keyword const here? If it is to indicate that the 
+date variable does not change, then in very many such places should the const 
+keyword be used. But it is not.
 
+As a related question, in the syntax for printf, we have printf(const char 
+*format) -- why should we have const here?
 
-Jan Engelhardt
 -- 
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-03-26 W12-7 UTC+0530
