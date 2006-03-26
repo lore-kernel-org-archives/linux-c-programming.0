@@ -1,56 +1,42 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Accessing a class' member functions
-Date: Sun, 26 Mar 2006 08:15:58 +0000
-Message-ID: <6a00c8d50603260015ud777b7fgfbfa02f567cf8b@mail.gmail.com>
-References: <200603260931.05639.samjnaa@gmail.com>
+From: Jan Engelhardt <jengelh@linux01.gwdg.de>
+Subject: Re: Virtual Serial Port
+Date: Sun, 26 Mar 2006 11:31:19 +0200 (MEST)
+Message-ID: <Pine.LNX.4.61.0603261127580.22145@yvahk01.tjqt.qr>
+References: <442582B8.8040403@gmail.com> <Pine.LNX.4.61.0603251945100.29793@yvahk01.tjqt.qr>
+ <4425FB22.7040405@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603260931.05639.samjnaa@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <4425FB22.7040405@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Mikado <mikado4vn@gmail.com>
+Cc: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On 3/26/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> I need to use a class' member functions without creating an instance of that
-> class. Is that possible? I have seen someone do this in their C++ library but
-> it does not work for me, so I am wondering what I did wrong.
+>> You could write a device driver implementing virtual serial ports. Then you 
+>> just add an ioctl that connects/disconnects virtual ports to real ports if 
+>> desired.
+>> I do not quite see what this would be good for, but I am sure it's 
+>> good for learning or for fun. :)
+>
+>My purpose is to provide serial interfaces for debugging. My real box
+>acts as remote host connecting to VMWare box by a *virtual* serial cable
+>so that I can set up a debugging environment.
+>
+Ah! You don't want to have the X11 overhead of VMware. Quite an idea.
+If I get it right, your setup looks like:
 
-What you've have seen are static member functions.  They can be called
-withouth creating an instance of the class they are defined in.
+  guest writes to /dev/ttyS0
+  vmware connects its virtual S0 to the host's ttyFakeS0
+  minicom on the host to ttyFakeS0
+or even
+  vmware S0 to host's ttyS0
+  other remote machine do minicom to ttyS0
 
-Please note that static member functions can only access global data
-or static class data and can not be declared virtual.  Since stattic
-member functions exist without class instances, you cannot use the
-implicit this pointer to access non-static members.
+The reason for FakeS0 is that vmware does not know about ptys, 
+unfortunately.
 
-To access static members you simply use the class name and append the
-member using the scope operator: MyClass::myStaticMember.
 
-Example:
-
--- BEGIN ---
-#include <iostream>
-#include <cstdlib>
-#include <ctime.h>
-
-class C {
-private:
-    static const int MAX_NUM = 10;
-public:
-
-    static void get_num () {
-        srand((unsigned)time(NULL));
-        return (int)(MAX_NUM * rand() / (RAND_MAX + 1.0));
-    }
-};
-
-int main(void) {
-    cout << C::get_num() << "\n";
-}
-
---- END ---
-
-	\Steve
+Jan Engelhardt
+-- 
