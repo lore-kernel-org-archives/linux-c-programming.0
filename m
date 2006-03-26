@@ -1,33 +1,29 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: Integer arithmetic vs double precision arithmetic
-Date: Sun, 26 Mar 2006 17:12:11 +0100
-Message-ID: <17446.48475.703425.729255@cerise.gclements.plus.com>
-References: <200603262044.37068.samjnaa@gmail.com>
+Date: Sun, 26 Mar 2006 21:54:28 +0530
+Message-ID: <200603262154.28395.samjnaa@gmail.com>
+References: <200603262044.37068.samjnaa@gmail.com> <6a00c8d50603260812q1ebddc26uae1c9b70bbe0d46e@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603262044.37068.samjnaa@gmail.com>
+In-Reply-To: <6a00c8d50603260812q1ebddc26uae1c9b70bbe0d46e@mail.gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Sunday, 26 March 2006 21:42 samaye tvayaa likhitam:
 
-Shriramana Sharma wrote:
+> Why do you consider doubles to store time values?
 
-> I am trying to work out whether to use an integer or a double for my internal 
-> storage variable of a class meant to store a time.
-> 
-> Qt uses an unsigned integer with millisecond being the best precision, but I 
-> am wondering, why I should lose the extra digits of precision that I could 
-> get if I used a double.
-> 
-> Is there a marked increase in computing speed if integer arithmetic is used 
-> compared to double precision?
+Oh, I need to use fractional days (in Julian Day Numbers) for astronomical 
+calculations.
 
-It depends upon the architecture, but a double could be a lot slower
-than an int.
+P.S: Thanks Steve and Glynn, for your feedback on my questions.
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.0
+$ date [] CCE +2006-03-26 W12-7 UTC+0530
