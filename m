@@ -1,68 +1,38 @@
-From: <krishna.vamsi@wipro.com>
-Subject: RE: Startup function before main.
-Date: Mon, 27 Mar 2006 17:52:53 +0530
-Message-ID: <DC91351678E31E4FB24B551221F507EC028D5065@blr-itp-msg.wipro.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Integer arithmetic vs double precision arithmetic
+Date: Mon, 27 Mar 2006 18:13:00 +0100
+Message-ID: <17448.7452.936006.434903@cerise.gclements.plus.com>
+References: <200603262044.37068.samjnaa@gmail.com>
+	<200603270505.42464.samjnaa@gmail.com>
+	<17447.14781.949111.245955@cerise.gclements.plus.com>
+	<200603271402.08010.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
+In-Reply-To: <200603271402.08010.samjnaa@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: uday.karan@gmail.com
-Cc: linux-c-programming@vger.kernel.org
-
-This is aimed at learning at Learning Linux Environment and c language.
-To Get to know better.
-
-I want to create inter process communication environment where every
-process is linked to a symbol table. This linking is done through
-Startup routine before main. The communication is achieved by modifying
-or Adding new entries to the Symbol Table.
-
-This is very much analogous to the Linux Kernel Symbol Table Concept
-where every module can use its symbol table. My effort is to create the
-similar environment.
+To: Shriramana Sharma <samjnaa@gmail.com>
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 
--Vamsi
------Original Message-----
-From: Uday Karan [mailto:uday.karan@gmail.com] 
-Sent: Monday, March 27, 2006 5:32 PM
-To: Vamsi Krishna (WT01 - Wireless Networks and Devices)
-Cc: linux-c-programming@vger.kernel.org
-Subject: Re: Startup function before main.
+Shriramana Sharma wrote:
 
+> > E.g. The Unix API uses either seconds since midnight UTC, Jan 1st 1970
+> > (time(), typically 32 bits) or seconds and microseconds since that
+> > time (gettimeofday(), typically 32 bits for each component), while
+> > Java uses milliseconds since that date (64 bits).
+> 
+> Oh! I did not know that Java can return system time to millisecond
+> precision. 
 
-I really don't understand what is the need to have a
-initialization/start up routine before main().  Main is just like any
-other function except that it works as a default entry point to which
-the glibc start up code makes a call to.
+To be precise, it returns the time at millisecond *granularity*; the
+precision is limited by the OS.
 
-You can have a function main() as your start up routine that calls your
-application's main functions app_main() or something similar. 
-You can do all your start up code in main itself and then call
-app_main().
+> Is there a C or C++ function that can do that?
 
-Simulating what you are trying to achieve here should not be very
-difficult.  You can tweak your environment and stuff in main().
+gettimeofday() returns the current time at microsecond granularity.
 
-On 3/27/06, krishna.vamsi@wipro.com <krishna.vamsi@wipro.com> wrote:
-> Hi List,
->
-> Before Executing the main function, a startup routine will be executed
-
-> which will set up the initial environment for the process.
->
-> This Startup routine will be supplied by the kernel and linked by the 
-> Linker. My question is : Can we add one more startup routine before 
-> executing the main program, if yes how??
->
->
-> -Vamsi
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in the body of a message to 
-> majordomo@vger.kernel.org More majordomo info at  
-> http://vger.kernel.org/majordomo-info.html
->
+-- 
+Glynn Clements <glynn@gclements.plus.com>
