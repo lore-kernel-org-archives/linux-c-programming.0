@@ -1,52 +1,36 @@
-From: "Holy Aavu" <holyaavu@gmail.com>
-Subject: Re: Virtual Serial Port
-Date: Mon, 27 Mar 2006 16:55:22 +0530
-Message-ID: <bd7767e40603270325g71d39837if3bca8a05be39ace@mail.gmail.com>
-References: <442582B8.8040403@gmail.com>
+From: "Steve Graegert" <graegerts@gmail.com>
+Subject: Re: Startup function before main.
+Date: Mon, 27 Mar 2006 13:48:16 +0200
+Message-ID: <6a00c8d50603270348j3966c663w3ff789c809e65228@mail.gmail.com>
+References: <DC91351678E31E4FB24B551221F507EC028D5063@blr-itp-msg.wipro.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <442582B8.8040403@gmail.com>
+In-Reply-To: <DC91351678E31E4FB24B551221F507EC028D5063@blr-itp-msg.wipro.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: mikado4vn@gmail.com
-Cc: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On 3/25/06, Mikado <mikado4vn@gmail.com> wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
+On 3/27/06, krishna.vamsi@wipro.com <krishna.vamsi@wipro.com> wrote:
+> Hi List,
 >
-> My machine has only one serial port. Now I want to add more *software*
-> (virtual) serial ports. I also want to make a virtual serial cable
-> between a real serial port and a virtual one OR between virtual ports.
-> Is there any way to solve that problem in our universe?
+> Before Executing the main function, a startup routine will be executed
+> which will set up the initial environment for the process.
+>
+> This Startup routine will be supplied by the kernel and linked by the
+> Linker. My question is : Can we add one more startup routine before
+> executing the main program, if yes how??
 
-I have a doubt... I am not sure if you can have a full working
-solution to make all programs run using the virtual serial ports.
-Because, there *might* be some programs which actually use the 'in'
-and 'out' instructions of the processor directly from a user space
-program. (After calling iopl/ioperm etc to elevate their I/O
-privileges to directly use the IO ports) I dont think even a kernel
-change can help in that case...
+No, not programmatically, only by patching the executable or object file.
+You can call other functions from within the constructor:
 
-Is my understanding correct or am I missing something?
+	void __attribute__ ((constructor)) my_ctor() {
+		int i = my_func();
+	}
 
->
-> Thanks,
-> Mikado.
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v1.4.2.2 (GNU/Linux)
-> Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
->
-> iD8DBQFEJYK3NWc9T2Wr2JcRAro+AKCMMf5So3sPJ+gXzSN+eYk0RXBxsQCg2V6I
-> UK2pvLjQIECVc3e1//7d0WE=
-> =GroY
-> -----END PGP SIGNATURE-----
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-kernel" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> Please read the FAQ at  http://www.tux.org/lkml/
->
+You should not need a second constructor.  Who shall decide which one
+comes first and how should it be done?
+
+	\Steve
