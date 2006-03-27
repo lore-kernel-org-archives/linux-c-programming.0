@@ -1,38 +1,49 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Integer arithmetic vs double precision arithmetic
-Date: Mon, 27 Mar 2006 18:13:00 +0100
-Message-ID: <17448.7452.936006.434903@cerise.gclements.plus.com>
-References: <200603262044.37068.samjnaa@gmail.com>
-	<200603270505.42464.samjnaa@gmail.com>
-	<17447.14781.949111.245955@cerise.gclements.plus.com>
-	<200603271402.08010.samjnaa@gmail.com>
+Subject: Re: Virtual Serial Port
+Date: Mon, 27 Mar 2006 18:29:43 +0100
+Message-ID: <17448.8455.670409.748372@cerise.gclements.plus.com>
+References: <442582B8.8040403@gmail.com>
+	<bd7767e40603270325g71d39837if3bca8a05be39ace@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200603271402.08010.samjnaa@gmail.com>
+In-Reply-To: <bd7767e40603270325g71d39837if3bca8a05be39ace@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: Holy Aavu <holyaavu@gmail.com>
+Cc: mikado4vn@gmail.com, linux-c-programming@vger.kernel.org
 
 
-Shriramana Sharma wrote:
+Holy Aavu wrote:
 
-> > E.g. The Unix API uses either seconds since midnight UTC, Jan 1st 1970
-> > (time(), typically 32 bits) or seconds and microseconds since that
-> > time (gettimeofday(), typically 32 bits for each component), while
-> > Java uses milliseconds since that date (64 bits).
+> > My machine has only one serial port. Now I want to add more *software*
+> > (virtual) serial ports. I also want to make a virtual serial cable
+> > between a real serial port and a virtual one OR between virtual ports.
+> > Is there any way to solve that problem in our universe?
 > 
-> Oh! I did not know that Java can return system time to millisecond
-> precision. 
+> I have a doubt... I am not sure if you can have a full working
+> solution to make all programs run using the virtual serial ports.
+> Because, there *might* be some programs which actually use the 'in'
+> and 'out' instructions of the processor directly from a user space
+> program. (After calling iopl/ioperm etc to elevate their I/O
+> privileges to directly use the IO ports) I dont think even a kernel
+> change can help in that case...
+> 
+> Is my understanding correct or am I missing something?
 
-To be precise, it returns the time at millisecond *granularity*; the
-precision is limited by the OS.
+1. Any such programs will only work with "PC-style" serial ports (8250
+and compatible UARTs); they won't work with other serial hardware
+(e.g. multi-port serial cards). Also, such programs would require root
+privilege. Consequently, most programs which use serial ports limit
+themselves to using the /dev/tty* devices and their associated ioctl()
+calls.
 
-> Is there a C or C++ function that can do that?
-
-gettimeofday() returns the current time at microsecond granularity.
+2. You could change the iopl() system call so that it doesn't affect
+the IOPL bits in the EFLAGS register. Instead, you would handle the
+resulting exceptions, trapping attempts to access the UARTs and
+redirecting them to the "virtual UART" driver. The ioperm() system
+call would need similar modifications.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
