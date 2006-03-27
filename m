@@ -1,49 +1,38 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Virtual Serial Port
-Date: Mon, 27 Mar 2006 18:29:43 +0100
-Message-ID: <17448.8455.670409.748372@cerise.gclements.plus.com>
-References: <442582B8.8040403@gmail.com>
-	<bd7767e40603270325g71d39837if3bca8a05be39ace@mail.gmail.com>
+Subject: Re: Startup function before main.
+Date: Mon, 27 Mar 2006 18:48:12 +0100
+Message-ID: <17448.9564.516559.483360@cerise.gclements.plus.com>
+References: <DC91351678E31E4FB24B551221F507EC028D5063@blr-itp-msg.wipro.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <bd7767e40603270325g71d39837if3bca8a05be39ace@mail.gmail.com>
+In-Reply-To: <DC91351678E31E4FB24B551221F507EC028D5063@blr-itp-msg.wipro.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Holy Aavu <holyaavu@gmail.com>
-Cc: mikado4vn@gmail.com, linux-c-programming@vger.kernel.org
+To: krishna.vamsi@wipro.com
+Cc: linux-c-programming@vger.kernel.org
 
 
-Holy Aavu wrote:
+krishna.vamsi@wipro.com wrote:
 
-> > My machine has only one serial port. Now I want to add more *software*
-> > (virtual) serial ports. I also want to make a virtual serial cable
-> > between a real serial port and a virtual one OR between virtual ports.
-> > Is there any way to solve that problem in our universe?
-> 
-> I have a doubt... I am not sure if you can have a full working
-> solution to make all programs run using the virtual serial ports.
-> Because, there *might* be some programs which actually use the 'in'
-> and 'out' instructions of the processor directly from a user space
-> program. (After calling iopl/ioperm etc to elevate their I/O
-> privileges to directly use the IO ports) I dont think even a kernel
-> change can help in that case...
-> 
-> Is my understanding correct or am I missing something?
+> Before Executing the main function, a startup routine will be executed
+> which will set up the initial environment for the process.
+>  
+> This Startup routine will be supplied by the kernel
 
-1. Any such programs will only work with "PC-style" serial ports (8250
-and compatible UARTs); they won't work with other serial hardware
-(e.g. multi-port serial cards). Also, such programs would require root
-privilege. Consequently, most programs which use serial ports limit
-themselves to using the /dev/tty* devices and their associated ioctl()
-calls.
+That's incorrect. The kernel's job ends at the point that it inkokes
+the loader.
 
-2. You could change the iopl() system call so that it doesn't affect
-the IOPL bits in the EFLAGS register. Instead, you would handle the
-resulting exceptions, trapping attempts to access the UARTs and
-redirecting them to the "virtual UART" driver. The ioperm() system
-call would need similar modifications.
+> and linked by the
+> Linker. My question is : Can we add one more startup routine before
+> executing the main program, if yes how??
+
+Apart from the approach suggested by Steve, you can replace the
+run-time startup file (crtbegin.o etc) with your own file (use gcc's
+-nostartfiles option), or use your own loader in place of
+ld-linux.so.2 (store the name of the loader in the .interp section of
+the executable).
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
