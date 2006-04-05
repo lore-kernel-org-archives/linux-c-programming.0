@@ -1,33 +1,43 @@
-From: "Steve Graegert" <graegerts@gmail.com>
+From: Al Boldi <a1426z@gawab.com>
 Subject: Re: FILE_FLAG_WRITE_THROUGH
-Date: Wed, 5 Apr 2006 09:36:25 +0200
-Message-ID: <6a00c8d50604050036p127a1348hee9c6fa7ea67bed@mail.gmail.com>
-References: <4432B296.8050408@gmail.com>
-	 <17459.16716.938764.154497@cerise.gclements.plus.com>
-	 <20060405065038.GB716@ju.Imrashi.net.bd>
+Date: Wed, 5 Apr 2006 16:43:06 +0300
+Message-ID: <200604051643.06825.a1426z@gawab.com>
+References: <4432B296.8050408@gmail.com> <17459.16716.938764.154497@cerise.gclements.plus.com> <6a00c8d50604050031w3b30032bm73cefeab84119024@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20060405065038.GB716@ju.Imrashi.net.bd>
+In-Reply-To: <6a00c8d50604050031w3b30032bm73cefeab84119024@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-On 4/5/06, Progga <abulfazl@juniv.edu> wrote:
-> On Wed, Apr 05, 2006 at 05:02:20AM +0100, Glynn Clements wrote:
->
+Steve Graegert wrote:
+> On 4/5/06, Glynn Clements <glynn@gclements.plus.com> wrote:
+> > Rebelde wrote:
+> > > On Windows XP I can write directly to disk whitout cache write using
+> > > the CreateFile function with FILE_FLAG_WRITE_THROUGH. Could someone
+> > > tell me how to make this on Linux?
+> >
+> > Pass the O_SYNC flag to open(). This will cause write() calls to block
+> > until the data has been sent to the drive.
+> >
 > > The O_DIRECT flag suggested by Steve is probably overkill. It requires
 > > that the buffer start address, buffer size and file offset are all
 > > multiples of the filesystem's block size, and only works on some
 > > filesystems.
 >
-> Although it works for a single file, how good is fsync() in this case?
+> Well, the O_SYNC flag causes, i.e. write(2), to block until the data
+> has been physically written to disk, but it does not prevent the C
+> library/kernel from caching the bytes.  O_DIRECT, on the other hand,
+> circumvents the caching mechanisms and allows for raw access, although
+> it may degrade performance.
 
-fsync(2) does not ensure that all data has actually been written to
-disk.  The controller may indicate that all data is stable, but it
-does so even if it is still in its internal cache.  From this point of
-view, fsync(2) is not a replacement for O_DIRECT.
+Or increase performance because dcache costs dear cpu-cycles?
 
-	\Steve
+Thanks!
+
+--
+Al
+
