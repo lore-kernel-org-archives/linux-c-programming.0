@@ -1,118 +1,41 @@
-From: Mihai Dontu <mdontu@bitdefender.com>
-Subject: Re: Serial Reading
-Date: Thu, 20 Apr 2006 16:23:20 +0300
-Message-ID: <44478B48.8050001@bitdefender.com>
-References: <OF6B1B71E6.FB0713A3-ON83257156.004830D6-83257156.0048FB31@Cyclades.com>
+From: Tassilo Horn <heimdall@uni-koblenz.de>
+Subject: Getting resource usage informations of a process
+Date: Thu, 20 Apr 2006 15:27:51 +0200
+Message-ID: <87r73snzqg.fsf@baldur.nicundtas.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <OF6B1B71E6.FB0713A3-ON83257156.004830D6-83257156.0048FB31@Cyclades.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-ronaldo.afonso@avocent.com wrote:
-> 
-> 
-> 
-> Hello all,
-> 
-> I'm trying to read data from a "tty" one character at a time. I'd like that
-> when a single byte was inputed on one side of my tty, it imediataly must be
-> read by my user space program on the otherside. It is not happening in my
-> environment and I belive the cause is a buffer in the tty driver. I'd like
-> to know if it could be happening, I mean, could a tty be buffering data
-> before send to user space, and if so, what can I do to inform the tty
-> driver not buffering data anymore?
-> Thanks.
-> 
-> 
-> ====================================================
-> Ronaldo Z. Afonso
-> Software Engineering
-> Avocent Corporation, formerly Cyclades
-> ronaldo.afonso@avocent.com
-> Phone: 55 11 5033-3361
-> Fax: 55 11 5033-3388
-> www.avocent.com
-> ====================================================
-> 
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> 
-> 
-Hi,
+Hi all,
 
-This is a small demo I made some time ago. Should help.
+I've written a specialized compression utility (C++). Now I want to
+compare it to some general purpose compressors like gzip, bzip2 and
+compress. CPU time and memory consumption are the main things of
+interest.
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/select.h>
-#include <termios.h>
-#include <unistd.h>
+Therefore I tried using GNU time [1] (version 1.7). With it I get the
+correct CPU time, but the memory resources are always zero (%p and %M in
+time's format string). I tested this on Linux 2.4 & 2.6, Mac OS X and
+OpenBSD.
 
-int main( void )
-{
-     fd_set read_fd;
-     struct termios t;
-     struct timeval tv;
+Then I tried writing a simple replacement [2] which utilizes the
+getrusage() (via wait4()) system call. But with this, the memory
+resources are always zero, too. Looking into GNU time's source code, it
+seems that it uses the same approach, so this was a no-go. ;-)
 
-        /* Since '0' is open()-ed to STDIN... let's use this */
-        /* "See" what the terminal knows */
-     tcgetattr( 0, &t );
+Is getrusage()/wait4() broken, or not intended to be used like this?
 
-        /* "Tell" the terminal not to wait for EOL (Enter) */
-     t.c_lflag &= ~( ICANON );
+How can I get correct memory resource usage informations of a (child)
+process (without changing the code of the process' applications)?
 
-        /* This should be restored if not needed anymore */
-        tcsetattr( 0, TCSANOW, &t );
+Kind regards,
+Tassilo
 
-     printf( "Waiting for ESC ...\n" );
-     while ( 1 ) {
-          memset( &tv, 0, sizeof( tv ) );
-          tv.tv_sec = 1;
-
-                /* These two below shold not be needed (should be outside the loop), but somehow the program won't work without
-them */
-          FD_ZERO( &read_fd );
-          FD_SET( 0, &read_fd );
-
-                /* Aaa... multiplexing for the penguins :-) */
-          if ( select( 1, &read_fd, NULL, NULL, &tv ) > 0 && FD_ISSET( 0, &read_fd ) ) {
-               unsigned v = 0;
-
-                        /* Read what we've got so far */
-               read( 0, &v, sizeof( v ) );
-
-                        /* Mask out the extra data and leave the character code */
-               v &= 0x7F;
-
-                        /* This has been deduced experimentaly :-) */
-                if ( v == 0x1b ) printf( "ESC!\n" );
-          } else {
-                       /* Do something */
-                       printf( "Zum\n" );
-                }
-     }
-     return 0;
-}
-
-Enjoy,
-M.D.
-
--- 
-
-|_|0|_|
-|_|_|0|
-|0|0|0|
-
-
--- 
-This message was scanned for spam and viruses by BitDefender.
-For more information please visit http://www.bitdefender.com/
+Footnotes:
+[1] http://www.gnu.org/software/time/time.html
+[2] http://www.uni-koblenz.de/~heimdall/rusage.c
 
