@@ -1,49 +1,35 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Getting resource usage informations of a process
-Date: Sun, 23 Apr 2006 15:28:20 +0100
-Message-ID: <17483.36612.294727.811224@cerise.gclements.plus.com>
-References: <87r73snzqg.fsf@baldur.nicundtas.de>
-	<17480.57948.42893.816927@cerise.gclements.plus.com>
-	<871wvoa778.fsf@baldur.nicundtas.de>
+From: gutter <gutter@bk.ru>
+Subject: Working with COM-port from kernel module
+Date: Wed, 26 Apr 2006 11:16:45 +1100
+Message-ID: <444EBBED.8060203@bk.ru>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <871wvoa778.fsf@baldur.nicundtas.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Tassilo Horn <heimdall@uni-koblenz.de>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Hi, all.
 
-Tassilo Horn wrote:
+Could you, please, help me?
 
-> >> How can I get correct memory resource usage informations of a (child)
-> >> process (without changing the code of the process' applications)?
-> >
-> > Parse /proc/<pid>/maps. Any entries with an inode of zero (other than
-> > the heap and stack regions) correspond to mmap(MAP_ANONYMOUS).
-> 
-> The problem with that approach is, that I want some statistics over the
-> complete runtime of the process. So I would have to parse
-> /proc/<pid>/maps every few tenth of a second, sorting out what's seen
-> before, etc. which would produce a great overhead and could have effects
-> on the processes I want to inspect. Or do I get you wrong, here?
+I want to write a linux-driver for a device connected to computer over a 
+serial port to access it through /dev/mydev, but i'm not sure how to do 
+it. I mean, i can access my device from user-mode program, setting 
+termios structure and working with device through file /dev/ttySx.
 
-If you want to continuously monitor resource usage, efficiency could
-be an issue. But I don't think that there's any other way to obtain
-that information.
+1. But how can i in kernel-mode open /dev/ttySx, setup termios and 
+read/write?
+2. Should i use some kernel functions to do it or i shouldn't use 
+termios and have to program harware ports (such as 0x3F8 etc) using 
+inb/outb?
+3. If i should program harware ports then how can i disable native linux 
+serial driver (couse when my driver and linux driver will exist together 
+they won't work, i think)?
+4. And is there any way to use native linux serial driver from my driver 
+to open serial port and read/write it?
 
-> BTW: The infos of /proc/<pid>/status are looking interesting, too
-> (VmPeak, VmSize, VmData, ...). But then another question is, how do I
-> know when a process finishes? Is there some sort of signalling: "Hey,
-> Process XY's going to die now!"?
+Thank you in advance.
 
-The parent receives SIGCHLD when a child terminates. However, at that
-point, /proc/<pid>/maps will be empty, as the process will have
-released all of its resources. The only information which you can
-obtain once the process has terminated is that returned by wait4()
-etc.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Mihail.
