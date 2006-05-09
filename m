@@ -1,35 +1,110 @@
-From: gutter <gutter@bk.ru>
-Subject: Working with COM-port from kernel module
-Date: Wed, 26 Apr 2006 11:16:45 +1100
-Message-ID: <444EBBED.8060203@bk.ru>
+From: Christian Stalp <stalp@imbei.uni-mainz.de>
+Subject: IPC-Semaphore
+Date: Tue, 9 May 2006 19:06:43 +0200
+Message-ID: <200605091906.43370.stalp@imbei.uni-mainz.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="iso-8859-1"
 To: linux-c-programming@vger.kernel.org
 
-Hi, all.
+Hello out there,
+Im working on a solution to delete a semaphore, which is used by other=20
+processes.
+The semaphore was created by a server-process. It write the semaphore-k=
+ey into=20
+a file ( where the clients can read it, and get access to the semaphore=
+ )
+After that the server proceeds its work.=20
+When the server finished its work, it destroys the semaphore. And here =
+we have=20
+quandary. In this very moment the clients still need the semaphore.
 
-Could you, please, help me?
+In the semctl-manual we have a several arguments, amongst others.
+GETZCNT     The  system  call returns the value of semzcnt for the sem-
+                   num-th semaphore of the set (i.e. the number  of  pr=
+ocesses
+                   waiting for semval of the semnum-th semaphore of the=
+ set to
+                   become 0).  The calling process must have read acces=
+s priv-
+                   ileges on the semaphore set.
+or
+GETNCNT     The  system  call returns the value of semncnt for the sem-
+                   num-th semaphore of the set (i.e. the number  of  pr=
+ocesses
+                   waiting  for  an  increase  of  semval  for  the  se=
+mnum-th
+                   semaphore of the set).  The calling process must hav=
+e  read
+                   access privileges on the semaphore set.
 
-I want to write a linux-driver for a device connected to computer over a 
-serial port to access it through /dev/mydev, but i'm not sure how to do 
-it. I mean, i can access my device from user-mode program, setting 
-termios structure and working with device through file /dev/ttySx.
+based on this I made this function:
+/* Loeschen einer Semaphore                                            =
+   */
+int loesche_semaphore ( int kennung )
+{
+  union semun mysem;
+  int semnum      =3D 0,
+      rueckgabe_1 =3D 0,
+      rueckgabe_2 =3D 0;
 
-1. But how can i in kernel-mode open /dev/ttySx, setup termios and 
-read/write?
-2. Should i use some kernel functions to do it or i shouldn't use 
-termios and have to program harware ports (such as 0x3F8 etc) using 
-inb/outb?
-3. If i should program harware ports then how can i disable native linux 
-serial driver (couse when my driver and linux driver will exist together 
-they won't work, i think)?
-4. And is there any way to use native linux serial driver from my driver 
-to open serial port and read/write it?
+  while ( 1 )
+  {
+     if ( ( rueckgabe_1 =3D semctl ( kennung, semnum, GETZCNT, mysem ) =
+) =3D=3D -1 )
+     {
+         perror ( "Fehler beim bestimmen der Semaphor-Wartelist\n" );
+         exit ( errno );
+     }
+     else if ( ( rueckgabe_2 =3D semctl ( kennung, semnum, GETNCNT, mys=
+em ) ) =3D=3D=20
+-1 )
+     {
+         perror ( "Fehler beim bestimmen der Semaphor-Wartelist\n" );
+         exit ( errno );
+     }
+     else
+     {
+         printf ( "Die Menge der Prozesse ist gleich: %d und %d \n",=20
+rueckgabe_1, rueckgabe_2 );
+         break;
+     }
+  }
 
-Thank you in advance.
+  if ( ( semctl ( kennung, 0, IPC_RMID, mysem ) ) =3D=3D -1 )
+  {
+      perror ( "Fehler beim loeschen der Semaphore\n" );
+      exit ( errno );
+  }
 
-Mihail.
+ return ( 1 );
+}
+
+I know that so far this function doesn't work. It should only show me i=
+f some=20
+process try to access the semaphore.=20
+But neither GETZCNT nor GETNCNT give me info about processes which try =
+to=20
+access the semaphore. Both gave me a '0'
+
+What is the problem, what I have missed?
+
+Thank you all...
+
+Gruss Christian
+
+--=20
+Christian Stalp
+Institut f=FCr Medizinische Biometrie, Epidemiologie und Informatik
+Johannes-Gutenberg-Universit=E4t Mainz
+Tel.: 06131 / 17-3107
+E-Mail: stalp@imbei.uni-mainz.de
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
