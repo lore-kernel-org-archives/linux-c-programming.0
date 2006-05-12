@@ -1,48 +1,53 @@
-From: "james-lists" <james@stev.org>
-Subject: RE: "double free or corruption" - how to solve this?
-Date: Fri, 12 May 2006 13:01:29 +0100
-Message-ID: <002201c675bb$ce3aec20$0500ac0a@slider>
-References: <75062f40605120111s2d27c8c0gb768c50b1ae34588@mail.gmail.com>
+From: =?iso-8859-1?Q?Jedenastik=2C_G=FCnther?= 
+	<guenther.jedenastik@maxolution.at>
+Subject: AW: "double free or corruption" - how to solve this?
+Date: Fri, 12 May 2006 22:40:10 +0200
+Message-ID: <1DC8E51669ADE94C85B69D0E5EAEB746629B8E@manchester.maxolution.local>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <75062f40605120111s2d27c8c0gb768c50b1ae34588@mail.gmail.com>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: 'Shriramana Sharma' <samjnaa@gmail.com>, linux-c-programming@vger.kernel.org
-
-Hi,
+To: linux-c-programming@vger.kernel.org
 
 
-Try linking your program with electric fence. It may already be installed it
-comes on most distros now. Add -lefence when linking. It should help you pin
-point the problem very quickly when used with a debugger like gdb.
-
-	James
-
-> -----Original Message-----
-> From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
-> programming-owner@vger.kernel.org] On Behalf Of Shriramana Sharma
-> Sent: 12 May 2006 09:11
-> To: linux-c-programming@vger.kernel.org
-> Subject: "double free or corruption" - how to solve this?
-> 
-> One of my programs, which was working quite well till now, suddenly
-> gives me the error:
-> 
-> *** glibc detected *** double free or corruption (top): 0x0808a338 ***
-> Aborted
-> 
-> It is a pure C program compiled with GCC 4.02 -- I do not understand
-> why it does not work suddenly. Please tell me what the above error can
-> be.
-> 
-> Thanks.
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-
-> programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>Hello Shriramana,
 
 
+>On Fri, 12 May 2006 13:41:12 +0530 "Shriramana Sharma" <samjnaa@gmail.com> >wrote:
+
+>> One of my programs, which was working quite well till now, suddenly
+>> gives me the error:
+>> 
+>> *** glibc detected *** double free or corruption (top): 0x0808a338 ***
+>> Aborted
+>> 
+>> It is a pure C program compiled with GCC 4.02 -- I do not understand
+>> why it does not work suddenly. Please tell me what the above error can
+>> be.
+
+>Would be nice to run it from gdb, in order to get the backtrace when it
+>crashes. This should help you understand where and why :).
+
+
+>Regards,
+
+>-- 
+>wwp
+
+I have a similar problem, but i don't know how gdb can help with this?
+I tried with gdb (btw: I have one process forked (and a few threads) and I think this process creates the problem) but I only get the problem during exit handlers (e.g. SIGINT)
+
+To get back to my question: how can I trace the problem with gdb, if I have forked processes and threads?
+
+Cause it seems, that glibc only prints the line "*** glibc detected *** double free or corruption" and then continues
+It doesn't send a SIGABORT or something else, so why should gdb "know" something was wrong? And how could I trace back (using "bt") if I have the problem, but don't know where it occures (cause glibc just prints and continues, not?)
+I think the only "simple" way is using electric fence (?)
+
+I'll try this next Monday
+
+But some internal explanations what "*** glibc detected ***" does (not why it occures, but internally happens if it occures), if anyone knows, would be great
+
+Thx and regards
