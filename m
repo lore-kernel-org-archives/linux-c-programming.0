@@ -1,61 +1,65 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
+From: "Steve Graegert" <graegerts@gmail.com>
 Subject: Re: Curious segmentation fault - please help
-Date: Sun, 14 May 2006 00:28:13 +0530
-Message-ID: <200605140028.17718.samjnaa@gmail.com>
-References: <200605131958.39156.samjnaa@gmail.com> <200605132157.24997.samjnaa@gmail.com> <6a00c8d50605131020o6665b157u18b72e93cc04411b@mail.gmail.com>
+Date: Sat, 13 May 2006 23:04:33 +0200
+Message-ID: <6a00c8d50605131404sc845ab7p5604a5e902c5ff55@mail.gmail.com>
+References: <200605131958.39156.samjnaa@gmail.com>
+	 <200605132157.24997.samjnaa@gmail.com>
+	 <6a00c8d50605131020o6665b157u18b72e93cc04411b@mail.gmail.com>
+	 <200605140028.17718.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed;
-  boundary="nextPart1155657.UjRGbsKR3r";
-  protocol="application/pgp-signature";
-  micalg=pgp-sha1
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6a00c8d50605131020o6665b157u18b72e93cc04411b@mail.gmail.com>
+In-Reply-To: <200605140028.17718.samjnaa@gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
---nextPart1155657.UjRGbsKR3r
-Content-Type: text/plain;
-  charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-
-Saturday 13 May 2006 22:50 samaye, Steve Graegert alekhiit:
-
-> > vaasara[6] does give the correct output. The fault is seen *after*
-> > vaasara[6] is read and written to stdout:
+On 5/13/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
+> Saturday 13 May 2006 22:50 samaye, Steve Graegert alekhiit:
 >
-> which accesses the last element correctly.  Nevertheless, the function
-> tries to read one more character causing a segfault.  Please don't
-> misinterpret valgind's output: we are still in listsplpanchaanga().
+> > > vaasara[6] does give the correct output. The fault is seen *after*
+> > > vaasara[6] is read and written to stdout:
+> >
+> > which accesses the last element correctly.  Nevertheless, the function
+> > tries to read one more character causing a segfault.  Please don't
+> > misinterpret valgind's output: we are still in listsplpanchaanga().
+>
+> Of course. But all I am doing is using the standard fprintf function. Is it
+> possible that the behaviour of this function would have changed from glibc
+> 2.36 to glibc 2.4?
 
-Of course. But all I am doing is using the standard fprintf function. Is it=
-=20
-possible that the behaviour of this function would have changed from glibc=
-=20
-2.36 to glibc 2.4?
+OK, now I got the code.  You're right, it's not as simple as it seemed
+at first glance.  Just oversaw some lines of the valgrind output,
+showing that accessing element 0 (zero) is indeed failing all the
+time.  Sorry, just did not get it at first.
 
-> Hm, don't know what could have changed.  I am not a SuSEr anymore;
-> returned to Debian and NetBSD.
+Let's try another thing before filing a bug or something: instruct
+valgrind to attach to a debugger when the error occurs:
 
-So can't see you anymore on SLE?
+% valgrind --tool=memcheck --db-attach=yes -v ./monthpan
 
-=2D-=20
+when entered the debugger call
 
-Tux #395953 resides at http://samvit.org
-playing with KDE 3.51 on SUSE Linux 10.1
-$ date [] CCE +2006-05-14 W19-7 UTC+0530
+(gdb) where
+... /* stack trace */
+(gdb) whatis grahanaama
+... /* prints type and size of expression */
+(gdb) print grahanaama[0]
+... /* should display contents of expression; may result in an error*/
 
---nextPart1155657.UjRGbsKR3r
-Content-Type: application/pgp-signature
+Try to capture the output and mail it to me privately.  You can also
+send me the complete program and I'll have a look at it.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2 (GNU/Linux)
+If all goes well here, you may have uncovered some weird behaviour
+which may indeed be a bug either in glibc or gcc.
 
-iD8DBQBEZixJLOFFQi4zqy0RAsv7AKCSQ73Jd1rH4ZgHnR65iSB8Q8VxnwCeO1ly
-yOvtKmkPv+DxAilTtkjBODk=
-=DexG
------END PGP SIGNATURE-----
+> > Hm, don't know what could have changed.  I am not a SuSEr anymore;
+> > returned to Debian and NetBSD.
+>
+> So can't see you anymore on SLE?
 
---nextPart1155657.UjRGbsKR3r--
+Yes, I simply don't have the time to follow SLE discussions anymore.
+
+	\Steve
