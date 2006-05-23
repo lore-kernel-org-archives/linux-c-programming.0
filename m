@@ -1,65 +1,73 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Curious segmentation fault - please help
-Date: Sat, 13 May 2006 23:04:33 +0200
-Message-ID: <6a00c8d50605131404sc845ab7p5604a5e902c5ff55@mail.gmail.com>
-References: <200605131958.39156.samjnaa@gmail.com>
-	 <200605132157.24997.samjnaa@gmail.com>
-	 <6a00c8d50605131020o6665b157u18b72e93cc04411b@mail.gmail.com>
-	 <200605140028.17718.samjnaa@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Way to leave-out unused functions while linking to a library
+Date: Tue, 23 May 2006 14:43:32 +0530
+Message-ID: <200605231443.35393.samjnaa@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Type: multipart/signed;
+  boundary="nextPart1608415.IK7bNpSxlY";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200605140028.17718.samjnaa@gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-On 5/13/06, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> Saturday 13 May 2006 22:50 samaye, Steve Graegert alekhiit:
->
-> > > vaasara[6] does give the correct output. The fault is seen *after*
-> > > vaasara[6] is read and written to stdout:
-> >
-> > which accesses the last element correctly.  Nevertheless, the function
-> > tries to read one more character causing a segfault.  Please don't
-> > misinterpret valgind's output: we are still in listsplpanchaanga().
->
-> Of course. But all I am doing is using the standard fprintf function. Is it
-> possible that the behaviour of this function would have changed from glibc
-> 2.36 to glibc 2.4?
+--nextPart1608415.IK7bNpSxlY
+Content-Type: text/plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 
-OK, now I got the code.  You're right, it's not as simple as it seemed
-at first glance.  Just oversaw some lines of the valgrind output,
-showing that accessing element 0 (zero) is indeed failing all the
-time.  Sorry, just did not get it at first.
+I asked this question on this list some time back, IIRC -- how to leave-out=
+=20
+unused functions while linking to a library?
 
-Let's try another thing before filing a bug or something: instruct
-valgrind to attach to a debugger when the error occurs:
+The normal behaviour is that if a library.c contains two functions fna() an=
+d=20
+fnb() and main.c calls only fna(), compiling library.c and main.c and linki=
+ng=20
+to form an executable will result in the fnb() function getting included in=
+=20
+the final executable, though it is never used in the entire course of the=20
+program.
 
-% valgrind --tool=memcheck --db-attach=yes -v ./monthpan
+So how to stop fnb() from getting linked in?
 
-when entered the debugger call
+Over at the GNU GCC list, a good soul gave us the solution. Use -
 
-(gdb) where
-... /* stack trace */
-(gdb) whatis grahanaama
-... /* prints type and size of expression */
-(gdb) print grahanaama[0]
-... /* should display contents of expression; may result in an error*/
+=2Dffunction-sections -fdata-sections=20
 
-Try to capture the output and mail it to me privately.  You can also
-send me the complete program and I'll have a look at it.
+as compiler options and=20
 
-If all goes well here, you may have uncovered some weird behaviour
-which may indeed be a bug either in glibc or gcc.
+=2D-gc-sections=20
 
-> > Hm, don't know what could have changed.  I am not a SuSEr anymore;
-> > returned to Debian and NetBSD.
->
-> So can't see you anymore on SLE?
+as a linker option. If you are calling the linker indirectly via the compil=
+er=20
+gcc (i.e. if you are directly creating executables using gcc without a=20
+separate call to ld) then give it the options:=20
 
-Yes, I simply don't have the time to follow SLE discussions anymore.
+=2Dffunction-sections -fdata-sections -Wl,--gc-sections=20
 
-	\Steve
+[exactly as it is, with the comma] so that the compiler passes the appropri=
+ate=20
+option on to the linker. This method worked for me!
+
+=2D-=20
+
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.51 on SUSE Linux 10.1
+$ date [] CCE +2006-05-23 W21-2 UTC+0530
+
+--nextPart1608415.IK7bNpSxlY
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2 (GNU/Linux)
+
+iD8DBQBEctI/LOFFQi4zqy0RAq9VAJ9dxYNw4UZnyRaZqTPWwnQqWtdBqwCeKWVE
+I+jCLvvEO00R5rhbpK8Lxp4=
+=1peC
+-----END PGP SIGNATURE-----
+
+--nextPart1608415.IK7bNpSxlY--
