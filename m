@@ -1,34 +1,34 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: James Colannino <james@colannino.org>
 Subject: Re: Undefined reference to 'fmod'
-Date: Sun, 11 Jun 2006 08:18:30 +0100
-Message-ID: <200606110718.k5B7IUVg022519@cerise.gclements.plus.com>
-References: <448B9DA5.7050708@colannino.org>
+Date: Sun, 11 Jun 2006 10:58:18 -0700
+Message-ID: <448C59BA.2090706@colannino.org>
+References: <448B9DA5.7050708@colannino.org> <17547.46674.360830.637227@cerise.gclements.plus.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <448B9DA5.7050708@colannino.org>
+In-Reply-To: <17547.46674.360830.637227@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: James Colannino <james@colannino.org>
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Glynn Clements wrote:
 
-James Colannino wrote:
-
-> Hey everyone.  I included the math.h header, proceeded to use fmod(),
-> then got the following error:
+> No, fmod() is in libm, so you have to add -lm to the link command.
 > 
-> /tmp/ccKQxpJi.o: In function `main':
-> 04-03-calc.c:(.text+0x144): undefined reference to `fmod'
-> collect2: ld returned 1 exit status
-> 
-> Does anybody know why it won't link?  fmod() is a part of the standard
-> library.
+> As a general rule, anything which uses <math.h> has to link against
+> libm.
 
-No, fmod() is in libm, so you have to add -lm to the link command.
+Interesting.  Compiling with the argument -lm fixed my problem.  That
+leads me to another question: why are the functions found in math.h in a
+separate library?  I would have thought that all functions found in the
+standard C library would be in glibc (The K&R book I'm reading said that
+math.h is a part of the standard library.)
 
-As a general rule, anything which uses <math.h> has to link against
-libm.
-
+James
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+"Blessed is the man, who having nothing to say, abstains from giving
+wordy evidence of the fact." --George Eliot
