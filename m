@@ -1,52 +1,62 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: RE: Undefined reference to 'fmod'
-Date: Thu, 15 Jun 2006 01:20:17 +0100
-Message-ID: <17552.42945.974091.909567@cerise.gclements.plus.com>
-References: <448C59BA.2090706@colannino.org>
-	<010d01c68fc8$f56e1020$0500ac0a@slider>
+From: John Richard Moser <nigelenki@comcast.net>
+Subject: Re: Group ordering and comparison
+Date: Thu, 15 Jun 2006 00:55:21 -0400
+Message-ID: <4490E839.1060202@comcast.net>
+References: <44909ED0.3060402@comcast.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <010d01c68fc8$f56e1020$0500ac0a@slider>
+In-Reply-To: <44909ED0.3060402@comcast.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: James Stevenson <james@stev.org>
-Cc: 'James Colannino' <james@colannino.org>, 'Linux C Programming List' <linux-c-programming@vger.kernel.org>
+To: John Richard Moser <nigelenki@comcast.net>
+Cc: linux-kernel@vger.kernel.org, linux-c-programming <linux-c-programming@vger.kernel.org>
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
 
-James Stevenson wrote:
 
-> > > No, fmod() is in libm, so you have to add -lm to the link command.
-> > >
-> > > As a general rule, anything which uses <math.h> has to link against
-> > > libm.
-> > 
-> > Interesting.  Compiling with the argument -lm fixed my problem.  That
-> > leads me to another question: why are the functions found in math.h in a
-> > separate library?  I would have thought that all functions found in the
-> > standard C library would be in glibc (The K&R book I'm reading said that
-> > math.h is a part of the standard library.)
+John Richard Moser wrote:
+> I need a little help proving a conjecture I've come up with in relation
+> to ordering and sorting.. not sure where else to go with this but since
+> I'm using it in kernel code I might as well ask.
 > 
-> It cant be not all processors have floating point unit's Therefor it cannot
-> be in the main standard libary
+[...]
 
-There are some functions in libc which use floating-point. Also, FP is
-part of the C language itself; on processors which don't support FP in
-hardware, you just emulate it.
+I asked #math, apparently it works.  I still can't figure out how to
+deal with the swap code.. I guess I'll try to write other useful code
+and coerce someone else into writing that part for me later so I can get
+it hooked up.
 
-The reason for the use of a separate math library is more likely to be
-so that you can have different versions for systems with and without
-FP support. Implementing FP math functions using an FP emulation
-library is likely to be more efficient that relying upon generic FP
-emulation.
+- --
+All content of all messages exchanged herein are left in the
+Public Domain, unless otherwise explicitly stated.
 
-Generic FP emulation normally works by handling "illegal instruction"
-exceptions, which occur if a CPU without FP support attempts to
-execute a FP instruction. The exception handler then emulates the
-instruction in software. Exception handling normally adds significant
-overhead, so it's more efficient to replace FP instructions with calls
-to functions in an FP emulation library.
+    Creative brains are a valuable, limited resource. They shouldn't be
+    wasted on re-inventing the wheel when there are so many fascinating
+    new problems waiting out there.
+                                                 -- Eric Steven Raymond
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+    We will enslave their women, eat their children and rape their
+    cattle!
+                  -- Bosc, Evil alien overlord from the fifth dimension
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2.2 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iQIVAwUBRJDoNws1xW0HCTEFAQKPPw/9Fxa/m8HdRIGzjVDz2MvH3Y0aVorr0r4Q
+N8JorcvdNWE2GhrCsbF0usSui3+00G5HzYXqgIVTv6jNveiPzDajh1ttKXZHqhRu
+zDEtxIn+xEMcIoWIp5187CfSULodnsSL4yqdVo7u1jXvfy8G7tq1Q9o3df6vhD//
+U2gzRDdny8mOLK3W2qH/TnyvLY5/8ktx/0Xa+wGWa6HLsvz5EO8yVPpzC32B+WT8
+B2GivC/n1sDspHL7bz/KsHhXtMfV3mxm3gWjBjahPyy67TwUhYMvtvXvE0i89aBk
+lvuwHFvc8V3/eNxj6oHtiwn7vWpHftWsItvtbu811fe3OTRbF3qct3nQSLjF7nPw
+RHkdryYrQeDOkeMVmPG6lx+DYTaqfvFEnXqliPWzVUYTTPLwM7eXrWLa0Uzb6FhR
+NmMC2olOlxmoNheLYnjARbskU0yeuQTKYepgM3PcgSm2kZYrXwNfyW52y8SF9A4s
+p85l6B6QgSfZJQ6VGWZPuljaARR3koW4HtE9oltsnwJmEJbU/mvy7BmFTBX2MIB9
+Q9/k9ZOwSZfTnjvVXKGgeHTUea0a1yU2xNk9lTMFzUFDzK93RnPXPltoIRe4y+LR
+Y+yLFQK25e1QloEjD1FZgsXKRwGCt6OOjWKctyAlRxnPgArTu9Wsw5POJTUntEoi
+ZCozaLijf5w=
+=ejo3
+-----END PGP SIGNATURE-----
