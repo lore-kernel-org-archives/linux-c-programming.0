@@ -1,45 +1,44 @@
-From: leslie.polzer@gmx.net
-Subject: Re: System.map reference...
-Date: Wed, 28 Jun 2006 20:54:43 +0200
-Message-ID: <20060628185443.GA23646@wintermute>
-References: <44A2CBB2.1060000@jpl.nasa.gov>
+From: Mihai Dontu <mdontu@bitdefender.com>
+Subject: link table
+Date: Tue, 04 Jul 2006 17:31:42 +0300
+Message-ID: <44AA7BCE.8050107@bitdefender.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="vkogqOf2sHV7VnPd"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <44A2CBB2.1060000@jpl.nasa.gov>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: Roy L Butler <roy.butler@jpl.nasa.gov>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
+
+Hi,
+
+Does anyone know a tool which I can use to dump the link table?
+
+Basically I want to know how symbols were resolved. Such a tool should 
+display:
+  - the name of the symbol
+  - the type of the symbol (T,U - see man nm)
+  - the address of the symbol (as set by the dynamic linker)
+  - the module in which this the symbol's address is located
+
+Eg:
+
+myprocess
+   U strcmp 0x0040500f (/lib/libc.so)
+
+Why do I want such a tool?
+  - I have this program that loads several shared objects (plugins) and 
+sometimes the linker resolves the syms in a wrong way making the program 
+misbehave (i.e. some plugins have syms with the same name, but they do 
+different things - I can not change this because the plugins are third 
+party (and closed source)).
+
+Thanks in advance.
+
+M.D.
 
 
---vkogqOf2sHV7VnPd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-- 
+This message was scanned for spam and viruses by BitDefender.
+For more information please visit http://www.bitdefender.com/
 
-On Wed, Jun 28, 2006 at 11:34:26AM -0700, Roy L Butler wrote:
-
-> Where's there a reference to the meaning of the symbols in the second
-> column of System.map? For instance: A, T, t, R, r, D, d, B, b.
-man nm
-
---=20
-gpg --keyserver pgp.mit.edu --recv-keys 0x52D70289
-http://nic-nac-project.de/~skypher/
-
---vkogqOf2sHV7VnPd
-Content-Type: application/pgp-signature
-Content-Disposition: inline
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2.2 (GNU/Linux)
-
-iD8DBQFEotBzyYzv6N1Ov4MRAuRtAJ0Xi0qsBwF6/elQWgOdrwh1E2QS9ACffip+
-AYE3GBSycUtcO7XfPkGFCW8=
-=ei8f
------END PGP SIGNATURE-----
-
---vkogqOf2sHV7VnPd--
