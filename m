@@ -1,7 +1,7 @@
-From: Fabio Miranda Hamburger <fabmirha@ulatina.ac.cr>
-Subject: Remove x number of decimals from a float value
-Date: Tue, 11 Jul 2006 12:10:13 -0600 (CST)
-Message-ID: <Pine.LNX.4.64.0607111209430.16861@ns.isi.ulatina.ac.cr>
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Subject: Remove x number of decimals form a float
+Date: Tue, 11 Jul 2006 12:12:25 -0600 (CST)
+Message-ID: <Pine.LNX.4.64.0607111211270.17950@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
