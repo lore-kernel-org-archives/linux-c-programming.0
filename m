@@ -1,44 +1,33 @@
-From: Mihai Dontu <mdontu@bitdefender.com>
-Subject: link table
-Date: Tue, 04 Jul 2006 17:31:42 +0300
-Message-ID: <44AA7BCE.8050107@bitdefender.com>
+From: Fabio Miranda Hamburger <fabmirha@ulatina.ac.cr>
+Subject: Remove x number of decimals from a float value
+Date: Tue, 11 Jul 2006 12:10:13 -0600 (CST)
+Message-ID: <Pine.LNX.4.64.0607111209430.16861@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Hi,
+Hello,
 
-Does anyone know a tool which I can use to dump the link table?
+I am trying to implement a 100% math function ( avoid handle the float as 
+a char array), that remove x number of decimals from the right to the 
+float point.
 
-Basically I want to know how symbols were resolved. Such a tool should 
-display:
-  - the name of the symbol
-  - the type of the symbol (T,U - see man nm)
-  - the address of the symbol (as set by the dynamic linker)
-  - the module in which this the symbol's address is located
+Example:
+Given x= 12345.6789 I call the function with (x,2) and the returned number 
+is: x= 12345.67, for (x,4) returned value is x=12345
 
-Eg:
+I was trying to implement this function using datatype casting, abs() and 
+other functions from math.h library.
 
-myprocess
-   U strcmp 0x0040500f (/lib/libc.so)
-
-Why do I want such a tool?
-  - I have this program that loads several shared objects (plugins) and 
-sometimes the linker resolves the syms in a wrong way making the program 
-misbehave (i.e. some plugins have syms with the same name, but they do 
-different things - I can not change this because the plugins are third 
-party (and closed source)).
-
-Thanks in advance.
-
-M.D.
+Thanks for any advice,
 
 
--- 
-This message was scanned for spam and viruses by BitDefender.
-For more information please visit http://www.bitdefender.com/
+---
+Fabio Andres Miranda
+Ingenieria de sistemas informaticos
+Universidad Latina - Costa Rica
 
