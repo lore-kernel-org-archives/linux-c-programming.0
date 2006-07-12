@@ -1,49 +1,60 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Remove x number of decimals from a float value
-Date: Tue, 11 Jul 2006 21:58:54 +0100
-Message-ID: <17588.4366.644741.791294@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0607111209430.16861@ns.isi.ulatina.ac.cr>
+From: "Daniel Bonekeeper" <thehazard@gmail.com>
+Subject: Re: link table
+Date: Wed, 12 Jul 2006 17:15:02 -0400
+Message-ID: <e1e1d5f40607121415p4e5a5c95h1011999ee27a8b57@mail.gmail.com>
+References: <44AA7BCE.8050107@bitdefender.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0607111209430.16861@ns.isi.ulatina.ac.cr>
+In-Reply-To: <44AA7BCE.8050107@bitdefender.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Fabio Miranda Hamburger <fabmirha@ulatina.ac.cr>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Mihai Dontu <mdontu@bitdefender.com>
 Cc: linux-c-programming@vger.kernel.org
 
+On 7/4/06, Mihai Dontu <mdontu@bitdefender.com> wrote:
+> Hi,
+>
+> Does anyone know a tool which I can use to dump the link table?
+>
+> Basically I want to know how symbols were resolved. Such a tool should
+> display:
+>   - the name of the symbol
+>   - the type of the symbol (T,U - see man nm)
+>   - the address of the symbol (as set by the dynamic linker)
+>   - the module in which this the symbol's address is located
+>
+> Eg:
+>
+> myprocess
+>    U strcmp 0x0040500f (/lib/libc.so)
+>
+> Why do I want such a tool?
+>   - I have this program that loads several shared objects (plugins) and
+> sometimes the linker resolves the syms in a wrong way making the program
+> misbehave (i.e. some plugins have syms with the same name, but they do
+> different things - I can not change this because the plugins are third
+> party (and closed source)).
+>
+> Thanks in advance.
+>
+> M.D.
+>
+>
+> --
+> This message was scanned for spam and viruses by BitDefender.
+> For more information please visit http://www.bitdefender.com/
+>
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
-Fabio Miranda Hamburger wrote:
+You can find this on objdump(1) source codes.
 
-> I am trying to implement a 100% math function ( avoid handle the float as 
-> a char array), that remove x number of decimals from the right to the 
-> float point.
-
-That is a meaningless specification.
-
-> Example:
-> Given x= 12345.6789 I call the function with (x,2) and the returned number 
-> is: x= 12345.67, for (x,4) returned value is x=12345
-
-So presumably if x = 12345.67890000, f(x,2) would be 12345.678900 and
-f(x,4) would be 12345.6789.
-
-But all of those numbers are the same.
-
-Also, bear in mind that you cannot exactly represent 0.1 (or, more
-generally, 10^(-n) for any n >= 1) in floating-point.
-
-E.g. storing 12345.6789 as a single-precision value will result in:
-
-	12345.67871093750000000000000000000000000000000000000000...
-
-while a double-precision value will give:
-
-	12345.67890000000079453457146883010864257812500000000000...
-
-Per's suggestion of *keeping* a given number of decimal places is
-feasible.
-
+Daniel
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+What this world needs is a good five-dollar plasma weapon.
