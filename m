@@ -1,81 +1,58 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: n-dimension dynamic allocated array with malloc()
-Date: Thu, 13 Jul 2006 04:21:08 +0100
-Message-ID: <17589.48164.448211.911294@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0607121556330.10434@ns.isi.ulatina.ac.cr>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: How to write apps dependent on external libraries?
+Date: Thu, 13 Jul 2006 21:34:54 +0530
+Message-ID: <200607132134.57378.samjnaa@gmail.com>
 Mime-Version: 1.0
+Content-Type: multipart/signed;
+  boundary="nextPart3180104.zMj2FOq5fP";
+  protocol="application/pgp-signature";
+  micalg=pgp-sha1
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0607121556330.10434@ns.isi.ulatina.ac.cr>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming@vger.kernel.org
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+--nextPart3180104.zMj2FOq5fP
+Content-Type: text/plain;
+  charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 
-Fabio Miranda Hamburger wrote:
+Often I see apps which are dependent on this .so file or that. I don't know=
+=20
+how apps can be written that depend on libraries that are not linked into t=
+he=20
+executable. So far I have been linking all needed libraries into the=20
+executable.
 
-> What's wrong with the following code:
+A .so is a collection of what? An .a is a collection of .o-s, right? What i=
+s=20
+a .la? I am so very confused.
 
->          double ****array;
+I don't know what keywords to search for on Google. Which is why I ask here=
+=2E=20
+If it is a detailed subject please give me keywords so I can search and fin=
+d=20
+on my own.
 
->          for(i=0;i< A; i++)
->          {
->                  array = malloc(A * sizeof(double));
->          }
->          for(i=0;i< B; i++)
->          {
->                  array[i]=malloc(B * sizeof(double));
->          }
->          for(i=0;i<C;i++)
->          {
->                  array[i][i]=malloc(C * sizeof(double));
->          }
->          for(i=0;i<D;i++)
->          {
->                  array[i][i][i]=malloc(D * sizeof(double));
->          }
+Thanks for your help.
 
-You are only allocating the elements along the main diagonal.
+=2D-=20
 
-Also, you are assuming that:
+Tux #395953 resides at http://samvit.org
+playing with KDE 3.53 on SUSE Linux 10.1
+$ date [] CCE +2006-07-13 W28-4 UTC+0530
 
-sizeof(double ***) == sizeof(double **) == sizeof(double *) == sizeof(double)
+--nextPart3180104.zMj2FOq5fP
+Content-Type: application/pgp-signature
 
-Fixed version:
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.2 (GNU/Linux)
 
-	array = malloc(A * sizeof(double ***));
-	for(i=0;i<A; i++)
-	{
-		array[i] = malloc(B * sizeof(double **));
-		for(j=0;j<B;j++)
-		{
-			array[i][j] = malloc(C * sizeof(double *));
-			for(k=0;k<C;k++)
-				array[i][j][k] = malloc(D * sizeof(double));
-		}
-	}
+iD8DBQBEtm8pLOFFQi4zqy0RAnhPAJ9c/GBrcOO7rI9fTZKrc3PLTtF+DwCcDlhX
+qJnVn1ODyVk6oqS7+OFZx1s=
+=Saz6
+-----END PGP SIGNATURE-----
 
-In most cases, you would probably be better off without the pointers,
-i.e.:
-
-	array = malloc(A * B * C * D * sizeof(double));
-
-	#define ARRAY(i,j,k,l) (array[(((i) * B + (j)) * C + (k)) * D + (l)])
-
-If you access the array (or parts of it) in a linear fashion, the
-compiler will optimise the multiplies away. Similarly, if any of the
-constants are powers of two, the compiler will convert the multiplies
-to shifts.
-
-The only case where having 3 levels of pointers would be advantageous
-is if you are accessing the array in a random (unpredictable) order
-and the CPU is relatively slow at multiplication and relatively fast
-at memory access. On a modern CPU with fast multiplication and slow
-memory access (relative to the CPU speed), I would guess that the
-version using pointers would probably be slower even for random
-access.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--nextPart3180104.zMj2FOq5fP--
