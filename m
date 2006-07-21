@@ -1,81 +1,207 @@
-From: "Markus Rechberger" <mrechberger@gmail.com>
-Subject: Re: How to write apps dependent on external libraries?
-Date: Fri, 14 Jul 2006 12:32:09 +0200
-Message-ID: <d9def9db0607140332jb349136k13dc3107f2766325@mail.gmail.com>
-References: <200607132134.57378.samjnaa@gmail.com>
-	 <17590.58653.143536.23451@cerise.gclements.plus.com>
+From: James Colannino <james@colannino.org>
+Subject: glibc: realloc(): invalid next size
+Date: Thu, 20 Jul 2006 17:10:38 -0700
+Message-ID: <44C01B7E.4070308@colannino.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17590.58653.143536.23451@cerise.gclements.plus.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: Shriramana Sharma <samjnaa@gmail.com>, Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hey,
+Hey everyone.  I'm having great difficulty debugging a function of mine 
+that adds more memory as needed when reading variable length lines.
 
-Ulrich Drepper has written quite alot about shared libraries. He also
-did some performance tests uppon that topic.
+When I run the code, it always fails after readline() calls addmemory() 
+for the second time (no matter how I change linebuf->buflen, or don't 
+change it...) If readline only has to call addmemory() once, no matter 
+what the size of memory being passed is, it works.  The following is the 
+error I get:
 
-* http://people.redhat.com/drepper/ (look at papers)
-* http://udrepper.livejournal.com/
+*** glibc detected *** realloc(): invalid next size: 0x0804a170 ***
 
-think it's better to read his papers first, bet noone will explain it
-that accuratly here.
+Frankly, this has me absolutely stumped.  I scoured the code looking for 
+things like buffer overruns, etc. and couldn't find a thing.  I'm sure 
+there must be something I'm missing, but for the life of me, I can't 
+figure it out.  Other than this problem, readline() works great.  Below 
+is the code for the two functions (along with the main function that 
+initializes the structure used by readline), along with the output of a 
+backtrace from gdb.
 
-Markus
+**********
+Backtrace:
+**********
 
-On 7/14/06, Glynn Clements <glynn@gclements.plus.com> wrote:
->
-> Shriramana Sharma wrote:
->
-> > Often I see apps which are dependent on this .so file or that. I don't know
-> > how apps can be written that depend on libraries that are not linked into the
-> > executable. So far I have been linking all needed libraries into the
-> > executable.
-> >
-> > A .so is a collection of what?
->
-> A .so (shared object) is structurally quite similar to a single .o
-> file. The difference is that a .so is meant to be able to be linked at
-> run-time.
->
-> Linking against a .so file doesn't copy the code/data from the .o file
-> to the executable; it just stores references to the .so file in the
-> executable.
->
-> The loader (ld-linux.so) will load any shared libraries which the
-> executable requires when the executable is loaded. If it can't find
-> one or more libraries, you get an error when you try to run the
-> executable.
->
-> > An .a is a collection of .o-s, right?
->
-> It can be a collection of anything (a .a file is just an archive,
-> similar to a .zip file), but it's usually just a collection of .o
-> files.
->
-> Linking against a .a file is similar to linking against the individual
-> .o files which it contains, except that only those .o files which
-> supply a required symbol (function, variable) are used.
->
-> > What is a .la?
->
-> A .la file is a metadata file created and used by libtool. It contains
-> information (e.g. dependencies) which libtool needs to link against a
-> static library.
->
-> --
-> Glynn Clements <glynn@gclements.plus.com>
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+(gdb) run
+Starting program: 
+/home/james/svn/projects/exercises/linux-prog-ptr/03-memory/src/a.out
+
+*** glibc detected *** realloc(): invalid next size: 0x0804a170 ***
+
+Program received signal SIGABRT, Aborted.
+0xffffe410 in __kernel_vsyscall ()
+(gdb) bt
+#0  0xffffe410 in __kernel_vsyscall ()
+#1  0xb7df9391 in raise () from /lib/tls/libc.so.6
+#2  0xb7dfab27 in abort () from /lib/tls/libc.so.6
+#3  0xb7e2c98e in __fsetlocking () from /lib/tls/libc.so.6
+#4  0xb7e36666 in mallopt () from /lib/tls/libc.so.6
+#5  0xb7e35a89 in mallopt () from /lib/tls/libc.so.6
+#6  0xb7e3421c in realloc () from /lib/tls/libc.so.6
+#7  0x080486cb in addmemory (linebuf=0xbfa28a30) at 03-01-readline-getc.c:79
+#8  0x080485d4 in readline (linebuf=0xbfa28a30) at 03-01-readline-getc.c:30
+#9  0x080487f3 in main (argc=2, argv=0xbfa28ad4) at 03-01-test.c:28
+
+**************************
+main(), from 03-01-test.c:
+**************************
+
+struct line {
+    size_t buflen;
+    char *buf;
+    FILE *fp;
+};
+
+int main(int argc, char **argv) {
+
+    struct line linebuf;
+
+    if (argc != 2) {
+       fprintf(stderr, "correct usage: %s filename\n", argv[1]);
+       exit(EXIT_FAILURE);
+    }
+
+    if ((linebuf.fp = fopen(argv[1], "r")) == NULL) {
+       fprintf(stderr, "error: couldn't open %s\n", argv[1]);
+       exit(EXIT_FAILURE);
+    }
+
+    if ((linebuf.buf = (char *)calloc(81, sizeof(char))) == NULL) {
+       fprintf(stderr, "error: not enough memory :(\n");
+       exit(EXIT_FAILURE);
+    }
+
+    linebuf.buflen = sizeof(char) * 81;
+
+    switch(readline(&linebuf)) {
+       case  0:
+          break;
+       case -1:
+          printf("EOF!\n");
+          break;
+       case -2:
+          fprintf(stderr, "error: linebuf->fp not opened\n");
+          break;
+       case -3:
+          break;
+    }
+
+    printf("string: %s", linebuf.buf);
+    return 0;
+
+***************************************************
+readline() and addmemory(), from 03-01-readline.c:
+***************************************************
+
+/* readline(): reads one single line from linebuf->fp into linebuf->buf.
+
+    The programmer should make sure that buf is malloc'd with an initial
+    amount of memory, that the size of that allocation (in bytes) is
+    stored in linebuf->buflen and that linebuf->fp points to an open
+    file.  If any of these conditions are not met, readline() will fail.
+
+    Return Codes:
+       0 - success
+      -1 - EOF
+      -2 - linebuf->fp not an opened file
+      -3 - other error
+*/
+int readline(struct line *linebuf) {
+
+    char *start;                     /* points to beginning of buffer */
+    char *bufpos;                    /* our current position in 
+linebuf->buf */
+
+    size_t    buflen;                /* size of buffer in bytes */
+    ptrdiff_t bufcount;              /* how many characters we've read 
+so far */
+
+    int c;                           /* stores the result of getc(fp) */
+
+    if (linebuf->fp == NULL)         /* linebuf->fp is not an opened file */
+       return -2;
+
+    bufpos = start = linebuf->buf;
+    buflen = linebuf->buflen;
+
+    while ((c = getc(linebuf->fp)) != EOF) {
+
+       if (buflen <= 2) {            /* need more memory */
+          bufcount = bufpos - start;
+          printf("hello!\n");
+          start = addmemory(linebuf);
+          buflen = linebuf->buflen;
+          bufpos = start + bufcount;
+       }
+
+       *(bufpos++) = c;
+       buflen -= 1;
+
+       if (c == '\n') {              /* we're done with one line */
+          *bufpos = '\0';
+          break;
+       }
+    }
+
+    if (c == EOF) {
+
+       if (strlen(start) == 0)   /* we got nothing else before EOF */
+          return -1;
+
+       else if ( start[strlen(start) - 1] != '\n') {
+
+                if (buflen <= 2) {       /* need more memory */
+                   bufcount = bufpos - start;
+                   start = addmemory(linebuf);
+                   buflen = linebuf->buflen;
+                   bufpos = start + bufcount;
+                }
+
+                *(bufpos++) = '\n';
+                *bufpos = '\0';
+       }
+
+       else
+          return -1;     /* the line was complete */
+    }
+
+    return 0;
+}
 
 
+/* addmemory(): doubles the size of linebuf->buf.  Returns a pointer
+    to the newly allocated memory or exits if it fails */
+char *addmemory(struct line *linebuf) {
+
+    char *bufcpy = linebuf->buf;
+
+    linebuf->buflen *= 2;
+    printf("%ld\n", linebuf->buflen);
+
+    if ((linebuf->buf = (char *)realloc(linebuf->buf, linebuf->buflen)) \
+== NULL) {
+       free(bufcpy);
+       fprintf(stderr, "error: out of memory! :( \n");
+       exit(EXIT_FAILURE);
+    }
+
+    return linebuf->buf;
+}
+
+James
 -- 
-Markus Rechberger
+My blog: http://www.crazydrclaw.com/
+My homepage: http://james.colannino.org/
+
+"Black holes are where God divided by zero." --Steven Wright
