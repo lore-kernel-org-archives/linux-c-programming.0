@@ -1,69 +1,135 @@
-From: James Colannino <james@colannino.org>
-Subject: Re: glibc: realloc(): invalid next size
-Date: Thu, 20 Jul 2006 23:10:40 -0700
-Message-ID: <44C06FE0.9000300@colannino.org>
-References: <44C01B7E.4070308@colannino.org>
+From: Nikola <root.admin1@zg.t-com.hr>
+Subject: select() problem/feature
+Date: Mon, 24 Jul 2006 15:49:48 +0200
+Message-ID: <44C4CFFC.8040909@zg.t-com.hr>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="------------040404090508050103030507"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <44C01B7E.4070308@colannino.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-James Colannino wrote:
+This is a multi-part message in MIME format.
+--------------040404090508050103030507
+Content-Type: text/plain; charset=ISO-8859-2; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> Hey everyone.  I'm having great difficulty debugging a function of mine 
-> that adds more memory as needed when reading variable length lines.
-> 
-> When I run the code, it always fails after readline() calls addmemory() 
-> for the second time (no matter how I change linebuf->buflen, or don't 
-> change it...) If readline only has to call addmemory() once, no matter 
-> what the size of memory being passed is, it works.[...]
+Hi all,
 
-I found the bug (for what it's worth.)  It was very subtle, but it 
-caused catastrophic results at runtime.  Notice line 6 below (I numbered 
-them.)  This is the while loop in readline().  It says that it should 
-start counting down again from linebuf->buflen elements after the 
-reallocation.  The problem is, half of those spaces are already filled, 
-so when I start counting down again from such a high number, forgetting 
-that half is already filled, I think I must blow away bookeeping 
-information stored by the memory allocator, thus, while the first call 
-to realloc() is successful, the second one isn't.
+i am writing small daemon.....and when i was seeing the end ......that 
+was just the beginning
+of my problems.
 
-I changed that line of code to:
-6: buflen = linebuf->buflen - bufcount;
+General idea was to monitor list of files that was given on start.
 
-That way, it makes sure to take into account those spaces which have 
-already been used.  This code when compiled runs perfectly.  Sorry for 
-the noise to the list.  I honestly have been banging my head over this 
-one and really couldn't find a good solution (I was starting to suspect 
-something was up with glibc, which probably wasn't very bright :-P), 
-otherwise I wouldn'tve asked the question.
+For this example i am using test1.txt and test2.txt because I've 
+succeeded to replicate my problem
+,at least i think so....:)))))
+
+so the files are....
+
+test1.txt
+-----8<-----8<-----8<-----8<-----8<-----8<-----8<
+Testing from test1
+-----8<-----8<-----8<-----8<-----8<-----8<-----8<
 
 
->1:    while ((c = getc(linebuf->fp)) != EOF) {
->2: 
->3:       if (buflen <= 2) {            /* need more memory */
->4:          bufcount = bufpos - start;
->5:          start = addmemory(linebuf);
->6:          buflen = linebuf->buflen;
->7:          bufpos = start + bufcount;
->8:       }
->9: 
->10:      *(bufpos++) = c;
->11:      buflen -= 1;
->12: 
->13:      if (c == '\n') {              /* we're done with one line */
->14:        *bufpos = '\0';
->15:         break;
->16:      }
->17:   }
 
-James
--- 
-My blog: http://www.crazydrclaw.com/
-My homepage: http://james.colannino.org/
+test2.txt
+-----8<-----8<-----8<-----8<-----8<-----8<-----8<
+Testing from test1
+-----8<-----8<-----8<-----8<-----8<-----8<-----8<
 
-"Black holes are where God divided by zero." --Steven Wright
+and daemon.c
+
+
+Now the problem is following:
+
+when i compile (gcc daemon.c => a.out) and run binary in this version 
+all works fine....and
+if I do
+#echo "some new line" >> test1.txt
+
+i would see on my screen that select figured it out and i am having new 
+data for processing and it
+would print it out.
+
+but when i uncomment last fprintf my while and select goes 
+ballistic.....it prints  numbers forever...not
+blocking......
+
+So why is that this line "fprintf(stderr,"%d\n",i++);" causes this behavior.
+
+tnx for help.
+
+--------------040404090508050103030507
+Content-Type: text/x-csrc;
+ name="daemon.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="daemon.c"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/select.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+
+ 	FILE *fp1,*fp2;
+	fd_set fdst;
+	char buffer[100];
+	int i;
+	
+	
+	if((fp1 = fopen("test1.txt","r")) == NULL){
+		return 0;
+	}
+	
+	if((fp2 = fopen("test2.txt","r")) == NULL){
+		return 0;
+	}
+	
+	
+	
+        /* Daemon-specific initialization goes here */
+
+        /* The Big Loop */
+        while (1) {
+           /* Do some task here ... */
+
+		FD_ZERO(&fdst);
+		FD_SET(fileno(fp1),&fdst);
+		FD_SET(fileno(fp2),&fdst);
+
+		select(fileno(fp2)+1,&fdst,NULL,NULL,NULL);
+
+		
+		if(FD_ISSET(fileno(fp1),&fdst)){
+
+			while(fgets(buffer,100,fp1) != NULL){
+				puts(buffer);
+
+			}	
+		}
+		
+
+		if(FD_ISSET(fileno(fp2),&fdst)){
+			
+			while(fgets(buffer,100,fp2) != NULL){
+				puts(buffer);
+			}	
+	
+		}
+
+		//fprintf(stderr,"%d\n",i++);
+	
+        }
+	
+	exit(EXIT_SUCCESS);
+}
+
+
+--------------040404090508050103030507--
