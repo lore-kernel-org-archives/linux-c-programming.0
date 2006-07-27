@@ -1,50 +1,32 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: select() problem/feature
-Date: Mon, 24 Jul 2006 17:35:04 +0100
-Message-ID: <17604.63160.842162.982799@cerise.gclements.plus.com>
-References: <44C4CFFC.8040909@zg.t-com.hr>
+From: "=?ISO-8859-1?Q?Norbert_Fran=E7ois?=" <norbertlike@gmail.com>
+Subject: my server is blocking...
+Date: Thu, 27 Jul 2006 21:17:46 +0200
+Message-ID: <78031e5e0607271217u2f60d430n42cacef776a26e2@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <44C4CFFC.8040909@zg.t-com.hr>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Nikola <root.admin1@zg.t-com.hr>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Hi list,
 
-Nikola wrote:
+I'm a beginner in C (sockets) programming, so please, excuse my stupid question.
 
-> i am writing small daemon.....and when i was seeing the end ......that 
-> was just the beginning
-> of my problems.
-> 
-> General idea was to monitor list of files that was given on start.
+I'm trying to do a servent (server+client) for a p2p connexion. When I
+dissociate the client and the server, everything's all right. The
+Server is waiting for (pending) a connexion and when I connect on it,
+I've the behaviour I want.
 
-> if I do
-> #echo "some new line" >> test1.txt
-> 
-> i would see on my screen that select figured it out and i am having new 
-> data for processing and it
-> would print it out.
+But now, I tried to merge the server & client together. When I start
+my program, the server is pending and the other part of my program
+isn't executed :( (the server is pending in an "accept" state). I
+tried to do some fork(), but it was useless (in fact, a new server is
+restarted and I get a bind error). How can I solve this problem
+(easily, if possible) ?
 
-select() is of no use here; files are always "ready" for I/O. select()
-is intended for use on descriptors where I/O calls may block
-indefinitely: pipes, sockets, terminals and other "slow" character
-devices.
+In advance, thank you for your help
 
-You can either poll the file at intervals (like "tail -f ..." does),
-or use the linux-specific "dnotify" ioctl()s (see the file
-Documentation/dnotify.txt in the kernel source tree for details).
-
-> but when i uncomment last fprintf my while and select goes 
-> ballistic.....it prints  numbers forever...not
-> blocking......
-
-None of the syscalls in your code will ever block; your program will
-be running continuously, using up to 100% CPU. Uncommenting the
-fprintf() call simply makes this obvious; it isn't changing anything.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+norbert
