@@ -1,7 +1,7 @@
 From: "Robert P. J. Day" <rpjday@mindspring.com>
-Subject: the pros and cons of "catch-all" header files
-Date: Thu, 10 Aug 2006 10:01:00 -0400 (EDT)
-Message-ID: <Pine.LNX.4.64.0608100956590.13049@localhost.localdomain>
+Subject: how to implement routines that return general strings?
+Date: Thu, 10 Aug 2006 10:10:21 -0400 (EDT)
+Message-ID: <Pine.LNX.4.64.0608101004460.13097@localhost.localdomain>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
@@ -11,24 +11,35 @@ Content-Transfer-Encoding: 7bit
 To: C programming list <linux-c-programming@vger.kernel.org>
 
 
-  over the next few days, i'm going to have some general design-type
-questions as i try to restructure a project i'm working on, so i'm
-hoping i don't wander too far from the mandate of the list.
+  i'm about to design and implement a number of routines that return
+strings and, as far as i can tell, i have two general design choices.
 
-  on this current project, there is frequent use of what i call
-"catchall" header files.  rather than have individual source files
-pull in just those header files they need, a monster "catchall.h" file
-is created that contains almost all project-related inclusions, so
-that source files need only:
+  int		func(char* buf, int bufsiz) ;
+  char*		func() ;
 
-  #include "catchall.h"
+  that first form obviously accepts the address of a buffer (and its
+size) into which to copy the result, and leaves the "int" return value
+to be used perhaps as an error code.  perfectly reasonable, but it
+forces every invocation to first have a buffer ready to go.
 
-  sure, it's convenient, but there are also some obvious downsides.
-the simple question -- is there a defensible rationale for this
-approach?  i personally don't like it and would prefer source files to
-be more selective, but the argument i keep hearing is, "it's more
-convenient."
+  the second form would be intuitively more natural, but is affected
+by the scope of the result.  the approach i would use there might be:
 
-  thoughts?
+char*
+func()
+{
+	static buf[128] ;	// or whatever size is appropriate
+	... copy result into buf ...
+	return buf ;
+}
+
+an error of some kind might be implemented by returning NULL, but that
+will restrict the range of error codes i can pass back.
+
+  are there compelling arguments either way?  while i like the natural
+feel of the second form, i have to admit the first form is more
+informative.  thoughts?
 
 rday
+
+
