@@ -1,43 +1,70 @@
-From: "Robert P. J. Day" <rpjday@mindspring.com>
-Subject: RE: the rationale for defining macros for simple types?
-Date: Thu, 10 Aug 2006 12:06:10 -0400 (EDT)
-Message-ID: <Pine.LNX.4.64.0608101201590.17399@localhost.localdomain>
-References: <C9D203A88CE285489324AEDC5174158604CEB983@dul1wnexmb01.vcorp.ad.vrsn.com>
+From: "Khan, Ahmer" <aakhan@vivotech.com>
+Subject: RE: how to implement routines that return general strings?
+Date: Thu, 10 Aug 2006 12:51:02 -0400
+Message-ID: <24E518F08BD8C445A6D9AE5BC7AD4B5802926DFA@ms09.mse4.exchange.ms>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <C9D203A88CE285489324AEDC5174158604CEB983@dul1wnexmb01.vcorp.ad.vrsn.com>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "Smith, Jason - VA" <JasonSmith@verisign.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: "Robert P. J. Day" <rpjday@mindspring.com>, C programming list <linux-c-programming@vger.kernel.org>
 
-On Thu, 10 Aug 2006, Smith, Jason - VA wrote:
+It really depends on what func() is doing inside. If it's only
+allocating memory and copying contents, then you can have the 
+	char* func()
+if it's doing other stuff too, like validating contents against various
+rules, which can result in different error codes, then you should
+consider using the 
+	int func(...) 
+form. I think both approaches are otherwise ok.
 
-> Robert,
->
-> stdint.h is a part of glibc methinks, and not part of any blessed
-> standard that I am aware of.  What you probably want to include for
-> the int*_t types is <inttypes.h>, which found in
-> /usr/(local/)?/include on most of the common *nix's out there (might
-> be part of a standard like C99 too).
+Ahmer
 
-as a followup to my last post, i suspect i need include only
-<stdint.h>, as i don't really need the additional info from
-<inttypes.h>.  i'm a minimalist, and i'd just as soon include as
-little as i actually need.  if some file genuinely needs the extras
-from <inttypes.h>, then that file can include it explicitly.
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Robert
+P. J. Day
+Sent: Thursday, August 10, 2006 7:10 AM
+To: C programming list
+Subject: how to implement routines that return general strings?
 
-> As a second opinion, I agree that those macros you have there are
-> close to worthless, as they are just abbreviated rehashes of the
-> word-size dependent native types.  Unless you have a compelling
-> reason for making the code less readable with no benefit over
-> inttypes.h, I'd ditch those macros.
 
-i'd suspected as much, i just wanted to make sure there wasn't some
-really tricky C idiom at work here.  so just declaring things with
-"int8_t" (for example) is the way to go if i really and truly need to
-get that specific.  thanks.
+  i'm about to design and implement a number of routines that return
+strings and, as far as i can tell, i have two general design choices.
+
+  int		func(char* buf, int bufsiz) ;
+  char*		func() ;
+
+  that first form obviously accepts the address of a buffer (and its
+size) into which to copy the result, and leaves the "int" return value
+to be used perhaps as an error code.  perfectly reasonable, but it
+forces every invocation to first have a buffer ready to go.
+
+  the second form would be intuitively more natural, but is affected
+by the scope of the result.  the approach i would use there might be:
+
+char*
+func()
+{
+	static buf[128] ;	// or whatever size is appropriate
+	... copy result into buf ...
+	return buf ;
+}
+
+an error of some kind might be implemented by returning NULL, but that
+will restrict the range of error codes i can pass back.
+
+  are there compelling arguments either way?  while i like the natural
+feel of the second form, i have to admit the first form is more
+informative.  thoughts?
 
 rday
+
+
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
