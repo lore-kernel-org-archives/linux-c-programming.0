@@ -1,55 +1,33 @@
-From: Scott <drmemory@3rivers.net>
-Subject: Re: how to implement routines that return general strings?
-Date: Thu, 10 Aug 2006 11:12:38 -0600
-Message-ID: <20060810171238.GC778@drmemory.local>
-References: <Pine.LNX.4.64.0608101004460.13097@localhost.localdomain>
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Subject: Linux kernel file access monitoring
+Date: Thu, 10 Aug 2006 11:10:28 -0600 (CST)
+Message-ID: <Pine.LNX.4.64.0608101059140.29875@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.64.0608101004460.13097@localhost.localdomain>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
 Content-Transfer-Encoding: 7bit
-To: "Robert P. J. Day" <rpjday@mindspring.com>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Thu, Aug 10, 2006 at 10:10:21AM -0400, Robert P. J. Day wrote:
-> 
->   i'm about to design and implement a number of routines that return
-> strings and, as far as i can tell, i have two general design choices.
-> 
->   int		func(char* buf, int bufsiz) ;
->   char*		func() ;
-> 
+Hello,
 
-With the caveat that I haven't done any serious programming in C for
-many years:  As I recall, I always used a protocol halfway between
-these, as:
+Anyone know can I monitor in real time all the files that are open(), 
+read(), stat[64]() and close() in a Linux kernel ?
 
-char *func(size_t bufsiz)
-{
-	char *retval = malloc (bufsiz);
-	if (retval == NULL) return (NULL);
-	/* whatever */
-	return (retval);
-}
+I assume setuid privileges. If a tool exists for this task, let me know.
 
-My thinking being that the low-level memory allocation (or a static
-buffer, if that is appropriate) is better handled in the lower-level
-routine. NULL vs valid pointer was usually good enough, though I do
-recall hacking something together with one of these to where a static
-error-code was recorded in the routine if something went wrong, which
-could be retrieved by sending a magic value for bufsiz:
+Thanks for the continued effort of the list in providing support for Linux 
+developers.
 
-char *foo = func(128);
-if (foo == NULL) {
-  errcode = (int) func(0xFFFF);
-  .....
-}
+Regards,
 
-I suppose violating all precepts of proper coding, but it used to
-work.....
 
-Good luck, and I'd appreciate hearing what your final decision is!
+---
+Fabio Andres Miranda
+Ingenieria de sistemas informaticos
+Universidad Latina - Costa Rica
+http://ns.isi.ulatina.ac.cr/~fabmirha
 
-Scott Swanson
+
+
