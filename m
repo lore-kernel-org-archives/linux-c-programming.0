@@ -1,49 +1,38 @@
-From: "Markus Rechberger" <mrechberger@gmail.com>
-Subject: Re: Linux kernel file access monitoring
-Date: Thu, 10 Aug 2006 19:59:47 +0200
-Message-ID: <d9def9db0608101059i414c98bdv3326f34a47a49909@mail.gmail.com>
-References: <Pine.LNX.4.64.0608101059140.29875@ns.isi.ulatina.ac.cr>
-	 <d9def9db0608101032q68794243r92aae3e24f205a97@mail.gmail.com>
-	 <Pine.LNX.4.64.0608101143320.5917@ns.isi.ulatina.ac.cr>
+From: "David Rientjes" <rientjes@google.com>
+Subject: Re: how to implement routines that return general strings?
+Date: Thu, 10 Aug 2006 12:04:25 -0700
+Message-ID: <9ec263480608101204t848a37u3e515f6c485a32ce@mail.google.com>
+References: <Pine.LNX.4.64.0608101004460.13097@localhost.localdomain>
+	 <20060810171238.GC778@drmemory.local>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0608101143320.5917@ns.isi.ulatina.ac.cr>
+In-Reply-To: <20060810171238.GC778@drmemory.local>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming@vger.kernel.org
+To: Scott <drmemory@3rivers.net>
+Cc: "Robert P. J. Day" <rpjday@mindspring.com>, linux-c-programming@vger.kernel.org
 
-Another way that comes into mind would be to manipulate the filesystem driver..
-Though I haven't seen any exported kernel function that does this...
-
-Markus
-
-On 8/10/06, Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr> wrote:
-> Markus,
+On 8/10/06, Scott <drmemory@3rivers.net> wrote:
+> With the caveat that I haven't done any serious programming in C for
+> many years:  As I recall, I always used a protocol halfway between
+> these, as:
 >
-> lsof doesnt allow to keep showing file information forever, instead, it
-> prints out the info and quit.
->
-> Think of "tail -f" command that keep hooked showing lseek() output.
->
-> Let me know another workaround,
->
-> Thanks,
->
-> ---
-> Fabio Andres Miranda
-> Ingenieria de sistemas informaticos
-> Universidad Latina - Costa Rica
-> http://ns.isi.ulatina.ac.cr/~fabmirha
->
->
->
->
+> char *func(size_t bufsiz)
+> {
+>         char *retval = malloc (bufsiz);
+>         if (retval == NULL) return (NULL);
+>         /* whatever */
+>         return (retval);
+> }
 >
 
+It looks like this would lead to memory leaks that would be difficult
+to track down along a wide variety of code paths upon return.
 
--- 
-Markus Rechberger
+I recommend the first style: int func(char *buf, size_t bufsize).  All
+malloc and frees are then encouraged to sandwich this call.
+
+David
