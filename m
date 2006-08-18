@@ -1,16 +1,27 @@
 From: "Marius Cosma" <marius.cosma@computaris.com>
 Subject: RE: Macro exercise
-Date: Fri, 18 Aug 2006 12:12:10 +0300
-Message-ID: <01b501c6c2a6$62fdfcd0$b361a8c0@COSMA>
+Date: Fri, 18 Aug 2006 12:19:52 +0300
+Message-ID: <01b701c6c2a7$76c33770$b361a8c0@COSMA>
+References: <01b501c6c2a6$62fdfcd0$b361a8c0@COSMA>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: 
+In-Reply-To: <01b501c6c2a6$62fdfcd0$b361a8c0@COSMA>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
+
+
+Solved ... x.PARAM works just fine 
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Marius Cosma
+Sent: 18 August 2006 12:12
+To: linux-c-programming@vger.kernel.org
+Subject: RE: Macro exercise
 
 Hello,
 
@@ -47,6 +58,15 @@ faster than a google search? :)
 
 Thanks
 
+
+
+This email is subject to Computaris email terms of use:
+http://www.computaris.com/email_terms.html
+-
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
 
 This email is subject to Computaris email terms of use: http://www.computaris.com/email_terms.html
