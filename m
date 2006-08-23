@@ -1,19 +1,29 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Where to find definition for __FUNCTION__ macro
-Date: Wed, 23 Aug 2006 12:11:38 +0100
-Message-ID: <17644.14314.29203.840094@cerise.gclements.plus.com>
-References: <3ce33f6c0608230302n6b779dd1w1543f437a955c5a0@mail.gmail.com>
-	<6eee1c40608230324t63154c45xa4b54c6d6cc9850d@mail.gmail.com>
-	<3ce33f6c0608230348s1cd6d5a1yf8b54d1eb830fffa@mail.gmail.com>
+From: "Shorty Porty" <getshorty_@hotmail.com>
+Subject: RE: Where to find definition for __FUNCTION__ macro
+Date: Wed, 23 Aug 2006 22:49:28 +1000
+Message-ID: <BAY104-DAV70758AAD5F35546BA30EEED470@phx.gbl>
+References: <17644.14314.29203.840094@cerise.gclements.plus.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <3ce33f6c0608230348s1cd6d5a1yf8b54d1eb830fffa@mail.gmail.com>
+In-Reply-To: <17644.14314.29203.840094@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriek <shriek.007@gmail.com>
-Cc: Vadiraj <vadiraj.cs@gmail.com>, Mihai Dontu <mdontu@bitdefender.com>, linux-c-programming@vger.kernel.org
+To: 'Glynn Clements' <glynn@gclements.plus.com>, 'Shriek' <shriek.007@gmail.com>
+Cc: 'Vadiraj' <vadiraj.cs@gmail.com>, 'Mihai Dontu' <mdontu@bitdefender.com>, linux-c-programming@vger.kernel.org
+
+My understanding is that __FUNCTION__ is substituted at compile time. So
+__FUNCTION__ doesn't run anything, it's just a string, like __FILE__ or
+__LINE__.
+
+shorty
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Glynn
+Clements
+Sent: Wednesday, 23 August 2006 9:12 PM
 
 
 Shriek wrote:
@@ -41,5 +51,3 @@ exist anywhere at run-time.
 I'd suggest looking at the source code for "nm" for details on reading
 symbol information.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
