@@ -1,45 +1,61 @@
-From: "Kelly Burkhart" <kelly@kkcsm.net>
-Subject: Re: Struct padding (was blank subject)
-Date: Wed, 27 Sep 2006 09:19:35 -0500
-Message-ID: <fa1e4ce70609270719l6bdf5902h7606bcfee5958d90@mail.gmail.com>
+From: Henry Margies <henry.margies@gmx.de>
+Subject: Re: getdate(3) - format date
+Date: Thu, 28 Sep 2006 09:38:43 +0200
+Message-ID: <1159429123.3898.4.camel@localhost.localdomain>
+References: <200609212236.46183.hitoc_mail@yahoo.it>
+	 <200609222239.43219.hitoc_mail@yahoo.it>
+	 <1159174413.3918.28.camel@localhost.localdomain>
+	 <200609261927.37275.hitoc_mail@yahoo.it>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <200609261927.37275.hitoc_mail@yahoo.it>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-On 9/26/06, Kirkwood, David A <DAVID.A.KIRKWOOD@saic.com> wrote:
-> I have an application that works perfectly in a 32 bit environment, but
-> does not in a 64 bit environment. I believe
->
-> The problem has to do with a structure defined as
->
->             Struct  x {
->
->                         Short aaa
->                         Short bbb
->                         Char something[12]
->                         Long lll
->                         Long mmm
->             }
->
-> Sorry about the capitalization.... I'm condemned to using exchange /
-> outlook.
->
-> After the program starts, I look at the  short variables above and they
-> are initialized to hex 2020 (both) which are spaces if they were
-> characters. Since this structure is initialized with a pointer to is (
-> and its components ) I wonder if in the 64 bit environment I have to
-> manually pad out the size(s) to even 64 bit boumderies?
+On Tue, 2006-09-26 at 19:27 +0200, HIToC wrote:
+> Hello Henry,
+> 
+> 	I have used "sh": sh script
+> But using ./script has the same problem: DATEMSK is not exported.
+> 
+> Thank you for the emails
+> HIToC
+> 
 
-How are you initializing the structure?
+If you execute a script via sh script.sh or ./script.sh it is executed
+in a sub shell. So every exported variable is only set in all sub-sub
+shells.
 
-You usually shouldn't depend on the layout of structures.  There are
-cases in which it is necessary, but it is usually better to avoid.  If
-you're trying to write the memory region of this structure to a file
-on a 32-bit machine and read it on a 64-bit machine it  would be
-better to write marshal/unmarshal functions to transform the structure
-to/from a platform independent representation.
+Try this script to see what I mean
+
+#!/bin/sh
+
+export V=Test
+echo $V
+
+
+
+Now execute it in a sub shell:
+
+sh script.sh
+echo $V
+
+and execute it in the current shell (via sourcing it)
+
+. ./script.sh
+echo $V
+
+or
+
+source script.sh
+echo $V
+
+
+
+Best regards,
+
+Henry
+
