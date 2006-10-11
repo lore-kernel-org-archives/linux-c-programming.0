@@ -1,34 +1,20 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: pointer indirection on the LHS of an assignment
-Date: Sun, 8 Oct 2006 13:17:39 +0100
-Message-ID: <17704.60515.225828.672044@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0610070909590.6332@localhost.localdomain>
-	<17704.12250.231544.173434@cerise.gclements.plus.com>
-	<Pine.LNX.4.64.0610080252420.12188@localhost.localdomain>
+From: "Raseel Bhagat" <raseelbhagat@gmail.com>
+Subject: Turning PC monitor on/off
+Date: Wed, 11 Oct 2006 11:34:38 +0530
+Message-ID: <f68850780610102304g35ea4fa6pb4bf2a0db9b14668@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0610080252420.12188@localhost.localdomain>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: "Robert P. J. Day" <rpjday@mindspring.com>
-Cc: C programming list <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: C programming list <linux-c-programming@vger.kernel.org>
 
-
-Robert P. J. Day wrote:
-
-> > The problem with the first example is that the
-> > __SEMAPHORE_INITIALIZER macro uses C99 features, which probably
-> > aren't supported in gcc 2.7.x.
-> >
-> > The LHS has nothing to do with it.
-> 
-> ah, sorry, i didn't look closely enough.  so if one could count on a
-> C99-compilant compiler being available, then the first form would be
-> perfectly acceptable?  thanks.
-
-Yes.
+Hi,
+ I want to write a C code for toggling my PC monitor on/off in Linux.
+Can some one point to any reading material or a hint or line of thought ?
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+Raseel.
+http://www.opensourcedeal.com
