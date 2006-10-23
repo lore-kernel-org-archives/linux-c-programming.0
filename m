@@ -1,46 +1,50 @@
-From: "Raseel Bhagat" <raseelbhagat@gmail.com>
-Subject: Re: Turning PC monitor on/off
-Date: Wed, 11 Oct 2006 17:00:27 +0530
-Message-ID: <f68850780610110430y4b0f792dx58db321315c0f2ce@mail.gmail.com>
-References: <f68850780610102304g35ea4fa6pb4bf2a0db9b14668@mail.gmail.com>
-	 <1160554317.4000.3.camel@localhost.localdomain>
-	 <f68850780610110226v38ff4650w94a53129b7f7ec0e@mail.gmail.com>
-	 <452CC11C.7040309@computer.org>
-	 <f68850780610110325l186c0dbdx14e97dcf44e9ad15@mail.gmail.com>
-	 <20061011110626.GA18435@shadow.uid0x00.org>
+From: =?ISO-8859-1?Q?=22J=F8rgen_P=2E_Tjern=F8=22?= <jorgen@devsoft.no>
+Subject: execve-type memory-based function, possible?
+Date: Mon, 23 Oct 2006 11:19:58 +0200
+Message-ID: <453C893E.9060901@devsoft.no>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20061011110626.GA18435@shadow.uid0x00.org>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Katelyn Rowlands <knr@uid0x00.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-I think I got my keywords, VESA and/or frame-buffers.
-Not to mention DPMS.
-I think I'll google from here on.
+Hi!
 
+I've recently been toying with methods for copy-protection and other=20
+esoteric subjects, for academic and hobby purposes, and I haven't found=
+=20
+much info on this subject.
 
-On 10/11/06, Katelyn Rowlands <knr@uid0x00.org> wrote:
-> On Wed, Oct 11, 2006 at 03:55:33PM +0530, Raseel Bhagat wrote:
-> > Thanks you guys, xset helped with X.
-> >
-> > But it doesn't work on console.
->
-> You could take a look at the dpmsctl program, located at
-> http://forums.gentoo.org/viewtopic.php?t=154996. It does the same as xset, but
-> works in the console.
->
-> I don't know if it only works for the Inspiron 510m laptop though. I never tried
-> it with anything else.
->
-> - Katelyn
->
+I want to see if it's possible (from userspace) to load and execute an=20
+ELF-binary based on a memory-buffer, i.e. load, relocate, etcetera (the=
+n=20
+execute) a program that's stored in memory.
 
+I can't find any readily available options, I've toyed a bit with shmem=
+=20
+(to get an fd) and fexecve, but haven't gotten far. I've briefly looked=
+=20
+at the execve-code in the kernel.
 
--- 
-Raseel.
-http://raseel.livejournal.com
+So I'm curious; does anyone have any experience or suggestions on this=20
+subject? Is it at all possible to do the operations via usermode? I've=20
+toyed with creating copy-protection-schemes and binary packers and such=
+=20
+under Win32, where it's possible, but I have no experience on the=20
+subject under Linux (or found any documentation on anyone else doing so=
+).
+
+Any papers, links, source-file-references etcetera would be appreciated=
+=2E :-)
+
+--=20
+Kindest regards / Med vennlig hilsen,
+  J=F8rgen P. Tjern=F8
+  <jorgen@devsoft.no>
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
