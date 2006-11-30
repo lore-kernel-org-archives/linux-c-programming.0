@@ -1,53 +1,44 @@
-From: linux err <linux_err@yahoo.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: Core file size?
-Date: Thu, 30 Nov 2006 07:29:25 -0800 (PST)
-Message-ID: <20061130152925.62097.qmail@web56515.mail.re3.yahoo.com>
-References: <456EF0C0.6030706@ladadee.com>
+Date: Thu, 30 Nov 2006 22:11:43 +0000
+Message-ID: <17775.22303.407587.991319@cerise.gclements.plus.com>
+References: <526654.3564.qm@web56508.mail.re3.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <456EF0C0.6030706@ladadee.com>
+In-Reply-To: <526654.3564.qm@web56508.mail.re3.yahoo.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: fifty.63@ladadee.com
+To: linux err <linux_err@yahoo.com>
 Cc: linux-c-programming@vger.kernel.org
 
-ulimit -c is set to unlimited. (like i said core size
-varies depending on how much you wrote on the memory
-you allocated)
 
+linux err wrote:
 
+> 
+> Does anyone know what determines the size of a core
+> dump? I have a process running out of memory (it
+> allocates about 3GB) - but the size of core varies
+> (between 2-3GB) depending on how much the process
+> wrote on the allocated memory.
+> 
+> Also, the time it takes to write the core (same size)
+> varies??
+> 
+> I briefly looked at elf_core_dump and get_user_pages()
+> in binfmt_elf.c. Is there any documentation on this?
+> Or anyone knows how it works?
 
---- David Vernon <fifty.63@ladadee.com> wrote:
+The relevant function seems to be maydump() (in binfmt_elf.c); this
+determines whether or not a given VM area should be dumped.
 
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
-> 
-> linux err wrote:
-> 
-> > Does anyone know what determines the size of a
-> core
-> > dump? 
-> 
-> ulimit -c to set the size and ulimit -a to see the
-> size.
-> 
-> 
-> -----BEGIN PGP SIGNATURE-----
-> Version: GnuPG v1.4.5 (GNU/Linux)
-> 
->
-iD8DBQFFbvDAxkzzjLpmvCwRAr95AJ9uztMsfMBuy9yPbcGZqXOYFrk62ACgycsY
-> 4hWUQKuZBsthw4cFdYNSqMg=
-> =LXka
-> -----END PGP SIGNATURE-----
-> 
+Essentially, it doesn't dump data which can be obtained elsewhere,
+e.g. from an executable, shared library, unmodified mmap()d file, etc.
 
+Primarily, this prevents dumping the .text and .rodata segments of the
+executable and shared libraries, which will often account for most of
+a process' address space.
 
-
- 
-____________________________________________________________________________________
-Do you Yahoo!?
-Everyone is raving about the all-new Yahoo! Mail beta.
-http://new.mail.yahoo.com
+-- 
+Glynn Clements <glynn@gclements.plus.com>
