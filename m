@@ -1,44 +1,80 @@
-From: Stephen Kratzer <kratzers@pa.net>
-Subject: Re: Request help with function pointers
-Date: Tue, 27 Feb 2007 10:15:13 -0500
-Message-ID: <200702271015.13729.kratzers@pa.net>
-References: <45DD1BC9.9030902@gmail.com>
-Reply-To: kratzers@pa.net
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Multiple declaration problem
+Date: Tue, 27 Feb 2007 18:42:46 +0000
+Message-ID: <17892.31654.328309.65384@cerise.gclements.plus.com>
+References: <45E05E83.5010005@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <45DD1BC9.9030902@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <45E05E83.5010005@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Shriramana Sharma <samjnaa@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On Wednesday 21 February 2007 23:27, Shriramana Sharma wrote:
-> Hello. I am trying the examples from Bruce Eckel's Thinking in C++ 2nd
-> edn and am getting a problem. I have attached the examples I am using
-> and the error messages (basically the same kind) which I got. I am
-> unable to understand what is wrong when I have followed the book example
-> perfectly (AFAIK) except for the variablenames which is immaterial.
->
-> Please explain what I did wrong. I am using:
->
-> $ g++ -v
-> Using built-in specs.
-> Target: i486-linux-gnu
-> Configured with: ../src/configure -v
-> --enable-languages=c,c++,fortran,objc,obj-c++,treelang --prefix=/usr
-> --enable-shared --with-system-zlib --libexecdir=/usr/lib
-> --without-included-gettext --enable-threads=posix --enable-nls
-> --program-suffix=-4.1 --enable-__cxa_atexit --enable-clocale=gnu
-> --enable-libstdcxx-debug --enable-mpfr --enable-checking=release
-> i486-linux-gnu
-> Thread model: posix
-> gcc version 4.1.2 20060928 (prerelease) (Ubuntu 4.1.1-13ubuntu5)
->
-> Thank you.
->
-> Shriramana Sharma.
 
-Remove the space in ". *" and "-> *".
+Shriramana Sharma wrote:
+
+> Hello. I have a problem with multiple declaration in a project I am 
+> working on. I have constructed a similar testcase which throws the same 
+> kind of error. Please see the files in the attachment. -g or -g3 did not 
+> give any useful debugging symbols, I don't know why. The following is 
+> the session transcript:
+> 
+> $ ls
+> main.cpp  myheader.cpp  myheader.h
+> $ g++ -c main.cpp
+> $ g++ -c myheader.cpp
+> $ g++ -o main main.o myheader.o
+> myheader.o:(.data+0x0): multiple definition of `b'
+> main.o:(.data+0x0): first defined here
+> collect2: ld returned 1 exit status
+> $ mv main.cpp main.c
+> $ mv myheader.cpp myheader.c
+> $ rm *.o
+> $ gcc -c main.c
+> $ gcc -c myheader.c
+> $ gcc -o main main.o myheader.o
+> myheader.o:(.rodata+0x0): multiple definition of `a'
+> main.o:(.rodata+0x0): first defined here
+> myheader.o:(.data+0x0): multiple definition of `b'
+> main.o:(.data+0x0): first defined here
+> collect2: ld returned 1 exit status
+> 
+> In my project, I need to put the following statement in a header file:
+> 
+> int lawCurrentEngine = NONE ; // NONE has been enum-med previously
+> 
+> because I need to declare a function
+> 
+> int lawCloseEngine ( int engineID = lawCurrentEngine ) ;
+> 
+> I include the header file containing these two lines in two cpp files, 
+> and I get a multiple definition error for lawCurrentEngine just like in 
+> the given test case. If I push the lawCurrentEngine declaration to one 
+> of the cpp-s (it's not needed in the other cpp) I am unable to provide 
+> the default argument for the lawCloseEngine which can be done only in 
+> the header.
+
+Default parameter values need to be constants; if you declare
+lawCloseEngine as "const int", you won't get an error.
+
+If you want the default value to be a variable rather than a constant,
+you need to use something like:
+
+	int lawCloseEngine ( int engineID = -1 ) ;
+
+
+	int lawCloseEngine ( int engineID )
+	{
+		if (engineID == -1)
+			engineID = lawCurrentEngine ;
+		...
+	}
+
+Alternatively, define separate zero-arguments and one-argument
+versions of lawCloseEngine.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
