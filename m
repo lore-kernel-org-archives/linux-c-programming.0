@@ -1,7 +1,7 @@
 From: Stephen Kratzer <kratzers@pa.net>
 Subject: Re: Request help with function pointers
-Date: Tue, 27 Feb 2007 09:48:38 -0500
-Message-ID: <200702270948.38776.kratzers@pa.net>
+Date: Tue, 27 Feb 2007 10:15:13 -0500
+Message-ID: <200702271015.13729.kratzers@pa.net>
 References: <45DD1BC9.9030902@gmail.com>
 Reply-To: kratzers@pa.net
 Mime-Version: 1.0
