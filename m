@@ -1,31 +1,52 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: leslie.polzer@gmx.net
 Subject: Re: Handling ioctl() argp memory
-Date: Mon, 5 Mar 2007 01:54:37 +0000
-Message-ID: <17899.30813.80673.270405@cerise.gclements.plus.com>
-References: <20070304164844.GA7231@wintermute.farpoint>
+Date: Mon, 5 Mar 2007 06:23:55 +0100
+Message-ID: <20070305052355.GA13946@wintermute.farpoint>
+References: <20070304164844.GA7231@wintermute.farpoint> <17899.30813.80673.270405@cerise.gclements.plus.com>
+Reply-To: leslie.polzer@gmx.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="6TrnltStXW4iwmi0"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20070304164844.GA7231@wintermute.farpoint>
+Content-Disposition: inline
+In-Reply-To: <17899.30813.80673.270405@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: leslie.polzer@gmx.net
+To: Glynn Clements <glynn@gclements.plus.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-leslie.polzer@gmx.net wrote:
+--6TrnltStXW4iwmi0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->   I'm passing an array to a ioctl.
->   ioctl(2) says it needs to point at memory, so I'm allocating it.
->   Do I need to, or rather, am I allowed to free the memory afterwards?
+On Mon, Mar 05, 2007 at 01:54:37AM +0000, Glynn Clements wrote:
 
-Yes. The kernel never retains pointers to user-space memory; it either
-copies the data, or finishes using it before the system call returns.
+> You're probably overwriting the beginning of the allocated block.
+What do you mean by that?  I can surely write to allocated memory, at
+the start, end and any point between...
 
->   It seems I'm getting segfaults when I free the memory...
+Besides, for the record: a short Valgrind run (thanks for the reminder!)
+showed me that I calculated the space wrongly, i.e. I allocated not
+enough memory.
 
-You're probably overwriting the beginning of the allocated block.
+  Leslie
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--=20
+gpg --keyserver pgp.mit.edu --recv-keys DD4EBF83
+http://nic-nac-project.de/~skypher/
+
+--6TrnltStXW4iwmi0
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.6 (GNU/Linux)
+
+iD8DBQFF66lryYzv6N1Ov4MRAn+9AJ46qxsmX3GyZ6khAIK8kcoxF0mPzgCdHYrW
+5juAWuKZlwo2mCUdOTXaUJE=
+=6Lcd
+-----END PGP SIGNATURE-----
+
+--6TrnltStXW4iwmi0--
