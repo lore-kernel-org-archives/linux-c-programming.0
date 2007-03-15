@@ -1,78 +1,64 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: execv fails with EFAULT
-Date: Wed, 7 Mar 2007 16:58:28 +0000
-Message-ID: <17902.61236.767765.91902@cerise.gclements.plus.com>
-References: <45EEA7F8.5080908@sun.com>
-	<6a00c8d50703070446s26ddb847uae5697ed797a2ff0@mail.gmail.com>
-	<45EEBA9B.9030903@sun.com>
+From: "Sreevathsa" <sreevathsa@gmail.com>
+Subject: PThread question
+Date: Thu, 15 Mar 2007 00:13:18 -0700
+Message-ID: <45f8f22b.0c41e030.3bf2.ffff8dda@mx.google.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <45EEBA9B.9030903@sun.com>
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:from:to:subject:date:organization:mime-version:content-type:content-transfer-encoding:x-mailer:x-mimeole:thread-index:message-id;
+        b=TzTdiV1+HeCPIpSFV+zVHx7kS7ePIjOWHzGIvh64Hh1WpVF555ZGaX1tfQ2dfD7UoGBtJX+/ae9EgUJHHxX8/3gTOy5UXcimsVmmXa99UxB2lDdJofZW5uGeTmDIbDBJB87xBft8/7t14W7ZsV4I/IqhEV1/b3KOU+3BwI0vCOw=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Prasanta Sadhukhan <Prasanta.Sadhukhan@Sun.COM>
-Cc: Steve Graegert <graegerts@gmail.com>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+I have a question on syncing the threads. I have a scenario like this:
+
+5 threads (T1, T2, T3, T4 & T5) are working on this piece of code:
+
+LINE1: 	for(;;) {
+LINE2: 		pthread_mutex_lock(&r1_mutex)
+LINE3: 		.............
+LINE4: 		.............
+LINE5: 		pthread_mutex_unlock(&r1_mutex)
 
 
-Prasanta Sadhukhan wrote:
+			/* some code that does not need protection */
+LINE6: 		.............
+LINE7: 		.............
 
-> >> When I tried the following program
-> >> void test4()
-> >> {
-> >>     printf("doing execv\n");
-> >>     if(execv("/bin/ls", "-l") == -1)
-> >>         printf("exec failed with errno %d\n", errno);
-> >>     else
-> >>         printf("exec succeed\n");
-> >> }
-> >
-> >
-> > Prasanta,
-> >
-> > A NULL terminated array of arguments must be passed to execv(2) as the
-> > prototype indicates: int execv(const char *path, char *const argv[]);
-> >
-> > For example:
-> >
-> > #include <unistd.h>
-> >
-> > char *cmd[] = { "ls", "-l", NULL };
-> > int result = execv ("/bin/ls", cmd);
-> >
-> > An error of EFAULT usually means that an argument points to an illegal 
-> > address.
-> >
-> >     \Steve
-> 
-> Thanks Steve... If I have a string like this sprintf(str, 
-> "-Xparameter:%d %s, value, command"), how to make it NULL terminated. Is 
-> this declaration char *cmd[] = {str, NULL} and invocation
-> execv(path, cmd) correct?
 
-Probably not. It's correct in that the second argument to execv() has
-the correct type, but if you're trying to pass multiple arguments, it
-won't work.
+LINE8: 		pthread_mutex_lock(&r2_mutex)
+LINE9: 		.............
+LINE10: 		.............
+LINE11: 		pthread_mutex_unlock(&r2_mutex)
+LINE12: 	}
 
-It's more likely that you want something like:
 
-	char str[20];
-	char *args[4];
+r1_mutex is to protect the access to a FIFO queue. I want the 5 threads to
+process the queue contents in the same order in which they arrived into the
+queue. 
 
-	sprintf(str, "-Xparameter:%d", value);
+Now, lets assume that a request comes into the queue and thread T1 picks up
+and starts processing it. T1 has released r1_mutex lock and is holding
+r2_mutex lock and is executing the code in lines 9 and 10.
 
-	args[0] = path;
-	args[1] = str;
-	args[2] = command;
-	args[3] = NULL;
+While T1 is busy executing code on lines 9 and 10, the queue gets 4 more
+requests and threads T2, T3, T4 and T5 (in that order) picks each one of
+them in the order in which they came into the queue and start processing
+them. They come till LINE 8 and wait to lock r2_mutex which thread T1 has
+currently locked.
 
-	result = execv(path, args);
+Now, given this scenario, here is my question:
+After T1 unlocks r2_mutex, which thread among T2, T3, T4 and T5 gets the
+r2_mutex lock? Does pthread scheduler schedule (give the lock to) thread T2
+which came to LINE8 first??
 
-This assumes that "command" is meant to be a single argument, not a
-list of arguments. If it's a list (e.g. with individual items
-separated by spaces), you'll have to split it back into a list before
-passing it to execv().
+FYI: I use Linux 2.6 - Fedora distro. I am not sure if its uses NPTL or the
+native Linux threads.
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Thanks,
+Sreevathsa
+
