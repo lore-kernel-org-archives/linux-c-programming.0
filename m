@@ -1,52 +1,49 @@
-From: Topher Fischer <javert42@cs.byu.edu>
-Subject: Getting output from another program.
-Date: Wed, 21 Mar 2007 14:01:14 -0600
-Message-ID: <46018F0A.9010801@cs.byu.edu>
+From: leslie.polzer@gmx.net
+Subject: Re: Getting output from another program.
+Date: Wed, 21 Mar 2007 21:39:42 +0100
+Message-ID: <20070321203942.GA2830@wintermute.farpoint>
+References: <46018F0A.9010801@cs.byu.edu>
+Reply-To: leslie.polzer@gmx.net
 Mime-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="------------enigE69AA6421B67A765C8B3C3B9"
+	protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <46018F0A.9010801@cs.byu.edu>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+To: Topher Fischer <javert42@cs.byu.edu>
+Cc: linux-c-programming@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---------------enigE69AA6421B67A765C8B3C3B9
-Content-Type: text/plain; charset=ISO-8859-1
+
+--uAKRQypu60I7Lcqm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Today I discovered the 'file' command.  I was immediately embarrassed
-and upset that I have gone so long without ever running into it.  It
-also made me think of a few questions.
+On Wed, Mar 21, 2007 at 02:01:14PM -0600, Topher Fischer wrote:
 
-1. Is there a C library that provides equivalent or similar
-functionality (especially for identifying MIME types)?
+> 1. Is there a C library that provides equivalent or similar
+> functionality (especially for identifying MIME types)?
+libmagic (part of 'file' package)
+libgmime (part of 'gmime' package)
 
-2. What's the best practice for getting output from an external command?
- I've heard of it being done by forking, overwriting the child's file
-descriptors for stdin and stdout with pipes, and then exec'ing the
-command.
-
+  Leslie
 
 --=20
-Topher Fischer
-GnuPG Fingerprint: 3597 1B8D C7A5 C5AF 2E19  EFF5 2FC3 BE99 D123 6674
-javert42@cs.byu.edu
+NEW homepage: https://viridian.dnsalias.net/~sky/homepage/
+gpg --keyserver pgp.mit.edu --recv-keys DD4EBF83
 
-
---------------enigE69AA6421B67A765C8B3C3B9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+--uAKRQypu60I7Lcqm
+Content-Type: application/pgp-signature
+Content-Disposition: inline
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org
+Version: GnuPG v1.4.7 (GNU/Linux)
 
-iD8DBQFGAY8ML8O+mdEjZnQRAumsAJ4he4frDrdbe9xSi9G4hu1tN2JvDACcCm8t
-qUVSSAA0N/zz1MeOER7vsEA=
-=NDyI
+iD8DBQFGAZgOyYzv6N1Ov4MRAna5AJ95abWMOJr/rJVel0CXOL8B+JuXVwCfe9IC
+km1kf8hkL7kQ29EfpDdOaLs=
+=yWLX
 -----END PGP SIGNATURE-----
 
---------------enigE69AA6421B67A765C8B3C3B9--
+--uAKRQypu60I7Lcqm--
