@@ -1,24 +1,22 @@
-From: Mathieu Dube <mujo@dubix.org>
-Subject: Re: Getting output from another program.
-Date: Wed, 21 Mar 2007 16:43:34 -0400
-Message-ID: <20070321204334.GB23547@dubix.org>
-References: <46018F0A.9010801@cs.byu.edu>
+From: Prasanta Sadhukhan <Prasanta.Sadhukhan@Sun.COM>
+Subject: Getting pid of exec'd process
+Date: Thu, 22 Mar 2007 16:41:43 +0530
+Message-ID: <4602646F.3040906@sun.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <46018F0A.9010801@cs.byu.edu>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; format="flowed"; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-On Wed, Mar 21, 2007 at 02:01:14PM -0600, Topher Fischer wrote:
-> 2. What's the best practice for getting output from an external command?
->  I've heard of it being done by forking, overwriting the child's file
-> descriptors for stdin and stdout with pipes, and then exec'ing the
-> command.
->
-have you checked popen?
+Hi,
 
--M 
+Can anyone suggest as to how can I get the pid of the process which I 
+have done execv()?
+ie, if I do execv(path, cmd) a new process will be launched and now how 
+can I get the pid of this new process?
+
+Regard
+Prasanta
+
