@@ -1,59 +1,36 @@
-From: Reggie Cushing <reggie.cushing@um.edu.mt>
-Subject: Re: Function stack reallocation
-Date: Wed, 28 Mar 2007 15:36:30 +0200
-Message-ID: <460A6F5E.6010608@um.edu.mt>
-References: <460A177A.4080506@um.edu.mt> <460A5208.7070501@computer.org>
+From: "Sreevathsa" <sreevathsa@gmail.com>
+Subject: Custom defined object in a signal handler
+Date: Wed, 28 Mar 2007 16:54:02 -0700
+Message-ID: <460b0048.12917d31.29d5.102f@mx.google.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <460A5208.7070501@computer.org>
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:from:to:subject:date:organization:mime-version:content-type:content-transfer-encoding:x-mailer:x-mimeole:thread-index:message-id;
+        b=llfg9JHiR51Ogic4vGGIUR+tvQeREAh7m9x1MP7LXzy6wgsjbXKIEO/n6ZAkaDdn04vOqPqeYx/qoEXe4EFLZVBlABPw0bj24OR3QlzJTa7E2VSllWy8aGvS4nbBZmtwJVdGN+5P1Wf9ZYYuWukoho5bi2HzGtOWJs4xEWls3zQ=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Per Jessen <per@computer.org>
-Cc: linux-c-programming@vger.kernel.org, nhorman@tuxdriver.com
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-cheers for the clarification, very much appreciated.
+I have a question regarding signals. Is there a way you can pass some custom
+defined parameter (say, a struct foo * ) to a signal handler??
 
-R.
+To be more specific, struct sigaction defines 2 types of handlers - namely
+sa_handler and sa_sigaction both of which have predefined set of arguments
+to them.
 
-Per Jessen wrote:
-> Reggie Cushing wrote:
->   
->> Hi All - I wish some insight on the possibility of reallocating a
->> function stack to a malloced regions in realtime ie I jump out of a
->> function and the next time I jump in the stack would have moved along
->> with its data. To me it seems unreliable cause the values in the stack
->> have no type hence I would not know if the stack value is a data value
->> or a pointer. If I mistakenly interpret a data value as a pointer I will
->> update the data value resulting in data corruption. I would really wish
->> some expert insight in this on this subject.
+sa_handler has (int) as the argument and sa_sigaction has (int, siginfo_t *,
+void *) as its arguments. The third argument void * to sa_sigaction is for a
+ucontext_t struct that contains the process's context at the time of signal
+delivery.
 
->> What you're talking about is something long these lines:
->>
->> a=malloc(chunk);
->> memcpy( chunk, SP, size);
->> SP=chunk;
->>
->>
->> The only way you "know" what's on your stack is by the variable
->> declarations you've made in your code.  The stack, wherever it is, does
->> not contain any type info.
->>
->>
->> /Per Jessen, Zurich
->> -
->> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->>
->>
->>     
+My requirement is: I need to pass a struct foo * pointer to the signal
+handler when I set it up and later when the signal is delivered I must be
+able to see the foo * that I had passed at the time of setting up the
+handler. Does anyone know how we can do this?
 
--- 
-Reggie Cushing
-Systems Engineer
-310, Dept Computer Science and AI
-University of Malta, MSD06, MALTA
-Tel: +356 2340 2130 
+TIA,
+Sreevathsa
 
