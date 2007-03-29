@@ -1,64 +1,140 @@
-From: "Sreevathsa" <sreevathsa@gmail.com>
-Subject: RE: Custom defined object in a signal handler
-Date: Wed, 28 Mar 2007 17:22:10 -0700
-Message-ID: <460b06e1.2894bac9.6e94.23cd@mx.google.com>
-References: <17931.925.199685.326663@cerise.gclements.plus.com>
+From: Nikola <root.admin1@zg.t-com.hr>
+Subject: Pipes and passwd programm problem
+Date: Thu, 29 Mar 2007 04:41:48 +0200
+Message-ID: <460B276C.3090103@zg.t-com.hr>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:from:to:cc:subject:date:organization:mime-version:content-type:content-transfer-encoding:x-mailer:x-mimeole:in-reply-to:thread-index:message-id;
-        b=IdDCOzoj+LqV2av/rbrSc5zHNF66iVkZCPHRg5GAT2+zEWkPXT0J0c9ZZESgsfWJszvk9RYKwzteXvFvBo/UZBsYlL0oFB4lvZrt3DgMsD/LX9pug6K6E9kPWUObnXZjLO0ifsYwHDnl0rOiIU7vP6xKUY5s8CbL/+tG1z5XHFw=
-In-Reply-To: <17931.925.199685.326663@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: 'Glynn Clements' <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-I am working on a multithreaded application in which, in one of the code
-paths, multiple threads need to setup a SIGALRM signal (to achieve TCP
-retrasmission kind of functionality). When each thread does this, it also
-need to pass the address of the structure that it operated upon, so that
-when the signal is delivered, the signal handling thread will know the
-address of the strucutre and can act upon it.
+Hi,
 
-Is there any way to accomplish this goal? If you need any other info about
-the problem environment, I can provide them, please let me know.
+I would like to interface with passwd program in Debian Linux using 
+pipes to be able to change password from a C program.
 
-Thanks,
-Sreevathsa
+Problem is in reading output from passwd program.
 
- 
+I have observed interesting behavior with passwd program.
 
-> -----Original Message-----
-> From: linux-c-programming-owner@vger.kernel.org 
-> [mailto:linux-c-programming-owner@vger.kernel.org] On Behalf 
-> Of Glynn Clements
-> Sent: Wednesday, March 28, 2007 5:09 PM
-> To: Sreevathsa
-> Cc: linux-c-programming@vger.kernel.org
-> Subject: Re: Custom defined object in a signal handler
-> 
-> 
-> Sreevathsa wrote:
-> 
-> > I have a question regarding signals. Is there a way you can 
-> pass some 
-> > custom defined parameter (say, a struct foo * ) to a signal 
-> handler??
-> 
-> No (other than by using a global variable).
-> 
-> As you can only install a single handler for any given 
-> signal, there isn't any real need to support closures.
-> 
-> --
-> Glynn Clements <glynn@gclements.plus.com>
-> -
-> To unsubscribe from this list: send the line "unsubscribe 
-> linux-c-programming" in the body of a message to 
-> majordomo@vger.kernel.org More majordomo info at  
-> http://vger.kernel.org/majordomo-info.html
+---------------------------
+
+[nikola@host][~]$ passwd
+Changing password for zip
+(current) UNIX password:
+[ENTER]
+passwd: Authentication failure
+[nikola@host][~]$
+
+
+[nikola@host][~]$ passwd 1> /dev/null
+(current) UNIX password:
+[ENTER]
+passwd: Authentication failure
+[nikola@host][~]$
+
+
+[nikola@host][~]$ passwd 2> /dev/null
+Changing password for zip
+[ENTER]
+[nikola@host][~]$
+
+
+---------------------------
+
+Program is using both STDOUT and STDERR for output.
+
+
+program.c
+---------------------------
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#define BSIZE 500
+
+int read_chars(FILE *rstream){
+        char ch;
+
+        while(!feof(rstream)){
+                ch = fgetc(rstream);
+                printf("%c",ch);
+        }
+
+        fflush(NULL);
+
+        return 0;
+}
+
+
+int main(int argc, char **argv){
+
+
+        int rfds[2];
+        int stdout_wfds[2];
+        int stderr_wfds[2];
+
+        pid_t pid;
+
+
+        if(argc < 3){
+                fprintf(stderr,"Error: In argument count\n");
+                exit(1);
+        }
+
+
+        pipe(rfds);
+        pipe(stdout_wfds);
+        pipe(stderr_wfds);
+
+
+        pid = fork();
+        if( pid == 0 ){ // child
+                close(rfds[1]);
+                close(stdout_wfds[0]);
+                close(stderr_wfds[0]);
+
+
+                dup2(rfds[0],STDIN_FILENO);
+                dup2(stdout_wfds[1],STDOUT_FILENO);
+                dup2(stderr_wfds[1],STDERR_FILENO);
+
+                execlp("passwd","passwd",0);
+
+        } else { // parent
+
+                FILE *rstream_out,*rstream_err,*wstream;
+                char buffer[BSIZE];
+
+                wstream = fdopen(rfds[1],"w");
+                rstream_out = fdopen(stdout_wfds[0],"r");
+                rstream_err = fdopen(stderr_wfds[0],"r");
+
+
+                // PROBLEM !!!!!!!!!!!!!!!!!!!
+                // this is supposed to read 2 lines of passwd output
+                // but seems it doesn't work
+                read_chars(rstream_out);
+                read_chars(rstream_err);
+
+
+                close(rfds[1]);
+                close(stdout_wfds[0]);
+                close(stderr_wfds[0]);
+
+                waitpid(pid,NULL,0);
+        }
+
+        return 0;
+}
+
+---------------------------
+
+
+tnx in advance.
+Nikola.
+
 
