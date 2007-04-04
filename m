@@ -1,113 +1,111 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Pipes and passwd programm problem
-Date: Thu, 29 Mar 2007 04:35:33 +0100
-Message-ID: <17931.13317.108466.580863@cerise.gclements.plus.com>
-References: <460B276C.3090103@zg.t-com.hr>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Function pointers to inline functions
+Date: Wed, 04 Apr 2007 22:39:22 +0530
+Message-ID: <4613DBC2.8060708@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="------------060109050908030000040400"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <460B276C.3090103@zg.t-com.hr>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Nikola <root.admin1@zg.t-com.hr>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+This is a multi-part message in MIME format.
+--------------060109050908030000040400
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hello.
+
+As per my understanding, an inline function is replaced in place by the 
+compiler with the body of the function, so it does not have a separate 
+location in memory in contrast with a regular function. This being so, 
+how is it possible to extract a pointer to an inline function and 
+effectively use it?
+
+See the attached two examples. They work and though it's a good thing 
+for my project that I can extract a pointer to an inline function I do 
+not understand how it is possible.
+
+Please explain. Thank you.
+
+Shriramana Sharma.
+
+--------------060109050908030000040400
+Content-Type: text/x-c++src;
+ name="function-pointers-1.cpp"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="function-pointers-1.cpp"
+
+#include "stdio.h"
+
+inline void square ( int a ) { printf ( "The square of %d is %d\n", a, a * a ) ; }
+inline void cube ( int a ) { printf ( "The cube of %d is %d\n", a, a * a * a ) ; }
+inline void fourthpower ( int a ) { printf ( "The fourth power of %d is %d\n", a, a * a * a * a ) ; }
+
+void ( * functionpointers [ 3 ] ) ( int ) ;
+/*
+the above line declares an array called functionpointers that has three ( 3 ) elements which are all pointers ( * ) to functions which take a single integer as parameter ( int ) and return nothing ( void ) and do not modify the contents of the class in anyway ( const )
+*/
+
+void executefunction ( int functionnumber, int inputforfunction )
+{
+	if ( functionnumber < 0 || functionnumber > 2 ) return ;
+	( * functionpointers [ functionnumber ] ) ( inputforfunction ) ;
+	// this line calls the function which is pointed ( * ) to by the functionnumber-th element of the functionpointers array which is a member of the object pointed to by the current object pointer ( this ) and passes the function the value of the variable inputforfunction as a parameter
+}
+
+int main ( void )
+{
+	functionpointers [ 0 ] = & square ;
+	functionpointers [ 1 ] = & cube ;
+	functionpointers [ 2 ] = & fourthpower ;
+	
+	int count ;
+	for ( count = 0; count < 3; count ++ )
+		executefunction ( count, 2 ) ;
+}
+
+--------------060109050908030000040400
+Content-Type: text/x-c++src;
+ name="function-pointers-2.cpp"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="function-pointers-2.cpp"
+
+#include "stdio.h"
+
+inline int square ( int a ) { return a * a ; }
+inline int cube ( int a ) { return a * a * a ; }
+inline int fourthpower ( int a ) { return a * a * a * a ; }
+inline int squarepluscube ( int a ) { return square ( a ) + cube ( a ) ; }
+inline int squarepluscubeplusfourthpower ( int a ) { return squarepluscube ( a ) + fourthpower ( a ) ; }
+
+int ( * functionpointers [ 5 ] ) ( int ) ;
+/*
+the above line declares an array called functionpointers that has three ( 3 ) elements which are all pointers ( * ) to functions which take a single integer as parameter ( int ) and return nothing ( void ) and do not modify the contents of the class in anyway ( const )
+*/
+
+void executefunction ( int functionnumber, int inputforfunction )
+{
+	printf ( "%d\n", ( * functionpointers [ functionnumber ] ) ( inputforfunction ) ) ;
+	// this line calls the function which is pointed ( * ) to by the functionnumber-th element of the functionpointers array which is a member of the object pointed to by the current object pointer ( this ) and passes the function the value of the variable inputforfunction as a parameter
+}
+
+int main ( void )
+{
+	functionpointers [ 0 ] = & square ;
+	functionpointers [ 1 ] = & cube ;
+	functionpointers [ 2 ] = & fourthpower ;
+	functionpointers [ 3 ] = & squarepluscube ;
+	functionpointers [ 4 ] = & squarepluscubeplusfourthpower ;
+	
+	int count ;
+	for ( count = 0; count < 5; count ++ )
+		executefunction ( count, 2 ) ;
+}
+
+--------------060109050908030000040400--
 
 
-Nikola wrote:
-
-> I would like to interface with passwd program in Debian Linux using 
-> pipes to be able to change password from a C program.
-> 
-> Problem is in reading output from passwd program.
-> 
-> I have observed interesting behavior with passwd program.
-> 
-> ---------------------------
-> 
-> [nikola@host][~]$ passwd
-> Changing password for zip
-> (current) UNIX password:
-> [ENTER]
-> passwd: Authentication failure
-> [nikola@host][~]$
-> 
-> 
-> [nikola@host][~]$ passwd 1> /dev/null
-> (current) UNIX password:
-> [ENTER]
-> passwd: Authentication failure
-> [nikola@host][~]$
-> 
-> 
-> [nikola@host][~]$ passwd 2> /dev/null
-> Changing password for zip
-> [ENTER]
-> [nikola@host][~]$
-> 
-> 
-> ---------------------------
-> 
-> Program is using both STDOUT and STDERR for output.
-
-> int read_chars(FILE *rstream){
->         char ch;
-> 
->         while(!feof(rstream)){
->                 ch = fgetc(rstream);
->                 printf("%c",ch);
->         }
-> 
->         fflush(NULL);
-> 
->         return 0;
-> }
-
-This function reads until EOF, which is a problem for your usage of
-it. See below.
-
->         pipe(rfds);
->         pipe(stdout_wfds);
->         pipe(stderr_wfds);
-
-Do you need the stdout and stderr to be separate? You could create one
-pipe and assign it to both stdout and stderr.
-
->         if( pid == 0 ){ // child
->                 close(rfds[1]);
->                 close(stdout_wfds[0]);
->                 close(stderr_wfds[0]);
-> 
-> 
->                 dup2(rfds[0],STDIN_FILENO);
->                 dup2(stdout_wfds[1],STDOUT_FILENO);
->                 dup2(stderr_wfds[1],STDERR_FILENO);
-
-At this point, you should close std{out,err}_wfds[1] and rfds[0]. 
-dup2() copies the descriptor; it doesn't close the source.
-
->                 execlp("passwd","passwd",0);
-> 
->         } else { // parent
-
-Again, you should close std{out,err}_wfds[1] and rfds[0] here.
-
->                 // PROBLEM !!!!!!!!!!!!!!!!!!!
->                 // this is supposed to read 2 lines of passwd output
->                 // but seems it doesn't work
->                 read_chars(rstream_out);
->                 read_chars(rstream_err);
-
-These functions read until EOF. That won't happen so long as any
-process has the write end open. The child will keep its copies open
-until it terminates (which won't happen until you've sent at least the
-oldpassword, and also the new password if the old password is
-correct), and the parent is also holding copies.
-
-More generally, scripting an interactive program such as passwd is
-inherently fragile. Scripting the passwd program is especially
-fragile, as it typically uses PAM, and so the exact behaviour is
-highly variable.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
