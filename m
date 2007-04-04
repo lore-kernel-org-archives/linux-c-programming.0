@@ -1,47 +1,68 @@
 From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Function pointers to inline functions
-Date: Wed, 4 Apr 2007 20:33:51 +0200
-Message-ID: <6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
-References: <4613DBC2.8060708@gmail.com>
+Subject: Re: efficiency in passing a value to a function
+Date: Wed, 4 Apr 2007 20:38:36 +0200
+Message-ID: <6a00c8d50704041138l278f34d2t9c97ba551f7ad5c3@mail.gmail.com>
+References: <4613DCB8.8030007@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
         d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
-        b=iLv/dW7/6EBxuBwo1OSo5MUVPePLahAPn0StcfLzJkF+tPudXhM97l1/sEVEo3losi22IvR2W7n8HBPxW0yJ3Ee1KUcYMJxUj/aA8yoRCuBO+aw4cckrDZYB4aEoZd05xkOQYNP+Cqa0ic+R8W+nvqJY39LYcZE11IEyOuctwLI=
-In-Reply-To: <4613DBC2.8060708@gmail.com>
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        b=XQ/J4AkP59C7vfSy7ekyapoaiwMI2NWZRjAw6yKgJTE0mwVIEhMAcbNfQrKYUwtvxCLefKQh/sCDOiaNewHqC5xahmvkBohQq+1dEj4GvrfZY6tcyMHLNbctV+4cvVnvLbibV0vRhYVcJ0xcOv2Hcf4VkW45LF+wxf4SgTOznCg=
+In-Reply-To: <4613DCB8.8030007@gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: Shriramana Sharma <jamadagni@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
 Shriramana,
 
-On 4/4/07, Shriramana Sharma <samjnaa@gmail.com> wrote:
+On 4/4/07, Shriramana Sharma <jamadagni@gmail.com> wrote:
 > Hello.
 >
-> As per my understanding, an inline function is replaced in place by t=
-he
-> compiler with the body of the function, so it does not have a separat=
-e
-> location in memory in contrast with a regular function. This being so=
-,
-> how is it possible to extract a pointer to an inline function and
-> effectively use it?
+> Is providing an input to a function by constant reference more effici=
+ent
+> than passing it by value? In what way.
 >
-> See the attached two examples. They work and though it's a good thing
-> for my project that I can extract a pointer to an inline function I d=
-o
-> not understand how it is possible.
+> For ex:
+>
+> int addOne ( const & int inValue ) { return inValue + 1 ; }
+>
+> vs:
+>
+> int addOne ( int inValue ) { return inValue + 1 ; }
+>
+> or:
+>
+> void printThis ( const & int inValue ) { cout << inValue ; }
+>
+> vs:
+>
+> void printThis ( int inValue ) { cout << inValue ; }
+>
+> I think passing as const & would be more efficient since passing by
+> value would involve copying the value whereas passing by const & woul=
+d
+> skip this step. Am I right? Or is there something else?
 
-Whenever you request a pointer to an inline function the compiler will
-place a normal subroutine version of the inline's implementation in an
-object file and return its address.  So, effectively, the function
-pointer does not point to an inline function at all.
+I have seen many programs making use const reference parameters in
+order to inform the compiler that the parameter is read-only, and
+hence should be better optimized.
 
-       \Steve
+Unfortunately, this intent is at odds with the C++ language
+definition. The const keyword says that the storage may not be
+modified through the given name. What it does not say is that the
+storage cannot be modified through some other name.
+
+With the exception of variables directly declared const, which means
+you can only initialize them, const is basically ineffective a
+improving run-time performance. It does, however, catch errors in the
+programming process.
+
+	\Steve
 
 --
 
