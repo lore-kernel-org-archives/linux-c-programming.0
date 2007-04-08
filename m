@@ -1,70 +1,51 @@
-From: Adam Dyga <adeon@tlen.pl>
+From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: efficiency in passing a value to a function
-Date: Wed, 11 Apr 2007 23:44:25 +0200
-Message-ID: <200704112344.25098.adeon@tlen.pl>
-References: <4613DCB8.8030007@gmail.com> <17939.60957.687289.154272@cerise.gclements.plus.com>
+Date: Sun, 08 Apr 2007 20:15:42 +0530
+Message-ID: <46190016.2000402@gmail.com>
+References: <4613DCB8.8030007@gmail.com> <6a00c8d50704041138l278f34d2t9c97ba551f7ad5c3@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17939.60957.687289.154272@cerise.gclements.plus.com>
-Content-Disposition: inline
+In-Reply-To: <6a00c8d50704041138l278f34d2t9c97ba551f7ad5c3@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-On Wednesday, 4 April 2007 20:27, Glynn Clements wrote:
+Steve Graegert wrote:
 
-> Shriramana Sharma wrote:
-> > Is providing an input to a function by constant reference more efficient
-> > than passing it by value? In what way.
->
-> Passing a reference doesn't copy the value. This can be significant if
-> the value is large (i.e. a structure); for values which are no larger
-> than a pointer, it is unlikely to make any difference.
+> I have seen many programs making use const reference parameters in
+> order to inform the compiler that the parameter is read-only, and
+> hence should be better optimized.
 
-For values which are not larger than a pointer, passing by reference can be 
-even (slightly) slower, because the pointer must be dereferenced in the 
-function in order to use the value:
+I thought the usage of const before & in function definitions was to 
+prevent the value from being modified. I never knew there is an 
+optimization aspect.
 
-void f1(const int v)
-{
-    printf("%d", v);
-}
+> Unfortunately, this intent is at odds with the C++ language
+> definition. The const keyword says that the storage may not be
+> modified through the given name. What it does not say is that the
+> storage cannot be modified through some other name.
 
-void f2(const int & v)
-{
-    printf("%d", v);
-}
+I observe that this is true for C too, not just C++. Anyway, how is it 
+exactly "at odds" with the language definition?
 
+[BTW gcc is intelligent enough to give me a compile-time warning:
 
-Compiled with -O2:
+const.c:7: warning: initialization discards qualifiers from pointer 
+target type
 
-(gdb) disas f1
-Dump of assembler code for function _Z2f1i:
-0x08048460 <_Z2f1i+0>:  push   %ebp
-0x08048461 <_Z2f1i+1>:  mov    %esp,%ebp
-0x08048463 <_Z2f1i+3>:  sub    $0x10,%esp
-0x08048466 <_Z2f1i+6>:  mov    0x8(%ebp),%eax
-0x08048469 <_Z2f1i+9>:  push   %eax
-0x0804846a <_Z2f1i+10>: push   $0x80485d4
-0x0804846f <_Z2f1i+15>: call   0x8048358 <printf@plt>
-0x08048474 <_Z2f1i+20>: leave
-0x08048475 <_Z2f1i+21>: ret
-End of assembler dump.
-(gdb) disas f2
-Dump of assembler code for function _Z2f2RKi:
-0x08048480 <_Z2f2RKi+0>:        push   %ebp
-0x08048481 <_Z2f2RKi+1>:        mov    %esp,%ebp
-0x08048483 <_Z2f2RKi+3>:        sub    $0x10,%esp
-0x08048486 <_Z2f2RKi+6>:        mov    0x8(%ebp),%eax
-0x08048489 <_Z2f2RKi+9>:        mov    (%eax),%edx      //pointer dereference
-0x0804848b <_Z2f2RKi+11>:       push   %edx
-0x0804848c <_Z2f2RKi+12>:       push   $0x80485d4
-0x08048491 <_Z2f2RKi+17>:       call   0x8048358 <printf@plt>
-0x08048496 <_Z2f2RKi+22>:       leave
-0x08048497 <_Z2f2RKi+23>:       ret
-End of assembler dump.
+when I write const int i = 2 ; int * iptr = & i ; and I don't even have 
+to give -Wall !]
 
+> you can only initialize them, const is basically ineffective a
+> improving run-time performance. It does, however, catch errors in the
+> programming process.
 
-Adam
+const is also useful for preventing a function writing to a variable 
+passed to it as reference, which is what this thread was originally about.
+
+Just for the record, are there any other uses for const?
+
+Shriramana Sharma.
+
