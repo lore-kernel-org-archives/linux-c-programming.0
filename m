@@ -1,28 +1,30 @@
-From: Adam Dyga <adeon@tlen.pl>
-Subject: Re: efficiency in passing a value to a function
-Date: Sat, 14 Apr 2007 15:15:37 +0200
-Message-ID: <200704141515.37060.adeon@tlen.pl>
-References: <4613DCB8.8030007@gmail.com> <6a00c8d50704050602j1c7a7543le5ebeb3b19994977@mail.gmail.com> <46190779.3040508@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: How to create separate files with debug information?
+Date: Mon, 16 Apr 2007 09:39:38 +0530
+Message-ID: <4622F702.6000301@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46190779.3040508@gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-On Sunday, 8 April 2007 17:17, Shriramana Sharma wrote:
+When we strip a file, we remove any debug information from it. This is 
+done to reduce the size of the file.
 
-> I agree of course that in case of tiny tidbits of parameters like a few
-> int-s, double-s or even std::string-s, there is not much meaning in
-> using const ref-s, and it is more intuitive to pass these by value. It
-> is only practically useful to pass big classes / struct-s by reference.
+I have seen package managers provide separate files with debug 
+information. For instance, I have a libQtGui.so.4.2.3.debug file 55 MB 
+in size separate from the libQtGui.so.4.2.3 file which is 7 MB in size.
 
-Well, std::string should be passed by const reference. Depending on the 
-implementation, passing std::string by value may involve heap 
-allocation/deallocation and memory copy operations which are quite costly.
+Now the questions:
 
-Adam
+First: Is this kind of providing separate debug files applicable only 
+for library or also for applications?
 
+Second: How do I create such .debug files with debug information only? I 
+find that these debug files are not executables.
+
+Thank you.
+
+Shriramana Sharma.
