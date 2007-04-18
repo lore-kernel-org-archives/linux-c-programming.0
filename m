@@ -1,62 +1,46 @@
-From: <cyon.john@wipro.com>
-Subject: RE: unable to link to a static library present alongside a shared library
-Date: Wed, 18 Apr 2007 17:49:16 +0530
-Message-ID: <70661EB74D51BD4889EE03CC34E733F5A76677@blr-m2-msg.wipro.com>
-References: <46260A74.90309@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Re: unable to link to a static library present alongside a shared
+ library
+Date: Wed, 18 Apr 2007 18:03:03 +0530
+Message-ID: <46260FFF.9050909@gmail.com>
+References: <70661EB74D51BD4889EE03CC34E733F5A76677@blr-m2-msg.wipro.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
-In-Reply-To: <46260A74.90309@gmail.com>
+In-Reply-To: <70661EB74D51BD4889EE03CC34E733F5A76677@blr-m2-msg.wipro.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: samjnaa@gmail.com, linux-c-programming@vger.kernel.org
-
-Hi,
-
-You can use the '-static' option to gcc for forcing a static link even
-if a shared library is present.
-I think the default behaviour is set so as to take advantages of shared
-library. For example, a dynamically linked executables has smaller size
-than their corresponding statically linked files. While executing
-multiple programs dynamically linked to a shared library, there will be
-only one instance of that particular library in the memory for serving
-all the programs that use it.
-
-Hope that was helpful.
-
-Regards,
-Cyon P.J.
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of
-Shriramana Sharma
-Sent: Wednesday, April 18, 2007 5:39 PM
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
-Subject: unable to link to a static library present alongside a shared
-library
 
-I read recently that someone was not able to link statically to a
-library which was placed alongside a shared library. Having gained some
-knowhow from the good people on this list I checked first the ld manpage
-and found this:
+cyon.john@wipro.com wrote:
 
-ld will search a directory for a library with an extension of .so before
-searching for one with an extension of .a.
+> You can use the '-static' option to gcc for forcing a static link even
+> if a shared library is present.
 
-Does anyone know of a way to subvert this behaviour and force linking to
-the static library?
+So much for my being intelligent enough to have looked up the ld manual. 
+Thanks for your pointing out and I believe your reason for preferring 
+the shared libs must be the correct one.
 
-Also, why is this behaviour made this way? Is there a reason or is it
-arbitrary?
+BTW what does this mean (found it under man:ld for -static):
 
-Thanks as ever, for all your help.
+This option can be used with -shared. Doing so means that a shared 
+library is being created but that all of the library's external 
+references must be resolved by pulling in entries from static libraries.
+
+Does it mean that while creating a shared library, static libraries 
+which the shared library itself depends on must be integrated into the 
+.so file?
+
+So if libfoo depends on libgoo and libgoo.a is available (but not 
+libgoo.so) I will have to specify both -static and -shared to pull the 
+contents of libgoo.a into libfoo.so when it is created?
+
+That must further mean that the default behaviour is NOT to integrate a 
+static library into a shared library. Is that right? Seems somewhat 
+contrary to the standard policy of integrating into the target whatever 
+static libraries are linked against, no?
+
+Thanks.
 
 Shriramana Sharma.
--
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in the body of a message to
-majordomo@vger.kernel.org More majordomo info at
-http://vger.kernel.org/majordomo-info.html
