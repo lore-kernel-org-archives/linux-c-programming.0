@@ -1,52 +1,93 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: unable to link to a static library present alongside a shared
  library
-Date: Wed, 18 Apr 2007 23:04:21 +0530
-Message-ID: <4626569D.7000200@gmail.com>
-References: <70661EB74D51BD4889EE03CC34E733F5A766BA@blr-m2-msg.wipro.com>
+Date: Thu, 19 Apr 2007 00:10:04 +0530
+Message-ID: <46266604.8090103@gmail.com>
+References: <46260A74.90309@gmail.com> <17958.13648.425008.752038@cerise.gclements.plus.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <70661EB74D51BD4889EE03CC34E733F5A766BA@blr-m2-msg.wipro.com>
+In-Reply-To: <17958.13648.425008.752038@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: cyon.john@wipro.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-cyon.john@wipro.com wrote:
+Please take some time to read the following as I have been reading some 
+Wikipedia articles about libraries and have a few questions. You don't 
+have to answer the entire mail at once but please don't ignore it 
+because it's a bit long. You are my teachers here since I am neither 
+neither a professional programmer nor do I have a computer science 
+degree so I am trusting in you...
 
-> That "-shared -static" option becomes relevant when both libgoo.so and
-> libgoo.a are present. By default, libfoo.so will be dynamically linked
-> with libgoo.so and will be a dependency. But if used "-static" along
-> with "-shared" while creating libfoo.so, then it will be statically
-> linked with libgoo.a and won't have a dependency on libfoo.so.
+Glynn Clements wrote:
 
-You are talking about the ordinary behaviour. -static always is used to 
-mandate linking to a static lib and deny linking to a shared lib. 
-Whether the target being built is an executable or a shared lib is 
-immaterial.
+> But for a shared library, the end result will be a library which
+> cannot actually be shared: effectively just a DLL (dynamically-linked
+> library) rather than a *shared* library.
 
-> I was not able to see such a statement in the man pages in my system !!!
+I thought dll : Windows :: so : *nix. Apparently it is not so. After 
+reading your mail I read through the 
+http://en.wikipedia.org/wiki/Library_(computing) article and learnt some 
+things but I'm still not fully clear:
 
-Dunno why. I'm using Kubuntu Edgy and my binutils version is 
-2.17-1ubuntu1. The statement about using -shared and -static together is 
-there in the documentation for the -static option (end of the paragraph) 
-and is probably intended to clarify to the users that -static and 
--shared are not conflicting and only -static and -call_shared are 
-conflicting. It could be rewritten.
+1)
 
-> I tried 'gcc -shared -static -o libfoo.so foo.c -L . -lgoo', but the
-> output libfoo.so was dynamically linked with libgoo.so though libgoo.a
-> was present.
-> 
-> Then after some googling, I tried 'gcc -shared -Wl,-static -o libfoo.so
-> foo.c -L . -lgoo -nostdlib' and it gave me libfoo.so which is statically
-> linked with libgoo.a.
+A Windows DLL is a dynamic link library. I hope I am right in 
+understanding that to "link" means to basically resolve external 
+references in an object module. 
+http://en.wikipedia.org/wiki/Position_independent_code#Windows_DLLs 
+tells me that Windows DLLs would largely be shareable only on disk and 
+not on memory were it not for the fact that they are premapped to 
+certain addresses in memory.
 
-What's the difference? gcc will transparently pass on the -static option 
-to ld if I read my man:gcc page right, and -nostdlib is to prevent 
-linking to standard system libraries which libgoo is certainly not! How 
-do the two commands give a different effect?
+But Unix SO files are truly shareable on memory since they use PIC.
 
-Shriramana Sharma.
+Is that all the functional difference between Windows DLL-s and Unix SO-s?
+
+2)
+
+Is there a difference between a dynamic link library and a dynamic load 
+library? Would I be right in understanding that a dynamic link lib needs 
+to be loaded at the same time as (or previous to) the loading of the 
+caller, but a dynamic load lib can be loaded *after* the loading of the 
+caller? This might mean that the latter would be valid for functions. Is 
+my understanding correct?
+
+3)
+
+Is there a conflict between 
+http://en.wikipedia.org/wiki/Library_(computing)#Dynamic_linking and 
+http://en.wikipedia.org/wiki/Linker#Dynamic_linking . They have 
+different explanations of dynamic linking...
+
+4)
+
+Anyway, the first article has the phrase "index names or numbers" but it 
+does not say names or numbers of what. (If you tell me I will edit the 
+article myself.)
+
+5)
+
+The article http://en.wikipedia.org/wiki/Static_Library further confuses 
+me. It says that a static lib is a lib *in which* references to external 
+variables/functions are resolved at compile time. I thought it was a lib 
+which *satisfies* the references present *in a caller* and where the 
+linking is done at compile time. Should the wording be corrected?
+
+6)
+
+The article also says "... or at runtime by the linker or linking 
+loader". I think the word "respectively" should be added after "loader", 
+but still I don't understand how refs to symbols provided by a static 
+lib can be resolved at runtime. To me it goes against the very nature of 
+  a static lib. What am I missing?
+
+> Also, on SELinux systems, you typically need to modify the security
+> policy to allow such libraries to be used, 
+
+Such libraries meaning?
+
+Thanks, as always.
+
+Shriramana.
