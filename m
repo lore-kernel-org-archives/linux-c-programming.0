@@ -1,57 +1,54 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: -ffunction-sections -Wl,--gc-sections trick and class members
-Date: Thu, 19 Apr 2007 16:13:53 +0100
-Message-ID: <17959.34609.888091.432080@cerise.gclements.plus.com>
-References: <46277EF0.900@gmail.com>
+From: leslie.polzer@gmx.net
+Subject: Re: unable to link to a static library present alongside a shared library
+Date: Thu, 19 Apr 2007 18:30:29 +0200
+Message-ID: <20070419163029.GA22700@wintermute.farpoint>
+References: <46260A74.90309@gmail.com> <17958.13648.425008.752038@cerise.gclements.plus.com> <46266604.8090103@gmail.com> <17958.31994.242710.443269@cerise.gclements.plus.com> <46273FFC.2070902@gmail.com> <20070419123436.GA19433@wintermute.farpoint> <4627731F.3040108@gmail.com>
+Reply-To: leslie.polzer@gmx.net
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46277EF0.900@gmail.com>
+Content-Disposition: inline
+In-Reply-To: <4627731F.3040108@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
 To: Shriramana Sharma <samjnaa@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
 
-Shriramana Sharma wrote:
+--9jxsPFA5p3P2qPhR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I learnt from the good people on this list that usage of:
-> 
-> -fdata-sections -ffunction-sections -Wl,--gc-sections
-> 
-> will ensure that only those sections of object modules get linked to the 
-> target which are actually used in the target.
-> 
-> Recently I was musing on whether I can use this when I recompile the Qt 
-> 4 libraries for static linking. But the thing is that the Qt libraries 
-> are already very optimized in this aspect -- in that there is a separate 
-> source file per class and consequently a separate object file per class.
-> 
-> However I was wondering whether even then I could do my 
-> hyper-optimization because I will be using only a small number of 
-> functions in each class. It is highly unlikely that I (or anyone else) 
-> is going to use all member functions of a class.
-> 
-> Then I thought how I could possibly prevent linking a function which was 
-> part of a class definition. To my understanding at runtime whenever a 
-> class is loaded into memory (I'm not talking about the individual 
-> instances) its members including functions are all loaded into memory. 
-> If a particular function is not present for loading, wouldn't that be a 
-> fatal error?
-> 
-> So the long and short of it is, are these options useful to filter out 
-> unused class members or not?
+On Thu, Apr 19, 2007 at 07:18:15PM +0530, Shriramana Sharma wrote:
+> leslie.polzer@gmx.net wrote:
+>
+> >You may trace a certain group of functions, chosen by you.
+>
+> I was able to get an idea of how the other two uses follow from this
+> property of the Linux loader, but can you please elaborate a bit on
+> this one?
 
-Possibly. C++ methods aren't really any different from C functions in
-terms of object code, so it's conceivable that they could be omitted
-if the aren't used.
+You can just wrap open(), for example, and provide its full
+functionality, but also print out a message how it is called.
 
-OTOH, I suspect that virtual methods are always "used" when
-intialising the virtual method table, so it's less likely that they
-could be omitted.
+  Leslie
 
-If you want a definite answer, test it.
+--=20
+NEW homepage: https://viridian.dnsalias.net/~sky/homepage/
+gpg --keyserver pgp.mit.edu --recv-keys DD4EBF83
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--9jxsPFA5p3P2qPhR
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.7 (GNU/Linux)
+
+iD8DBQFGJ5klyYzv6N1Ov4MRAsZdAJ9cEvKDdnJ8VkI2NhPDHM2jbWlATwCfSO6P
+0F2ayYKjt8OKpraH6ShR56E=
+=Y2Pf
+-----END PGP SIGNATURE-----
+
+--9jxsPFA5p3P2qPhR--
