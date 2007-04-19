@@ -1,27 +1,42 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: unable to link to a static library present alongside a shared
- library
-Date: Thu, 19 Apr 2007 19:18:15 +0530
-Message-ID: <4627731F.3040108@gmail.com>
-References: <46260A74.90309@gmail.com> <17958.13648.425008.752038@cerise.gclements.plus.com> <46266604.8090103@gmail.com> <17958.31994.242710.443269@cerise.gclements.plus.com> <46273FFC.2070902@gmail.com> <20070419123436.GA19433@wintermute.farpoint>
+Subject: -ffunction-sections -Wl,--gc-sections trick and class members
+Date: Thu, 19 Apr 2007 20:08:40 +0530
+Message-ID: <46277EF0.900@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20070419123436.GA19433@wintermute.farpoint>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: leslie.polzer@gmx.net
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-leslie.polzer@gmx.net wrote:
+I learnt from the good people on this list that usage of:
 
-> You may trace a certain group of functions, chosen by you.
+-fdata-sections -ffunction-sections -Wl,--gc-sections
 
-I was able to get an idea of how the other two uses follow from this 
-property of the Linux loader, but can you please elaborate a bit on this 
-one?
+will ensure that only those sections of object modules get linked to the 
+target which are actually used in the target.
 
-Thanks.
+Recently I was musing on whether I can use this when I recompile the Qt 
+4 libraries for static linking. But the thing is that the Qt libraries 
+are already very optimized in this aspect -- in that there is a separate 
+source file per class and consequently a separate object file per class.
 
-Shriramana.
+However I was wondering whether even then I could do my 
+hyper-optimization because I will be using only a small number of 
+functions in each class. It is highly unlikely that I (or anyone else) 
+is going to use all member functions of a class.
+
+Then I thought how I could possibly prevent linking a function which was 
+part of a class definition. To my understanding at runtime whenever a 
+class is loaded into memory (I'm not talking about the individual 
+instances) its members including functions are all loaded into memory. 
+If a particular function is not present for loading, wouldn't that be a 
+fatal error?
+
+So the long and short of it is, are these options useful to filter out 
+unused class members or not?
+
+Thanks as always,
+
+Shriramana Sharma.
