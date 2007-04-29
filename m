@@ -1,22 +1,46 @@
-From: Nikola <root.admin1@zg.t-com.hr>
-Subject: 802.11 wireless programming
-Date: Thu, 26 Apr 2007 02:34:30 +0200
-Message-ID: <462FF396.4050802@zg.t-com.hr>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: enum types and casting
+Date: Sun, 29 Apr 2007 11:10:26 +0530
+Message-ID: <46342FCA.1090400@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hi,
+Hello. Just now I learnt that enums can be very usefully used as types, 
+and was experimenting some with it. The following questions arose.
 
-I am interested in 802.11a/b/g programming.
+1. Are enums allowed as types only in C++ and not in C? gcc rejects 
+using an enum as a type whereas g++ accepts it.
 
-Task is straight forward: generate ap frame in air to announce AP essid 
-(like fake ap).
+2.
 
-Can anyone direct me in right way, what is needed to know to write such app.
+Consider:
 
-tnx in advance.
+enum BODY { SUN, MOON, STAR } ;
+enum PLANET { EARTH, VENUS, MARS, PLUTO } ;
+
+int main ( void )
+{
+	BODY body ;
+	// body = 1 ;         // gives error
+	// body = EARTH ;     // gives error
+	body = (BODY) 1 ;     // does not give error. expected.
+	body = (BODY) EARTH ; // does not give error. expected.
+	body = 3 ;            // does not give error. unexpected.
+	body = (BODY) PLUTO ; // does not give error. unexpected.
+}
+
+When the target enum of the cast contains no name that has the same 
+integer value as the value being casted, how does g++ accept the cast? 
+Is this expected behaviour or a bug?
+
+Thanks as always.
+
+Shriramana Sharma.
+
+P.S: Oops, silly me, Pluto isn't a planet any more...
+
