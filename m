@@ -1,7 +1,7 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: enum types and casting
-Date: Sun, 29 Apr 2007 11:10:26 +0530
-Message-ID: <46342FCA.1090400@gmail.com>
+Subject: class Q_CORE_EXPORT QFlag
+Date: Tue, 01 May 2007 17:24:54 +0530
+Message-ID: <46372A8E.5090201@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -10,37 +10,21 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hello. Just now I learnt that enums can be very usefully used as types, 
-and was experimenting some with it. The following questions arose.
+I see many usages in the Qt sources like:
 
-1. Are enums allowed as types only in C++ and not in C? gcc rejects 
-using an enum as a type whereas g++ accepts it.
-
-2.
-
-Consider:
-
-enum BODY { SUN, MOON, STAR } ;
-enum PLANET { EARTH, VENUS, MARS, PLUTO } ;
-
-int main ( void )
+class Q_CORE_EXPORT QFlag
 {
-	BODY body ;
-	// body = 1 ;         // gives error
-	// body = EARTH ;     // gives error
-	body = (BODY) 1 ;     // does not give error. expected.
-	body = (BODY) EARTH ; // does not give error. expected.
-	body = 3 ;            // does not give error. unexpected.
-	body = (BODY) PLUTO ; // does not give error. unexpected.
-}
+	<blah blah blah>
+} ;
 
-When the target enum of the cast contains no name that has the same 
-integer value as the value being casted, how does g++ accept the cast? 
-Is this expected behaviour or a bug?
+Isn't the word immediately next to the keyword class supposed to be the 
+class name? Q_CORE_EXPORT etc are certainly not class names. What are 
+they and how are they allowed in between the word class and the class name?
 
-Thanks as always.
+I searched my "Thinking in C++" for this but did not turn up an answer. 
+Please help.
+
+Thanks as always,
 
 Shriramana Sharma.
-
-P.S: Oops, silly me, Pluto isn't a planet any more...
 
