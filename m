@@ -1,35 +1,41 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: How did KDbg find out the source corresponding to my executable?
-Date: Fri, 27 Apr 2007 20:36:20 +0530
-Message-ID: <4632116C.70109@gmail.com>
+Subject: C or C++
+Date: Fri, 04 May 2007 16:30:20 +0530
+Message-ID: <463B1244.6080802@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Has someone here used KDbg?
+Hello.
 
-Just a few minutes ago, I tried KDbg, the KDE front-end to gdb. (The 
-change in position of g between the two names amuses me for some reason.)
+I am writing a library and wondering whether to write it in C or C++.
+Previously I knew only C but now I got introduced to the many
+conveniences of C++ I am loth to give them up. I also feel C++ is a
+cleaner language than C (for whatever reason).
 
-When I selected an executable which was located at a location different 
-from its source, KDbg automatically found out the location of the 
-source-file and opened it for setting breakpoints etc.
+OTOH I am thinking maybe if I write in C many more programmers will be
+able to use it - C programmers as well as C++ programmers, whereas if I
+write in C++ only C++ programmers can use it (i.e. if the API contains
+any C++-specific items [or even if otherwise?]).
 
-Is the path to the source embedded in every executable? Upon examining 
-the executable by nm for symbols I did not find the source path, but 
-maybe that is not a symbol. Okay: readelf has an entry corresponding to 
-the source filename but not the source path. Does KDbg search the home 
-directory for the source filename?
+I would like the list's opinion on whether it is worth sacrificing the
+advantages of C++ to capture more "clients".
 
-If not, how could KDbg correctly open the source file?
+A voice inside tells me -- Qt and KDE are pure C++, yet they are among
+the hugest-used (if there is such a word) libraries... But another voice
+tells me -- there is GTK, GNOME and so many other libraries which I do
+not know which may be having many users precisely because they are in
+pure C...
+
+So I don't want to be like the frog in the well (who did not know there
+was such a thing as an ocean) and so I am asking you.
+
+Namaste.
 
 Shriramana Sharma.
 
-P.S: I realize this is slightly OT since it asks a question about a KDE 
-application albeit most related to programming. I'm taking the chance 
-that someone here has used KDbg.
 
