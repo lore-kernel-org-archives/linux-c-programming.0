@@ -1,14 +1,12 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Function pointers to inline functions
-Date: Fri, 4 May 2007 14:40:10 +0100
-Message-ID: <17979.14266.175484.318241@cerise.gclements.plus.com>
-References: <4613DBC2.8060708@gmail.com>
-	<6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
-	<46322C77.8070803@gmail.com>
+Subject: Re: C or C++
+Date: Fri, 4 May 2007 14:46:18 +0100
+Message-ID: <17979.14634.85216.727844@cerise.gclements.plus.com>
+References: <463B1244.6080802@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46322C77.8070803@gmail.com>
+In-Reply-To: <463B1244.6080802@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
@@ -18,36 +16,34 @@ Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 Shriramana Sharma wrote:
 
-> I did some experimentation with pointers to inline and static inline 
-> functions. Please unpack the attachment and run the build script.
+> I am writing a library and wondering whether to write it in C or C++.
+> Previously I knew only C but now I got introduced to the many
+> conveniences of C++ I am loth to give them up. I also feel C++ is a
+> cleaner language than C (for whatever reason).
 > 
-> You will observe that the nm files only differ in the last four lines, 
-> and that too in only three of them.
+> OTOH I am thinking maybe if I write in C many more programmers will be
+> able to use it - C programmers as well as C++ programmers, whereas if I
+> write in C++ only C++ programmers can use it (i.e. if the API contains
+> any C++-specific items [or even if otherwise?]).
 > 
-> The difference is that the executable built from the source with just 
-> "inline" has the functions square, cube and fourthpower marked as "W" 
-> which according to man:nm means that "The symbol is a weak symbol that 
-> has not been specifically tagged as a weak object symbol".
+> I would like the list's opinion on whether it is worth sacrificing the
+> advantages of C++ to capture more "clients".
 > 
-> In the same place, the executable built from the source with "static 
-> inline" has the same functions marked "t" which denotes a local symbol 
-> in the code section.
+> A voice inside tells me -- Qt and KDE are pure C++, yet they are among
+> the hugest-used (if there is such a word) libraries... But another voice
+> tells me -- there is GTK, GNOME and so many other libraries which I do
+> not know which may be having many users precisely because they are in
+> pure C...
 > 
-> I actually expected static inline to make the entries for the functions 
-> disappear but OK, I'm calling pointers to those functions, so they won't 
-> disappear. But at least shouldn't they become weak objects, like they do 
-> for "inline"?
+> So I don't want to be like the frog in the well (who did not know there
+> was such a thing as an ocean) and so I am asking you.
 
-There's no point in making them weak if they're local.
+It depends upon what you want to do with the library.
 
-> Though I do not profess to fully understand what a weak object is, (upon 
-> which matter I would like to learn more) it sounds like an object which 
-> does not have a full separate existence. If an inline function is such a 
-> weak object, how come a static inline one is not tagged as one?
-
-A weak symbol is one which is only used as a last resort. If another
-library defines a non-weak version of the same symbol, it will be used
-in preference to the weak version.
+If it's likely to be useful to other libraries, there's a strong
+incentive to use C, or at least to provide a C API (the standard
+implementation of GLU is written in C++, although the public API only
+uses C).
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
