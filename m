@@ -1,85 +1,43 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: enum types and casting
-Date: Fri, 4 May 2007 14:18:35 +0200
-Message-ID: <6a00c8d50705040518o2712d37cw8db39d80a20f3b4e@mail.gmail.com>
-References: <46342FCA.1090400@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: -ffunction-sections -Wl,--gc-sections trick and class members
+Date: Fri, 4 May 2007 14:31:17 +0100
+Message-ID: <17979.13733.881263.496494@cerise.gclements.plus.com>
+References: <46277EF0.900@gmail.com>
+	<17959.34609.888091.432080@cerise.gclements.plus.com>
+	<4630E1C7.40804@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
-        b=OdWJgInc7zduB4YX8SRCqqraGVUnJiKkwclObE+zMcPK30kHZPQ8Kv7MQdVPnY/1+rPoq3mOHuH0nDnhTyXCE2RRabNA5v6sSnO3Du9UB4HCseeap+l3ooum2FshEU1qWeJeO5gUzUnzsKcsFy/9MMlFHXIL/W8PT/EwHK2kArA=
-In-Reply-To: <46342FCA.1090400@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <4630E1C7.40804@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Cc: linux-c-programming@vger.kernel.org
 
-On 4/29/07, Shriramana Sharma <samjnaa@gmail.com> wrote:
-> Hello. Just now I learnt that enums can be very usefully used as type=
-s,
-> and was experimenting some with it. The following questions arose.
->
-> 1. Are enums allowed as types only in C++ and not in C? gcc rejects
-> using an enum as a type whereas g++ accepts it.
 
-As Leslie pointed out, you will have to declare variables of type
-enumwith the enum keyword.
+Shriramana Sharma wrote:
 
-> 2.
->
-> Consider:
->
-> enum BODY { SUN, MOON, STAR } ;
-> enum PLANET { EARTH, VENUS, MARS, PLUTO } ;
->
-> int main ( void )
-> {
->         BODY body ;
->         // body =3D 1 ;         // gives error
->         // body =3D EARTH ;     // gives error
->         body =3D (BODY) 1 ;     // does not give error. expected.
->         body =3D (BODY) EARTH ; // does not give error. expected.
->         body =3D 3 ;            // does not give error. unexpected.
->         body =3D (BODY) PLUTO ; // does not give error. unexpected.
-> }
->
-> When the target enum of the cast contains no name that has the same
-> integer value as the value being casted, how does g++ accept the cast=
-?
-> Is this expected behaviour or a bug?
+> > OTOH, I suspect that virtual methods are always "used" when
+> > intialising the virtual method table, so it's less likely that they
+> > could be omitted.
+> > 
+> > If you want a definite answer, test it.
+> 
+> Well I tested it and it is obvious that the trick is able to weed out 
+> unused class members too -- run the contents of the attachment.
+> 
+> But I did not comprehend how you suspect that having virtual function (I 
+> presume methods are the same as functions) will create different 
+> results.
 
-=46rom the historical perspective, enums are implicitly converted to an
-integral value whenever needed. And there __always__ is an integral
-value to represent any enum value.  That's why assignments of integers
-to variables of type enum are perfectly legal. So, for example, when
-you compare two enum values, they are both converted to an integer.
+Non-virtual methods are referenced directly from the object file in
+which they are used. If you don't call them, they won't be referenced.
 
-However, assignment of an int to an enum variable leads to undefined
-behavior if the enum is not large enough to store the integral value.
-So, allowing the assignment of any integer, without casting, to a
-variable of enum type, would be worse than the opposite.
+Virtual methods are called through a function pointer in the virtual
+method table. The only direct reference to the function will be in the
+code which initialised the table. But that initialisation will occur
+regardless of whether or not anything calls the method.
 
-To convert an integral type to an enumeration, use the following semant=
-ic:
-
-enum TEST { zero =3D 0, one, two };
-int i1 =3D 2;
-test t1 =3D static_cast<TEST> (i1); // t1 =3D=3D two
-
-The same is true for casts between different enum types.
-
-	\Steve
-
---
-
-Steve Gr=E4gert <steve@graegert.com>
-Jabber    xmpp://graegerts@jabber.org
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Glynn Clements <glynn@gclements.plus.com>
