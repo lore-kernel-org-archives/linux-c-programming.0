@@ -1,45 +1,44 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: enum types and casting
-Date: Thu, 17 May 2007 00:07:58 +0530
-Message-ID: <464B4F86.80709@gmail.com>
-References: <46342FCA.1090400@gmail.com> <6a00c8d50705040518o2712d37cw8db39d80a20f3b4e@mail.gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: C or C++
+Date: Tue, 22 May 2007 19:10:56 +0100
+Message-ID: <18003.12848.409694.190317@cerise.gclements.plus.com>
+References: <463B1244.6080802@gmail.com>
+	<17979.14634.85216.727844@cerise.gclements.plus.com>
+	<464B0AC1.2070501@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6a00c8d50705040518o2712d37cw8db39d80a20f3b4e@mail.gmail.com>
+In-Reply-To: <464B0AC1.2070501@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Steve Graegert <graegerts@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+To: Shriramana Sharma <samjnaa@gmail.com>
 Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Steve Graegert wrote:
 
-> To convert an integral type to an enumeration, use the following semantic:
+Shriramana Sharma wrote:
+
+> > If it's likely to be useful to other libraries, there's a strong
+> > incentive to use C, or at least to provide a C API (the standard
+> > implementation of GLU is written in C++, although the public API only
+> > uses C).
 > 
-> enum TEST { zero = 0, one, two };
-> int i1 = 2;
-> test t1 = static_cast<TEST> (i1); // t1 == two
+> Would it be enough if I ensure that the API header file does not contain 
+> any C++-only usages for such a library internally implemented in C++ to 
+> be linkable from a C program or library?
+> 
+> Or would there be problems with the C linker not being able to resolve 
+> references from the C object code to C++ symbols in the library? (I hope 
+> I got that terminology correct.)
 
-Steve,
+You can't link C code against C++ symbols.
 
-I tried this as follows:
+If you want the library to be usable from C, the public interface must
+consist of functions (not methods) which are declared with C linkage
+(extern "C" ...). Those functions can call C++ code.
 
-enum BODY { SUN, MOON, STAR } ;
-enum PLANET { EARTH, VENUS, MARS, PLUTO } ;
-int main ( void )
-{
-  BODY body ;
-  body = static_cast < BODY > ( 3 ) ; // does not give error.
-  body = static_cast < BODY > ( PLUTO ) ; // does not give error.
-}
+If you need to pass pointers to objects between C++ and C, you need to
+cast them to/from something which is valid in C (e.g. "void *").
 
-but it still does not throw an error even though the enum being casted 
-*to* does not contain an identifier equivalent to the value actually 
-being casted, whether a primitive integer or an identifier belonging to 
-another enum.
-
-Don't you think this is a GCC bug?
-
-Shriramana.
-
+-- 
+Glynn Clements <glynn@gclements.plus.com>
