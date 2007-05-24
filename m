@@ -1,40 +1,46 @@
-From: Shriramana Sharma <jamadagni@gmail.com>
-Subject: why right-to-left evaluation in printf argument list?
-Date: Thu, 24 May 2007 09:58:25 +0530
-Message-ID: <46551469.4080103@gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: synonymous error messages?
+Date: Thu, 24 May 2007 12:40:33 +0530
+Message-ID: <46553A69.9000409@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-For you people this is probably old hat but none of my book sources 
-explain the C / C++ idiosyncrasy of evaluating arguments of printf (and 
-maybe other functions too, I don't know) from right-to-left. For 
-instance, the following code:
+g++ -c on the following code fragment:
 
-# include <stdio.h>
-void main ( void )
-{
-	int i = 0 ;
-	printf ( "%d %d\n", i ++, i ++ ) ;
+void f ( void ) {
+	class Local {
+		static int j ;
+	} ;
 }
 
-prints out:
+gives the following errors:
 
-1 0
+static-member-in-local-class.cpp: In function =91void f()=92:
+static-member-in-local-class.cpp:3: error: local class =91class=20
+f()::Local=92 shall not have static data member =91int f()::Local::j=92
+static-member-in-local-class.cpp:3: error: field =91f()::Local::j=92 in=
+=20
+local class cannot be static
 
-instead of:
+I understand that local classes cannot have static members because it i=
+s=20
+not possible to describe the data member at file scope in order to=20
+define it.
 
-0 1
+But what is the difference between "local class shall not have static=20
+data member" and "field in local class cannot be static"?
 
-as expected. I remember having heard of this years ago and got around to 
-testing it today, but I don't get the logic behind this behaviour. Is 
-there one? If yes, what is it?
-
-Thanks.
+Thanks as always.
 
 Shriramana Sharma.
 
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
