@@ -1,62 +1,40 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: warning about anonymous type
-Date: Wed, 23 May 2007 19:47:47 +0530
-Message-ID: <46544D0B.30904@gmail.com>
+From: Shriramana Sharma <jamadagni@gmail.com>
+Subject: why right-to-left evaluation in printf argument list?
+Date: Thu, 24 May 2007 09:58:25 +0530
+Message-ID: <46551469.4080103@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-I need to have a single global variable containing some members. I read=
-=20
-that using a singleton class is not recommended and really I don't have=
-=20
-a need for a class. So I just tested g++ -c on a code fragment:
+For you people this is probably old hat but none of my book sources 
+explain the C / C++ idiosyncrasy of evaluating arguments of printf (and 
+maybe other functions too, I don't know) from right-to-left. For 
+instance, the following code:
 
----------------------------
-struct {
-	int a, b, c ;
-} mystruct ;
+# include <stdio.h>
+void main ( void )
+{
+	int i = 0 ;
+	printf ( "%d %d\n", i ++, i ++ ) ;
+}
 
-class {
-	int a, b, c ;
-} myclass ;
----------------------------
+prints out:
 
-g++ -c gives me the warnings:
+1 0
 
-singleton.cpp:7: warning: non-local variable =91<anonymous struct>=20
-mystruct=92 uses anonymous type
-singleton.cpp:13: warning: non-local variable =91<anonymous class>=20
-myclass=92 uses anonymous type
+instead of:
 
-However, testing the struct declaration in C does not give any warnings=
-=2E=20
-OK, C++ is pickier than C, so this is fine. But I don't really know wha=
-t=20
-to make of the warnings that g++ gave me. What is the potential problem=
-=20
-if a non-local variable has an anonymous type?
+0 1
 
-Apparently if a **local** variable has an anonymous type it is OK, sinc=
-e=20
-I did not get this warning when I put the mystruct and myclass=20
-definitions into main(). But I don't get the logic behind:
+as expected. I remember having heard of this years ago and got around to 
+testing it today, but I don't get the logic behind this behaviour. Is 
+there one? If yes, what is it?
 
-1) the warning
-2) the distinction between local and nonlocal in this case
-
-Please explain.
-
-With thanks as always,
+Thanks.
 
 Shriramana Sharma.
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
