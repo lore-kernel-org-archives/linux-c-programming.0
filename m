@@ -1,47 +1,56 @@
-From: Mariusz Kozlowski <m.kozlowski@tuxland.pl>
-Subject: Re: why right-to-left evaluation in printf argument list?
-Date: Fri, 25 May 2007 18:43:23 +0200
-Message-ID: <200705251843.28432.m.kozlowski@tuxland.pl>
-References: <46551469.4080103@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: operator != not automatically defined when operator == is defined
+Date: Fri, 25 May 2007 23:32:43 +0100
+Message-ID: <18007.25611.966535.940360@cerise.gclements.plus.com>
+References: <46558CFF.1010606@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46551469.4080103@gmail.com>
-Content-Disposition: inline
+In-Reply-To: <46558CFF.1010606@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <jamadagni@gmail.com>
+Content-Type: text/plain; charset="windows-1252"
+To: Shriramana Sharma <samjnaa@gmail.com>
 Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hello,
 
-> For you people this is probably old hat but none of my book sources 
-> explain the C / C++ idiosyncrasy of evaluating arguments of printf (and 
-> maybe other functions too, I don't know) from right-to-left. For 
-> instance, the following code:
-> 
-> # include <stdio.h>
-> void main ( void )
-> {
-> 	int i = 0 ;
-> 	printf ( "%d %d\n", i ++, i ++ ) ;
-> }
-> 
-> prints out:
-> 
-> 1 0
-> 
-> instead of:
-> 
-> 0 1
-> 
-> as expected. I remember having heard of this years ago and got around to 
-> testing it today, but I don't get the logic behind this behaviour. Is 
-> there one? If yes, what is it?
+Shriramana Sharma wrote:
 
-Take a look here -> http://www.c-faq.com/expr/comma.html
+> operator-notequal.cpp:14: error: no match for =91operator!=3D=92 in =91=
+a !=3D b=92
+>=20
+> Now there need conceivably be no definition for operator !=3D other t=
+han=20
+> the not-ted value of what operator =3D=3D gives, so why does gcc want=
+ me to=20
+> define operator !=3D separately?
+>=20
+> Similarly even if I define only operator !=3D, gcc will tell me to=20
+> separately define operator =3D=3D if I want to use that.
+>=20
+> For the pairs:
+>=20
+> =3D=3D and !=3D
+>  > and <=3D
+> < and >=3D
+>=20
+> it is mathematically illogical to have any definition for each operat=
+or=20
+> in the pair which does not output same as the not-ted output of the=20
+> other operator in the pair,
 
-Regards,
+In terms of mathematics, that's not even remotely true, particularly
+for the inequalities (totally-ordered vs partially-ordered).
 
-	Mariusz
+In C/C++ terms, it isn't necessarily true for the standard types; e.g.=20
+if floating-point values x and y are both NaN, then both x=3D=3Dy and x=
+!=3Dy
+are false.
+
+--=20
+Glynn Clements <glynn@gclements.plus.com>
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
