@@ -1,44 +1,62 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: Function pointers to inline functions
-Date: Fri, 25 May 2007 10:27:41 +0530
-Message-ID: <46566CC5.6080904@gmail.com>
+Date: Fri, 25 May 2007 11:32:10 +0530
+Message-ID: <46567BE2.4010401@gmail.com>
 References: <4613DBC2.8060708@gmail.com> <17939.60731.269679.612012@cerise.gclements.plus.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 In-Reply-To: <17939.60731.269679.612012@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
 To: Glynn Clements <glynn@gclements.plus.com>
 Cc: linux-c-programming@vger.kernel.org
 
 Glynn Clements wrote:
-> If you declare a function as "inline", the compiler will typically add
-> a normal definition as well as inlining it. If you declare a function
-> as "static inline", the compiler may omit the normal definition.
+>      run-time callable version of the function.  This switch does not
+>      affect `extern inline' functions.
 
-Would the static keyword in such a case also restrict the visibility of 
-that inline function to that file only?
+What would be the purpose of "extern inline"?
 
-I mean, if I use -fkeep-inline-functions to get the function output in 
-the object file, and if the static keyword also meant that the function 
-is visible only in the translation unit in which it appears, then 
--fkeep-inline-functions would be rendered useless, since the only 
-conceivable (to me) purpose of outputting a run-time callable version of 
-an inline function is to make it available to callers from *outside the 
-translation unit*, such as a programmer using a library.
+I mean, inlining is done by the compiler, and extern is only useful to=20
+tell the linker to resolve references to a variable or function that is=
+=20
+initially defined in another object file.
 
-(In fact, I think the *only* conceivable use-case would be someone using 
-a library since another translation unit in the same project as the one 
-containing the inline function can very well use the definition of the 
-inline function to directly inline the code into the caller -- why would 
-they want a separate runtime callable version in that case? So the only 
-valid case is a programmer using a library but not having access to the 
-actual definition of an inline function via the API.)
+I tried putting an inline function *definition* in lib.cpp:
 
-So I presume that when static is used with inline, it does not retain 
-its meaning of "local to this translation unit". Am I right?
+inline int foo ( void ) { return 2 ; }
+
+and a *declaration* to that function qualified by extern inline in main=
+=2Ecpp:
+
+# include <cstdio>
+extern inline int foo ( void ) ;
+int main ( void )
+{
+         printf ( "%d\n", foo () ) ;
+}
+
+The session transcript:
+
+$ g++ -c main.cpp lib.cpp
+main.cpp:3: warning: inline function =91int foo()=92 used but never def=
+ined
+$ g++ -o main main.o lib.o
+main.o: In function `main':
+main.cpp:(.text+0x12): undefined reference to `foo()'
+collect2: ld returned 1 exit status
+$
+
+So extern for inline functions does not work as for normal functions --=
+=20
+so what is the use of extern inline?
 
 Shriramana Sharma.
 
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
