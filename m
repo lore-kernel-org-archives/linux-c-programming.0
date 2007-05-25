@@ -1,62 +1,47 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: Function pointers to inline functions
-Date: Fri, 25 May 2007 11:32:10 +0530
-Message-ID: <46567BE2.4010401@gmail.com>
-References: <4613DBC2.8060708@gmail.com> <17939.60731.269679.612012@cerise.gclements.plus.com>
+From: Mariusz Kozlowski <m.kozlowski@tuxland.pl>
+Subject: Re: why right-to-left evaluation in printf argument list?
+Date: Fri, 25 May 2007 18:43:23 +0200
+Message-ID: <200705251843.28432.m.kozlowski@tuxland.pl>
+References: <46551469.4080103@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <17939.60731.269679.612012@cerise.gclements.plus.com>
+In-Reply-To: <46551469.4080103@gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Shriramana Sharma <jamadagni@gmail.com>
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Glynn Clements wrote:
->      run-time callable version of the function.  This switch does not
->      affect `extern inline' functions.
+Hello,
 
-What would be the purpose of "extern inline"?
+> For you people this is probably old hat but none of my book sources 
+> explain the C / C++ idiosyncrasy of evaluating arguments of printf (and 
+> maybe other functions too, I don't know) from right-to-left. For 
+> instance, the following code:
+> 
+> # include <stdio.h>
+> void main ( void )
+> {
+> 	int i = 0 ;
+> 	printf ( "%d %d\n", i ++, i ++ ) ;
+> }
+> 
+> prints out:
+> 
+> 1 0
+> 
+> instead of:
+> 
+> 0 1
+> 
+> as expected. I remember having heard of this years ago and got around to 
+> testing it today, but I don't get the logic behind this behaviour. Is 
+> there one? If yes, what is it?
 
-I mean, inlining is done by the compiler, and extern is only useful to=20
-tell the linker to resolve references to a variable or function that is=
-=20
-initially defined in another object file.
+Take a look here -> http://www.c-faq.com/expr/comma.html
 
-I tried putting an inline function *definition* in lib.cpp:
+Regards,
 
-inline int foo ( void ) { return 2 ; }
-
-and a *declaration* to that function qualified by extern inline in main=
-=2Ecpp:
-
-# include <cstdio>
-extern inline int foo ( void ) ;
-int main ( void )
-{
-         printf ( "%d\n", foo () ) ;
-}
-
-The session transcript:
-
-$ g++ -c main.cpp lib.cpp
-main.cpp:3: warning: inline function =91int foo()=92 used but never def=
-ined
-$ g++ -o main main.o lib.o
-main.o: In function `main':
-main.cpp:(.text+0x12): undefined reference to `foo()'
-collect2: ld returned 1 exit status
-$
-
-So extern for inline functions does not work as for normal functions --=
-=20
-so what is the use of extern inline?
-
-Shriramana Sharma.
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+	Mariusz
