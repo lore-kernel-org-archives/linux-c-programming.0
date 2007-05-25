@@ -1,66 +1,37 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: operator != not automatically defined when operator == is defined
-Date: Thu, 24 May 2007 18:32:55 +0530
-Message-ID: <46558CFF.1010606@gmail.com>
+Subject: Re: Function pointers to inline functions
+Date: Fri, 25 May 2007 10:11:26 +0530
+Message-ID: <465668F6.6060206@gmail.com>
+References: <4613DBC2.8060708@gmail.com> <6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"; format="flowed"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Steve Graegert <graegerts@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Observe:
+Steve Graegert wrote:
+> Whenever you request a pointer to an inline function the compiler will
+> place a normal subroutine version of the inline's implementation in an
+> object file and return its address.
 
-class MyClass
-{
-public :
-     MyClass ( int x ) : i ( x ) {}
-     bool operator =3D=3D ( const MyClass & other )
-         { return i =3D=3D other . i ; }
-private :
-     int i ;
-} ;
-int main ( void )
-{
-     MyClass a ( 1 ), b ( 2 ) ;
-     if ( a !=3D b ) {}
-}
+Does this mean that the compiler will check the entire translation unit 
+where the inline function is visible for pointer-request operations on 
+the function and if any are present, the compiler will place a normal 
+version in the object file?
 
-Trying to compile this gives:
+This would mean that the function is output separately even if 
+-finline-functions is used. Is that true?
 
-operator-notequal.cpp:14: error: no match for =91operator!=3D=92 in =91=
-a !=3D b=92
+Do I have a way of checking whether a function is output separately or 
+not using nm? Do I just check to see whether the function name is there 
+in the output or do I have to look for some flag on the function name? I 
+am still not aware of the full depth of using nm.
 
-Now there need conceivably be no definition for operator !=3D other tha=
-n=20
-the not-ted value of what operator =3D=3D gives, so why does gcc want m=
-e to=20
-define operator !=3D separately?
-
-Similarly even if I define only operator !=3D, gcc will tell me to=20
-separately define operator =3D=3D if I want to use that.
-
-=46or the pairs:
-
-=3D=3D and !=3D
- > and <=3D
-< and >=3D
-
-it is mathematically illogical to have any definition for each operator=
-=20
-in the pair which does not output same as the not-ted output of the=20
-other operator in the pair, but gcc will not allow me to use an operato=
-r=20
-unless it has been explicitly defined even if its logical negative=20
-operator has been defined. I believe this is a defect in gcc.
-
-Your comments?
+Thanks as always,
 
 Shriramana Sharma.
 
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
