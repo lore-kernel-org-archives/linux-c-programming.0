@@ -1,37 +1,44 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: Function pointers to inline functions
-Date: Fri, 25 May 2007 10:11:26 +0530
-Message-ID: <465668F6.6060206@gmail.com>
-References: <4613DBC2.8060708@gmail.com> <6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
+Date: Fri, 25 May 2007 10:27:41 +0530
+Message-ID: <46566CC5.6080904@gmail.com>
+References: <4613DBC2.8060708@gmail.com> <17939.60731.269679.612012@cerise.gclements.plus.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <6a00c8d50704041133u30d98daavec529753606fc7e9@mail.gmail.com>
+In-Reply-To: <17939.60731.269679.612012@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Steve Graegert <graegerts@gmail.com>
+To: Glynn Clements <glynn@gclements.plus.com>
 Cc: linux-c-programming@vger.kernel.org
 
-Steve Graegert wrote:
-> Whenever you request a pointer to an inline function the compiler will
-> place a normal subroutine version of the inline's implementation in an
-> object file and return its address.
+Glynn Clements wrote:
+> If you declare a function as "inline", the compiler will typically add
+> a normal definition as well as inlining it. If you declare a function
+> as "static inline", the compiler may omit the normal definition.
 
-Does this mean that the compiler will check the entire translation unit 
-where the inline function is visible for pointer-request operations on 
-the function and if any are present, the compiler will place a normal 
-version in the object file?
+Would the static keyword in such a case also restrict the visibility of 
+that inline function to that file only?
 
-This would mean that the function is output separately even if 
--finline-functions is used. Is that true?
+I mean, if I use -fkeep-inline-functions to get the function output in 
+the object file, and if the static keyword also meant that the function 
+is visible only in the translation unit in which it appears, then 
+-fkeep-inline-functions would be rendered useless, since the only 
+conceivable (to me) purpose of outputting a run-time callable version of 
+an inline function is to make it available to callers from *outside the 
+translation unit*, such as a programmer using a library.
 
-Do I have a way of checking whether a function is output separately or 
-not using nm? Do I just check to see whether the function name is there 
-in the output or do I have to look for some flag on the function name? I 
-am still not aware of the full depth of using nm.
+(In fact, I think the *only* conceivable use-case would be someone using 
+a library since another translation unit in the same project as the one 
+containing the inline function can very well use the definition of the 
+inline function to directly inline the code into the caller -- why would 
+they want a separate runtime callable version in that case? So the only 
+valid case is a programmer using a library but not having access to the 
+actual definition of an inline function via the API.)
 
-Thanks as always,
+So I presume that when static is used with inline, it does not retain 
+its meaning of "local to this translation unit". Am I right?
 
 Shriramana Sharma.
 
