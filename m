@@ -1,78 +1,37 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: can't understand linking behaviour
-Date: Tue, 29 May 2007 00:29:18 +0100
-Message-ID: <18011.26062.21505.664418@cerise.gclements.plus.com>
-References: <46599AB7.1010701@gmail.com>
+From: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
+Subject: du and ls
+Date: Sat, 2 Jun 2007 01:58:04 +0000 (UTC)
+Message-ID: <Pine.LNX.4.64.0706050051290.29079@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: MULTIPART/MIXED; BOUNDARY="-1909733254-2071909937-1181026658=:29079"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46599AB7.1010701@gmail.com>
+Date: Tue, 5 Jun 2007 00:57:38 -0600 (CST)
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Shriramana Sharma wrote:
+---1909733254-2071909937-1181026658=:29079
+Content-Type: TEXT/PLAIN; charset=X-UNKNOWN; format=flowed
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-> main.c calls function firstcall()
-> a.c defines function firstcall() which calls secondcall()
-> b.c defines function secondcall()
-> 
-> To build the executable main, I need to do:
-> 
-> gcc -fPIC -c a.c
-> gcc -fPIC -shared -o liba.so a.o
-> gcc -fPIC -c b.c
-> gcc -fPIC -shared -o libb.so b.o
-> gcc -o main main.c -L. -la -lb
-> 
-> My question is, why does not the creation of liba.so require the 
-> presence of and linking against libb.so, seeing as a.o contains 
-> firstcall() which calls secondcall() present only in libb.so?
-> 
-> The gcc command building liba.so does not use -c which would prevent the 
-> linker from being called. So if the linker is called then it should 
-> require the presence of and linking to libb.so to resolve the reference 
-> to the external function secondcall(). But this does not happen.
+Hello,
 
-Libraries can have undefined references. Sometimes this is necessary,
-e.g. if the library depends upon a function which is supposed to be
-provided by the executable.
+I am curious about the mismatch between du and ls. Apparently, du reports=
+=20
+amount of 512 or 1024-K blocks, and ls lists the absolute value.
 
-> What does happen is that I am supposed to specify at the point of 
-> building the *executable* not only the libraries that the executable 
-> depends on, but also the libraries that *those* libraries depend on, as 
-> well as, presumably, any third-level, fourth-level and upto n-th level 
-> dependencies.
+But, why in some cases, a 1100 bytes file is reported by du as 4 x 512=20
+bytes instead of 3 x 512bytes
 
-Not if the libraries themselves have dependency information. E.g.:
+I note both use fstat().
 
-	gcc -fPIC -c b.c
-	gcc -fPIC -shared -o libb.so b.o
-	gcc -fPIC -c a.c
-	gcc -fPIC -shared -o liba.so a.o -L. -lb
-	gcc -o main main.c -L. -Wl,-rpath-link,. -la
+Thanks for advice,
 
-> This seems highly counter-intuitive. Why would the linker require *only* 
-> at *executable* build-time the libraries,
-
-You're looking it at the wrong way.
-
-Why would the linker require all external symbols to be resolved at
-the time the library is built?
-
-> and the whole dependency *tree* at that, to be specified?
-
-Ultimately, any symbols which are required must be provided, so this
-is checked when the executable is built. There isn't any need to check
-it before then.
-
-> Why does it not need at each level of 
-> build of an executable or library its and only its own dependencies?
-
-Because there is no reason for such a requirement.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+---
+Fabio Andr=E9s Miranda
+Ingenier=EDa en sistemas inform=E1ticos
+Universidad Latina - Costa Rica
+---1909733254-2071909937-1181026658=:29079--
