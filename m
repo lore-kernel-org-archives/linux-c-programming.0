@@ -1,55 +1,61 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Function pointers to inline functions
-Date: Mon, 4 Jun 2007 08:08:58 +0100
-Message-ID: <18019.47754.381600.13402@cerise.gclements.plus.com>
-References: <4613DBC2.8060708@gmail.com>
-	<17939.60731.269679.612012@cerise.gclements.plus.com>
-	<46566CC5.6080904@gmail.com>
-	<18007.26131.433749.106380@cerise.gclements.plus.com>
-	<465C249A.4000007@gmail.com>
+Subject: Re: du and ls
+Date: Mon, 4 Jun 2007 08:12:04 +0100
+Message-ID: <18019.47940.735970.683428@cerise.gclements.plus.com>
+References: <Pine.LNX.4.64.0706050051290.29079@ns.isi.ulatina.ac.cr>
+	<18017.20272.201352.576692@cerise.gclements.plus.com>
+	<Pine.LNX.4.64.0706052236270.20275@ns.isi.ulatina.ac.cr>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <465C249A.4000007@gmail.com>
+In-Reply-To: <Pine.LNX.4.64.0706052236270.20275@ns.isi.ulatina.ac.cr>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
+To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
 Cc: linux-c-programming@vger.kernel.org
 
 
-Shriramana Sharma wrote:
+Fabio Miranda Hamburger wrote:
 
-> >> I mean, if I use -fkeep-inline-functions to get the function output in 
-> >> the object file, and if the static keyword also meant that the function 
-> >> is visible only in the translation unit in which it appears, then 
-> >> -fkeep-inline-functions would be rendered useless, 
+> >> I am curious about the mismatch between du and ls. Apparently, du reports
+> >> amount of 512 or 1024-K blocks, and ls lists the absolute value.
+> >
+> > du reports the amount of disk space which the file uses, while ls
+> > reports the amount of data which it contains.
+> >
+> >> But, why in some cases, a 1100 bytes file is reported by du as 4 x 512
+> >> bytes instead of 3 x 512bytes
+> >
+> > Because the file occupies 2 x 1024-byte blocks.
+> >
+> >> I note both use fstat().
+> >
+> > stat(), fstat() etc, and thus du, report disk usage in multiples of
+> > 512-byte blocks, as that was the block size on the earliest Unix
+> > systems. The actual block size depends upon the filesystem.
+> >
+> > The st_size field indicates the actual size of the file (i.e. the
+> > number of bytes which it contains); this is the value reported by ls.
+> >
+> > The st_blocks field returns the disk usage in multiples of 512 bytes;
+> > this is the value reported by du.
+> >
+> > Note that the actual size of the file can be more than 512 * st_blocks
+> > bytes if the file contains "holes". These are blocks which are
+> > implicitly filled with zeros when the file is enlarged by lseek(),
+> > ftruncate() etc, and aren't actually stored on disk.
 > 
-> ... in the case of static inline functions.
-
-Non-static inline functions are always generated so that they can be
-called from other translation units. It's only when a function is both
-static and inline that you can (normally) eliminate the function body
-altogether.
-
-> Is this correct or no?
+> Glynn, why lseek() will fill space with zeros if it's placed in a position 
+> beyond file limit itself? To provide to the application a fixed size of 
+> data for one purpose and so on.
 > 
-> Would a function visible only in its translation unit be accessible from 
-> a debugger, as you say?
+> Example, an application will use first 1025k of a file for something, then 
+> the next 2048 fo another, is this the intention of lseek() ?
 
-Yes.
-
-The debugger might still require the function to be in scope (i.e. the
-active stack frame must be in the same translation unit) in order to
-call it, but that's down to how the debugger resolves symbols which
-are entered by the user.
-
-gdb doesn't have this requirement.
-
-> I would test it myself, but I haven't any idea 
-> how to load just a single object file in gdb and test it so I am asking.
-
-Add a minimal main.c so that you can run it as a program.
+An application may want to write fixed-sized records, so that they can
+be accessed in an arbitrary order, using lseek() to locate a specific
+record.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
