@@ -1,61 +1,36 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: du and ls
-Date: Mon, 4 Jun 2007 08:12:04 +0100
-Message-ID: <18019.47940.735970.683428@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0706050051290.29079@ns.isi.ulatina.ac.cr>
-	<18017.20272.201352.576692@cerise.gclements.plus.com>
-	<Pine.LNX.4.64.0706052236270.20275@ns.isi.ulatina.ac.cr>
+From: "Mark Farnell" <mark.farnell@gmail.com>
+Subject: using the correct tool to time my parallel program
+Date: Sat, 9 Jun 2007 17:08:17 +1200
+Message-ID: <aaf549e0706082208n4b5df24x544e0edcf43ef3dc@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0706052236270.20275@ns.isi.ulatina.ac.cr>
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:mime-version:content-type:content-transfer-encoding:content-disposition;
+        b=KMAPCxqhV1+31HkvV45f/C22MZ1VmIFXpRbH/tvBYhNmJ4PIf7341mKidlODjUmgt5GcnwXsl1lYiL1+FLY8SSbLtOopi55Tfk13xqFfj0Gk6TBBYifz3ErN79uPkAJGns7kiKNaHnsWpYlBdz0ohiSntJnL3sJvYhtXJZwxa9k=
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Fabio Miranda Hamburger <fabmirha@ns.isi.ulatina.ac.cr>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+I have a parallel program, which calls some message passing functions
+which block.  Then I attempted to use times() (with struct tms) to
+time the program.
 
-Fabio Miranda Hamburger wrote:
+the struct tms gives me the "program time" and the "system time" as
+well as the child process time (if any).  However does it also include
+the time spent when my program is blocked (i.e. network time).
 
-> >> I am curious about the mismatch between du and ls. Apparently, du reports
-> >> amount of 512 or 1024-K blocks, and ls lists the absolute value.
-> >
-> > du reports the amount of disk space which the file uses, while ls
-> > reports the amount of data which it contains.
-> >
-> >> But, why in some cases, a 1100 bytes file is reported by du as 4 x 512
-> >> bytes instead of 3 x 512bytes
-> >
-> > Because the file occupies 2 x 1024-byte blocks.
-> >
-> >> I note both use fstat().
-> >
-> > stat(), fstat() etc, and thus du, report disk usage in multiples of
-> > 512-byte blocks, as that was the block size on the earliest Unix
-> > systems. The actual block size depends upon the filesystem.
-> >
-> > The st_size field indicates the actual size of the file (i.e. the
-> > number of bytes which it contains); this is the value reported by ls.
-> >
-> > The st_blocks field returns the disk usage in multiples of 512 bytes;
-> > this is the value reported by du.
-> >
-> > Note that the actual size of the file can be more than 512 * st_blocks
-> > bytes if the file contains "holes". These are blocks which are
-> > implicitly filled with zeros when the file is enlarged by lseek(),
-> > ftruncate() etc, and aren't actually stored on disk.
-> 
-> Glynn, why lseek() will fill space with zeros if it's placed in a position 
-> beyond file limit itself? To provide to the application a fixed size of 
-> data for one purpose and so on.
-> 
-> Example, an application will use first 1025k of a file for something, then 
-> the next 2048 fo another, is this the intention of lseek() ?
+This is important because although I use gprof to separate the CPU
+time spent by my program vs libraries, when I calculate the total time
+spent, I really need to include the time spent waiting for message
+from network (network time).
 
-An application may want to write fixed-sized records, so that they can
-be accessed in an arbitrary order, using lseek() to locate a specific
-record.
+Therefore is times() really appropriate for my purpose?  If not, what
+other functions can I use instead? (such as gettimeofday?)
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Thanks!
+
+Mark
