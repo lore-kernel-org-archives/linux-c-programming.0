@@ -1,14 +1,14 @@
 From: "Mark Farnell" <mark.farnell@gmail.com>
-Subject: using the correct tool to time my parallel program
-Date: Sat, 9 Jun 2007 17:08:17 +1200
-Message-ID: <aaf549e0706082208n4b5df24x544e0edcf43ef3dc@mail.gmail.com>
+Subject: using the correct tool to time my program
+Date: Sat, 9 Jun 2007 17:18:37 +1200
+Message-ID: <aaf549e0706082218l7232c813o27def48e8c6432e5@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
         d=gmail.com; s=beta;
         h=domainkey-signature:received:received:message-id:date:from:to:subject:mime-version:content-type:content-transfer-encoding:content-disposition;
-        b=KMAPCxqhV1+31HkvV45f/C22MZ1VmIFXpRbH/tvBYhNmJ4PIf7341mKidlODjUmgt5GcnwXsl1lYiL1+FLY8SSbLtOopi55Tfk13xqFfj0Gk6TBBYifz3ErN79uPkAJGns7kiKNaHnsWpYlBdz0ohiSntJnL3sJvYhtXJZwxa9k=
+        b=U3HdiSBvFNgN/WY9lCT+bahpER1WykNBwYq2YksX8OaXNQnJPCIJkEvB9jEplHEyoOaHxjx8RlRQElClTo3BLSrqaZ1/ogELp4kRpQ3Ef8TzNcSUo8kHbM8SyqVIfGNC7Lm4VVPrdM5layiup3nFQsJ+FU+QouXoH05fUyuDsqU=
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
