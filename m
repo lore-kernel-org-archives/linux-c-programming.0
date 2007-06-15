@@ -1,32 +1,45 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: getutline (3) fails on a daemon process
-Date: Tue, 12 Jun 2007 16:19:55 +0100
-Message-ID: <18030.47515.764472.244603@cerise.gclements.plus.com>
-References: <1181660517.5483.8.camel@blr-img.blr.novell.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: include guards
+Date: Fri, 15 Jun 2007 09:13:59 +0530
+Message-ID: <46720AFF.6070402@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1181660517.5483.8.camel@blr-img.blr.novell.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: vadis.list@gmail.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Hello.
 
-vadiraj wrote:
+To prevent header files from being included more than once in the same 
+translation unit, we use include guards like
 
-> I'm trying to fetch userid using utmp.h API's. I'm able to get the
-> userid from the funciton getutline(3) on normal process. But the
-> same function while called by a daemon process it fails with perror
-> "no such process".
-> 
-> Any Idea why this is failing on a daemon process? 
+# ifndef FOO_H
+# define FOO_H
+...
+# endif
 
-Because the daemon hasn't logged itself to the utmp file.
+Recently I came to know that I can use simply:
 
-The utmp file is intended for recording "logged-in users". daemon
-processes don't normally register themselves.
+# pragma once
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+instead of the above group of sentences and the desired effect is still 
+accomplished.
+
+This leads me to think of two things:
+
+1. why use the ifndef-define-endif method when the pragma once method is 
+simpler and cleaner?
+
+2. why should we need to use either method at all? If it is a 
+universally undesirable behaviour that the same header file is included 
+in a translation unit more than once, then an intelligent compiler (or 
+preprocessor) itself can by default take of this, right?
+
+I understand that to write portable code that compiles on 
+not-so-intelligent compilers, we may need to do something manually, so 
+question 2 is answered, but question 1 still stands...
+
+Shriramana Sharma.
+
