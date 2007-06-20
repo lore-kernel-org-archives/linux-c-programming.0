@@ -1,49 +1,78 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: can't understand linking behaviour
-Date: Fri, 15 Jun 2007 09:50:58 +0530
-Message-ID: <467213AA.5070008@gmail.com>
-References: <46599AB7.1010701@gmail.com> <18011.26062.21505.664418@cerise.gclements.plus.com>
+From: wwp <subscript@free.fr>
+Subject: Re: include guards
+Date: Wed, 20 Jun 2007 14:43:06 +0200
+Message-ID: <20070620144306.727cc2ba@localhost.localdomain>
+References: <46720AFF.6070402@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_rANdVgESm=Xh3QqypgnjCzK";
+ protocol="application/pgp-signature"; micalg=PGP-SHA1
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <18011.26062.21505.664418@cerise.gclements.plus.com>
+In-Reply-To: <46720AFF.6070402@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
 
-Glynn Clements wrote:
-> Libraries can have undefined references. Sometimes this is necessary,
-> e.g. if the library depends upon a function which is supposed to be
-> provided by the executable.
+--Sig_rANdVgESm=Xh3QqypgnjCzK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-To my mind, in the real world, if a library must access a function that 
-the executable provides, it will only be through a function pointer -- 
-the library may provide, for e.g. a binary search facility, and the 
-program uses this to carry out a binary search on a function in its body.
+Hello Shriramana,
 
-What real world application would make a library A to call a function 
-foo() when foo() is defined in the body of an executable X that itself 
-depends on A? If foo() were in a dependency of A, say library B, then it 
-can be understood, but to expect the function to come from X is, 
-although *theoretically* possible, how practically necessary?
 
-> gcc -o main main.c -L. -Wl,-rpath-link,. -la
+On Fri, 15 Jun 2007 09:13:59 +0530 Shriramana Sharma <samjnaa@gmail.com> wr=
+ote:
 
-On my system doing the same without the -Wl, command seems to produce 
-the same effect. However the symbol is still marked undefined by nm, 
-even if I have linked it.
+> Hello.
+>=20
+> To prevent header files from being included more than once in the same=20
+> translation unit, we use include guards like
+>=20
+> # ifndef FOO_H
+> # define FOO_H
+> ...
+> # endif
+>=20
+> Recently I came to know that I can use simply:
+>=20
+> # pragma once
+>=20
+> instead of the above group of sentences and the desired effect is still=20
+> accomplished.
+>=20
+> This leads me to think of two things:
+>=20
+> 1. why use the ifndef-define-endif method when the pragma once method is=
+=20
+> simpler and cleaner?
+>=20
+> 2. why should we need to use either method at all? If it is a=20
+> universally undesirable behaviour that the same header file is included=20
+> in a translation unit more than once, then an intelligent compiler (or=20
+> preprocessor) itself can by default take of this, right?
+>=20
+> I understand that to write portable code that compiles on=20
+> not-so-intelligent compilers, we may need to do something manually, so=20
+> question 2 is answered, but question 1 still stands...
 
->> This seems highly counter-intuitive. Why would the linker require *only* 
->> at *executable* build-time the libraries,
-> 
-> Why would the linker require all external symbols to be resolved at
-> the time the library is built?
+#pragma is simply not supported by all pre-processors, is that
+directive present in any standard at least?
 
-If you prove that there is a valid real-life situation where the library 
-needs a symbol from an application, then the linker would not require 
-all external symbols to be resolved.
 
-Shriramana Sharma.
+Regards,
 
+--=20
+wwp
+
+--Sig_rANdVgESm=Xh3QqypgnjCzK
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Disposition: attachment; filename=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.7 (GNU/Linux)
+
+iD8DBQFGeSDaadgnuQFKG88RAhVqAJsG/O36Ues7NhZ74yzLL+JdbCD8nwCgjJyn
+7oEhRHAOcXe6BPKe3+zesSU=
+=Ti0q
+-----END PGP SIGNATURE-----
+
+--Sig_rANdVgESm=Xh3QqypgnjCzK--
