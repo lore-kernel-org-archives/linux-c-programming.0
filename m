@@ -1,139 +1,99 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: need non-classwide sticky variable for a member function of a class
-Date: Fri, 22 Jun 2007 13:28:55 +0530
-Message-ID: <467B813F.4060408@gmail.com>
+Subject: ambiguous type conversion
+Date: Fri, 22 Jun 2007 21:54:56 +0530
+Message-ID: <467BF7D8.1020600@gmail.com>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="------------020403080607000601090405"
+ boundary="------------050002090205020700000400"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 This is a multi-part message in MIME format.
---------------020403080607000601090405
+--------------050002090205020700000400
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hello.
 
-Definition of the problem :
+While reading the operator overloading chapter of Thinking in C++ I came 
+across the author saying that if there exist two separate definitions 
+for type conversion between two user-defined types, one being an 
+operator and the other a constructor, the compiler gives an error. But 
+when I tried this, I found that the compiler (at least GCC) does not 
+raise an error and prefers the constructor to the operator.
 
-* I have a class representing a time object with a property 
-startingPoint accessed by the member function startingPoint().
+Please peruse the attached code. You need to compile with -DALLOWCONS to 
+enable the constructor:
 
-* I do not want to calculate the value of the property for each class 
-instance at the time of creation of the instance, since that calculation 
-is computationally intensive.
+g++ -o ambiguous ambiguous-type-conversion.cpp -DALLOWCONS
+./ambiguous-type-conversion
+g++ -o ambiguous ambiguous-type-conversion.cpp
+./ambiguous-type-conversion
 
-* Only if someone asks for the value I want to calculate it.
-
-* Once calculated, I want to store it to be returned directly from 
-storage if it is asked for again.
-
-* Different instances of the class of course have different 
-startingPoint values. So it will require that there is a separate store 
-variable for the startingPoint property of each instance.
-
-I first thought I could use a static variable inside the function 
-startingPoint() which would act as the store. But the compiler outputs 
-only one block of machine code for the function, which means there is 
-actually only one static store created. This means that there are no 
-separate stores for each class instance.
-
-Of course the workaround is obvious -- declare a private variable 
-directly as a member of the class instead of a static variable in the 
-member function.
-
-What I really want to ask is, aren't the two meanings of the keyword 
-static mixed up here?
-
-When a class has a static member, it means that that member belongs to 
-the whole class. Different instances of a class can use this to pass 
-information amongst themselves, for example.
-
-But here there is a variable which is a static "member" of a non-static 
-member function of a class, and it is also acting as a classwide object.
-
-To my mind, there are three meanings to the keyword static:
-
-1. local visibility (vars and funcs)
-2. classwide commonness (vars and funcs)
-3. sticky nature (vars only) to hold values between function calls
-
-Here the second and third meanings are mixed up -- that makes the static 
-keyword quite ambiguous, don't you think?
-
-Your comments invited.
+You observe that the constructor is used when present, in preference to 
+the operator. Is there a reason for this? I mean I would expect at least 
+a warning in such a case, like I get when I initialize a variable with 
+the extern keyword.
 
 Shriramana Sharma.
 
---------------020403080607000601090405
+P.S: I had to resort to somewhat ugly hacks to actually get the two 
+user-defined classes to define the constructor and operator -- the 
+example provided in the book is incomplete. One is the forward 
+declaration of the second class before the first class. Two is the 
+friend declaration of the second class within the first class. Three is 
+the definition of the operator of the first class *after* the second class.
+
+--------------050002090205020700000400
 Content-Type: text/x-c++src;
- name="class-function-static-var.cpp"
+ name="ambiguous-type-conversion.cpp"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="class-function-static-var.cpp"
+ filename="ambiguous-type-conversion.cpp"
 
 # include <iostream>
-using namespace std ;
 
-class Number
+class Superinteger ;
+
+class Integer
 {
 public :
-	Number ( int i ) : i_ ( i ) {}
-	int value ( void ) { return i_ ; }
-	int previous ( void ) ;
-
+	Integer ( int i ) : i__ ( i ) {}
+	operator Superinteger () const ; // converts Integer to Superinteger
+	friend class Superinteger ;
 private :
-	int i_ ;
+	int i__ ;
 } ;
 
-int Number :: previous ( void )
+class Superinteger
 {
-	static int previousValue ;
-	static bool calculated = false ;
+public :
+	Superinteger ( int i ) : i__ ( i ) {}
+# ifdef ALLOWCONS
+	Superinteger ( Integer in ) : i__ ( in . i__ ) // converts Integer to Superinteger
+		{ std :: cout << "Superinteger's constructor was called.\n" ; }
+# endif
+private :
+	int i__ ;
+} ;
 
-	if ( not calculated )
-	{
-		cout << "Not calculated.\nCalculating...\n" ;
-		previousValue = i_ - 1 ;
-		calculated = true ;
-		cout << "Returning calculated value.\n" ;
-		return previousValue ;
-	}
-	// else
-	cout << "Already calculated.\nNot calculating again.\n" ;
-	cout << "Returning previously calculated value.\n" ;
-	return previousValue ;
+Integer :: operator Superinteger () const
+{
+	std :: cout << "Integer's operator was called.\n" ;
+	return Superinteger ( i__ ) ;
+}
+
+void autoConvert ( Superinteger si )
+{
+	std :: cout << "autoConvert ( Superinteger ) was successfully called with an Integer argument.\n" ;
 }
 
 int main ( void )
 {
-	Number a ( 100 ) ;
-
-	cout << "a :\n" ;
-	cout << a . value () ;
-
-	cout << "\na.previous :\n" ;
-	cout << a . previous () ;
-
-	cout << "\nAgain a.previous :\n" ;
-	cout << a . previous () ;
-
-	Number b ( 200 ) ;
-
-	cout << "\nb :\n" ;
-	cout << b . value () ;
-
-	cout << "\nb.previous :\n" ;
-	cout << b . previous () ;
-
-	cout << "\nAgain b.previous :\n" ;
-	cout << b . previous () ;
-
-	cout << "\n" ;
+	autoConvert ( Integer ( 20 ) ) ;
 }
 
---------------020403080607000601090405--
+--------------050002090205020700000400--
 
