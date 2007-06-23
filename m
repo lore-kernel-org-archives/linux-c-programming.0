@@ -1,99 +1,112 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: ambiguous type conversion
-Date: Fri, 22 Jun 2007 21:54:56 +0530
-Message-ID: <467BF7D8.1020600@gmail.com>
+Subject: #define-s for clarity/convenience
+Date: Sat, 23 Jun 2007 11:53:16 +0530
+Message-ID: <467CBC54.1040302@gmail.com>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="------------050002090205020700000400"
+ boundary="------------080805010507020803050502"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 This is a multi-part message in MIME format.
---------------050002090205020700000400
+--------------080805010507020803050502
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Hello.
 
-While reading the operator overloading chapter of Thinking in C++ I came 
-across the author saying that if there exist two separate definitions 
-for type conversion between two user-defined types, one being an 
-operator and the other a constructor, the compiler gives an error. But 
-when I tried this, I found that the compiler (at least GCC) does not 
-raise an error and prefers the constructor to the operator.
+I enclose herewith some #define-s I created for clarity. They are in the 
+public domain to be used if anyone finds them useful.
 
-Please peruse the attached code. You need to compile with -DALLOWCONS to 
-enable the constructor:
-
-g++ -o ambiguous ambiguous-type-conversion.cpp -DALLOWCONS
-./ambiguous-type-conversion
-g++ -o ambiguous ambiguous-type-conversion.cpp
-./ambiguous-type-conversion
-
-You observe that the constructor is used when present, in preference to 
-the operator. Is there a reason for this? I mean I would expect at least 
-a warning in such a case, like I get when I initialize a variable with 
-the extern keyword.
+I also request the experienced programmers here to share any such 
+#define-s they may have. I and others may benefit. Please also specify 
+the terms for usage.
 
 Shriramana Sharma.
 
-P.S: I had to resort to somewhat ugly hacks to actually get the two 
-user-defined classes to define the constructor and operator -- the 
-example provided in the book is incomplete. One is the forward 
-declaration of the second class before the first class. Two is the 
-friend declaration of the second class within the first class. Three is 
-the definition of the operator of the first class *after* the second class.
-
---------------050002090205020700000400
-Content-Type: text/x-c++src;
- name="ambiguous-type-conversion.cpp"
+--------------080805010507020803050502
+Content-Type: text/x-chdr;
+ name="jamadagni.h"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="ambiguous-type-conversion.cpp"
+ filename="jamadagni.h"
 
-# include <iostream>
+// (c) Shriramana Sharma, 2007. Placed in the public domain by the author.
+// version 2, 2007-06-23
 
-class Superinteger ;
+//
+// some replacements using # define for ambiguous/pitfall/unclear/related keywords/operators in C++ for convenience
+// it would be nice if the following replacements (even with other replacers) were to be part of a future C++ standard
+// the current usages can be supported with deprecated status
+//
 
-class Integer
-{
-public :
-	Integer ( int i ) : i__ ( i ) {}
-	operator Superinteger () const ; // converts Integer to Superinteger
-	friend class Superinteger ;
-private :
-	int i__ ;
-} ;
+//
+// in the following comments, "declaration" also means "implicitly declaring definition" unless stated otherwise
+//
 
-class Superinteger
-{
-public :
-	Superinteger ( int i ) : i__ ( i ) {}
-# ifdef ALLOWCONS
-	Superinteger ( Integer in ) : i__ ( in . i__ ) // converts Integer to Superinteger
-		{ std :: cout << "Superinteger's constructor was called.\n" ; }
-# endif
-private :
-	int i__ ;
-} ;
+//--------
+// static
+//--------
 
-Integer :: operator Superinteger () const
-{
-	std :: cout << "Integer's operator was called.\n" ;
-	return Superinteger ( i__ ) ;
-}
+// "local" for "static" in declarations of variables and functions at file scope which are desired to be visible only in the current translation unit
+# define local static
 
-void autoConvert ( Superinteger si )
-{
-	std :: cout << "autoConvert ( Superinteger ) was successfully called with an Integer argument.\n" ;
-}
+// "sticky" for "static" in declarations of local variables inside a function which should retain their value between function calls
+# define sticky static
 
-int main ( void )
-{
-	autoConvert ( Integer ( 20 ) ) ;
-}
+// "classwide" for "static" in declarations of local variables inside a class which are common to all instances of that class
+# define classwide static
 
---------------050002090205020700000400--
+// "nothis" for "static" in declarations of member functions inside a class which can be called without an instance of that class
+# define nothis static
+
+//--------
+// extern
+//--------
+
+// "exists" for "extern" in pure declarations (no implictly declaring definitions) of variables, types and functions which are defined elsewhere
+# define exists extern
+// in a future standard if "exists" is used in an implicitly declaring definition it should be an error
+// if there is no "exists" in a line declaring a variable then it means memory should be allocated for that variable; if there is "exists", then no memory is allocated
+
+// "global" for "extern" in declarations of variables and functions which are desired to be visible across all translation units; complement to "local" above
+# define global extern
+// this may of course be omitted since it is the default
+// in a future version of GCC implementing a future standard, when "global" is used in an implicitly declaring definition there should be no warning -- currently GCC warns when "extern" is used here
+
+// "decorateas" for "extern" to enclose declarations of functions which must be decorated in a particular way - i.e. "C" or "C++"
+# define decorateas extern
+
+//
+// other:
+//
+
+// "pure" for "= 0" for declarations of pure virtual functions in classes
+// since pure virtual means no definition exists, the word declarations here above does not include implicitly declaring definitions
+# define pure = 0
+// in a future standard preferably the word "pure" can be written before "virtual" instead of at the end of the declaration as provided by this # define
+
+//---
+// &
+//---
+
+// "ref" for "&" in declarations of variables and functions to denote a reference
+# define ref &
+
+// "addr" for "&" for extracting the address of a variable or function
+# define addr(X) & X
+
+//---
+// *
+//---
+
+// "ptr" for "*" in declarations of variables and functions to denote a pointer
+# define ptr *
+
+// "ptee()" for "*" for dereferencing pointers; ptee = pointee, just as ptr = pointer
+# define ptee(X) * X
+
+--------------080805010507020803050502--
 
