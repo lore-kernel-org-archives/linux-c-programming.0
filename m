@@ -1,112 +1,50 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: #define-s for clarity/convenience
-Date: Sat, 23 Jun 2007 11:53:16 +0530
-Message-ID: <467CBC54.1040302@gmail.com>
+Subject: various meanings of static
+Date: Sat, 23 Jun 2007 11:38:44 +0530
+Message-ID: <467CB8EC.8080209@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------080805010507020803050502"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
-
-This is a multi-part message in MIME format.
---------------080805010507020803050502
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
 
 Hello.
 
-I enclose herewith some #define-s I created for clarity. They are in the 
-public domain to be used if anyone finds them useful.
+To my thinking, the keyword static is used for four different purposes 
+in C++. I will explain this and I request your comments on that:
 
-I also request the experienced programmers here to share any such 
-#define-s they may have. I and others may benefit. Please also specify 
-the terms for usage.
+1. "static" is used in the declarations at file scope of variables and 
+functions to make them "local" -- i.e. visible only within that file.
+
+2. "static" is used in the declarations of variables inside functions to 
+make them "sticky" -- i.e. not get destroyed when the function is exit. 
+They "stick" around.
+
+3. "static" is used in the declarations of variables inside classes to 
+make them "classwide" -- i.e. common to all instances of that class, in 
+contrast with other member variables which are unique to each instance.
+
+4. "static" is used in the declarations of functions inside classes to 
+make them "nothis" -- i.e. not take/require a silent "this" pointer to 
+be passed, and hence be able to be called without an instance of that 
+class to exist.
+
+I am thinking of using # define-s to use these four words:
+
+local, sticky, classwide, nothis
+
+instead of static in my C++ programs to make them more meaningful. I 
+believe that the above four are mutually distinct purposes of the single 
+static keyword and whether a future C++ standard disambiguates these 
+purposes or not (where I prefer it would) I can even now use these new 
+clearer keywords.
+
+Are there any other meanings to static? Or are there any objections to 
+the above classification?
+
+Thank you.
 
 Shriramana Sharma.
-
---------------080805010507020803050502
-Content-Type: text/x-chdr;
- name="jamadagni.h"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="jamadagni.h"
-
-// (c) Shriramana Sharma, 2007. Placed in the public domain by the author.
-// version 2, 2007-06-23
-
-//
-// some replacements using # define for ambiguous/pitfall/unclear/related keywords/operators in C++ for convenience
-// it would be nice if the following replacements (even with other replacers) were to be part of a future C++ standard
-// the current usages can be supported with deprecated status
-//
-
-//
-// in the following comments, "declaration" also means "implicitly declaring definition" unless stated otherwise
-//
-
-//--------
-// static
-//--------
-
-// "local" for "static" in declarations of variables and functions at file scope which are desired to be visible only in the current translation unit
-# define local static
-
-// "sticky" for "static" in declarations of local variables inside a function which should retain their value between function calls
-# define sticky static
-
-// "classwide" for "static" in declarations of local variables inside a class which are common to all instances of that class
-# define classwide static
-
-// "nothis" for "static" in declarations of member functions inside a class which can be called without an instance of that class
-# define nothis static
-
-//--------
-// extern
-//--------
-
-// "exists" for "extern" in pure declarations (no implictly declaring definitions) of variables, types and functions which are defined elsewhere
-# define exists extern
-// in a future standard if "exists" is used in an implicitly declaring definition it should be an error
-// if there is no "exists" in a line declaring a variable then it means memory should be allocated for that variable; if there is "exists", then no memory is allocated
-
-// "global" for "extern" in declarations of variables and functions which are desired to be visible across all translation units; complement to "local" above
-# define global extern
-// this may of course be omitted since it is the default
-// in a future version of GCC implementing a future standard, when "global" is used in an implicitly declaring definition there should be no warning -- currently GCC warns when "extern" is used here
-
-// "decorateas" for "extern" to enclose declarations of functions which must be decorated in a particular way - i.e. "C" or "C++"
-# define decorateas extern
-
-//
-// other:
-//
-
-// "pure" for "= 0" for declarations of pure virtual functions in classes
-// since pure virtual means no definition exists, the word declarations here above does not include implicitly declaring definitions
-# define pure = 0
-// in a future standard preferably the word "pure" can be written before "virtual" instead of at the end of the declaration as provided by this # define
-
-//---
-// &
-//---
-
-// "ref" for "&" in declarations of variables and functions to denote a reference
-# define ref &
-
-// "addr" for "&" for extracting the address of a variable or function
-# define addr(X) & X
-
-//---
-// *
-//---
-
-// "ptr" for "*" in declarations of variables and functions to denote a pointer
-# define ptr *
-
-// "ptee()" for "*" for dereferencing pointers; ptee = pointee, just as ptr = pointer
-# define ptee(X) * X
-
---------------080805010507020803050502--
 
