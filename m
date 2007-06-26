@@ -1,44 +1,54 @@
-From: "Pedro de Medeiros" <pedrovmm+lists@gmail.com>
-Subject: Re: various meanings of static
-Date: Mon, 25 Jun 2007 20:01:32 -0300
-Message-ID: <38511efb0706251601n28622266k661db6c949be50cc@mail.gmail.com>
-References: <467CB8EC.8080209@gmail.com>
-	 <84bd26ef0706230555x35fdceber20d5788370b602ee@mail.gmail.com>
-	 <18045.17976.961868.834988@cerise.gclements.plus.com>
-	 <38511efb0706241408m42241137n254944e32902262c@mail.gmail.com>
-	 <18048.13578.542604.949301@cerise.gclements.plus.com>
+From: "Li YanBo" <dreamfly281@gmail.com>
+Subject: Confuse with big endian bitwise field
+Date: Tue, 26 Jun 2007 18:20:35 +0800
+Message-ID: <1197ff4c0706260320t648dba53ga7e3eed745293e9a@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
         d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:sender:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references:x-google-sender-auth;
-        b=FvAsq3BVsLz5Zk3/lmHtkCtER2wE82G6AHYwKB08/3EWWKF5jDAW12M1lIr9uuDTpnS1GB8H4iXPbwS9wh3tuLaz2oRz52+IOaD3Xxmq9mPUSpjDQ1QSPGeozYETlHVPFC5yF7l/c3zPEmsy+SUxERJ3p8zP63xw+XzNy7njS/E=
-In-Reply-To: <18048.13578.542604.949301@cerise.gclements.plus.com>
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:mime-version:content-type:content-transfer-encoding:content-disposition;
+        b=LmF2I6X8UuHXAMqsmLNt0fmLBYYDXArJw5gIxjctZcJrVDLBZk3mWsPIQsPS3UNzwLI5r+fTyEmtCE8i25QigJP9O1x+aFFbDVDXSCmUAeHoWeLrJ7mqbdfuCZXZ/UMuMGOd1+xOIc7sIGXt6TuvNGeRLQS6kkQ5G9qvS8gRj2Y=
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: linux-c-programming@vger.kernel.org
+Cc: kernelnewbies@nl.linux.org
 
-On 6/25/07, Glynn Clements <glynn@gclements.plus.com> wrote:
->
-> Using the preprocessor to create a project-specific language is seldom
-> as good an idea as it may seem at the time, as you tend to end up with
-> code which only the author understands.
->
-> In general, to be able to work on a C source file should only require
-> knowledge of C along with the types, variables and functions used by
-> that particular file. Having to be familiar with a large number of
-> project-specific conventions and idioms before you can touch anything
-> tends to result in code which is hard to maintain.
+hi all,
 
-Yes, now I agree.
+I am try  to define a hardware specific struct, it is like below:
 
-Well, if macros are not worse than __attribute__ declarations for
-machine-readability and if you acknowledge their usefulness, then
-maybe you should have given the reason above in the first place. ;-)
+struct xxx {
+        __be32 pdu_cnt:6;
+        __be32 y:3;
+        __be32 wep_key:2;
+        __be32 uses_wep_key:1;
+        __be32 keep_alive:1;
+        __be32 buff_tail_addr:19;
 
-Cheers,
-Pedro.
+        __be32 cts_11g:1;
+        __be32 rts_11g:1;
+        __be32 x:2;
+        __be32 frag_size:12;
+        __be32 payload_len:12;
+        __be32 frag_num:4;
+}
+
+but I am confuse with how to assign the values to the fields
+"buff_tail_addr" and "payload_len", I think there  are two ways to
+assign values to them, but I don't know which is right?
+
+eg: I declare a variable  struct xxx X;
+
+1: X.buff_tail_addr = 0x3456;                        X.payload_len = 0x20;
+2: X.buff_tail_addr = cpu_to_be32(0x3456);    X.payload_len = cpu_to_be16(0x20);
+
+There are two way I think to assign values. Could anyone tell me which
+is right or both are wrong? I will be appreciate for any hints, thanks
+in advance!
+
+BR
+
+lyb
