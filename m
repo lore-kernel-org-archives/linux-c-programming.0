@@ -1,66 +1,40 @@
-From: Kristof Provost <Kristof@provost-engineering.be>
-Subject: Re: Confuse with big endian bitwise field
-Date: Tue, 26 Jun 2007 20:09:14 +0200
-Message-ID: <20070626180914.GA28386@luggage>
-References: <1197ff4c0706260320t648dba53ga7e3eed745293e9a@mail.gmail.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: operator! and lvalue
+Date: Wed, 27 Jun 2007 09:01:47 +0530
+Message-ID: <4681DA23.7030001@gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <1197ff4c0706260320t648dba53ga7e3eed745293e9a@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: Li YanBo <dreamfly281@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, kernelnewbies@nl.linux.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-On 2007-06-26 18:20:35 (+0800), Li YanBo <dreamfly281@gmail.com> wrote:
-> hi all,
-> 
-> I am try  to define a hardware specific struct, it is like below:
-> 
-> struct xxx {
->        __be32 pdu_cnt:6;
->        __be32 y:3;
->        __be32 wep_key:2;
->        __be32 uses_wep_key:1;
->        __be32 keep_alive:1;
->        __be32 buff_tail_addr:19;
-> 
->        __be32 cts_11g:1;
->        __be32 rts_11g:1;
->        __be32 x:2;
->        __be32 frag_size:12;
->        __be32 payload_len:12;
->        __be32 frag_num:4;
-> }
-> 
-> but I am confuse with how to assign the values to the fields
-> "buff_tail_addr" and "payload_len", I think there  are two ways to
-> assign values to them, but I don't know which is right?
-> 
-> eg: I declare a variable  struct xxx X;
-> 
-> 1: X.buff_tail_addr = 0x3456;                        X.payload_len = 0x20;
-> 2: X.buff_tail_addr = cpu_to_be32(0x3456);    X.payload_len = 
-> cpu_to_be16(0x20);
-> 
-> There are two way I think to assign values. Could anyone tell me which
-> is right or both are wrong? I will be appreciate for any hints, thanks
-> in advance!
-> 
-> BR
-> 
-> lyb
+In Thinking in C++ chapter on overloading operators, Bruce Eckel gives
+the following code:
 
-Disclaimer: I'm not exactly an expert, so someone tell me if I'm wrong.
+For a non-member operator:
 
-You'll need to use cpu_to_be32, to make sure the values you assign are
-big endian too. You'll need to do this for every field larger than 8
-bits (as endianness is not an issue if there's only one byte).
+int operator!(const Integer& a) {
+   cout << "!Integer\n";
+   return !a.i;
+}
 
-You should be able to test this if you write a small program to populate
-that struct and then dump it byte per byte (or just use gdb to see the
-content).
+For a member operator:
 
-Kristof
+Byte operator!() const {
+   cout << "!Byte\n";
+   return Byte(!b);
+}
+
+My question is: why is there no "const" before Integer and Byte at the
+head of the function? There's all that stuff about when temporaries are
+returned they are automatically const, but throughout the examples in
+this chapter, only operator! is not explicitly specified to have a const
+return value whereas in all other relevant cases we have the "const"
+specified explicitly.
+
+Shriramana Sharma.
+
+
+
