@@ -1,41 +1,38 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: no number->string conversion in stdc++?
-Date: Fri, 29 Jun 2007 05:34:06 +0530
-Message-ID: <46844C76.6060208@gmail.com>
+From: Eric Bambach <eric@cisu.net>
+Subject: Re: why is "no newline at end of file" a warning?
+Date: Thu, 28 Jun 2007 23:52:13 -0500
+Message-ID: <200706282352.13703.eric@cisu.net>
+References: <46844620.4050902@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <46844620.4050902@gmail.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Shriramana Sharma <samjnaa@gmail.com>
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Hello.
+On Thursday 28 June 2007 18:37, Shriramana Sharma wrote:
+> Hello.
+>
+> gcc (and so many other *nix utilities) often give a warning (sometimes
+> even an error) if there is "no newline at end of file". I would like to
+> know why this is such a serious issue that it deserves to be called a
+> warning (or an error).
 
-I learnt today to my dismay that there is in fact no number to string 
-conversion function in the standard C++ library? I can't do simple 
-natural things like:
+I think it warns because a file with no newline could have possibly been 
+truncated. Or at least thats what I heard somewhere someplace a while ago :)
 
-std :: string a ( 2 ) ;
-std :: string b ( 2.5 ) ;
+> Shriramana Sharma.
+>
+> -
+> To unsubscribe from this list: send the line "unsubscribe
+> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-without errors at compilation talking about "no matching function for call".
+-- 
+Thanks,
 
-I find it difficult to believe that no-one thought this was necessary 
-enough to be included in the C++ standard basic_string class.
-
-The three ways out of this problem I got to know:
-
-1. stringstream from std, resulting in somewhat unweildy operations
-2. lexical_cast from boost, resulting in dependency on huge boost lib
-3. QString from Qt, resulting in depdency on huge Qt lib
-
-Of course stdc++ is also a huge lib, but thought I can expect stdc++ to 
-be there on more machines than boost or Qt.
-
-So shall I go with std::string and std::stringstream, std::string and 
-boost::lexical_cast or simply Qt's QString? QString seems most 
-appealing, but I would listen to your better judgment.
-
-Shriramana Sharma.
-
+Eric
