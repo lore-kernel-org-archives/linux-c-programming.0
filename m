@@ -1,70 +1,59 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Question about ULLONG_MAX
-Date: Mon, 2 Jul 2007 19:55:26 +0100
-Message-ID: <18057.18974.373870.405519@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0707020835520.6237@praktifix.dwd.de>
+From: "Pedro de Medeiros" <pedrovmm+lists@gmail.com>
+Subject: Using both wchar_t and GCC __attribute__((format(...)))
+Date: Mon, 2 Jul 2007 16:52:05 -0300
+Message-ID: <38511efb0707021252r2b995821x9880f11165500184@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0707020835520.6237@praktifix.dwd.de>
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:sender:to:subject:mime-version:content-type:content-transfer-encoding:content-disposition:x-google-sender-auth;
+        b=EOn6Rml/AWhS+qAyRfc+ew/V/3vtAs5vJtSU3GxYCJb9X7p6mTy7xwZ53ZPhN1AT9bSTtUCKTsCS6rXeoipoRW0QjCwEm9jdf7ULAdKXWMloOpse9fIpyKwgJoH41DadQASwA1fOWy44Eg61cb4JMa13LP2VAmCn1cWd8ctZe7Q=
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Holger Kiehl <Holger.Kiehl@dwd.de>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
+Hello,
 
-Holger Kiehl wrote:
+I am trying to convert some functions in my library from (char *) to
+(wchar_t *), and it has been a bit of a nightmare. I want to use GCC er=
+ror
+detection for printf-style functions, but that doesn't seem to work whe=
+n
+functions use wchar_t *. For instance:
 
-> Hello
-> 
-> When compiling the following program on a Fedora 6 x86_64 system:
-> 
->     #include <stdio.h>
->     #include <limits.h>
-> 
->     int
->     main(void)
->     {
->        (void)printf("%llu\n", ULLONG_MAX);
-> 
->        return 0;
->     }
-> 
-> Produces the following result:
-> 
->    cc longlong.c
->    longlong.c: In function 'main':
->    longlong.c:7: error: 'ULLONG_MAX' undeclared (first use in this function)
->    longlong.c:7: error: (Each undeclared identifier is reported only once
->    longlong.c:7: error: for each function it appears in.)
-> 
-> If I compile it with cc -std=c99 longlong.c it works.
-> 
-> Why is it necessary to specify -std=c99? If I use for example strtoull()
-> I do not need to set -std=c99.
+void trace(conn_t *, wchar_t *, ...)
+        __attribute__ ((format(printf, 2, 3)));
 
-The declaration of strtoull() is enabled by __USE_MISC:
+And GCC aborts with:
 
-#if defined __USE_ISOC99 || (defined __GLIBC_HAVE_LONG_LONG && defined __USE_MISC)
+"error: format string argument not a string type"
 
-If you use "-ansi -Wall", you'll get a warning due to the implicit
-declaration of strtoull().
+Then I tried something like:
 
-Bear in mind that a missing declaration only results in a warning,
-while a missing macro is an error (as the symbol won't exist in any
-library).
+void trace(conn_t *, wchar_t *, ...)
+        __attribute__ ((format(wprintf, 2, 3)));
 
-> Compiling the above on AIX compiles and runs without problems. Also
-> on an older Solaris 8 system using gcc (3.3.2) it compiles and runs
-> straight out of the box.
-> 
-> If I want to use ULLONG_MAX how can I do this in a portable way so it
-> compiles on different systems?
+But GCC tells me that:
 
-You need to explicitly enable C99 support; "long long" isn't in C89,
-so you shouldn't assume that it will be available when using the
-default compilation settings.
+"warning: 'wprintf' is an unrecognized format function type"
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Which I assume will disable GCC printf-style error checking.
+
+How do I solve this other than disabling this feature completely?
+Any help would be greatly appreciated.
+
+Cheers,
+Pedro.
+
+--=20
+Pedro de Medeiros - Ci=EAncia da Computa=E7=E3o - Universidade de Bras=ED=
+lia
+Home Page: http://www.nonseq.net - Linux User No.: 234250
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
