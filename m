@@ -1,37 +1,56 @@
-From: Holger Kiehl <Holger.Kiehl@dwd.de>
-Subject: Re: Question about ULLONG_MAX
-Date: Mon, 2 Jul 2007 20:39:44 +0000 (GMT)
-Message-ID: <Pine.LNX.4.64.0707022034110.21471@praktifix.dwd.de>
-References: <Pine.LNX.4.64.0707020835520.6237@praktifix.dwd.de>
- <18057.18974.373870.405519@cerise.gclements.plus.com>
+From: <cyon.john@wipro.com>
+Subject: RE: Using both wchar_t and GCC __attribute__((format(...)))
+Date: Tue, 3 Jul 2007 09:33:54 +0530
+Message-ID: <8068EA5DFF3D964CB9B957236985862B02B82F0E@BLR-EC-MBX06.wipro.com>
+References: <38511efb0707021252r2b995821x9880f11165500184@mail.gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <18057.18974.373870.405519@cerise.gclements.plus.com>
+Content-class: urn:content-classes:message
+In-Reply-To: <38511efb0707021252r2b995821x9880f11165500184@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
-Content-Transfer-Encoding: 7bit
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: pedrovmm+lists@gmail.com, linux-c-programming@vger.kernel.org
 
-On Mon, 2 Jul 2007, Glynn Clements wrote:
+Hi, 
 
->
-> Holger Kiehl wrote:
->
->> Compiling the above on AIX compiles and runs without problems. Also
->> on an older Solaris 8 system using gcc (3.3.2) it compiles and runs
->> straight out of the box.
->>
->> If I want to use ULLONG_MAX how can I do this in a portable way so it
->> compiles on different systems?
->
-> You need to explicitly enable C99 support; "long long" isn't in C89,
-> so you shouldn't assume that it will be available when using the
-> default compilation settings.
->
-You are right. Enabling C99 support explicitly is the better solution.
+I haven't used this attribute before, but the following is what I feel
+after giving it a try now...
 
-Thanks,
-Holger
+> void trace(conn_t *, wchar_t *, ...)
+>         __attribute__ ((format(printf, 2, 3)));
+> 
+> And GCC aborts with:
+> 
+> "error: format string argument not a string type"
+
+Here, the error is due to the fact that gcc expects the 'string-index'
+parameter of format attribute to point to 'const char *' type.
+
+> void trace(conn_t *, wchar_t *, ...)
+>         __attribute__ ((format(wprintf, 2, 3)));
+> 
+> But GCC tells me that:
+> 
+> "warning: 'wprintf' is an unrecognized format function type"
+
+This error is because, according to gcc-4.2.0 manual it only supports
+the following - printf, scanf, strftime or strfmon - for the 'archetype'
+parameter offormat attribute.
+
+So I feel we are out of luck unless gcc adds support for 'wprintf' as
+archetype for format attribute.
+
+I found a mail loop at gcc-patches mailing list where a patch is
+submitted to add this support and its discussion. I am not sure if has
+got approved, but you may take a look at it.
+
+Here is the link -
+http://gcc.gnu.org/ml/gcc-patches/2001-12/msg01579.html
+
+Hope that will help you.
+
+Regards,
+Cyon
 
