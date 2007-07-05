@@ -1,31 +1,33 @@
-From: "Leslie P. Polzer" <leslie.polzer@gmx.net>
-Subject: Re: link error
-Date: Fri, 6 Jul 2007 09:02:32 +0200 (CEST)
-Message-ID: <54747.212.211.137.66.1183705352.squirrel@viridian.dnsalias.net>
-References: <1183704838.5947.14.camel@debian>
+From: Eugene Rosenzweig <eugene259@internode.on.net>
+Subject: Re: C/C++ File Parser
+Date: Fri, 06 Jul 2007 01:20:52 +1000
+Message-ID: <f6j28g$pna$1@sea.gmane.org>
+References: <11445958.post@talk.nabble.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1183704838.5947.14.camel@debian>
+In-Reply-To: <11445958.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: yyy <yaoyy@rising.com.cn>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-> When i link .o file to a dynamic lib, errors appear,
-> My link sentence such as:
-> g++ -g -shared -fPIC -o xxx.so xxx.o xxxx.o ....
->
-> the error such as:
-> `.L303' referenced in section `.rodata' of xxx.o: defined in discarded
-> section `.gnu.linkonce.t._ZN3ALT9TVSPrintfIcEEiPT_PKS1_Pv' of xxx.o
->
-> any one has any advice, i'm appreciate.
+mudassir wrote:
+> Hi All,
+> 
+> I am in search of a snippet that could parse a C/C++ source file and
+> give out as output different information on it. For example
+> 
+> 1. Signature of function defined in a file.
+> 2. Name of Global Variables declared.
+> 3. Files dependencies..(#include).
+> 
+> Can you help?
+> 
+> thanks,
+> mudassir. 
 
-Sure, ask a fortuneteller.
-
-Alternatively post your code here.
-
-  Leslie
+Some parser engines out there would have ANSI/K&R C grammar already
+available for you to integrate into your program. Have a look at some in
+this list: http://en.wikipedia.org/wiki/List_of_Parsers
 
