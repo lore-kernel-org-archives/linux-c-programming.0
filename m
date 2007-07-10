@@ -1,23 +1,23 @@
-From: "Jordi Vendrell" <J.Vendrell@spin.es>
-Subject: Finding the libraries
-Date: Wed, 11 Jul 2007 09:46:29 +0200
-Message-ID: <5E74D1C3210057408BCC59EE66FF83158DBF15@frontend2000.gestio.spinlan.es>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: operator=
+Date: Tue, 10 Jul 2007 10:30:18 +0530
+Message-ID: <46931262.4090709@gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+As Glynn pointed out, this list is about C on Linux (while obviously C 
+doesn't exclude C++), but still as I do not find as good a *mailing 
+list* elsewhere on the net, I beg your forgiveness and will continue to 
+ask just a few general questions now and then to which I have already 
+*tried* otherwise to get answers.
 
-hello,
+Are there different kinds of operator=? I read this somewhere: 
+"copy-assignment operator=" and "other forms of operator=".
 
-I'm trying to compile a program I've found , but it requires a library called "tfplib.h" which seems not to be in my computer. Anyone could tell me where can I download libraries and the like?
+Shriramana Sharma.
 
-thanks in advance
-
-
-
-Jordi Vendrell
