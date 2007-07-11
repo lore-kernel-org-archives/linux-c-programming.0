@@ -1,12 +1,12 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: operator=
-Date: Wed, 11 Jul 2007 16:10:17 +0100
-Message-ID: <18068.62169.228736.589181@cerise.gclements.plus.com>
-References: <46931262.4090709@gmail.com>
+Subject: Re: no see copy-constructor in output of nm
+Date: Wed, 11 Jul 2007 16:18:16 +0100
+Message-ID: <18068.62648.338531.678125@cerise.gclements.plus.com>
+References: <4693B441.6070203@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <46931262.4090709@gmail.com>
+In-Reply-To: <4693B441.6070203@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
@@ -16,75 +16,41 @@ Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
 Shriramana Sharma wrote:
 
-> Are there different kinds of operator=? I read this somewhere: 
-> "copy-assignment operator=" and "other forms of operator=".
+> class Integer
+> {
+> public :
+> 	Integer ( int i ) : i_ ( i ) {}
+> private :
+> 	int i_ ;
+> } ;
+> int main ( void )
+> {
+> 	Integer a ( 1 ) ;
+> 	Integer c ( a ) ;
+> }
+> 
+> I do: g++ -c and then run nm -C on the object file. I get only:
+> 
+> 00000000 W Integer::Integer(int)
+>           U __gxx_personality_v0
+> 00000000 T main
+> 
+> Why do I not see the signature of the copy constructor 
+> Integer::Integer(const Integer&) in the symbols list even though it is 
+> automatically created?
 
-I suspect that you're referring to the fact that initialisation can be
-differentiated from assignment to an existing object. E.g. if you
-have:
+Because it's inlined. The default copy constructor just copies the raw
+data.
 
-	class foo
-	{
-		foo(int);
-		foo(const foo&);
-		foo& operator=(const foo&);
-	}
-	
-	void f()
-	{
-		foo f1(10);
-		foo f2 = f1;
-	}
+> Also, why do I not see i_, a and c and the name of the class Integer 
+> itself? Are they not also symbols?
 
-The initialisation of f2 with:
+a and c are automatic variables, which are created on the stack
+whenever the function is called and destroyed when it returns. They
+don't exist within the executable.
 
-	foo f2 = f1;
-
-is equivalent to:
-
-	foo f2(f1);
-
-and NOT to:
-
-	foo f2;
-	f2 = f1;
-
-IOW, it uses the copy constructor foo(const foo&), not operator=.
-
-If you don't have a copy constructor, operator= will be used instead. 
-If you don't have either, the compiler will just perform a bitwise
-copy, as for copying C structures.
-
-Also, note that implicit initialisation of function arguments and
-return values also uses the copy constructor if it exists.
-
-Thus, if you define both a copy constructor and operator=, the copy
-constructor will be applied to uninitialised objects while operator=
-will only be applied to initialised objects.
-
-This allows operator= to refer to the existing state of the object
-being modified, as it will always be initialised. This is useful if an
-object contains dynamically-allocated values; when you change the
-value by assignment, you may want to de-allocate existing values
-and/or duplicate new values.
-
-E.g.
-
-	class string
-	{
-		char *buf;
-
-		string(char *p) {
-			buf = strdup(p);
-		}
-		string(const string &s) {
-			buf = strdup(s.buf);
-		}
-		string& operator=(const string &s) {
-			free(buf);
-			buf = strdup(s.buf);
-		}
-	}
+i_ is a structure field; it doesn't have an existence separate from
+the object to which it belongs.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
