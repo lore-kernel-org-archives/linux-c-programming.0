@@ -1,62 +1,56 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: operator for automatic type conversion not allowed as non-member
-Date: Mon, 16 Jul 2007 11:35:09 +0530
-Message-ID: <469B0A95.4040108@gmail.com>
+From: Eric Bambach <eric@cisu.net>
+Subject: Re: Finding the libraries
+Date: Mon, 16 Jul 2007 07:42:05 -0500
+Message-ID: <200707160742.06604.eric@cisu.net>
+References: <5E74D1C3210057408BCC59EE66FF83158D4287@frontend2000.gestio.spinlan.es>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <5E74D1C3210057408BCC59EE66FF83158D4287@frontend2000.gestio.spinlan.es>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-To: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Jordi Vendrell <J.Vendrell@spin.es>
+Cc: linux-c-programming@vger.kernel.org
 
-In my program, I would like QString-s (from Qt) to be automatically=20
-converted to std::string-s. The Qt people could have done this by=20
-providing an operator std::string () inside class QString but they=20
-didn't so I tried to do this using a global operator.
+On Monday 16 July 2007 02:20, Jordi Vendrell wrote:
+> Thanks, but actually, I got my code from that link, but the library I'm
+> looking for isn't there (or I haven't been able to find it) any other
+> suggestion? :)
 
-operator std::string (const QString & qs) { return qs.toStdString() ; }
+From the website:
 
-but I got:
+"The code is broken into two parts: one is the library and include file that 
+the threads link against, the other is the command-line utility. The source 
+is on the enclosed CD-ROM"
 
-error: =E2=80=98operator std::string(const QString&)=E2=80=99 must be a=
- nonstatic member=20
-function
+I think you may have to buy the book or find someone with the CD. It's 
+probably a custom header file the author wrote just for that book and isn't 
+released anywhere due to copyright.
 
-Whereas if I try:
+Good luck!
 
-const QString operator+ (const std::string & ss, const QString & qs) {
-	return QString::fromStdString(ss) + qs ;
-}
+> Jordi Vendrell
+>
+> > I'm trying to compile a program I've found , but it requires a library
+> > called "tfplib.h" which seems not to be in my computer. Anyone could tell
+> > me where can I
+>
+> download libraries and the like?
+>
+>
+>
+> http://www.google.ch/search?hl=en&q=tfplib.h&btnG=Google+Search&meta=
+>
+>
+> /Per Jessen
+> -
+> To unsubscribe from this list: send the line "unsubscribe
+> linux-c-programming" in the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-it works. So what is special about operator othertype that it is not=20
-allowed to be a non-member?
+-- 
+Thanks,
 
-Similarly operator=3D is not allowed to be a non-member. So I cannot do=
-:
-
-const std::string & operator=3D ( std::string & ss, const QString & qs =
-) {
-	ss =3D qs.toStdString() ;
-	return ss ;
-}
-
-which is actually meaningful. Of course, since QString has toStdString,=
-=20
-I can always use that wherever I need to get a std::string from QString=
-,=20
-but operator overloading is a matter of convenience and I would like to=
-=20
-know if there is a strong reason that I cannot use operator othertype=20
-and operator=3D as a non-member. It would enable me to define convenien=
-ce=20
-operators between objects of third-party (which includes the standard=20
-library for me) types.
-
-Shriramana Sharma.
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Eric
