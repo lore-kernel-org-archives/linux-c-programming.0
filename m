@@ -1,18 +1,31 @@
-From: Eric Bambach <eric@cisu.net>
-Subject: Re: Finding the libraries
-Date: Mon, 16 Jul 2007 07:42:05 -0500
-Message-ID: <200707160742.06604.eric@cisu.net>
-References: <5E74D1C3210057408BCC59EE66FF83158D4287@frontend2000.gestio.spinlan.es>
+From: "Jordi Vendrell" <J.Vendrell@spin.es>
+Subject: RE: Finding the libraries
+Date: Mon, 16 Jul 2007 15:41:25 +0200
+Message-ID: <5E74D1C3210057408BCC59EE66FF83158D4288@frontend2000.gestio.spinlan.es>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <5E74D1C3210057408BCC59EE66FF83158D4287@frontend2000.gestio.spinlan.es>
-Content-Disposition: inline
+content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Jordi Vendrell <J.Vendrell@spin.es>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+
+Thanks a lot, seems reading is useful after all ^_^U
+
+
+Jordi Vendrell
+
+
+
+-----Mensaje original-----
+De: Eric Bambach [mailto:eric@cisu.net]
+Enviado el: lunes, 16 de julio de 2007 14:42
+Para: Jordi Vendrell
+CC: linux-c-programming@vger.kernel.org
+Asunto: Re: Finding the libraries
+
 
 On Monday 16 July 2007 02:20, Jordi Vendrell wrote:
 > Thanks, but actually, I got my code from that link, but the library I'm
@@ -54,3 +67,7 @@ Good luck!
 Thanks,
 
 Eric
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
