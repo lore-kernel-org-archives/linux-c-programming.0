@@ -1,115 +1,109 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: operator for automatic type conversion not allowed as non-member
-Date: Mon, 16 Jul 2007 16:54:51 +0100
-Message-ID: <18075.38091.44611.315224@cerise.gclements.plus.com>
-References: <469B0A95.4040108@gmail.com>
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: Where am I using so much memory?
+Date: Sun, 22 Jul 2007 11:26:54 +0000 (GMT)
+Message-ID: <Pine.LNX.4.64.0707221046430.18612@praktifix.dwd.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <469B0A95.4040108@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hello
 
-Shriramana Sharma wrote:
+I am trying to find out why one of my process (written in C) is suddenly
+using so much memory. Under normal conditions VSZ is 5132 and RSS is 2020.
+Now after running a view days VSZ is 280896 and RSS is 13700. And it stays
+at that level, so I assume it must have been in some code pass that is
+hardly used. The program is large so I am looking for a way to locate
+the variable that uses the memory with the help of gdb. The process
+is compiled with debug information (-ggdb3).
 
-> In my program, I would like QString-s (from Qt) to be automatically=20
-> converted to std::string-s. The Qt people could have done this by=20
-> providing an operator std::string () inside class QString but they=20
-> didn't so I tried to do this using a global operator.
->=20
-> operator std::string (const QString & qs) { return qs.toStdString() ;=
- }
->=20
-> but I got:
->=20
-> error: =1B-F=A1operator std::string(const QString&)=A2 must be a nons=
-tatic member =1B-A
-> function
->=20
-> Whereas if I try:
->=20
-> const QString operator+ (const std::string & ss, const QString & qs) =
-{
-> 	return QString::fromStdString(ss) + qs ;
-> }
->=20
-> it works. So what is special about operator othertype that it is not=20
-> allowed to be a non-member?
+Looking at /proc/29570/smaps (29570 is the process ID of the process in
+question) I find the following:
 
-My guess is that the decision to add this rule was to prevent the
-type-matching rules from becoming any more complex than they already
-are.
+    2b92d1283000-2b92e1d8e000 rw-p 2b92d1283000 00:00 0
+    Size:            273452 kB
+    Rss:               8328 kB
+    Shared_Clean:         0 kB
+    Shared_Dirty:         0 kB
+    Private_Clean:        0 kB
+    Private_Dirty:     8328 kB
 
-Type conversion and assignment aren't like normal operators, as they
-can be invoked implicitly. Also, as overloaded functions are selected
-based upon the argument types, the interaction between type conversion
-and overloading can have non-obvious results.
+Now I assume this must be the place that is using up all the memory. What
+type of memory is this? I assume this is memory from some malloc() call
+and glibc uses mmap() to implement this. Correct?
 
-By requiring type conversion operators, constructors and assignment
-operators to be implemented as members, the behaviour of calling a
-method with arguments of pre-defined types is determined by the class
-alone.
+If that is the case, then I assume that I did not call free(), since under
+linux free() realy frees the memory. Correct?
 
-If any of those operators could be defined outside of the class, the
-behaviour would depend upon the presence or absence of such
-definitions. This could result in the class being implemented
-differently in different translation units, depending upon which other
-header files were included.
+cat /proc/29570/maps shows the following:
 
-> Similarly operator=3D is not allowed to be a non-member. So I cannot =
-do:
->=20
-> const std::string & operator=3D ( std::string & ss, const QString & q=
-s ) {
-> 	ss =3D qs.toStdString() ;
-> 	return ss ;
-> }
->=20
-> which is actually meaningful. Of course, since QString has toStdStrin=
-g,=20
-> I can always use that wherever I need to get a std::string from QStri=
-ng,=20
-> but operator overloading is a matter of convenience and I would like =
-to=20
-> know if there is a strong reason that I cannot use operator othertype=
-=20
-> and operator=3D as a non-member.
->=20
-> It would enable me to define convenience=20
-> operators between objects of third-party (which includes the standard=
-=20
-> library for me) types.
+    00400000-00439000 r-xp 00000000 09:07 24494086                           /home/afd/bin/dir_check
+    00538000-00539000 rw-p 00038000 09:07 24494086                           /home/afd/bin/dir_check
+    00539000-005e7000 rw-p 00539000 00:00 0                                  [heap]
+    3953c00000-3953c1a000 r-xp 00000000 09:00 2899267                        /lib64/ld-2.4.so
+    3953d19000-3953d1a000 r--p 00019000 09:00 2899267                        /lib64/ld-2.4.so
+    3953d1a000-3953d1b000 rw-p 0001a000 09:00 2899267                        /lib64/ld-2.4.so
+    3953e00000-3953f3f000 r-xp 00000000 09:00 2899289                        /lib64/libc-2.4.so
+    3953f3f000-395403e000 ---p 0013f000 09:00 2899289                        /lib64/libc-2.4.so
+    395403e000-3954042000 r--p 0013e000 09:00 2899289                        /lib64/libc-2.4.so
+    3954042000-3954043000 rw-p 00142000 09:00 2899289                        /lib64/libc-2.4.so
+    3954043000-3954048000 rw-p 3954043000 00:00 0
+    2b92d0e8f000-2b92d0e90000 rw-p 2b92d0e8f000 00:00 0
+    2b92d0e90000-2b92d0e95000 rw-s 00000000 09:07 24478806                   /home/afd/fifodir/tmp_msg_buffer
+    2b92d0e95000-2b92d0e96000 rw-s 00000000 09:07 24478787                   /home/afd/fifodir/afd.status
+    2b92d0ea6000-2b92d0ea8000 rw-p 2b92d0ea6000 00:00 0
+    2b92d0ea8000-2b92d0ef3000 rw-s 00000000 09:07 3883010                    /home/afd/fifodir/fra_status.627
+    2b92d0ef3000-2b92d0f89000 rw-s 00000000 09:07 3883009                    /home/afd/fifodir/fsa_status.757
+    2b92d0f89000-2b92d0ff9000 rw-s 00000000 09:07 24477698                   /home/afd/fifodir/amg_data
+    2b92d0ff9000-2b92d1282000 rw-p 2b92d0ff9000 00:00 0
+    2b92d1282000-2b92d1283000 rw-s 00000000 09:07 24478740                   /home/afd/fifodir/error_queue
+    2b92d1283000-2b92e1d8e000 rw-p 2b92d1283000 00:00 0
+    7fffd9c06000-7fffd9c1b000 rw-p 7fffd9c06000 00:00 0                      [stack]
+    ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vdso]
 
-Designing a language isn't just about whether or not a feature can be
-implemented, but also about whether it is a good idea.
+And cat /proc/29570/status shows this:
 
-Many people (including myself) consider that the existence of implicit
-operators in C++ is a mistake, resulting in code which can be very
-hard to understand for anyone other than the author (or even for the
-author, once some time has elapsed since the code was written).
+    Name:   dir_check
+    State:  S (sleeping)
+    SleepAVG:       90%
+    Tgid:   29570
+    Pid:    29570
+    PPid:   28394
+    TracerPid:      0
+    Uid:    5521    5521    5521    5521
+    Gid:    501     501     501     501
+    FDSize: 64
+    Groups: 501
+    VmPeak:   281688 kB
+    VmSize:   280896 kB
+    VmLck:         0 kB
+    VmHWM:     14492 kB
+    VmRSS:     13700 kB
+    VmData:   276776 kB
+    VmStk:        84 kB
+    VmExe:       228 kB
+    VmLib:      1380 kB
+    VmPTE:        60 kB
+    Threads:        1
+    SigQ:   0/81920
+    SigPnd: 0000000000000000
+    ShdPnd: 0000000000000000
+    SigBlk: 0000000000000000
+    SigIgn: 0000000000000001
+    SigCgt: 0000000000000440
+    CapInh: 0000000000000000
+    CapPrm: 0000000000000000
+    CapEff: 0000000000000000
 
-Ensuring that you understand the evaluation of a particular expression
-requires exhaustive knowledge of any implicit operators which could be
-invoked.
+Is there a way that I can find with the help of gdb the variable name that
+had or still has this 270MB allocated?
 
-This is helped by the fact that such operators must appear somewhere
-in the definition of the relevant class (although, in the case of a
-conversion operator, it may be in a superclass; assignment operators
-aren't inherited).
+Or is there some other way to find at which place in the code I am using
+so much memory?
 
-If such operators could be defined as global functions, you would have
-to hunt through all of the header files which are included in a
-translation unit to find any such operators (or to ensure that they
-didn't exist).
+Thanks,
+Holger
 
---=20
-Glynn Clements <glynn@gclements.plus.com>
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
