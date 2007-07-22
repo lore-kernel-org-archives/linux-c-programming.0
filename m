@@ -1,7 +1,7 @@
 From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: How to find out meaning of __tcf_1 etc?
-Date: Sat, 21 Jul 2007 20:04:06 +0530
-Message-ID: <46A2195E.4030000@gmail.com>
+Subject: singleton pattern really necessary?
+Date: Sun, 22 Jul 2007 12:02:03 +0530
+Message-ID: <46A2F9E3.9050209@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -10,18 +10,18 @@ List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-I am at a loss to know where to start looking for information on what is 
-the purpose or meaning of the symbols I see in output of nm -C which *I* 
-or any library creators (like Qt) have not defined, such as:
+I was wondering, if a person wants there to be only one instance of a 
+class, they can simply do something like:
 
-__tcf_1
-__tcf_2
-__tcf_3
-__tcf_4
-__tcf_5
+class {
+<class definition here>
+} classInstance ;
 
-are created for. Can anyone please point me in the right direction? Ex: 
-What keywords to search for on Google?
+which automatically creates a single instance of a class. Why go to the 
+extent of locking the constructor, copy constructor, operator= etc? The 
+only possible thing (that I can think of) that cannot be done is 
+conveniently passing it as an argument to a function. Is there any other 
+reason that would make a class-name necessary?
 
 Shriramana Sharma.
 
