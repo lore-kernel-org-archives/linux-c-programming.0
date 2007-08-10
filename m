@@ -1,33 +1,46 @@
-From: Gary Hughes-Fenchel <ghughesf@tibco.com>
-Subject: Problem linking with -D_FILE_OFFSET_BITS=64
-Date: Thu, 02 Aug 2007 11:05:40 -0500
-Message-ID: <f8svck$g5d$1@sea.gmane.org>
+From: "Li YanBo" <dreamfly281@gmail.com>
+Subject: Re: programming using system calls
+Date: Fri, 10 Aug 2007 22:53:37 +0800
+Message-ID: <1197ff4c0708100753ja4e478au1a73664e5b9a601d@mail.gmail.com>
+References: <11922382.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        b=DWYHrX/I0aXJV6KVxdXXavqFVDNWs4EhxLNnqRvcLANJNs9ZUTpHcD1LKs7P2q4dRGntQif5H37BprCS/DCUVcVPKn0dmry9Xby28kbbNhveoi/mAyWL/Y8k8HaZad7uWHaCxf0nAdr3mAKFtUPJbd6R1yMoDOe7Hq5dmOrBlYU=
+In-Reply-To: <11922382.post@talk.nabble.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: nisa <snisa.balakrishnan@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-I see this same problem on a 32 and 64 bit machine. When I build a 
-dynamic library I see the following error message ("reallysmall" is the 
-name of the executable my test program is attempting to build):
+On 7/31/07, nisa <snisa.balakrishnan@gmail.com> wrote:
+>
+> hi,
+> i am quite new to programming using system calls and would like a basic idea
+> regarding the usage of system calls.
+> i would like assistance in the following area of c programming in linux:
+> 1.how to open a text file ,read data and print the data on console using
+> system calls
+> 2.create a text file and write some data
+> 3.read data from a file and append that data to another file using lseek()
+> 4.creation of a parent and child process using fork()
+>
+> --
+> View this message in context: http://www.nabble.com/programming-using-system-calls-tf4192448.html#a11922382
+> Sent from the linux-c-programming mailing list archive at Nabble.com.
+>
+> -
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>
 
-/usr/bin/ld: reallysmall: hidden symbol `stat64' in 
-/usr/lib64/libc_nonshared.a(stat64.oS) is referenced by DSO
+Recommend the Unix&&Linux system&&C program bible: Advanced
+Programming in the UNIX Environment author:W. Richard Stevens
 
-collect2: ld returned 1 exit status
-
-
-When I build a static lib (using ar rv) I see no such problem. If I 
-remove the -D_FILE_OFFSET_BITS=64 from the compilation the problem goes 
-away. Does anyone know what is happening? I have a small test program I 
-could send along if it would help.
-
-(I apologize in advance if this is the wrong group to be sending this 
-question to. There does not seem to be an active libc group around.)
-
-
-Gary Hughes-Fenchel
-
+lyb
