@@ -1,29 +1,37 @@
-From: KhaOsh <ficheironegro@gmail.com>
-Subject: String comparison for fixed strings
-Date: Wed, 15 Aug 2007 12:06:24 +0100
-Message-ID: <9870a8150708150406x6297b877u473bfbbc62949f10@mail.gmail.com>
+From: Stephen Kratzer <kratzers@pa.net>
+Subject: Re: String comparison for fixed strings
+Date: Wed, 15 Aug 2007 09:18:52 -0400
+Message-ID: <200708150918.52599.kratzers@pa.net>
+References: <9870a8150708150406x6297b877u473bfbbc62949f10@mail.gmail.com>
+Reply-To: kratzers@pa.net
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: a=rsa-sha1; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:mime-version:content-type:content-transfer-encoding:content-disposition;
-        b=gRMAlg8f1ZL8sDkfmnYdduzoGAnglHWzZTWE+aQiWyRW5DvZwwiPKTuauoVCp7FhTE4rL2M2JBZ/g3c8RHZvFhNPSe+ITNu4PmxOMf55EBu+e4p7hbVen7CRr+5AzS9rVu5T/qsw0sYFlSb5BCOHxcqXUeScixJBRryOiWUo5c4=
+In-Reply-To: <9870a8150708150406x6297b877u473bfbbc62949f10@mail.gmail.com>
 Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: KhaOsh <ficheironegro@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello everyone,
+On Wednesday 15 August 2007 07:06:24 KhaOsh wrote:
+> Hello everyone,
+>
+> In terms of speed what the fastest way of doing a strings comparison
+> on fixed strings? Using one of those strcmp() functions or doing the
+> following:
+>
+> (Pseudo code)
+> "if (s[0] == 0xa && s[1] == 0xb && s[2] == 0xc)" (etc)
+> or
+> "if (s[0] == 'A' && s[1] == 'B' && s[2[ == 'C')" (etc)
+>
+> Thanks for your help.
 
-In terms of speed what the fastest way of doing a strings comparison
-on fixed strings? Using one of those strcmp() functions or doing the
-following:
+The function strcmp uses a do/while loop, a conditional to test every 
+character in the first string against the null character, and pointer 
+arithmetic, so, in terms of sheer speed, your method would probably be 
+faster. But, in terms of program clarity, strcmp wins by a mile.
 
-(Pseudo code)
-"if (s[0] == 0xa && s[1] == 0xb && s[2] == 0xc)" (etc)
-or
-"if (s[0] == 'A' && s[1] == 'B' && s[2[ == 'C')" (etc)
-
-Thanks for your help.
+Stephen Kratzer
