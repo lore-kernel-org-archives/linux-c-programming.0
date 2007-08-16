@@ -1,66 +1,56 @@
-From: Jesse Ruffin <joruffin@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: String comparison for fixed strings
-Date: Wed, 15 Aug 2007 14:51:21 -0400
-Message-ID: <200708151451.48929.joruffin@gmail.com>
+Date: Thu, 16 Aug 2007 02:44:21 +0100
+Message-ID: <18115.44021.857573.892223@cerise.gclements.plus.com>
 References: <9870a8150708150406x6297b877u473bfbbc62949f10@mail.gmail.com>
+	<200708150918.52599.kratzers@pa.net>
+	<18115.4550.134335.647087@cerise.gclements.plus.com>
+	<3493.84.157.36.125.1187198815.squirrel@viridian.dnsalias.net>
 Mime-Version: 1.0
-Content-Type: multipart/signed;
-  boundary="nextPart1355457.JvPkCkknoY";
-  protocol="application/pgp-signature";
-  micalg=pgp-sha1
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <9870a8150708150406x6297b877u473bfbbc62949f10@mail.gmail.com>
+In-Reply-To: <3493.84.157.36.125.1187198815.squirrel@viridian.dnsalias.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: "Leslie P. Polzer" <leslie.polzer@gmx.net>
+Cc: kratzers@pa.net, KhaOsh <ficheironegro@gmail.com>, linux-c-programming@vger.kernel.org
 
---nextPart1355457.JvPkCkknoY
-Content-Type: text/plain;
-  charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
 
-If you are only checking for exact equality of a buffer against a string, t=
-he memcmp() function may be slightly faster.
+Leslie P. Polzer wrote:
 
-if ( memcmp( (const void*) s, (const void*) "ABC", 3 ) =3D=3D 0 ) {
-	// equal
-} else {
-	// not equal
-}
+> > 3. An actual loop is typically quicker than an "unrolled" loop (where
+> > you just repeat the loop body) as it results in smaller code and thus
+> > better cache coherency.
+> 
+> I'm not sure whether it was the OP's intention to talk about
+> the (dis)advantages of unrolled code.
 
-Jesse Ruffin
+No, but Stephen mentioned that strcmp() "uses a do/while loop".
+On a modern CPU, branches don't normally take any CPU cycles.
 
-On Wednesday 15 August 2007 07:06, KhaOsh wrote:
-> Hello everyone,
->=20
-> In terms of speed what the fastest way of doing a strings comparison
-> on fixed strings? Using one of those strcmp() functions or doing the
-> following:
->=20
-> (Pseudo code)
-> "if (s[0] =3D=3D 0xa && s[1] =3D=3D 0xb && s[2] =3D=3D 0xc)" (etc)
-> or
-> "if (s[0] =3D=3D 'A' && s[1] =3D=3D 'B' && s[2[ =3D=3D 'C')" (etc)
->=20
-> Thanks for your help.
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-program=
-ming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+> > All things considered, strcmp() is likely to be faster.
+> 
+> Given these things:
+> 
+> 1. The null byte check is mandatory.
+> 
+> 2. The haystack string is not _considerably_ larger than the
+>    needle string.
 
---nextPart1355457.JvPkCkknoY
-Content-Type: application/pgp-signature
+Huh? The question was about strcmp(), not strstr().
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.7 (GNU/Linux)
+For strcmp(), you don't really gain much by having the string fixed. 
+If you are performing the check often enough, the string will be
+cached. If the check is infrequent, a single strcmp() function is more
+likely to be cached than several fixed-string checks. The strings
+themselves won't necessarily be cached, but a cache miss for data is a
+lot less significant than a cache miss for code.
 
-iD8DBQBGw0s+8GGeAXLl3osRAgQrAJ9kAg583kpqgj8ujUF7+fkRU/1PtwCeMmAo
-MEOXxoJEcybdUc7JozITwFU=
-=YD0o
------END PGP SIGNATURE-----
+For strstr() with a fixed "needle", a pre-compiled finite automaton
+will win. With a variable "needle", if the "haystack" is large enough,
+even a dynamically-generated finite automaton will be faster than an
+strncmp() loop.
 
---nextPart1355457.JvPkCkknoY--
+-- 
+Glynn Clements <glynn@gclements.plus.com>
