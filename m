@@ -1,48 +1,42 @@
-From: Stephen Kratzer <kratzers@pa.net>
-Subject: Re: standard OS defines
-Date: Wed, 22 Aug 2007 16:01:02 -0400
-Message-ID: <200708221601.02890.kratzers@pa.net>
-References: <46CC81E9.1080904@hp.com> <46CC8E51.4050201@hp.com> <200708221547.25508.kratzers@pa.net>
-Reply-To: kratzers@pa.net
+From: "Robert P. J. Day" <rpjday@mindspring.com>
+Subject: Re: Testing if a file or directory exist
+Date: Sun, 9 Sep 2007 06:07:20 -0400 (EDT)
+Message-ID: <Pine.LNX.4.64.0709090605220.31293@localhost.localdomain>
+References: <Pine.LNX.4.64.0709090907400.18317@diagnostix.dwd.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <200708221547.25508.kratzers@pa.net>
-Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.64.0709090907400.18317@diagnostix.dwd.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Bryan Christ <bryan.christ@hp.com>
+Content-Type: TEXT/PLAIN; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Holger Kiehl <Holger.Kiehl@dwd.de>
 Cc: linux-c-programming@vger.kernel.org
 
-On Wednesday 22 August 2007 15:47:25 Stephen Kratzer wrote:
-> On Wednesday 22 August 2007 15:28:17 Bryan Christ wrote:
-> > Thanks! =A0This list is exactly what I was looking for. =A0Too bad =
-there's
-> > not a tool for piping to gcc--I was trying to avoid -D.
-> >
-> > Bryan
->
-> This is about as ugly as it gets, but here it is anyway:
->
-> echo -e "#ifndef __SOMETHING__\n#define __SOMETHING__\n#endif" | cat =
--
-> infile.c | gcc -x c -o outfile.c -
-> -
-> To unsubscribe from this list: send the line "unsubscribe
-> linux-c-programming" in the body of a message to majordomo@vger.kerne=
-l.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+On Sun, 9 Sep 2007, Holger Kiehl wrote:
 
-The outfile shouldn't have a .c extension since it's a binary. My bad. =
-The=20
-following is slightly cleaner, but not much:
+> Hello
+>
+> What is the quickest way to test if a file or directory exist. I can
+> think of three different system calls that can be used: access(),
+> stat() and open(). Writting a little test program I found that this
+> is also the order of which is the quickest, that is access() is the
+> quickest and open() the slowest.
 
-sed '1 i\#ifndef __SOMETHING__\n#define __SOMETHING__\n#endif\n' infile=
-=2Ec |=20
-gcc -x c -o outfile -
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+if all you want to do is check for existence, then, execution time
+notwithstanding, you should use the method which accomplishes that and
+nothing more, so the obvious solution would be stat().
+
+it would be illogical to call open() since a side-effect would be that
+you then had an open file.  in short, if you just want to test, then
+just test.
+
+rday
+-- 
+========================================================================
+Robert P. J. Day
+Linux Consulting, Training and Annoying Kernel Pedantry
+Waterloo, Ontario, CANADA
+
+http://crashcourse.ca
+========================================================================
