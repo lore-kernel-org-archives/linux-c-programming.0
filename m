@@ -1,43 +1,37 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Testing if a file or directory exist
-Date: Mon, 10 Sep 2007 19:01:24 +0100
-Message-ID: <18149.34420.844750.159700@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0709090907400.18317@diagnostix.dwd.de>
-	<Pine.LNX.4.64.0709090605220.31293@localhost.localdomain>
-	<Pine.LNX.4.64.0709101540300.17374@diagnostix.dwd.de>
+From: TOMAZ <tomas.zajc@gmail.com>
+Subject: NAN and complex.h
+Date: Tue, 18 Sep 2007 14:52:08 -0700 (PDT)
+Message-ID: <12766829.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0709101540300.17374@diagnostix.dwd.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Holger Kiehl <Holger.Kiehl@dwd.de>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-Holger Kiehl wrote:
+Hi I made a program which basically averages data from a file. The data is
+stored as complex float and I'm reading it with fread with no problem. Some
+data are taged as NAN (at least ENVI, an image procesing soft read these
+values as NAN). If I average the whole data adding a number with a NAN gives
+me a NAN and my whole program fails.
 
-> >> What is the quickest way to test if a file or directory exist. I can
-> >> think of three different system calls that can be used: access(),
-> >> stat() and open(). Writting a little test program I found that this
-> >> is also the order of which is the quickest, that is access() is the
-> >> quickest and open() the slowest.
-> >
-> > if all you want to do is check for existence, then, execution time
-> > notwithstanding, you should use the method which accomplishes that and
-> > nothing more, so the obvious solution would be stat().
-> 
-> That is what I first thought as well. But I think the problem is that
-> stat() needs to fill up the structure with all the data, is what takes
-> most the time.
+What I did is the folowing which doesn't seems to work:
 
-That isn't the case. All of the information returned by stat() is in
-one place: the inode. stat() just copies various fields from the inode
-into the "struct stat".
+if(cabsf(zhhzhh)!= NAN)
+{
+    printf("%f\n", cabsf(zhhzhh));
+}
 
-Most of the time taken would be in resolving the filename to an inode,
-and in the system call overhead.
+For some reason the test seeams to be positive all the time, I keep printing
+NAN's ("nan" actualy).
+
+Any idea?
+
+  Tomas
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+View this message in context: http://www.nabble.com/NAN-and-complex.h-tf4477349.html#a12766829
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
