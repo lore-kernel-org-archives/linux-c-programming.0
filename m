@@ -1,55 +1,37 @@
-From: "Plato" <zhangguoqiang@xunlei.com>
-Subject: Why does math.h not declare function round?
-Date: Mon, 24 Sep 2007 12:10:07 +0800
-Message-ID: <200709241210070352829@xunlei.com>
+From: "Lukasz Mielicki" <lukasz.mielicki@tahoe.pl>
+Subject: Re: NAN and complex.h
+Date: Mon, 24 Sep 2007 08:31:23 +0200
+Message-ID: <014001c7fe74$87112e20$2214a8c0@tahoec>
+References: <12766829.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; format="flowed"; charset="us-ascii"; reply-type="original"
+To: linux-c-programming@vger.kernel.org
 
-Hi!
-    I made such a program foo.c:
+> Hi I made a program which basically averages data from a file. The data is
+> stored as complex float and I'm reading it with fread with no problem. 
+> Some
+> data are taged as NAN (at least ENVI, an image procesing soft read these
+> values as NAN). If I average the whole data adding a number with a NAN 
+> gives
+> me a NAN and my whole program fails.
+>
+> What I did is the folowing which doesn't seems to work:
+>
+> if(cabsf(zhhzhh)!= NAN)
+> {
+>    printf("%f\n", cabsf(zhhzhh));
+> }
+>
+> For some reason the test seeams to be positive all the time, I keep 
+> printing
+> NAN's ("nan" actualy).
+>
+> Any idea?
 
-#include <math.h>
+use isnan or isfinite to check for wrong values
 
-int main()
-{
-    double bar=1.2;
-    printf("%f\n", round(bar));
-}
-    
-Then compile and run:
-[root@so41 tmp]# gcc foo.c -ofoo -lm
-[root@so41 tmp]# ./foo
-0.000000
-
-The result was obviously wrong. Then I add statement:
-#include <math.h>
-double round(double x);
-
-int main()
-{
-    double bar=1.2;
-    printf("%f\n", round(bar));
-}
-
-Then compile and run:
-[root@so41 tmp]# gcc foo.c -ofoo -lm
-[root@so41 tmp]# ./foo
-1.000000
-
-Now it's right.
-
-I wonder why function round not declared in math.h. Anyone have idea?
-
-Thx.
-
-
-
-
-Plato
-2007-09-24
-
+BX 
