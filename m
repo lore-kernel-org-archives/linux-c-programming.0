@@ -1,37 +1,75 @@
-From: "Lukasz Mielicki" <lukasz.mielicki@tahoe.pl>
-Subject: Re: NAN and complex.h
-Date: Mon, 24 Sep 2007 08:31:23 +0200
-Message-ID: <014001c7fe74$87112e20$2214a8c0@tahoec>
-References: <12766829.post@talk.nabble.com>
+From: "Steve Graegert" <graegerts@gmail.com>
+Subject: Re: Why does math.h not declare function round?
+Date: Mon, 24 Sep 2007 09:10:27 +0200
+Message-ID: <6a00c8d50709240010j4b994474tc0e2a671ac8de963@mail.gmail.com>
+References: <200709241210070352829@xunlei.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=beta;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        bh=/D64HF3dQ8M2OKD2LHHp1qyasrpJRAvbufB3U83GcVI=;
+        b=T1rJajmI+mezYP1WPvdk6Q0cZgWTYEgKc5fALadOr3rWPF/uvW9hBItFWxnqIhkQ9DpmsJOBUaEUwAls3hJ7f2DnjjAXBB0NS+qmlk2h0DgUQfS+NXPJWJvQBuOMCHeOJAnC70wxJoqCDr4sIUWvzyGlWpXuT2EmEbbRb+e5KpE=
+In-Reply-To: <200709241210070352829@xunlei.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"; reply-type="original"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Plato <zhangguoqiang@xunlei.com>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-> Hi I made a program which basically averages data from a file. The data is
-> stored as complex float and I'm reading it with fread with no problem. 
-> Some
-> data are taged as NAN (at least ENVI, an image procesing soft read these
-> values as NAN). If I average the whole data adding a number with a NAN 
-> gives
-> me a NAN and my whole program fails.
+On 9/24/07, Plato <zhangguoqiang@xunlei.com> wrote:
+> Hi!
+>     I made such a program foo.c:
 >
-> What I did is the folowing which doesn't seems to work:
+> #include <math.h>
 >
-> if(cabsf(zhhzhh)!= NAN)
+> int main()
 > {
->    printf("%f\n", cabsf(zhhzhh));
+>     double bar=3D1.2;
+>     printf("%f\n", round(bar));
 > }
 >
-> For some reason the test seeams to be positive all the time, I keep 
-> printing
-> NAN's ("nan" actualy).
+> Then compile and run:
+> [root@so41 tmp]# gcc foo.c -ofoo -lm
+> [root@so41 tmp]# ./foo
+> 0.000000
 >
-> Any idea?
+> The result was obviously wrong. Then I add statement:
+> #include <math.h>
+> double round(double x);
+>
+> int main()
+> {
+>     double bar=3D1.2;
+>     printf("%f\n", round(bar));
+> }
+>
+> Then compile and run:
+> [root@so41 tmp]# gcc foo.c -ofoo -lm
+> [root@so41 tmp]# ./foo
+> 1.000000
+>
+> Now it's right.
+>
+> I wonder why function round not declared in math.h. Anyone have idea?
 
-use isnan or isfinite to check for wrong values
+It is available in C99 mode only (see <bits/mathcalls.h>):
 
-BX 
+#ifdef __USE_ISOC99
+__MATHCALLX (round,, (_Mdouble_ __x), (__const__));
+
+To write fully portable code use floor() and ceil() instead.
+
+	\Steve
+
+--
+
+Steve Gr=E4gert <steve@graegert.com>
+Internet: http://digitalether.de
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
