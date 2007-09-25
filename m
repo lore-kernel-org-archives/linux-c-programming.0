@@ -1,75 +1,51 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Why does math.h not declare function round?
-Date: Mon, 24 Sep 2007 09:10:27 +0200
-Message-ID: <6a00c8d50709240010j4b994474tc0e2a671ac8de963@mail.gmail.com>
-References: <200709241210070352829@xunlei.com>
+From: Jonathan Walsh <jwalsh@atl.lmco.com>
+Subject: Question about pthreads on Linux
+Date: Tue, 25 Sep 2007 09:07:56 -0400
+Message-ID: <46F9082C.1060804@atl.lmco.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
-        bh=/D64HF3dQ8M2OKD2LHHp1qyasrpJRAvbufB3U83GcVI=;
-        b=T1rJajmI+mezYP1WPvdk6Q0cZgWTYEgKc5fALadOr3rWPF/uvW9hBItFWxnqIhkQ9DpmsJOBUaEUwAls3hJ7f2DnjjAXBB0NS+qmlk2h0DgUQfS+NXPJWJvQBuOMCHeOJAnC70wxJoqCDr4sIUWvzyGlWpXuT2EmEbbRb+e5KpE=
-In-Reply-To: <200709241210070352829@xunlei.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Plato <zhangguoqiang@xunlei.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-On 9/24/07, Plato <zhangguoqiang@xunlei.com> wrote:
-> Hi!
->     I made such a program foo.c:
->
-> #include <math.h>
->
-> int main()
-> {
->     double bar=3D1.2;
->     printf("%f\n", round(bar));
-> }
->
-> Then compile and run:
-> [root@so41 tmp]# gcc foo.c -ofoo -lm
-> [root@so41 tmp]# ./foo
-> 0.000000
->
-> The result was obviously wrong. Then I add statement:
-> #include <math.h>
-> double round(double x);
->
-> int main()
-> {
->     double bar=3D1.2;
->     printf("%f\n", round(bar));
-> }
->
-> Then compile and run:
-> [root@so41 tmp]# gcc foo.c -ofoo -lm
-> [root@so41 tmp]# ./foo
-> 1.000000
->
-> Now it's right.
->
-> I wonder why function round not declared in math.h. Anyone have idea?
+I am attempting to set up a program that has 3 threads.  The first
+thread is a receiver process that listens on a UDP port and puts a
+struct on a one of two queues depending on a flag in the packet.  The
+other two threads block on a pthread_cond_t (that is signaled when a
+message is added to their queue), then take messages off their
+corresponding queues and perform a fixed amount of computation.  I am
+setting thread priorities as follows:
 
-It is available in C99 mode only (see <bits/mathcalls.h>):
+  pthread_t tid_processor;
+  struct sched_param sparam;
+  pthread_attr_t tattr;
+  pthread_attr_init(&tattr);
+  pthread_attr_getschedparam(&tattr, &sparam);
+  sparam.sched_priority = SOME_THREAD_PRIORITY;
+  pthread_attr_setschedpolicy(&tattr, SCHED_FIFO);
+  pthread_attr_setschedparam(&tattr, &sparam));
+  pthread_create(&tid, &tattr, &thread_function, NULL );
 
-#ifdef __USE_ISOC99
-__MATHCALLX (round,, (_Mdouble_ __x), (__const__));
+I set the receiver thread to the highest priority, then one of the
+processor threads is higher than the other.
 
-To write fully portable code use floor() and ceil() instead.
+I have two questions about this situation:
 
-	\Steve
+1) Are pthread priorities reversed from Linux priorities.  In other
+words, does a lower number mean a higher priority?
+2) Will a higher priority thread preempt the execution of a lower
+priority thread?  With the behavior I am seeing now, this seems to not
+be the case.  If the lower priority processing thread begins execution
+first the higher priority processing thread will not begin until it has
+finished.  Though I correctly receive messages and put them into the
+queue making this all the more puzzling.
 
---
+Thank you for any help with my problem!  Let me know if you need more
+information or detail in my questions.
 
-Steve Gr=E4gert <steve@graegert.com>
-Internet: http://digitalether.de
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+Jonathan Walsh
+Member Engineering Staff
+Lockheed Martin Advanced Technology Laboratories
