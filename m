@@ -1,76 +1,65 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: Question about pthreads on Linux
-Date: Tue, 25 Sep 2007 16:12:25 +0200
-Message-ID: <6a00c8d50709250712l676cf64ev94230be4b541a5d1@mail.gmail.com>
-References: <46F9082C.1060804@atl.lmco.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
+Subject: Linux kernel, drivers, shims
+Date: Sun, 07 Oct 2007 16:04:02 +0530
+Message-ID: <4708B61A.6040003@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
-        bh=4XN11zNm8synA04eTkKSgX3SjNhnCy0HyItNfYaeUL8=;
-        b=Oe1AES63oweDpn+4kbmrYIrANf8AFwy0ayMllKHnlQMQFNC2h/wGV56htKjQnBJ28hTK3yWfrykvQdwqCiqWVCaeZthzf6Pr3j3tA5UL0cx07OfPbAtNUc4yHlm95OF4odTlfpCmIFhlT9lkc7Vfu1wa/YOB1TgCkvM1S4qmF/4=
-In-Reply-To: <46F9082C.1060804@atl.lmco.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Jonathan Walsh <jwalsh@atl.lmco.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-Jonathan,
+Dear list,
 
-On 9/25/07, Jonathan Walsh <jwalsh@atl.lmco.com> wrote:
-> I am attempting to set up a program that has 3 threads.  The first
-> thread is a receiver process that listens on a UDP port and puts a
-> struct on a one of two queues depending on a flag in the packet.  The
-> other two threads block on a pthread_cond_t (that is signaled when a
-> message is added to their queue), then take messages off their
-> corresponding queues and perform a fixed amount of computation.  I am
-> setting thread priorities as follows:
->
->   pthread_t tid_processor;
->   struct sched_param sparam;
->   pthread_attr_t tattr;
->   pthread_attr_init(&tattr);
->   pthread_attr_getschedparam(&tattr, &sparam);
->   sparam.sched_priority = SOME_THREAD_PRIORITY;
->   pthread_attr_setschedpolicy(&tattr, SCHED_FIFO);
->   pthread_attr_setschedparam(&tattr, &sparam));
->   pthread_create(&tid, &tattr, &thread_function, NULL );
->
-> I set the receiver thread to the highest priority, then one of the
-> processor threads is higher than the other.
->
-> I have two questions about this situation:
->
-> 1) Are pthread priorities reversed from Linux priorities.  In other
-> words, does a lower number mean a higher priority?
+Recently I have been looking through some of the Linux kernel - binary 
+drivers - GPL issues and came across what people mention about shims -- 
+interfaces between GPL-ed kernel and incompatible-licensed-drivers. And 
+about the thing where totally independently developed fs-s cannot be 
+considered derivative works (at least according to Torvalds).
 
-No. SCHED_FIFO or SCHED_RR have an allowed range of 1 to 99 with lower
-numbers representing lower thread priorities.
+I am not hacking out the legal parts of GPL (that only apparently leads 
+to endless flamewars) but I am asking about the programming part of it.
 
-> 2) Will a higher priority thread preempt the execution of a lower
-> priority thread?
+1)
 
-Normally, this is the true for SCHED_FIFO, where threads run until
-preempted by a thread of higher priority, or until blocked.
+I don't understand how two separate programs can work in the same memory 
+space -- if I have understood properly the part where closed-source 
+drivers are "loaded in kernel space" -- if they do not have knowledge of 
+how to talk to each other in the level of pushing a set of parameters to 
+the stack and making a function call. At that low level, when the fs is 
+talking to the kernel, how can it be developed without using the 
+kernel's headers?
 
-However, Linux limits the scheduling policies SCHED_RR and SCHED_FIFO
-to processes with superuser privileges.  So, unless your program runs
-with elevated privileges SCHED_OTHER will be selected by default which
-is "based on the nice level ... and increased for each time quantum
-the process [i.e. thread] is unable to run." according to
-sched_setscheduler(2).
+2)
 
-(Note, the pthread_set_schedparam() call maps to the
-sched_setscheduler() call. An operation that requires root
-privileges.)
+How is it also possible to just throw in an independently developed fs 
+module into the kernel and make it a perfect fit so they communicate 
+with each other?
 
-For SCHED_OTHER the allowed mininmum and maximum priorities are 0.
-Therefore it is not possible to change the priority.
+3)
 
-Hope that sheds some light on your questions
+How can a shim be written so as to circumvent legal issues? I mean, a 
+shim is as I understand an adapter pattern. You write a wrapper around 
+an API of a class or module so that consumers familiar with another API 
+can use this class or module.
 
-	\Steve
+But such a wrapper would definitely be a derivative work so it would 
+have to be under the GPL. And I don't think the author of such a 
+derivative work has a right to add exceptions to it to allow 
+incompatible modules to link. If that were possible, no GPL-ed interface 
+would be safe. One has to just write a GPL+exceptions wrapper.
+
+So how can anyone write a wrapper that is not a derivative work?
+
+*
+
+Can anyone please explain these in simple terms? For the technical 
+details of course I can lookup the official API and so on, but I am 
+asking for a Wikipedia-style guide to understanding "how to make a 
+program talk to another program at the lowest level without making 
+either use the other's headers" and so on.
+
+Thanks as always for your patience,
+
+Shriramana Sharma.
