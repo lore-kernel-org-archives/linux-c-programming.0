@@ -1,67 +1,47 @@
-From: "Steve Graegert" <graegerts@gmail.com>
-Subject: Re: strange message received after posting to here
-Date: Mon, 15 Oct 2007 22:17:18 +0200
-Message-ID: <6a00c8d50710151317sbf8f2a9tffad1c3cab5027c8@mail.gmail.com>
-References: <20071015200548.a26892be.dh@triple-media.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: how to best map/buffer a file to memory by being able to lock
+ sequences thread-safe
+Date: Tue, 16 Oct 2007 11:54:01 +0100
+Message-ID: <18196.38985.711509.375651@cerise.gclements.plus.com>
+References: <20071013000158.d011bc82.dh@triple-media.com>
+	<20071015174635.4cae245c.dh@triple-media.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
-        bh=whs0mfUKJI++ShJYw6OUkB3z6c8MhfFB6Dhb5Xi2Emc=;
-        b=dLImKPp/AMTn0qxN3d9Ooyh8uP0cWXYvyjoiij5riFOSVyeaAs8Xa+MzrTIKDMIJggM4HsYoj5QIKUFQEUXprUc5v1+FLYgw31cvgpOKWN7tLUbJ0+pxIf4snYCFkeX875kLAmXr0x3B1JNDpIS8GEU/Ymi/LQ5nd5L0hUVeVbg=
-In-Reply-To: <20071015200548.a26892be.dh@triple-media.com>
-Content-Disposition: inline
+In-Reply-To: <20071015174635.4cae245c.dh@triple-media.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: Dennis Heuer <dh@triple-media.com>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi Dennis,
 
-Although my Portuguese is pathetic I'd say that the mail has been
-blocked for an user's account that is being subscribed to this list.
+Dennis Heuer wrote:
 
-The reason for the delivery failure remains unknown.
+> i did not try obstacks yet, will have a look at them. what bothers me
+> at the moment is that mremap() is not a standard and that it operates
+> strangely to me:
+> 
+> ENOMEM
+>     The region is private writable, and insufficient virtual memory is
+> available to extend it. Also, this error will occur if MREMAP_MAYMOVE
+> is not given and the extension would collide with another mapped region.
+> 
+> i thought that mmap'ed space is only virtually aligned. possibly it's
+> better to write buffers oneself? the posix interfaces look strange to
+> me. they seem halfhearted and weirdly incompatible.
 
-	\Steve
+I don't understand what you're saying in any of the preceding
+paragraph.
 
+> consider a file that is growing. how to best remap it?
 
-On 10/15/07, Dennis Heuer <dh@triple-media.com> wrote:
-> to my last message (which has no bcc or whatever untypical in the
-> header) i received the following answer. do you know about them?
->
-> Return-path: <root@ctf.com.br>
-> Envelope-to: dh@triple-media.com
-> Delivery-date: Mon, 15 Oct 2007 17:47:53 +0200
-> Received: from mail.ctf.com.br ([201.63.119.87] helo=ctf.com.br)
->         by srvh02.vc-server.de with esmtps (TLSv1:AES256-SHA:256)
->         (Exim 4.68)
->         (envelope-from <root@ctf.com.br>)
->         id 1IhSAa-0005nj-Gq
->         for dh@triple-media.com; Mon, 15 Oct 2007 17:47:53 +0200
-> BrmaOutput: root@localhost
-> Received: (from root@localhost)
->         by ctf.com.br (8.12.11.20060308/8.12.11) id l9FGsYGl022991;
->         Mon, 15 Oct 2007 14:54:34 -0200
-> Date: Mon, 15 Oct 2007 14:54:34 -0200
-> Message-Id: <200710151654.l9FGsYGl022991@ctf.com.br>
-> From: postmaster@ctf.com.br
-> To: dennis heuer <dh@triple-media.com>
-> Subject: (BRMA) Mensagem n_o autorizada
->
->
-> Mensagem n_o autorizada
-> ----------------------------------------
-> Palavra (FF) proibida no campo Subject
-> ----------------------------------------
-> Para:  linux-c-programming@vger.kernel.org
-> Assunto:  Re: how to best map/buffer a file to memory by being able to
-> lock
-> -
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+If you don't need portability, use mremap() with MREMAP_MAYMOVE. If
+you need portability, use munmap() and mmap().
+
+The only advantage of mremap() (other than efficiency) is that it can
+be used to remap private or anonymous mappings, while mmap/munmap will
+only work if changes are written back to the file.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
