@@ -1,17 +1,52 @@
 From: "LaPoint, Adam W" <Adam.W.LaPoint@usa-spaceops.com>
 Subject: RE: offsets of fields in a structure
-Date: Fri, 19 Oct 2007 13:35:16 -0400
-Message-ID: <5599C9E027D65D4DB3CB4C0539533142050AF76E@usaflcms03.usa-spaceops.ksc.nasa.gov>
-References: <4718CCE2.9060202@infocamere.it>
+Date: Fri, 19 Oct 2007 14:07:52 -0400
+Message-ID: <5599C9E027D65D4DB3CB4C0539533142050AF76F@usaflcms03.usa-spaceops.ksc.nasa.gov>
+References: <5599C9E027D65D4DB3CB4C0539533142050AF76E@usaflcms03.usa-spaceops.ksc.nasa.gov>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Content-class: urn:content-classes:message
-In-Reply-To: <4718CCE2.9060202@infocamere.it>
+In-Reply-To: <5599C9E027D65D4DB3CB4C0539533142050AF76E@usaflcms03.usa-spaceops.ksc.nasa.gov>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Giulio Rossato <giulio.rossato@infocamere.it>, linux-c-programming@vger.kernel.org
+To: "LaPoint, Adam W" <Adam.W.LaPoint@usa-spaceops.com>, Giulio Rossato <giulio.rossato@infocamere.it>, linux-c-programming@vger.kernel.org
+
+Oops, make that:
+
+#include <stdio.h>
+
+struct astruct {
+  int field1;
+  float field2;
+  char field3[10];
+};
+
+int main(void)
+{
+  struct astruct r;
+  int h,i,j,k;
+
+  h = (long)&r;
+  i = (long)&(r.field1);
+  j = (long)&(r.field2);
+  k = (long)&(r.field3);
+
+  printf("offset field1: %d\n", i-h);
+  printf("offset field2: %d\n", j-h);
+  printf("offset field3: %d\n", k-h);
+  return(0);
+}
+
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org]On Behalf Of LaPoint,
+Adam W
+Sent: Friday, October 19, 2007 1:35 PM
+To: Giulio Rossato; linux-c-programming@vger.kernel.org
+Subject: RE: offsets of fields in a structure
+
 
 Maybe something like this?
 
@@ -83,6 +118,10 @@ calculated at runtime and the code should be independent of the machine.
 How should be written this function?
 
 
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 -
 To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 the body of a message to majordomo@vger.kernel.org
