@@ -1,61 +1,32 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Benoit Fouet <benoit.fouet@purplelabs.com>
 Subject: Re: threads and kernel
-Date: Sun, 21 Oct 2007 18:36:18 +0100
-Message-ID: <18203.36370.698649.822816@cerise.gclements.plus.com>
-References: <471B5276.9010800@gmail.com>
+Date: Mon, 22 Oct 2007 08:50:49 +0200
+Message-ID: <471C4849.2040409@purplelabs.com>
+References: <471B5276.9010800@gmail.com> <6a00c8d50710211023t898f17idf77bcad37c37a9b@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <471B5276.9010800@gmail.com>
+In-Reply-To: <6a00c8d50710211023t898f17idf77bcad37c37a9b@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+To: Steve Graegert <graegerts@gmail.com>
+Cc: Shriramana Sharma <samjnaa@gmail.com>, Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Hi,
 
-Shriramana Sharma wrote:
+Steve Graegert wrote:
+> As a side note: you can safely use dlopen()  to load shared libraries,
+> whether or not they depend on libpthread.so, as long as the main
+> program was initially threaded.  The other way round is dangerous and
+> mostly not allowed.
+>
+>   
 
-> As I understand it, the kernel is always running
+could you please elaborate a bit on that ? i cannot see why this is
+dangerous.
 
-Not in the same sense that a process is "running". Most of the time,
-it's "blocked" waiting for some external event to occur and give it
-something to do.
+Thanks,
 
-> and whenever an app 
-> asks for a system resource the kernel does the needful. However, in my 
-> process tree I see no process named linux or kernel. I only see the init 
-> process at the root of the tree. Does the init process represent the kernel?
+Ben
 
-No. "init" is /sbin/init. It's a normal process, albeit a fairly
-important one.
-
-> When an app does a system call, would some form of IPC between the 
-> process of that app and the kernel process (assuming there is one) be 
-> involved?
-
-In some ways, a system call is just like a function call. The main
-difference is that the kernel code is invoked through a software
-interrupt or trap, which causes the code to execute in the kernel's
-context rather than the application's context. Apart from having a
-completely different memory layout, the kernel code runs with
-increased privileges (ring 0 on i386, supervisor mode on 680x0, etc).
-
-If you want to know the details, you'll need to read a reference book
-for the particular type of CPU.
-
-> When an application uses a library, the app and the library are 
-> processed in DIFFERENT threads in which of the following cases:
-> 
-> 1. the library is statically linked
-> 2. the library is dynamically linked
-> 3. the library is loaded using dlopen
-> 
-> My guess is "none of the above", am I right?
-
-Correct. Many applications don't use threads at all. Even for those
-which do, any calls to a library function are executed in the same
-thread as the code which call it.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
