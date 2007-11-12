@@ -1,19 +1,28 @@
-From: Gery <zaphod001@gmail.com>
-Subject: reading elf section data
-Date: Mon, 12 Nov 2007 08:36:34 -0500
-Message-ID: <473856E2.5050707@gmail.com>
-Reply-To: zaphod001@gmail.com
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: reading elf section data
+Date: Mon, 12 Nov 2007 10:55:38 +0000
+Message-ID: <18232.12586.211596.82841@cerise.gclements.plus.com>
+References: <473856E2.5050707@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=beta;
-        h=domainkey-signature:received:received:message-id:date:from:reply-to:user-agent:mime-version:to:subject:content-type:content-transfer-encoding;
-        bh=NCJwnk4LudJNUJfdParB0ZkWdGpNCwWR3q67WjvDO7c=;
-        b=J6iZJMFb6diDb3zWMUtcGr24UQceMT7cJeFnreX96OSzdIBaPG8mmDYTnovp9SLvGJWce7H+1viFpyIY8hFsEHD6R6o7uDxeuBarbzsGqBqRbyW9ucPlHgzd8qYeXMDcV4+5Zr+vb+XPq1nNSz05Q5MpeuARbmsUVsgDoz77UbA=
+In-Reply-To: <473856E2.5050707@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-Id: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: zaphod001@gmail.com
+Cc: linux-c-programming@vger.kernel.org
 
-How to read in human format data from elf section?
+
+Gery wrote:
+
+> How to read in human format data from elf section?
+
+Can you be more specific? What kind of data? What format?
+
+objdump and readelf can provide a lot of information about ELF files,
+but they can't decode every type of data which could conceivably be
+stored in an ELF file.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
