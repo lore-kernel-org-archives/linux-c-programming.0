@@ -1,46 +1,58 @@
-From: Per Jessen <per@computer.org>
-Subject: Re: building libc
-Date: Thu, 13 Dec 2007 08:31:58 +0100
-Message-ID: <4760DFEE.70903@computer.org>
-References: <475D5001.60600@computer.org> <47604165.2070305@computer.org> <84bd26ef0712121743p77080df0t48a2e68443611337@mail.gmail.com>
+From: Topher <javert42@cs.byu.edu>
+Subject: mmap questions
+Date: Mon, 17 Dec 2007 22:51:43 -0700
+Message-ID: <47675FEF.2010903@cs.byu.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="------------enig589E4342183F6B1CC60DF072"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <84bd26ef0712121743p77080df0t48a2e68443611337@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: =?ISO-8859-1?Q?Dar=EDo_Mariani?= <mariani.dario@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Dar=EDo Mariani wrote:
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig589E4342183F6B1CC60DF072
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-> http://www.itworld.com/AppDev/1006/UIR000929interposers/pfindex.html.
->=20
+I've read through the man pages on mmap, munmap, and msync, and I still
+am not sure that I'm using the correct flags.  Actually, I'm not even
+completely sure that mmap is the way to go.
 
-Yeah, this is exactly what I intend to try.  My problem is in
-getaddrinfo() which has been misbehaving (for quite some time). The
-glibc code was fixed by Ian Jackson in glibc 2.6.1 for ubuntu, so I
-figured I'd just borrow that and stick the getaddrinfo() object-code
-into a shared library which I'd preload with LD_PRELOAD.  Sounds simple=
-,
-doesn't it?
+I'm creating a queue-like data structure that uses a fixed amount of
+heap space.  When it fills up, it must dump itself to a file, and then
+it can consider itself "cleared", and continue adding elements.  If a
+remove() call is made on the structure, and it's currently empty but has
+previously dumped to disk, it loads the data from disk, and then
+continues.  Also, this is only a single-threaded application.
 
-Well, building the glibc code was no big deal, but as for "just borrow
-that", it's not easy.  If I build getaddrinfo.c outside the glibc build
-structure, it throws about a million errors.  Option #1 is to attempt t=
-o
-fix that, but with getaddrinfo.c being about 2000 lines, I'm a little
-hesitant about that approach.
-Option #2 (I think) is to use the object-code from the built glibc, but
-when I try to use the shared library (containing just getaddrinfo.o), i=
-t
-complains about unresolved symbols - e.g. __inet_ntoa.
+I thought that I should use the MAP_PRIVATE flag when I map the file,
+then just munmap() then call close(fd) when I dump it, but that's not
+working.  I'm just getting empty files.
+
+Is mmap even the way to go, or should I just be using write() and read()?=
 
 
-/Per Jessen
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+--=20
+Topher Fischer
+GnuPG Fingerprint: 3597 1B8D C7A5 C5AF 2E19  EFF5 2FC3 BE99 D123 6674
+javert42@cs.byu.edu | http://www.thetopher.com
+
+
+--------------enig589E4342183F6B1CC60DF072
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.7 (GNU/Linux)
+Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org
+
+iD8DBQFHZ1/yL8O+mdEjZnQRAuqQAJ9K88o8bALMWB7BHCr98U6uw2ERRQCcDoG4
+Jh21n/G8PbC+zUM9BDN63/A=
+=cc83
+-----END PGP SIGNATURE-----
+
+--------------enig589E4342183F6B1CC60DF072--
