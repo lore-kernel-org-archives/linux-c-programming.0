@@ -1,71 +1,37 @@
-From: =?utf-8?B?Q2loYW4gS8O2bWXDp2/En2x1?= <cihan@enderunix.org>
-Subject: Re[2]: setuid funciton
-Date: Thu, 27 Dec 2007 01:48:20 +0200
-Message-ID: <563266144.20071227014821@enderunix.org>
-References: <861350659.20071225211241@enderunix.org> <18289.51784.890436.560301@cerise.gclements.plus.com>
+From: "Hendrik Visage" <hvjunk@gmail.com>
+Subject: Re: delayed execution
+Date: Thu, 3 Jan 2008 12:47:31 +0200
+Message-ID: <d93f04c70801030247y2f2d7dd7r293698f1e8cb0965@mail.gmail.com>
+References: <1198217274.2713.2.camel@root>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <18289.51784.890436.560301@cerise.gclements.plus.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        bh=iKB+3G7CeR92aOnHm/D6EeXeje0AKkbLAHw74DQAczE=;
+        b=SWUUIgYN57vKRfbE8gQCWMWLOq76Op3pQmHj5zRpzTXZrvQmjC93xlKuUDP87LOtWPUdQbWf3bkIic1R2Wh6F+RGz0XsR/NVzRPIdY9117T0hawbFvwykOuXobnXpMolFguQyMkR5oK4hZmOMlsgETWCIM0QM52q/QTKMBUB6Nw=
+In-Reply-To: <1198217274.2713.2.camel@root>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: vibi_sreenivasan@cms.com
+Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
-=0D
-I understand. Thanks for your answer
-I try this code under Freebsd 6.2
-and dont give me this output
+On Dec 21, 2007 8:07 AM, vibi <vibi_sreenivasan@cms.com> wrote:
+> hello,
+>         is there any function to delay the execution of a user defined
+> function .
 
-Wednesday, December 26, 2007, 5:28:08 AM, you wrote:
+What do you want to achieve?
 
-> Cihan K=C3=B6me=C3=A7o=C4=BElu wrote:
+> i know about sleep . is there any thing other.
 
->> Hello everybody
->>=20
->> I have written simple code about usage of setuid. this program file
->> set-user-id bit is on and this process after exec when I execute thi=
-s
->> program, effective user id and saved-user-id bit will be
->> program-file's user id. this correct?
->>=20
->> But the last output when I set uid to 80(www) ,effective user id
->> wasn't 80. Why not? saved set user id is still 80? What is the
->> problem?
->>=20
->>=20
->> I compiled below code with gcc and I set-user-id bit and change own
->> file with this command
-
-> [snip]
-
-> It works for me; I get:
-
-> Real UID        =3D 1001
-> Effective UID   =3D 80
-> Real UID        =3D 1001
-> Effective UID   =3D 1001
-> Real UID        =3D 1001
-> Effective UID   =3D 80
-
-> This is with a 2.6.17.13 kernel, compiled from stock sources (no
-> vendor patches).
-
-> If you are using a kernel with additional security features (e.g.=20
-> SELinux, AppArmor etc), it may impose additional restrictions on
-> setuid(). You could try using setreuid() to swap the real and
-> effective UIDs, rather than relying upon the saved UID.
+Why not sleep or usleep? you might consider sched_yield() or the
+alarm()/ualarm() based functions
 
 
 
-
---=20
-Cihan K=F6me=E7o=F0lu,
-EnderUNIX SDT                           mailto:cihan@enderunix.org
-
--
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Hendrik Visage
