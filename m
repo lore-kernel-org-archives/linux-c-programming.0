@@ -1,46 +1,27 @@
-From: "Manning, Gary L" <gary.l.manning@intel.com>
+From: "Christian Stalp" <christian.stalp@gmx.de>
 Subject: RE: sprintf with mips
-Date: Wed, 6 Feb 2008 11:45:55 -0800
-Message-ID: <012863478A62344593C56CC9991EAC48014B6E3B@fmsmsx417.amr.corp.intel.com>
-References: <20080206191600.243670@gmx.net>
+Date: Wed, 06 Feb 2008 20:58:01 +0100
+Message-ID: <20080206195801.58270@gmx.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
-In-Reply-To: <20080206191600.243670@gmx.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Christian Stalp <christian.stalp@gmx.de>, linux-c-programming@vger.kernel.org
-
-How is insertvalues defined?
-
-Gary
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of
-Christian Stalp
-Sent: Wednesday, February 06, 2008 11:16 AM
+Content-Type: text/plain; charset="iso-8859-1"
 To: linux-c-programming@vger.kernel.org
-Subject: sprintf with mips
 
-Hello out there,
-are there any known problems with sprintf under mips? I spend some time
-to make this code runnable:
+>How is insertvalues defined?
 
-sprintf(insertvalues, " %d , ' %s ' , %d ", counter, "192.168.1.1",
-mytraffic->num_frames);
-printf("input-string: %s\n", insertvalues);
-
-This works properly under x86 but if I run this under mips, the string
-is empty! Even if the variable 'counter' is uninitialized or
-'mytraffic->num_frames' (which is not the case, I can see the values if
-I dump them directly with printf) there should be at least that
-IP-address-string which should be inserted! This is weired. Has anybody
-an idea what the problem is here?
-
-Thank you.
+char insertvalues[256];
+memset (insertvalues, 0x0, 256 );
 
 Gruss Christian
 
+--=20
+Psssst! Schon vom neuen GMX MultiMessenger geh=F6rt?
+Der kann`s mit allen: http://www.gmx.net/de/go/multimessenger
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
