@@ -1,40 +1,45 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Shriramana Sharma <samjnaa@gmail.com>
 Subject: Re: can't initialize a constant using another constant?
-Date: Wed, 27 Feb 2008 11:43:44 +0000
-Message-ID: <18373.19696.942794.821373@cerise.gclements.plus.com>
-References: <47C422E6.8050702@gmail.com>
+Date: Thu, 28 Feb 2008 05:05:51 +0530
+Message-ID: <47C5F3D7.7020002@gmail.com>
+References: <47C422E6.8050702@gmail.com> <18373.19696.942794.821373@cerise.gclements.plus.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <47C422E6.8050702@gmail.com>
+In-Reply-To: <18373.19696.942794.821373@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Shriramana Sharma <samjnaa@gmail.com>
-Cc: Linux C Programming List <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
+To: Linux C Programming List <linux-c-programming@vger.kernel.org>
 
+Thanks to all those who replied. I am very sorry I did not specify the=20
+compiler version etc. I should have. It's gcc version 4.1.3 20070929=20
+(prerelease) (Ubuntu 4.1.2-16ubuntu2).
 
-Shriramana Sharma wrote:
+Glynn Clements wrote:
+> In C, "const" is only relevant to pointer targets. Adding the "const"
+> modifier to a variable has no effect.
 
-> Quite some time since I wrote. I hope you are all keeping well. :)
-> 
-> A strange thing I ran across this evening. I was not allowed to do:
-> 
-> const double lunarSynodicMonth = 29.53059 ;
-> const double daysLunarPhaseAngleTakesPerDegree = lunarSynodicMonth / 360.0 ;
-> 
-> I got the following error:
-> 
-> wdf-karanas.c:17: error: initializer element is not constant
-> make: *** [wdf-karanas.o] Error 1
-> 
-> I would be grateful if anyone could shed some light. TIA.
+I don't understand what you mean. I just tried gcc -o foo foo.c on:
 
-In C, "const" is only relevant to pointer targets. Adding the "const"
-modifier to a variable has no effect.
+# include <stdio.h>
+main () {
+         const int i =3D 1 ;
+         i =3D 2 ;
+         printf ( "%d\n", i ) ;
+}
 
-You need to change lunarSynodicMonth to a macro (#define) if you want
-to be able to use it in an initialiser.
+and I got:
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+foo.c: In function =91main=92:
+foo.c:6: error: assignment of read-only variable =91i=92
+
+So in what sense are you saying adding const to a variable has no effec=
+t?
+
+Shriramana Sharma.
+-
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
