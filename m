@@ -1,48 +1,28 @@
-From: Jason <lcprog@lakedaemon.net>
-Subject: Re: select() / inotify / sysfs
-Date: Wed, 19 Mar 2008 17:10:45 -0400
-Message-ID: <47E18155.2020800@lakedaemon.net>
-References: <47DFE6ED.9030908@lakedaemon.net>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Subject: Git tags
+Date: Thu, 03 Apr 2008 15:54:55 +0200
+Message-ID: <47F4E1AF.5060509@visionsystems.de>
+Reply-To: yegor_sub1@visionsystems.de
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <47DFE6ED.9030908@lakedaemon.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-Jason wrote:
-> All,
-> 
-> I've discovered that my physical environment causes intermittent wifi 
-> connectivity (drops for a few seconds, then returns).  My program can 
-> work through this, but needs to know that the connection has been 
-> interrupted.
-> 
-> I've placed a watch on different files in /sys/class/net/ath0/* and 
-> found that operstate changes (from 'up' to 'down') when I experience 
-> these network drops.  So, I used inotify to detect changes to the file 
-> as a proof of concept:
-> 
-> # inotifywatch -v -r /sys/class/net/ath0/operstate
-> 
-> No go.  It detects when I cat the file, but doesn't detect when the 
-> kernel changes it (which make sense on an academic note, since it 
-> doesn't have a value until it's read by userspace).
-> 
-> So, does anyone know of a good (hopefully select() based) method to 
-> detect this change?  It doesn't have to use sysfs, that's just the 
-> dragon I'm chasing right now.  ;-)  I'd really prefer not to poll the 
-> file...
+Hi all,
 
-Update since vger is backup.  I tried netlink also, and it only reports 
-IFF_UP changes (I've only tried RTMGRP_LINK/NETLINK_ROUTE so far).  So 
-it tells me when I do ifconfig ath0 [up|down], but doesn't trigger when 
-operstate changes and the interface is still up (IFF_UP).
+I don't really know where to post this question. Why, if I check out the 
+2.6.24.4 kernel (2.6.24.4 tag 
+http://git2.kernel.org/?p=linux/kernel/git/stable/linux-2.6-stable.git;a=commit;h=16c64cac7d9c6a503f49887219c4fe675e7d43d9) 
+from the stable git tree, I get "dirty" added to my kernel version after 
+compilation? The 2.6.24.4 is stable as far as I understand.
+I have already searched for this info and looked through some tutorials 
+like http://linux.yyz.us/git-howto.html, but I didn't find any info that 
+would answer my question.
 
-Any ideas?
+Thank you  in advance.
 
-thx,
-
-Jason.
+Best regards,
+Yegor
