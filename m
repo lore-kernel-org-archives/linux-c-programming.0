@@ -1,54 +1,86 @@
-From: =?ks_c_5601-1987?B?wMzBvrnO?= <anapple.orange@gmail.com>
-Subject: FW: NAN and complex.h
+From: =?UTF-8?B?7J207KKF66+8?= <anapple.orange@gmail.com>
+Subject: FW: Why does math.h not declare function round?
 Date: Wed, 14 May 2008 23:31:47 +0900
-Message-ID: <D9FA32E4672744FA8FA42D9CE4309C24@OrangeMini>
+Message-ID: <FE65CEDE566B4EA39A9BBA400D8FE30A@OrangeMini>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
         h=domainkey-signature:received:received:to:subject:date:message-id:mime-version:content-type:content-transfer-encoding:x-mailer:x-mimeole:thread-index:from;
-        bh=aiRLah9LEJnDezkqkxzdViLtyUnnF9lEY3usMtAkzLw=;
-        b=oxPfXHDOKS8oM2xzFIS/9l3Cr21r20hGTdQ0jbInx/oa+qAYEIfbfSTrvhijQ3HJ0imb4AAjTUAP175cXqHw4XymgPC+OfssgD4DNPycQBDj4sAQX3KRo/jwdrhCCKdbwu0xNXZxNLKIoSlyn0uCqiFBuT9N/0oXhb2aScyBPz4=
+        bh=PqDpNDomr5jtllthe5d3svymg25RRmA39P32V10nl0c=;
+        b=omZxfig8z6sbZRZWvlW1OTYS80iEvuYR2wLGdYugsmHyka61p9SJXXxcfuMSjTVyuufjgDjDT+KDq1h0tL+8scXu7JZrNb3qwvfEsD5S5cJMVlZs/h/KL8rckWceI0YefN4iiztyopNILt3p6614FqTFNxqCKgnxB/gEaGVwTEo=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="macroman"
 To: linux-c-programming@vger.kernel.org
 
- 
+=20
 
 -----Original Message-----
-From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-programming-
-owner@vger.kernel.org] On Behalf Of Lukasz Mielicki
-Sent: Monday, September 24, 2007 3:31 PM
-To: linux-c-programming@vger.kernel.org
-Subject: Re: NAN and complex.h
+=46rom: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-progr=
+amming-owner@vger.kernel.org] On Behalf Of Steve Graegert
+Sent: Monday, September 24, 2007 4:10 PM
+To: Plato
+Cc: linux-c-programming
+Subject: Re: Why does math.h not declare function round?
 
-> Hi I made a program which basically averages data from a file. The 
-> data is stored as complex float and I'm reading it with fread with no
-problem.
-> Some
-> data are taged as NAN (at least ENVI, an image procesing soft read 
-> these values as NAN). If I average the whole data adding a number with 
-> a NAN gives me a NAN and my whole program fails.
+On 9/24/07, Plato <zhangguoqiang@xunlei.com> wrote:
+> Hi!
+>     I made such a program foo.c:
 >
-> What I did is the folowing which doesn't seems to work:
+> #include <math.h>
 >
-> if(cabsf(zhhzhh)!= NAN)
+> int main()
 > {
->    printf("%f\n", cabsf(zhhzhh));
+>     double bar=3D1.2;
+>     printf("%f\n", round(bar));
 > }
 >
-> For some reason the test seeams to be positive all the time, I keep 
-> printing NAN's ("nan" actualy).
+> Then compile and run:
+> [root@so41 tmp]# gcc foo.c -ofoo -lm
+> [root@so41 tmp]# ./foo
+> 0.000000
 >
-> Any idea?
+> The result was obviously wrong. Then I add statement:
+> #include <math.h>
+> double round(double x);
+>
+> int main()
+> {
+>     double bar=3D1.2;
+>     printf("%f\n", round(bar));
+> }
+>
+> Then compile and run:
+> [root@so41 tmp]# gcc foo.c -ofoo -lm
+> [root@so41 tmp]# ./foo
+> 1.000000
+>
+> Now it's right.
+>
+> I wonder why function round not declared in math.h. Anyone have idea?
 
-use isnan or isfinite to check for wrong values
+It is available in C99 mode only (see <bits/mathcalls.h>):
 
-BX
+#ifdef __USE_ISOC99
+__MATHCALLX (round,, (_Mdouble_ __x), (__const__));
+
+To write fully portable code use floor() and ceil() instead.
+
+	\Steve
+
+--
+
+Steve Gr=C3=A4gert <steve@graegert.com>
+Internet: http://digitalether.de
 -
-To unsubscribe from this list: send the line "unsubscribe linux-c-
-programming" in the body of a message to majordomo@vger.kernel.org More
-majordomo info at  http://vger.kernel.org/majordomo-info.html
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in the body of a message to majordomo@vger.kernel.org More majo=
+rdomo info at  http://vger.kernel.org/majordomo-info.html
 
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
