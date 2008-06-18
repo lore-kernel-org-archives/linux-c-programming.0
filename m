@@ -1,40 +1,53 @@
-From: Alfeiks <tirra.newly@gmail.com>
-Subject: Re: Libfprint
-Date: Wed, 18 Jun 2008 14:39:55 +0400
-Message-ID: <4858E5FB.5050504@gmail.com>
-References: <F0F77800ED208443A33E6202DF9CE1A801E1C26D@bgsmsx413.gar.corp.intel.com>
+From: Benoit Fouet <benoit.fouet@purplelabs.com>
+Subject: Re: Shared Memory using threads in C on AIX
+Date: Wed, 18 Jun 2008 13:26:30 +0200
+Message-ID: <4858F0E6.80803@purplelabs.com>
+References: <17979185.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:message-id:date:user-agent
-         :mime-version:to:cc:subject:references:in-reply-to:content-type
-         :content-transfer-encoding:from;
-        bh=f5LTiSxbHTEIEIKMeNlO00VoWmnQsz2mWmv8qj4b7j4=;
-        b=xC0PcxOtP9G4PqDxod4CKrmuB0aOvkjhCUgtB0YvwxWf9t22OWsCVITTfFZ7B0SlaW
-         92oLYu60cN7d0tBN6XidtB9Ay1CEOrrPftDMnqsqRXf7pP6z24zxiOxlsd8K1G9gIwVT
-         KalyvV/awNcgsyqX7sZi7D0cn8JNwbUPSv2aA=
-In-Reply-To: <F0F77800ED208443A33E6202DF9CE1A801E1C26D@bgsmsx413.gar.corp.intel.com>
+In-Reply-To: <17979185.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: "Kumar, Vinoth R" <vinoth.r.kumar@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+To: kumars <subhankar_k@rediffmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-use -l flag to gcc - when it calls linker (ld)
+Hi,
 
-Kumar, Vinoth R wrote:
-> I am currently working on a project which uses a fingerprint reader. I
-> thought of using libfprint . The problem is I am very new to gcc. Could
-> anyone say how to compile and link it with the library my program say
-> myfprint.c
+kumars wrote:
+> I am looking for C program source code. Could you please help me in finding
+> the source code of the required mentioned below.
 >
-> Thanks,
-> R.Vinoth Kumar
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>  
+>
+> Task that I need to complete:
+>
+> Write a program to create multiple threads (one master thread and rest
+> worker threads) and using the threads write into and read from shared memory
+>
+>
+> Restrictions:
+>
+> Only one thread should be able to read at any instant of time into shared
+> memory region.
+>
+> Only one thread should be able to write at any instant of time into shared
+> memory region.
+>
+> Worker threads should inform the master thread after every read and write
+> operation.
+>
+> Master thread inform the worker thread (which is waiting to acquire shared
+> memory region) that read or write operation is successful and it can acquire
+> the memory for either reading and writing operations.
+>
+>
 >   
 
+man pthread.h, you'll find everything you need in there...
+
+-- 
+Benoit Fouet
+Purple Labs S.A.
+www.purplelabs.com
