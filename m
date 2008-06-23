@@ -1,59 +1,30 @@
-From: Glynn Clements <glynn-yNl2PdEqlWR9KcvjrzN2WNBPR1lH4CV8@public.gmane.org>
-Subject: Re: Accessing USB thermometer sensor
-Date: Sat, 21 Jun 2008 10:02:35 +0100
-Message-ID: <18524.50091.552123.924329@cerise.gclements.plus.com>
+From: "Tosoni" <jp.tosoni@acksys.fr>
+Subject: RE: Accessing USB thermometer sensor
+Date: Mon, 23 Jun 2008 09:20:27 +0200
+Message-ID: <003301c8d501$9cf1e040$2e01a8c0@acksys.local>
 References: <8b08c39f01286180748bbc0eeddc56cb.squirrel@webmail.vp44.net>
-	<18523.56941.116797.23150@cerise.gclements.plus.com>
-	<1f60185ec2ee200f67d7a12ee6cbf2fb.squirrel@webmail.vp44.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-usb-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
-In-Reply-To: <1f60185ec2ee200f67d7a12ee6cbf2fb.squirrel-2RFepEojUI3piBo0p4lDPw@public.gmane.org>
-Sender: linux-usb-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+Return-path: <linux-serial-owner@vger.kernel.org>
+In-Reply-To: <8b08c39f01286180748bbc0eeddc56cb.squirrel@webmail.vp44.net>
+Sender: linux-serial-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: jhammond-qGaTmy9+pjn8wb0/L2CcF0B+6BGkLq7r@public.gmane.org
-Cc: linux-usb-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, linux-serial-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, linux-c-programming-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+To: jhammond@external.fwmail.org, linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, linux-c-programming@vger.kernel.org
 
+> the right direction to be able to read the temperature from command
+> line?
+> Josh
+>
+Reading a serial device from the commannd line is not easy.
+First because each command you type closes the port after running and so it
+flushes buffers.
 
-Josh Hammond wrote:
+I would suggest using shell parenthesis to group the commands
+Use stty to set the port to raw mode etc.
+Use 'echo' and 'dd' which is like 'cat' but much more configurable for
+buffer sizes
+something like:
+( stty 9600 raw; echo 'request'; dd bs=1 count=10 >response.out)
+</dev/serialusb >&0
 
-> >> usb 1-2.2: pl2303 converter now attached to ttyUSB0
-> >
-> > Does "cat /dev/ttyUSB0" work?
-> 
-> Nope. I get only blank
-
-Thinking about it some more, if the device is outputting binary, the
-line buffering performed by the TTY driver and stdio will get in the
-way. How about:
-
-	stty raw < /dev/ttyUSB0
-	dd if=/dev/ttyUSB0 bs=1 | od -t x1 -w1
-
-Or, in C:
-
-	int fd;
-	struct termios t;
-
-	fd = open("/dev/ttyUSB0", O_RDONLY|O_NOCTTY);
-
-	tcgetattr(fd, &t);
-	cfmakeraw(&t);
-	tcsetattr(fd, TCSANOW, &t);
-
-	for (;;) {
-		unsigned char buf[1];
-		if (read(fd, buf, 1) <= 0)
-			break;
-		printf("%02x\n", *buf);
-	}
-
-	close(fd);
-
--- 
-Glynn Clements <glynn-yNl2PdEqlWR9KcvjrzN2WNBPR1lH4CV8@public.gmane.org>
---
-To unsubscribe from this list: send the line "unsubscribe linux-usb" in
-the body of a message to majordomo-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
