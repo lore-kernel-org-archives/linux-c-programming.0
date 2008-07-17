@@ -1,115 +1,61 @@
-From: "Jonathan Isom" <jeisom@gmail.com>
-Subject: Re: Some questions about linux termios
-Date: Sat, 12 Jul 2008 12:34:45 -0500
-Message-ID: <1767e6740807121034j52acd226s9edd3bfeafbb3cdc@mail.gmail.com>
-References: <d6b7c4190807121024p27464b5cgd27bce2ecd472055@mail.gmail.com>
+From: bkerin <bkerin@fastmail.fm>
+Subject: malloc interposition how?
+Date: Wed, 16 Jul 2008 20:55:20 -0700 (PDT)
+Message-ID: <18501119.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:message-id:date:from:to
-         :subject:cc:in-reply-to:mime-version:content-type
-         :content-transfer-encoding:content-disposition:references;
-        bh=F4ABT8LwbGj7vqN1Rbt2G/pIlrI+PqSFd2GfBpEAJ2A=;
-        b=YsZZZrZ8zRGF4Dw3/d2QXkTttaJCbF4tzHOXUqYAtMeO7enBz29h9wrT/EYKWHz/Qf
-         iITidJcFUocp8qyh5rYgXyppMJDPmXiT8K+Aaai1RBu/r+/CpPKjBThRipECxrm8Kx7r
-         x0tpUW9qUOvTJfypCoq6QI0HI/+8cah3+ITDk=
-In-Reply-To: <d6b7c4190807121024p27464b5cgd27bce2ecd472055@mail.gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: pei lin <telent998@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-in Sat, Jul 12, 2008 at 12:24 PM, pei lin <telent998@gmail.com> wrote:
-> Hi,buddy
->   I am puzzled by the linux termios.
->    First Question about /dev/tty0 and /dev/tty,this two devices is
-> the same one?
->    When i am in X terminal,as /dev/pts/0 , i do "echo hello >
-> /dev/pts/0 and echo hello > /dev/tty ", they return the same like that
-> "hello" on the screen .This means /dev/tty ->/dev/pts/0? But "echo
-> hello > /dev/tty0",there is nothing on the screen.And when i go to
-> Init 3 mode ,like /dev/tty1,when i do "echo hello > /dev/tty1 and echo
-> hello > .dev/tty and echo hello > /dev/tty0" ,They return the same all
-> print hello on the screen.Do they all point to the /dev/tty1?
 
-/dev/tty is a pointer to the current tty. whether it be /dev/tty1 or
-/dev/pts/0.  when you login you are assigned a tty and if you
-don't know it you can just use /dev/tty and it will open the current
-tty
+I'm trying to do these things simultaneously:
 
->    The second Question is that i write a small program to get
-> keyboard input like below.When i run it in X terminal ,when i press
-> keyboard it can return but can not get the press and release event.And
-> in the console,like tty1,it doesn't work .i don't know why.
->
-> file : get_keyboard.c
->
-> #include <stdio.h>
-> #include <linux/keyboard.h>
-> #include <sys/ioctl.h>
-> #include <fcntl.h>
-> #include <linux/kd.h>
-> #include <termios.h>
-> #include <unistd.h>
-> int main()
-> {
->        int fd,len,i;
->        struct kbentry entry;
->        unsigned char buf[64];
->        struct termios  ts,old_ts;
->        char * path;
->        path = ttyname(0);
->        printf("%s!\n",path);
->        fd = open(path, O_RDONLY|O_NOCTTY);
->        if(fd < 0){
->                printf("open the device error!\n");
->        }
->
->        printf("fd --- %d!\n",fd);
->
->        if (ioctl( fd, KDSKBMODE, K_RAW ) < 0) {
->                        printf("set mode wrong!\n");
->        }
->
->
->        tcgetattr( fd, &old_ts );
->
->
->           ts = old_ts;
->     ts.c_cc[VTIME] = 0;
->     ts.c_cc[VMIN] = 1;
->     ts.c_lflag &= ~(ICANON|ECHO|ISIG);
->     ts.c_iflag = 0;
->     tcsetattr( fd, TCSAFLUSH, &ts );
->
->     tcsetpgrp( fd, getpgrp() );
->
->
->           entry.kb_table = K_NORMTAB;
->     entry.kb_value = 0;
->
->        while(1){
->                len=read(fd,buf,64);
->        printf("len ========= %d!\n",len);
->                for(i =0; i < len;i++){
->                        entry.kb_index = buf[i];
->                        if(ioctl(fd,KDGKBENT,&entry)){
->                        printf("struct entry :%d %d
-> %d\n",entry.kb_table,entry.kb_index,entry.kb_value);
->                        if('2' == entry.kb_index){
->                                tcsetattr( fd, TCSAFLUSH, &old_ts );
->                                exit(0);
->                           }
->                        }
->                                      }
->                }
-> }
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+use glib
+use gc (Hans-Boehm)
+use my own library of random code
+
+I dont want to have to do manual garbage collection at least in the
+prototype stage.
+
+However, I haven't found a way to link the above together that works.
+
+I use the set_vtable function in glib to hopefully make it use the GC_malloc
+etc. from gc
+
+I include fcnts malloc/free/realloc in my library and the compiler/linker
+doesn't complain
+(presumably libc contains some special goop to not complain about these
+getting redefined
+in client code).  My malloc etc. of course just call GC_* fctns.
+
+I believe I have all the right -I -L -Wl,-rpath etc. crud.
+
+When I look at bins and my .so file with ldd everything appears to look for
+the correct libraries.
+
+When I use nm on my .so I see symbols like malloc supposedly in the text
+secion (marked with T).
+
+When I step with the debugger and a breakpoint in malloc (or realloc etc.) I
+always end up in the malloc
+in my library, not the system malloc.
+
+And yet, the program always seg faults eventually in a GC_malloc.
+
+Any ideas what I'm missing, or is the whole approach somehow fatally flawed?
+
+I've also tried using --wrap linker option, but it seemed to only map
+function defined in the source files being linked and
+didn't affect the use of malloc etc. by depended-on libraries (I ultimately
+need this to work for gsl (GNU scientific library as well not only glib
+which provides the set_vtable functionality).
+
+Thanks,
+Britton
+-- 
+View this message in context: http://www.nabble.com/malloc-interposition-how--tp18501119p18501119.html
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
