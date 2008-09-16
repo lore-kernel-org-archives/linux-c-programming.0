@@ -1,66 +1,40 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Subject: Issues updating 2.6-stable branch to 2.6.24.y
-Date: Wed, 13 Aug 2008 15:42:23 +0200
-Message-ID: <48A2E4BF.5010107@visionsystems.de>
-Reply-To: yegor_sub1@visionsystems.de
+From: "Xu Yang" <risingsunxy@googlemail.com>
+Subject: looking for a function
+Date: Tue, 16 Sep 2008 15:26:33 +0200
+Message-ID: <ab40e9c0809160626o1cc6e7en5e09650a1d04affe@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=gamma;
+        h=domainkey-signature:received:received:message-id:date:from:to
+         :subject:mime-version:content-type:content-transfer-encoding
+         :content-disposition;
+        bh=EViVbmTSkIU1F9/MCyTrqW63Fk/ow0IaNdvvhXolUvM=;
+        b=vx6f87a0Q1Vwo154xlWN/8z6QEN9BSRRro4aIB3SA0s7bQ8azGek7kO6hcJTlF7X/k
+         No++04LM94nyyEA0MjsivgmyHJLg00idmgYreyN98PW4q3H3QSkryCfuyPfz+ubUhe4A
+         gTk2ggm819tlXuvewFAYoL3JyF3mrmSLTCQEY=
+Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-Hi all,
+Hi guys,
 
-I've just cloned the 2.6-stable branch
+I am looking for a function that can show me the current thread is
+running on which cpu.
 
-git clone 
-git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-2.6-stable.git
+e.g I am using pthread to write a multithreaded program, in each
+thread I would like to insert such kind of function so that I can know
+on which cpu this thread is running on.
 
-after that I have 2.6.22.6. If call "git remote show origin" I get 
-following branches:
+which function should be used?
 
-Tracked remote branches
-    linux-2.6 linux-2.6.12.y linux-2.6.13.y linux-2.6.14.y 
-linux-2.6.15.y linux-2.6.16.y linux-2.6.17.y linux-2.6.18.y 
-linux-2.6.19.y linux-2.6.20.y linux-2.6.21.y linux-2.6.22.y 
-linux-2.6.23.y linux-2.6.24.y linux-2.6.25.y linux-2.6.26.y master
+thanks for the help!!
 
-I want to pull the changes from "linux-2.6.24.y" and execute
-
-git pull origin linux-2.6.24.y
-
-after that I've got the following message:
-
-Automatic merge failed; fix conflicts and then commit the result.
-
-If I look at the status "git status" I see lots of following entries
-
-...modified:   mm/hugetlb.c
-#       unmerged:   mm/readahead.c
-#       modified:   mm/readahead.c
-#       unmerged:   net/bluetooth/rfcomm/tty.c
-#       modified:   net/bluetooth/rfcomm/tty.c
-#       unmerged:   net/bridge/br_device.c
-#       modified:   net/bridge/br_device.c
-#       unmerged:   net/core/dev.c
-#       modified:   net/core/dev.c
-#       unmerged:   net/dccp/ccids/ccid2.c
-#       modified:   net/dccp/ccids/ccid2.c
-#       unmerged:   net/ieee80211/softmac/ieee80211softmac_assoc.c
-#       modified:   net/ieee80211/softmac/ieee80211softmac_assoc.c
-#       unmerged:   net/ieee80211/softmac/ieee80211softmac_wx.c
-#       modified:   net/ieee80211/softmac/ieee80211softmac_wx.c
-#       unmerged:   net/ipv4/netfilter/nf_conntrack_proto_icmp.c
-#       modified:   net/ipv4/netfilter/nf_conntrack_proto_icmp.c
-...
-
-I didn't touch any files. So where the conflicts come from? What am I 
-missing? Or how do I pull the changes from other branches to avoid such 
-conflicts?
-
-Best regards,
-Yegor
+best regards,
 
 
+
+Yang
