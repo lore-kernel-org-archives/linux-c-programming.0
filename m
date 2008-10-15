@@ -1,34 +1,58 @@
-From: korfuri@gmail.com
-Subject: Re : How to call another separate program and passing some variables in C?
-Date: Tue, 14 Oct 2008 13:12:29 +0200
-Message-ID: <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com>
-References: <DF93814AEDB44B7484B8BF8F416AA50D@johnny>
+From: "johnny_xing" <johnny_xing@banshing.com>
+Subject: RE: How to call another separate program and passing some variables in C?
+Date: Wed, 15 Oct 2008 14:27:23 +0800
+Message-ID: <0E415EA45AC641298E702FBDEDADEA87@johnny>
+References: <DF93814AEDB44B7484B8BF8F416AA50D@johnny> <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:message-id:date:from:to
-         :subject:cc:in-reply-to:mime-version:content-type
-         :content-transfer-encoding:content-disposition:references;
-        bh=TCBu7cGXjiEYUzamu88qBnrkb4YJmofJ6SNg1ELu2Jc=;
-        b=hpr0RFsomZutyMIYVsivzMNhMJjXvj5S3TShC5XpEzgFOS4WNvJ9KrPZKAjZ3f+vzF
-         Wk8DJs/aAV7mO9ScyDLViPpB8IXvGKLNtALwdXxgM3J4ciEGKp0eOzqFtA1ZrZk6HiPN
-         Vx17C2SXzu7sRUyc2PaCq3HOTK4BthRWyGoo8=
-In-Reply-To: <DF93814AEDB44B7484B8BF8F416AA50D@johnny>
-Content-Disposition: inline
+In-Reply-To: <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: johnny_xing <johnny_xing@banshing.com>
+Content-Type: text/plain; charset="iso-2022-jp"
+To: korfuri@gmail.com
 Cc: linux-c-programming@vger.kernel.org
+
+Hi, Uriel
+
+Yes I need to execute two separate programs although I know it would be much
+easier if I could put into one program.
+
+The reason is the first program invokes lots of other modules and program
+and it has been fixed and running that I don't know how to add in the second
+program.
+
+However, if I could invoke the second program using system() and pass some
+integers to the second program to generate the output I want, it will be
+good enough.
+
+Eg: system("/usr/local/src/program2"); 
+
+The problem is I don't know how to pass some integers upon invoking it.
+
+Is it something like this if I want to pass an integer 1?
+system("/usr/local/src/program2" 1);
+
+Thanks & Best Regards,
+ 
+Johnny Xing
+-----Original Message-----
+From: linux-c-programming-owner@vger.kernel.org
+[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of
+korfuri@gmail.com
+Sent: 2008年10月14日 19:12
+To: johnny_xing
+Cc: linux-c-programming@vger.kernel.org
+Subject: Re : How to call another separate program and passing some
+variables in C?
 
 2008/10/14, johnny_xing <johnny_xing@banshing.com>:
 > Hi,
 >
 > Forgive me if my question is so simple as I am a newbie to programming..
 >
-> I have two C programming and I want to call second C file within my first C
+> I have two C programming and I want to call second C file within my first
+C
 > program, upon calling, I need to pass some variables (like 1 or 0) to the
 > second program.
 >
@@ -68,3 +92,9 @@ Uriel
 -- 
 Uriel "Korfuri" Corfa
 Epitech student
+--
+To unsubscribe from this list: send the line "unsubscribe
+linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
