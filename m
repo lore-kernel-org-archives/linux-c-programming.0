@@ -1,49 +1,95 @@
 From: "johnny_xing" <johnny_xing@banshing.com>
 Subject: RE: How to call another separate program and passing some variables in C?
-Date: Wed, 15 Oct 2008 16:31:17 +0800
-Message-ID: <528704E66F154167B2EA3F70DDCFFF94@johnny>
-References: <DF93814AEDB44B7484B8BF8F416AA50D@johnny> <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com> <0E415EA45AC641298E702FBDEDADEA87@johnny> <4f5c2ba10810142334o6dbca046r52eb267c8da28aa9@mail.gmail.com>
+Date: Wed, 15 Oct 2008 17:10:36 +0800
+Message-ID: <E1AF7D141DDA48EEA3461954C013405E@johnny>
+References: <DF93814AEDB44B7484B8BF8F416AA50D@johnny> <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com> <0E415EA45AC641298E702FBDEDADEA87@johnny> <4f5c2ba10810142334o6dbca046r52eb267c8da28aa9@mail.gmail.com> <5F844C5CE0B949348F25CDBF9B3FA11D@johnny> <4f5c2ba10810150150k153b051fod1440a14037cd16c@mail.gmail.com> <4f5c2ba10810150152s6c6307fi1fde09505b31a8bc@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: 
+In-Reply-To: <4f5c2ba10810150152s6c6307fi1fde09505b31a8bc@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="utf-8"
 To: 'Halesh S' <halesh.tux@gmail.com>
 Cc: korfuri@gmail.com, linux-c-programming@vger.kernel.org
 
-Hi,
+Hi, Halesh,
 
-I tried as what Hlalesh said and it doesn=E2=80=99t work.
+Same result as above, I am wondering if system() should be used if we w=
+ant to pass some arguments as well.
 
-Here is what I have:
+Thanks & Best Regards,
+=20
+Johnny Xing
+=20
+________________________________________
+=46rom: Halesh S [mailto:halesh.tux@gmail.com]=20
+Sent: 2008=E5=B9=B410=E6=9C=8815=E6=97=A5 16:52
+To: johnny_xing
+Cc: korfuri@gmail.com; linux-c-programming@vger.kernel.org
+Subject: Re: How to call another separate program and passing some vari=
+ables in C?
 
-In program 1:
+Try program 2 as below, no need to use sprintf
 
-system(=E2=80=9C/usr/local/src/program2 1=E2=80=9D);
+In program 2:
+int main(int argc, char *argv[])
+{
+int input1;
+printf("buffer is %s\n", argv[0]);
+input1 =3Datoi(argv[0]);
+printf("input1 value is %d\n",input1);
+}
+Halesh
+
+
+
+Try program 2 as below, no need to use sprintf
 
 In program 2:
 int main(int argc, char *argv[])
 {
 int input1;
 char buffer[10];
-sprintf(buffer, argv[0]);
-
 printf("buffer is %s\n", buffer);
 input1 =3Datoi(buffer);
 printf("input1 value is %d\n",input1);
 }
+ - Halesh=20
 
+2008/10/15 johnny_xing <johnny_xing@banshing.com>
+2008/10/15 johnny_xing <johnny_xing@banshing.com>
+Hi,
+=20
+I tried as what Hlalesh said and it doesn't work.
+=20
+Here is what I have:
+=20
+In program 1:
+=20
+system("/usr/local/src/program2 1");
+=20
+In program 2:
+int main(int argc, char *argv[])
+{
+int input1;
+char buffer[10];
+sprintf(buffer, argv[0]);
+=20
+printf("buffer is %s\n", buffer);
+input1 =3Datoi(buffer);
+printf("input1 value is %d\n",input1);
+}
+=20
 The output is:
-
+=20
 buffer is /usr/local/src/parallel/asterisk
 input1 value is 0
-
-
+=20
+=20
 Anything wrong with it?
-
-
+=20
+=20
 Thanks & Best Regards,
 =20
 Johnny Xing
@@ -53,10 +99,11 @@ ________________________________________
 Sent: 2008=E5=B9=B410=E6=9C=8815=E6=97=A5 14:34
 To: johnny_xing
 Cc: korfuri@gmail.com; linux-c-programming@vger.kernel.org
+
 Subject: Re: How to call another separate program and passing some vari=
 ables in C?
-
-
+=20
+=20
 2008/10/15 johnny_xing <johnny_xing@banshing.com>
 Hi, Uriel
 
@@ -166,6 +213,8 @@ To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
 the body of a message to majordomo@vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
+=20
+
 
 
 --
