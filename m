@@ -1,40 +1,61 @@
-From: Jianjun Kong <kongjianjun@gmail.com>
-Subject: Re: How to call another separate program and passing some
-	variables in C?
-Date: Thu, 16 Oct 2008 08:41:35 +0800
-Message-ID: <20081016004135.GA5666@ubuntu>
-References: <DF93814AEDB44B7484B8BF8F416AA50D@johnny> <c15440c50810140412r7df6c411xdf24dd6a16590132@mail.gmail.com> <0E415EA45AC641298E702FBDEDADEA87@johnny> <4f5c2ba10810142334o6dbca046r52eb267c8da28aa9@mail.gmail.com> <5F844C5CE0B949348F25CDBF9B3FA11D@johnny> <4f5c2ba10810150150k153b051fod1440a14037cd16c@mail.gmail.com> <4f5c2ba10810150152s6c6307fi1fde09505b31a8bc@mail.gmail.com> <E1AF7D141DDA48EEA3461954C013405E@johnny>
+From: "saravanaraj v" <saravanaraj.v@gmail.com>
+Subject: Trouble reading a character device.
+Date: Tue, 16 Dec 2008 12:41:38 +0530
+Message-ID: <2e0180190812152311l5d01e9aek6728832d5babbb14@mail.gmail.com>
+References: <2e0180190812152308j64b827a2r21da6ff56e139f7e@mail.gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:date:from:to:cc:subject
-         :message-id:references:mime-version:content-type:content-disposition
-         :in-reply-to:user-agent;
-        bh=Kh+1ACDM8j7u46I/SkPDwqc3UnqfOFNUIQi889/3Z9o=;
-        b=XSRa9skBKd4u/6/8ZBKyC1UCKVgWOQ8qnc6LCpUnChRH3t9WTVM8P7AKeFzbt0xt7U
-         /BOcYLZl2eioMA5yfuv6jAcBuJdoEgBJuCOdydl7TuPSso5jdIjtXab/CGG/1flLISXb
-         g0j/f44CpBzQUvZX5xtdjJc1OzFcoEfYxeybg=
+        h=domainkey-signature:received:received:message-id:date:from:to
+         :subject:in-reply-to:mime-version:content-type
+         :content-transfer-encoding:content-disposition:references;
+        bh=jR6stFmXPO9eOywKxyjrqRV2ipsXFG7aMam6FmzuN70=;
+        b=AoLtU3en6R3dqeTSVofp9Tee02pZ7wWVYMz/E/kVhRtihKoDfkoJVTvTvQiiksA5CI
+         xi1J5zLBWaN/S+ioROSCV972gqUQ+MpER/VE9sORXUAcfdDwGj4XEw+0Pa/nZUwmKPBZ
+         64nUcRZTx4Eq4feHz5CVKhExl1hnuFBDPuUkk=
+In-Reply-To: <2e0180190812152308j64b827a2r21da6ff56e139f7e@mail.gmail.com>
 Content-Disposition: inline
-In-Reply-To: <E1AF7D141DDA48EEA3461954C013405E@johnny>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: johnny_xing <johnny_xing@banshing.com>
-Cc: 'Halesh S' <halesh.tux@gmail.com>, korfuri@gmail.com, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Wed, Oct 15, 2008 at 05:10:36PM +0800, johnny_xing wrote:
->Hi, Halesh,
->
->Same result as above, I am wondering if system() should be used if we want to pass some arguments as well.
+Hi,
+   I am facing few issues in reading from a character device.
+   I have created few character devices using 'mknod' and I am writing
+continuously to those devices using 'printk'. After some time I start
+another process to read from the device. The open/read is done using
+normal sys calls for file open/reading. I have pasted the code for
+your ref. When I run this program the read happens for some time and
+then there is no progress. I am suspecting that  everything written to
+the device before this program was started is read. The flags I tried
+for opening the file were RD, RDWR with/without NONBLOCK. The output
+was same in all the cases. I tried "cu -l /dev/virt_uart8". It was
+able to read continuosuly without any problem. Can someone tell where
+the problem is ?
 
-$ man system
 
-You can get more information :)
+int main(){
+
+int fd,counter=0;
+fd = open("/dev/virt_uart8",O_RDONLY|O_NONBLOCK);
+if(fd<0) printf("\nError in opeining file");
+while(1){
+
+                                        int nread = 0;
+                                        nread =
+read(fd,buffer,MAX_BUFFER_SIZE-1);
+                                        if(nread>0) {
+                                                buffer[nread]='\0';
+                                                printf("%s",buffer);
+                                        }
+
+}
+}
 
 
 
->Thanks & Best Regards,
-> 
->Johnny Xing
+Thanks,
+Saravanaraj
