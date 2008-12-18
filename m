@@ -1,69 +1,75 @@
-From: "saravanaraj v" <saravanaraj.v@gmail.com>
-Subject: Re: Trouble reading a character device.
-Date: Thu, 18 Dec 2008 17:47:52 +0530
-Message-ID: <2e0180190812180417m4247871k1bc26ac26addf4a6@mail.gmail.com>
-References: <2e0180190812152308j64b827a2r21da6ff56e139f7e@mail.gmail.com>
-	 <2e0180190812152311l5d01e9aek6728832d5babbb14@mail.gmail.com>
-	 <18759.49284.737408.12661@cerise.gclements.plus.com>
-Mime-Version: 1.0
+From: XComp <xcomp@arcor.de>
+Subject: Problem with ucontext_t struct in signal handler
+Date: Thu, 18 Dec 2008 10:11:59 -0800
+Message-ID: <0C323BC7-E8EF-4CFB-99AE-9A7A890A6191@arcor.de>
+Mime-Version: 1.0 (Apple Message framework v929.2)
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:message-id:date:from:to
-         :subject:in-reply-to:mime-version:content-type
-         :content-transfer-encoding:content-disposition:references;
-        bh=uEr5UYwuv5cunb1XRwkDyKRL/y/0yVhvR7a9K7whjcQ=;
-        b=eYiO6BIolMxW30jkx4Ln159Wgi3wnEd2HOd0X5n8hraWqy7gTb94zrn0njumt+Dn1o
-         q5q7juAw/nr+b/u5MHjlztXxQPoQyjp9v/tmp66V2fiXQcfY4+UsqchpGkuC7uydjUuF
-         jWfKSnYD4i49JxHBL1z+u+le86v++Sz+V/r+c=
-In-Reply-To: <18759.49284.737408.12661@cerise.gclements.plus.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
 To: linux-c-programming@vger.kernel.org
 
-Thanks Glynn
+Hello everyone,
+I want to switch between user contexts using a signal handler  
+(something like a preemptive scheduler for userlevel threads). I've  
+found several sources, which say that it's not a good idea to use  
+setcontext or swapcontext in a signal handler. Nevertheless there also  
+exists at least one sample code of such an preemptive scheduler, which  
+seems to work well, at least on my machine (Ubuntu 8.04 with linux  
+kernel 2.6.24-22): www.seas.upenn.edu/~cse381/context_demo.c
 
-On Tue, Dec 16, 2008 at 8:21 PM, Glynn Clements
-<glynn@gclements.plus.com> wrote:
->
-> saravanaraj v wrote:
->
-> >    I am facing few issues in reading from a character device.
-> >    I have created few character devices using 'mknod' and I am writing
-> > continuously to those devices using 'printk'. After some time I start
-> > another process to read from the device. The open/read is done using
-> > normal sys calls for file open/reading. I have pasted the code for
-> > your ref. When I run this program the read happens for some time and
-> > then there is no progress. I am suspecting that  everything written to
-> > the device before this program was started is read. The flags I tried
-> > for opening the file were RD, RDWR with/without NONBLOCK. The output
-> > was same in all the cases. I tried "cu -l /dev/virt_uart8". It was
-> > able to read continuosuly without any problem. Can someone tell where
-> > the problem is ?
-> >
-> > int main(){
-> >
-> > int fd,counter=0;
-> > fd = open("/dev/virt_uart8",O_RDONLY|O_NONBLOCK);
-> > if(fd<0) printf("\nError in opeining file");
-> > while(1){
-> >
-> >     int nread = 0;
-> >     nread = read(fd,buffer,MAX_BUFFER_SIZE-1);
-> >     if(nread>0) {
-> >         buffer[nread]='\0';
-> >         printf("%s",buffer);
-> >     }
->
-> If you want to print data which doesn't necessarily have a trailing
-> newline, you need fflush(stdout) or setvbuf(stdout, NULL, _IONBF, 0).
->
-> If you make that change and still have problems, it's likely to be an
-> issue with the device. E.g. you may need to disable XON/XOFF
-> processing with tcsetattr(), or put the device into raw mode.
->
-> --
-> Glynn Clements <glynn@gclements.plus.com>
+// [...]
+static ucontext_t thread_context;
+static ucontext_t scheduler_context;
+
+int thread_finished;
+int i;
+
+static void simple_function(void) {
+	// do nothing but counting
+	for (i = 0; i < 1000000000; ++i) { }
+
+	if (i == 1000000000) {
+		printf("\n[Thread Function]\t1st counting worked fine...");
+	} else {
+		printf("\n[Thread Function]\tError: Counting didn't finished  
+(%d)...", i);
+	}
+
+	thread_finished = 1;
+}
+
+static void other_function() {
+	// thread_finished is a global variable, which is set to 1, if the  
+thread function is finished
+	while(thread_finished != 1) { swapcontext(&scheduler_context,  
+&thread_context); }
+}
+
+static void signal_handler_function(int sig_nr, siginfo_t* info, void  
+*old_context) {
+	if (sig_nr == SIGPROF) {
+		// saves the thread context
+		thread_context = *((ucontext_t*) context);
+
+		// swaps back to scheduler context
+		setcontext(&scheduler_context);
+	}
+}
+// [...]
+
+I ran into the following problem which belongs to the code above. I  
+interrupted simple_function several times by using a ITimer. But the  
+for-loop doesn't finish successfully everytime. Often the if condition  
+is false. But it does not cancel after the first signal is raised.  
+I've found out that using the third parameter old_context for storing  
+the old context is the reason. But I don't know why. So I thought  
+there might be a problem in the kernel. Am I right? I was afraid to  
+post the whole code, so I hope that this code snippet is enough.
+I would appreciate if someone can give me a comment whether this  
+strange behaviour is because of a wrong thinking of mine or because of  
+a error in the kernel which needs to be fixed.
+
+Thanks a lot!
+Matthias
