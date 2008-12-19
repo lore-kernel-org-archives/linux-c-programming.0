@@ -1,75 +1,104 @@
-From: XComp <xcomp@arcor.de>
-Subject: Problem with ucontext_t struct in signal handler
-Date: Thu, 18 Dec 2008 10:11:59 -0800
-Message-ID: <0C323BC7-E8EF-4CFB-99AE-9A7A890A6191@arcor.de>
-Mime-Version: 1.0 (Apple Message framework v929.2)
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Problem with ucontext_t struct in signal handler
+Date: Fri, 19 Dec 2008 02:51:56 +0000
+Message-ID: <18763.3148.658098.808505@cerise.gclements.plus.com>
+References: <0C323BC7-E8EF-4CFB-99AE-9A7A890A6191@arcor.de>
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <0C323BC7-E8EF-4CFB-99AE-9A7A890A6191@arcor.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: XComp <xcomp@arcor.de>
+Cc: linux-c-programming@vger.kernel.org
 
-Hello everyone,
-I want to switch between user contexts using a signal handler  
-(something like a preemptive scheduler for userlevel threads). I've  
-found several sources, which say that it's not a good idea to use  
-setcontext or swapcontext in a signal handler. Nevertheless there also  
-exists at least one sample code of such an preemptive scheduler, which  
-seems to work well, at least on my machine (Ubuntu 8.04 with linux  
-kernel 2.6.24-22): www.seas.upenn.edu/~cse381/context_demo.c
 
-// [...]
-static ucontext_t thread_context;
-static ucontext_t scheduler_context;
+XComp wrote:
 
-int thread_finished;
-int i;
+> I want to switch between user contexts using a signal handler  
+> (something like a preemptive scheduler for userlevel threads). I've  
+> found several sources, which say that it's not a good idea to use  
+> setcontext or swapcontext in a signal handler. Nevertheless there also  
+> exists at least one sample code of such an preemptive scheduler, which  
+> seems to work well, at least on my machine (Ubuntu 8.04 with linux  
+> kernel 2.6.24-22): www.seas.upenn.edu/~cse381/context_demo.c
+> 
+> // [...]
+> static ucontext_t thread_context;
+> static ucontext_t scheduler_context;
+> 
+> int thread_finished;
+> int i;
+> 
+> static void simple_function(void) {
+> 	// do nothing but counting
+> 	for (i = 0; i < 1000000000; ++i) { }
+> 
+> 	if (i == 1000000000) {
+> 		printf("\n[Thread Function]\t1st counting worked fine...");
+> 	} else {
+> 		printf("\n[Thread Function]\tError: Counting didn't finished  (%d)...", i);
+> 	}
+> 
+> 	thread_finished = 1;
+> }
+> 
+> static void other_function() {
+> 	// thread_finished is a global variable, which is set to 1, if the  thread function is finished
+> 	while(thread_finished != 1) { swapcontext(&scheduler_context,  &thread_context); }
+> }
+> 
+> static void signal_handler_function(int sig_nr, siginfo_t* info, void  *old_context) {
+> 	if (sig_nr == SIGPROF) {
+> 		// saves the thread context
+> 		thread_context = *((ucontext_t*) context);
+> 
+> 		// swaps back to scheduler context
+> 		setcontext(&scheduler_context);
+> 	}
+> }
+> // [...]
+> 
+> I ran into the following problem which belongs to the code above. I  
+> interrupted simple_function several times by using a ITimer. But the  
+> for-loop doesn't finish successfully everytime. Often the if condition  
+> is false.
 
-static void simple_function(void) {
-	// do nothing but counting
-	for (i = 0; i < 1000000000; ++i) { }
+It seems likely that either the registers or the stack (wherever "i"
+is stored) is getting trashed. What is "i" in the cases where the test
+fails?
 
-	if (i == 1000000000) {
-		printf("\n[Thread Function]\t1st counting worked fine...");
-	} else {
-		printf("\n[Thread Function]\tError: Counting didn't finished  
-(%d)...", i);
-	}
+> But it does not cancel after the first signal is raised.  
+> I've found out that using the third parameter old_context for storing  
+> the old context is the reason. But I don't know why.
 
-	thread_finished = 1;
-}
+Note that the old_context parameter to the signal handler won't be
+pointing to any of your context "slots". When a signal occurs, the
+current context will be saved in a ucontext_t on the current context's
+stack, and the old_context argument will point to that.
 
-static void other_function() {
-	// thread_finished is a global variable, which is set to 1, if the  
-thread function is finished
-	while(thread_finished != 1) { swapcontext(&scheduler_context,  
-&thread_context); }
-}
+It needs to be borne in mind that a ucontext_t isn't "the context"
+itself. It's merely a structure for storing information about a
+context, either for receiving information (e.g. getcontext) or
+providing it (e.g. setcontext).
 
-static void signal_handler_function(int sig_nr, siginfo_t* info, void  
-*old_context) {
-	if (sig_nr == SIGPROF) {
-		// saves the thread context
-		thread_context = *((ucontext_t*) context);
+> So I thought there might be a problem in the kernel. Am I right?
 
-		// swaps back to scheduler context
-		setcontext(&scheduler_context);
-	}
-}
-// [...]
+I don't think so.
 
-I ran into the following problem which belongs to the code above. I  
-interrupted simple_function several times by using a ITimer. But the  
-for-loop doesn't finish successfully everytime. Often the if condition  
-is false. But it does not cancel after the first signal is raised.  
-I've found out that using the third parameter old_context for storing  
-the old context is the reason. But I don't know why. So I thought  
-there might be a problem in the kernel. Am I right? I was afraid to  
-post the whole code, so I hope that this code snippet is enough.
-I would appreciate if someone can give me a comment whether this  
-strange behaviour is because of a wrong thinking of mine or because of  
-a error in the kernel which needs to be fixed.
+> I was afraid to post the whole code, so I hope that this code
+> snippet is enough.
 
-Thanks a lot!
-Matthias
+It would help if it was accurate (e.g. the signal handler refers to
+"context" which isn't declared anywhere; is this supposed to be the
+old_context parameter?) and more complete.
+
+> I would appreciate if someone can give me a comment whether this  
+> strange behaviour is because of a wrong thinking of mine or because of  
+> a error in the kernel which needs to be fixed.
+
+I suspect the former.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
