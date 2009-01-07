@@ -1,48 +1,53 @@
-From: "Xin Zou" <zouxin2008@gmail.com>
+From: "Michele Mondelli" <mithenks.ml@gmail.com>
 Subject: Re: command output to variables
-Date: Wed, 7 Jan 2009 20:54:17 +0800
-Message-ID: <e9d800340901070454w4f4b2ef4yb9cdc43019fb8736@mail.gmail.com>
+Date: Wed, 7 Jan 2009 14:33:46 +0100
+Message-ID: <dbe330bd0901070533g4b49d451u12c70eed805e145b@mail.gmail.com>
 References: <1f714d50901070435h4b76e26brdb1eedddbdda4cc3@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_250927_16200122.1231335226458"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
         h=domainkey-signature:received:received:message-id:date:from:to
-         :subject:cc:in-reply-to:mime-version:content-type
-         :content-transfer-encoding:content-disposition:references;
-        bh=Sb255S62Rodmp+YEU6MArdE8LmheonqWL4tzlG+6yso=;
-        b=ILJLx+mg7PA4dmmp7/Syq0gQfCntO+dH4hBilAR+fAtSm2n/KkI0fnSFrh1snlubIz
-         N4ectZ8eEJnyi5Mp5ME8bE/J8hDUnjzZ+H4m9apBjC4cDPyWqWWasnrk5e2hHWctheKr
-         ANacd+9QRUGGpCI6Yl3lCca2vW9oTDRcFDISM=
+         :subject:in-reply-to:mime-version:content-type:references;
+        bh=gvl5u/5QRh6PZ6ozYu9KLRyMJN9rNSfbLmjPbACpL2A=;
+        b=Yg2UCs63W07HDfxz8VghGqAhxGezx7MpP9LF/AC9PfK+Tu3AoGxZFkEAF/bSZzzYZ7
+         2b54anOAYEzENVUEHvDujzmiCUnuKeGHMhzDHMJA/Y8j0dbxp8G9xINpjvQGKNgarkLx
+         00Y9SbfPaBZ5BfzmwrmdltGrEH3qUEuAYB0uI=
 In-Reply-To: <1f714d50901070435h4b76e26brdb1eedddbdda4cc3@mail.gmail.com>
-Content-Disposition: inline
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Jai Sharma <jai.unix@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-It's not easy to get output in C.
-You can use pipe to get the result from standard output.
+------=_Part_250927_16200122.1231335226458
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-On Wed, Jan 7, 2009 at 8:35 PM, Jai Sharma <jai.unix@gmail.com> wrote:
-> Hi All
->
-> I m PHP, Perl programmer , but finally I need C to program in LInux.
-> In perl I simply use `` operator to get command output.
->
-> $who_output = `who` ;
->
->
-> but in C , how can i get the output. Using system function i m easily
-> run the command. But how to get its output .
->
-> system("who");
->
-> Plz help
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+A simple example of using pipe in Linux.
+
+Regards
+
+
+--
+Homepage: http://www.mithenks.com
+Slackware GNU/Linux User since 2003
+Registered Linux User #383379
+Registered Linux Machine #391361
+
+------=_Part_250927_16200122.1231335226458
+Content-Type: text/x-csrc; name=pipe.c
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_fpo17v8c0
+Content-Disposition: attachment; filename=pipe.c
+
+LyoKICogUnVuIHRoZSAnbHMnIGNvbW1hbmQgYW5kIHByaW50IHRoZSBvdXRwdXQgdG8gc3Rkb3V0
+LgogKiAKICogQ29tcGlsZSB3aXRoIAogKiAJCWdjYyAtV2FsbCBwaXBlLmMgLW8gcGlwZQogKiAK
+ICogCiAqIE1pdGhlbmtzIDxtaXRoZW5rc0BzaWVuYS5saW51eC5pdD4KICogCiAqLwojaW5jbHVk
+ZSA8c3RkaW8uaD4KI2luY2x1ZGUgPHN0ZGxpYi5oPgoKaW50IG1haW4oKSB7CgkKCUZJTEUgKnBp
+cGU7CgljaGFyIGJ1ZmZlclsxMDI0XTsKCQoJaWYgKCAocGlwZSA9IHBvcGVuKCJscyIsInIiKSAp
+IDwgMCApIHsKCQlwZXJyb3IoInBvcGVuKCk6ICIpOwoJCWV4aXQoLTEpOwoJfQoJCgkKCWZyZWFk
+KGJ1ZmZlcixzaXplb2YoYnVmZmVyKSwxLHBpcGUpOwoJcHJpbnRmKCJPdXRwdXQ6XG4lc1xuIixi
+dWZmZXIpOwoJCglwY2xvc2UocGlwZSk7CgkKCXJldHVybiAwOwp9Cg==
+------=_Part_250927_16200122.1231335226458--
