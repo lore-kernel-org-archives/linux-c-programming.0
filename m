@@ -1,51 +1,163 @@
-From: "Task Struct From Hell" <taskstructfromhell@googlemail.com>
-Subject: Re: c preprocessor expansion
-Date: Fri, 9 Jan 2009 08:15:13 +0000
-Message-ID: <ef37ea20901090015i3d4ae177k5d587125ab0b212f@mail.gmail.com>
-References: <ef37ea20901080949i2cd875fbk58b4ae3605655812@mail.gmail.com>
-	 <a3399010901081011p607d688es98a4ca77581b0a88@mail.gmail.com>
+From: Jason <lcprog@lakedaemon.net>
+Subject: Re: command output to variables
+Date: Sat, 10 Jan 2009 09:57:07 -0500
+Message-ID: <4968B743.5080005@lakedaemon.net>
+References: <1f714d50901070435h4b76e26brdb1eedddbdda4cc3@mail.gmail.com> <dbe330bd0901070533g4b49d451u12c70eed805e145b@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="------------020003090506010003090101"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=gamma;
-        h=domainkey-signature:received:received:message-id:date:from:to
-         :subject:cc:in-reply-to:mime-version:content-type
-         :content-transfer-encoding:content-disposition:references;
-        bh=PuTmk7hY4wGNkAHwoEtthDVjGck//pO9sXvQ8FVYF24=;
-        b=ILj0yVZfdklh7YFUUqKrYYiD3I2IOZ+5tUpfxLLvWcQz3yaTNfVBH/nC90n8UNNz2m
-         WuIpy360nAVoR9ZjvbW4TsomK0xwV8Lb2uCAkr1baP9knivWwmiGNEj/X4FabJEd+R73
-         novEzONmR9YSznbJdd51qgbrO/tX96ntF8UeM=
-In-Reply-To: <a3399010901081011p607d688es98a4ca77581b0a88@mail.gmail.com>
-Content-Disposition: inline
+In-Reply-To: <dbe330bd0901070533g4b49d451u12c70eed805e145b@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: ninjaboy <n0b0dyn1nj4@gmail.com>
+To: Michele Mondelli <mithenks.ml@gmail.com>, jai.unix@gmail.com
 Cc: linux-c-programming@vger.kernel.org
 
-On Thu, Jan 8, 2009 at 6:11 PM, ninjaboy <n0b0dyn1nj4@gmail.com> wrote:
-> 2009/1/8 Task Struct From Hell <taskstructfromhell@googlemail.com>:
->> Hi,
->>
->> I was wondering if gcc has any argument which allows for the expansion
->> of all macros in a file, just so if we have something like the
->> following:
->>
->>
->> #define FOO "bar"
->>
->> int main() {
->>   printf(FOO);
->> }
->>
->> It will output this:
->>
->> int main() {
->>   printf("bar");
->> }
->>
->
-> gcc -E code.c -o codemacro.m
+This is a multi-part message in MIME format.
+--------------020003090506010003090101
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-Cheers for all responses so far!
+Michele Mondelli wrote:
+> A simple example of using pipe in Linux.
+>
+> /*
+>  * Run the 'ls' command and print the output to stdout.
+>  *
+>  * Compile with
+>  * 		gcc -Wall pipe.c -o pipe
+>  *
+>  *
+>  * Mithenks <mithenks@siena.linux.it>
+>  *
+>  */
+> #include <stdio.h>
+> #include <stdlib.h>
+>
+> int main() {
+> 	
+> 	FILE *pipe;
+> 	char buffer[1024];
+> 	
+>	if ( (pipe = popen("ls","r") ) < 0 ) {
+
+This should be:
+	if ( (pipe = popen("ls","r") ) == NULL ) {
+
+> 		perror("popen(): ");
+> 		exit(-1);
+>	}
+> 	
+> 	
+
+Don't forget to clear the buffer, printf requires NULL terminated strings.
+	memset(buffer, 0, sizeof(buffer));
+
+> 	fread(buffer,sizeof(buffer),1,pipe);
+
+In a real implementation, you'll be looping on fread(), and you'll want
+to check the return value, like so:
+
+	int rlen=0;
+	if ( (rlen = fread(buffer,sizeof(buffer),1,pipe) ) != 1 ) {
+		/*we have a short read or error*/
+		if( feof(pipe) != 0 ) {
+			printf("Finished\n");
+			exit(0);
+		}
+		else if ( ferror(pipe) != 0 ) {
+			printf("Error reading from pipe.\n");
+			exit(-1);
+		}
+	}
+
+> 	printf("Output:\n%s\n",buffer);
+> 	
+> 	pclose(pipe);
+> 	
+> 	return 0;
+> }
+
+So, that got a little messy, I've attached a re-write.  It's not the
+most efficient thing in the world, but it should get you started.
+
+When in doubt, 'man function_name'.  For example, 'man popen' told me I
+should be checking for a NULL return value, and 'man fread' told me I
+should be checking the number of items returned, _not_ the number of
+bytes.  'man brain' returned NULL for me, so any errors are solely my
+responsibility.  ;-)
+
+hth,
+
+Jason.
+
+--------------020003090506010003090101
+Content-Type: text/plain;
+ name="pipe.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="pipe.c"
+
+/*
+ * Run the 'ls' command and print the output to stdout.
+ * 
+ * Compile with 
+ * 		gcc -Wall pipe.c -o pipe
+ * 
+ * 
+ * Mithenks <mithenks@siena.linux.it>
+ * Changes added by Jason <lcprog@lakedaemon.net>
+ * 
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+	
+	FILE *pipe=NULL;
+	char buffer[1024];
+	int  rlen=0;
+	int  blen=0;
+	
+	if ( (pipe = popen("ls","r") ) == NULL ) {
+		perror("popen(): ");
+		exit(-1);
+	}
+
+	/*we subtract 1 so there is always a NULL terminator*/
+	blen = sizeof(buffer) - 1;
+
+	while (1) { 
+		memset(buffer,0,sizeof(buffer));
+
+		if ( (rlen = fread(buffer,blen,1,pipe) ) != 1 ) {
+			/*we have a short read or an error*/
+			if ( feof(pipe) != 0 ) {
+				fprintf(stderr,"Finished");
+				printf("%s",buffer);
+				break;
+			}
+			else if ( ferror(pipe) != 0 ) {
+				fprintf(stderr,"Error reading from pipe.\n");
+				break;
+			}
+			else {
+				/*short read*/
+				printf("%s",buffer);
+			}
+		}
+		else {
+			/*we got a full buffer*/
+			printf("%s",buffer);
+		}
+	}
+
+	if(pipe != NULL) {	
+		pclose(pipe);
+	}
+	
+	exit(0);
+}
+
+--------------020003090506010003090101--
