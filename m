@@ -1,163 +1,54 @@
-From: Jason <lcprog@lakedaemon.net>
-Subject: Re: command output to variables
-Date: Sat, 10 Jan 2009 09:57:07 -0500
-Message-ID: <4968B743.5080005@lakedaemon.net>
-References: <1f714d50901070435h4b76e26brdb1eedddbdda4cc3@mail.gmail.com> <dbe330bd0901070533g4b49d451u12c70eed805e145b@mail.gmail.com>
+From: Jai Sharma <jai.unix@gmail.com>
+Subject: extract the data from buffer
+Date: Fri, 16 Jan 2009 21:24:11 +0530
+Message-ID: <1f714d50901160754m4568738ev27879b0e9ba72fab@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------020003090506010003090101"
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <dbe330bd0901070533g4b49d451u12c70eed805e145b@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type:content-transfer-encoding;
+        bh=HE6G/v0pQJsTd0eMUFSnynyEWL8+6XcBWhddr/JY1yk=;
+        b=p0uMlKO7mnssUeeqFK5uMwt7Qp0EVbGHcvxOWBIqTVX0P24GcZqNfyysYLPc2rD85w
+         k8RIBGOQ6crvDbjG9pBWWJ6EOJUbI3Cg+1nXobLR7MS/HA4ZK5VORO0M6uzVlWghP7ys
+         c+1GDQbNU3sE837XvNM2TlJwH3a6HNPSPDfQ4=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-To: Michele Mondelli <mithenks.ml@gmail.com>, jai.unix@gmail.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------020003090506010003090101
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+Hi
 
-Michele Mondelli wrote:
-> A simple example of using pipe in Linux.
->
-> /*
->  * Run the 'ls' command and print the output to stdout.
->  *
->  * Compile with
->  * 		gcc -Wall pipe.c -o pipe
->  *
->  *
->  * Mithenks <mithenks@siena.linux.it>
->  *
->  */
-> #include <stdio.h>
-> #include <stdlib.h>
->
-> int main() {
-> 	
-> 	FILE *pipe;
-> 	char buffer[1024];
-> 	
->	if ( (pipe = popen("ls","r") ) < 0 ) {
+I want to extract variables values from a string buffer. Can anyone
+pleease tell me how can i do that.
+In C how to use perl like regular expressions.
 
-This should be:
-	if ( (pipe = popen("ls","r") ) == NULL ) {
 
-> 		perror("popen(): ");
-> 		exit(-1);
->	}
-> 	
-> 	
+Channel              Location             State   Application(Data)
+SIP/5078-099b4b48    s@newvcci:1          Ringing AppQueue((Outgoing Line))
+SIP/66.119.60.21-099 s@tracphone:6        Up      Queue(tracphone||||3600)
+SIP/5080-09964168    s@newvcci:1          Up      Bridged Call(SIP/66.119.60.21-
+SIP/66.119.60.21-099 s@tracphone:6        Up      Queue(tracphone||||3600)
+SIP/5079-09924998    s@newvcci:1          Up      Bridged Call(SIP/66.119.60.21-
+SIP/66.119.60.21-099 s@tracphone:6        Up      Queue(tracphone||||3600)
+SIP/5041-0993ee38    s@newvcci:1          Up      Bridged Call(SIP/66.119.60.21-
+SIP/66.119.60.21-099 s@tracphone:6        Up      Queue(tracphone||||3600)
+SIP/5010-098e7760    tsihomephoneservice@ Up      Bridged Call(SIP/63.111.11.135
+SIP/63.111.11.135-09 tsihomephoneservice@ Up      Queue(tsihomephoneservice||||9
+10 active channels
+5 of 200 max active calls ( 2.50% of capacity)
 
-Don't forget to clear the buffer, printf requires NULL terminated strings.
-	memset(buffer, 0, sizeof(buffer));
 
-> 	fread(buffer,sizeof(buffer),1,pipe);
+I want to extract three numeric data fields from last line:
+as
 
-In a real implementation, you'll be looping on fread(), and you'll want
-to check the return value, like so:
+%d of %d max active calls ( %l% of capacity)
+result : 5,200,2.50
 
-	int rlen=0;
-	if ( (rlen = fread(buffer,sizeof(buffer),1,pipe) ) != 1 ) {
-		/*we have a short read or error*/
-		if( feof(pipe) != 0 ) {
-			printf("Finished\n");
-			exit(0);
-		}
-		else if ( ferror(pipe) != 0 ) {
-			printf("Error reading from pipe.\n");
-			exit(-1);
-		}
-	}
+means 2.5
 
-> 	printf("Output:\n%s\n",buffer);
-> 	
-> 	pclose(pipe);
-> 	
-> 	return 0;
-> }
 
-So, that got a little messy, I've attached a re-write.  It's not the
-most efficient thing in the world, but it should get you started.
+Thanks and Regards
 
-When in doubt, 'man function_name'.  For example, 'man popen' told me I
-should be checking for a NULL return value, and 'man fread' told me I
-should be checking the number of items returned, _not_ the number of
-bytes.  'man brain' returned NULL for me, so any errors are solely my
-responsibility.  ;-)
-
-hth,
-
-Jason.
-
---------------020003090506010003090101
-Content-Type: text/plain;
- name="pipe.c"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="pipe.c"
-
-/*
- * Run the 'ls' command and print the output to stdout.
- * 
- * Compile with 
- * 		gcc -Wall pipe.c -o pipe
- * 
- * 
- * Mithenks <mithenks@siena.linux.it>
- * Changes added by Jason <lcprog@lakedaemon.net>
- * 
- */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-int main() {
-	
-	FILE *pipe=NULL;
-	char buffer[1024];
-	int  rlen=0;
-	int  blen=0;
-	
-	if ( (pipe = popen("ls","r") ) == NULL ) {
-		perror("popen(): ");
-		exit(-1);
-	}
-
-	/*we subtract 1 so there is always a NULL terminator*/
-	blen = sizeof(buffer) - 1;
-
-	while (1) { 
-		memset(buffer,0,sizeof(buffer));
-
-		if ( (rlen = fread(buffer,blen,1,pipe) ) != 1 ) {
-			/*we have a short read or an error*/
-			if ( feof(pipe) != 0 ) {
-				fprintf(stderr,"Finished");
-				printf("%s",buffer);
-				break;
-			}
-			else if ( ferror(pipe) != 0 ) {
-				fprintf(stderr,"Error reading from pipe.\n");
-				break;
-			}
-			else {
-				/*short read*/
-				printf("%s",buffer);
-			}
-		}
-		else {
-			/*we got a full buffer*/
-			printf("%s",buffer);
-		}
-	}
-
-	if(pipe != NULL) {	
-		pclose(pipe);
-	}
-	
-	exit(0);
-}
-
---------------020003090506010003090101--
+Jai
