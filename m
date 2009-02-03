@@ -1,52 +1,89 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Is it bad to let a signal handler stay alive for a long time
-Date: Thu, 29 Jan 2009 19:21:22 +0000
-Message-ID: <18818.434.100972.665773@cerise.gclements.plus.com>
-References: <16930643.1233169098680.JavaMail.ngmail@webmail14.arcor-online.net>
+From: "Srinivas G." <srinivasg@esntechnologies.co.in>
+Subject: Unable set the priority for a pthread through pthread_setschedparam
+Date: Tue, 3 Feb 2009 10:18:34 +0530
+Message-ID: <F5BA82141F7AA94885B9643C77EEA5F2103C73@mail.esntechnologies.co.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <16930643.1233169098680.JavaMail.ngmail@webmail14.arcor-online.net>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: xcomp@arcor.de
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Dear All,
 
-xcomp@arcor.de wrote:
+I have written a small thread program in C using the pthreads. I am able
+to set the threads priority with pthread_setschedparam API when I login
+as ROOT. If I login as a normal user other than ROOT, then the API
+returns the error number 1 (EPERM). 
 
-> But now I ran into another question: If I am using swapcontext inside
-> the signal handler its context stays alive for a long time (because
-> other contexts are running before the handler can finish its work). I
-> didn't find any trouble caused by this till now. But I've found also
-> many sites where they say that a signal handler should include only a
-> small amount of code so that it can finish fast.
+Please let me know whether a normal user can set the pthreads priority
+with pthread_setschedparam API or not.
 
-Do any of them say why?
+Here is the sample code for testing.
 
-The main reason for not doing too much inside a signal handler is that
-only a handful of functions are specified as being safe to use from
-within a signal handler.
+/* 
+ * Creates two threads, one printing 10 "a"s, 
+ * the other printing 10 "b"s.
+ * Illustrates: thread creation, thread joining. 
+ */
 
-If you are using user-space threads, you should protect "unsafe"
-functions from being re-entered with semaphores or similar. Note that
-functions which are re-entrant with respect to pthreads won't
-necessarily be re-entrant with respect to user-space threading.
+#include <stddef.h>
+#include <stdio.h>
+#include <unistd.h>
+#include "pthread.h"
+#include <errno.h>
 
-The pthreads library overrides a number of libc functions; the fact
-that the pthreads version is re-entrant doesn't mean that the normal
-version is. Also, some functions may use per-thread storage
-(pthread_setspecific() etc), but this doesn't help if you only have
-one "real" thread. E.g. errno is per-thread; functions which need to
-check errno will be re-entrant for pthreads but not for user-space
-threads.
+void * process(void * arg)
+{
+  int i;
+  fprintf(stderr, "Starting process %s\n", (char *) arg);
+  for (i = 0; i < 10; i++) {
+    write(1, (char *) arg, 1);
+  }
+  fprintf(stderr,"\n");
 
-Another reason is that the signal will be blocked while its handler is
-executing. On platforms which don't queue blocked signals (Linux
-does), only the first blocked signal will be received; the rest will
-be lost. But this doesn't apply if you leave the handler via
-swapcontext(), as each context has a separate signal mask.
+  return NULL;
+}
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+int main()
+{
+  int retcode;
+  pthread_t th_a, th_b;
+  void * retval;
+  struct sched_param sp;
+  int esnRetVal = 0;
+  pthread_attr_t attr;
+
+  pthread_attr_init(&attr);
+  pthread_attr_setinheritsched(&attr, PTHREAD_INHERIT_SCHED);
+ 
+  retcode = pthread_create(&th_a, &attr, process, "a");
+  if (retcode != 0) fprintf(stderr, "create a failed %d\n", retcode);
+
+  sp.sched_priority = 30;
+  esnRetVal = pthread_setschedparam(th_a, SCHED_RR, &sp);
+  if(esnRetVal != 0)
+  {
+     printf("Failed to set the pthread sched param! esnRetVal = %d errno
+= %d\n", esnRetVal, errno);
+     return -1;
+  } 
+
+  retcode = pthread_create(&th_b, NULL, process, "b");
+  if (retcode != 0) fprintf(stderr, "create b failed %d\n", retcode);
+
+  retcode = pthread_join(th_a, &retval);
+  if (retcode != 0) fprintf(stderr, "join a failed %d\n", retcode);
+
+  retcode = pthread_join(th_b, &retval);
+  if (retcode != 0) fprintf(stderr, "join b failed %d\n", retcode);
+
+  return 0;
+}
+
+Thanks in advance.
+
+With Regards,
+Srinivas G
