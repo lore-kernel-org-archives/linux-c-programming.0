@@ -1,61 +1,78 @@
-From: ben <brouits@free.fr>
-Subject: Re: warning: =?UTF-8?B?4oCYc3RydWN0IOKAmSBkZWNsYXJlZCBpbnNpZGUgcA==?=
- =?UTF-8?B?YXJhbWV0ZXIgbGlzdA==?=
-Date: Mon, 16 Feb 2009 18:03:26 +0100
-Message-ID: <49999C5E.1000401@free.fr>
-References: <875251.26275.qm@web63406.mail.re1.yahoo.com>
+From: Bryan Christ <bryan.christ@gmail.com>
+Subject: Re: running out of file descriptors
+Date: Mon, 16 Feb 2009 11:35:00 -0600
+Message-ID: <444391460902160935t5b244463nec095fedc45f3707@mail.gmail.com>
+References: <444391460902152148u11d4a973ka5a630898405d1c6@mail.gmail.com>
+	 <3605561d0902152218t431d9edbuf87397bdc9af999@mail.gmail.com>
+	 <444391460902152309h179bd75agdded10ca6af135d@mail.gmail.com>
+	 <200902160701.14982.eric@cisu.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <875251.26275.qm@web63406.mail.re1.yahoo.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:in-reply-to:references
+         :date:message-id:subject:from:to:cc:content-type
+         :content-transfer-encoding;
+        bh=kidXUUyUTaoR1wrCdXhPjK0OLokwG2oQ0bZRfm522F4=;
+        b=EWGuaM1dVH030fGc2c6GxNwzr7Z3Ns5rjusuLYPENPVF5poaCC6kwYkKDjL3EDv6uu
+         xlXZut/JyQ1xBCgXbylQQxDzsVJfsPokL4aHYRRv+hdLJyz3QxjDMSRBQ6cffnkum5jb
+         Ak7IRn/o8w7JQ45bJELz5xHMFiDCSEld1jqpM=
+In-Reply-To: <200902160701.14982.eric@cisu.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: eric@cisu.net
+Cc: Joe Damato <ice799@gmail.com>, linux-c-programming@vger.kernel.org
 
-=46undu a =C3=A9crit :
-> i'm running ubuntu 8.04 with gcc-4.2=20
-> and i'm getting=20
->=20
-> mb_con.h:43: warning: =E2=80=98struct query_resp=E2=80=99 declared in=
-side parameter list
-> mb_con.h:43: warning: its scope is only this definition or declaratio=
-n, which is probably not what you want
-> here's a snippet of how .h file looks
->=20
-> struct query_resp_type
-> {
->   int type;
-> } query_resp;
-you defined here _both a type and a variable_.
-this should not be done inside a .h file...
+I pretty sure you can just echo to /proc/sys/fs/file-nr to set that
+value (which already seems really high at 560178).  I doubt I'm
+exhausting 560178 descriptors.
 
-maybe you expected to redefine a type, and forgot to 'typedef' ?
-=3D=3D
-struct query_resp_type {
-  int type;
-};
+On Mon, Feb 16, 2009 at 7:01 AM, Eric Bambach <bot403@cisu.net> wrote:
+> On Monday 16 February 2009 01:09:42 Bryan Christ wrote:
+>> On Mon, Feb 16, 2009 at 12:18 AM, Joe Damato <ice799@gmail.com> wrote:
+>> > On Sun, Feb 15, 2009 at 9:48 PM, Bryan Christ <bryan.christ@gmail.com>
+> wrote:
+>> >> I am writing a multi-threaded application which services hundreds of
+>> >> remote connections for data transfer.  Several instances of this
+>> >> program are run simultaneously.  The problem is that whenever the
+>> >> total number of active user connections (cumulative total of all open
+>> >> sockets tallied from all process instances) reaches about 700 the
+>>
+>> It seems that would be the same as setting RLIMIT_NOFILE via
+>> setrlimt() or the same as using the userspace tool "ulimit -n".  Am I
+>> wrong?  Isn't this the same?
+>>
+>> >> system appears to run out of file descriptors.  I have tried raising
+>> >> the open files limit via "ulimit -n" and by using the setrlimit()
+>> >> facility.  Neither of these seem to help.  I am currently having to
+>> >> limit the number of processes running on the system to 2 instances
+>> >> allowing no more than 256 connections each.
+>> >
+>> > Have you tried editing /etc/security/limits.conf  (or equivalent file
+>> > on your system) to increase the max number of open files?
+>> >
+>> > perhaps something like:
+>> > *              -       nofile         524288
+>> >
+>> > is what you want?
+>> >
+>> > joe
+>
+> The solution used to be editing the kernel and tuning NR_OPEN and NR_FILE in
+>
+>  /your/kernel/source/include/linux/fs.h
+>
+> The kernel used to have an absolute hard limit that setrlimit and ulimit
+> couldn't go past but I'm not sure if this has changed.
+>
+> You could try bumping those up and recompiling or at least googling along
+> those lines.
+>
 
-typedef struct query_resp_type query_resp;
-=3D=3D
-after such a typedef, you will be able to use type 'query_resp'
-(note that 'struct' is not part of the type name)
 
-> void send_req(struct query_resp* resp);
-wrong. type 'struct query_resp' does not exist.
-but 'struct query_resp_type' does.
->=20
->=20
-> what i don't understand is why this warning when i have declared the =
-struct before the function in the header.
-typo issue.
 
-> what am i missing ?
-see above
-> thanks in advance !
->=20
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Bryan
+<><
