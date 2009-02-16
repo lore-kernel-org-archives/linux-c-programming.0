@@ -1,67 +1,40 @@
-From: Eric Polino <aluink@gmail.com>
-Subject: =?windows-1252?Q?Re=3A_warning=3A_=91struct_=92_declared_inside_parameter?=
-	=?windows-1252?Q?_list?=
-Date: Sat, 14 Feb 2009 21:20:04 -0500
-Message-ID: <b21328ed0902141820jc23e299q2cc1163da6c02a38@mail.gmail.com>
-References: <875251.26275.qm@web63406.mail.re1.yahoo.com>
+From: Bryan Christ <bryan.christ@gmail.com>
+Subject: running out of file descriptors
+Date: Sun, 15 Feb 2009 23:48:57 -0600
+Message-ID: <444391460902152148u11d4a973ka5a630898405d1c6@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=w0Gm2Yy8vWT2E2poeUu2M3ZzF3A2yhj9HKt0w2rneA8=;
-        b=YIg4/Wj14UYa9MsUm00CT9HHffvBj7uc32YIQrdyL10V3ox5pd7/SbLM/MhjUs5Spx
-         bFUyAmrqtb8JFiBeG1iZM98sZTi46xfnDQjB2I/+I+y1FVzVB6kTRtRs6yKkoPcj4BPN
-         /wm0GbtFF5qo10HpJ+zaezLFgwCJzqm6Awxns=
-In-Reply-To: <875251.26275.qm@web63406.mail.re1.yahoo.com>
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type:content-transfer-encoding;
+        bh=kIWjqTsFh3NXBEWtnimLizD0Vkn2hR6ZAtvQComPNiw=;
+        b=dqrm4vQ7415gH2ENTGB2Yux8CMPow6UnBB8f/LfTOsWPwywnUVIKvNNE4Q5OeVDVyI
+         4Ma5PteoWfjkL2kWxV2vPAcl7rIjNTlAd3wKeXg8WuowiWx94Cp6mPTkA7/3MTamen48
+         jnjUHVqJ2LwpJHyu+ykupGnd47kZFdbmbUXUU=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: fundu_1999@yahoo.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-"None are more hopelessly enslaved than those who falsely believe they
-are free."
-                                      --Goethe
+I am writing a multi-threaded application which services hundreds of
+remote connections for data transfer.  Several instances of this
+program are run simultaneously.  The problem is that whenever the
+total number of active user connections (cumulative total of all open
+sockets tallied from all process instances) reaches about 700 the
+system appears to run out of file descriptors.  I have tried raising
+the open files limit via "ulimit -n" and by using the setrlimit()
+facility.  Neither of these seem to help.  I am currently having to
+limit the number of processes running on the system to 2 instances
+allowing no more than 256 connections each.  In this configuration the
+sever will run for days without failure until I stop it.  If I try to
+add a third process or restart one of the process with a higher
+connection limit, bad things will start happening at about 700 open
+sockets.
 
-"Freedom is living without government coercion."
-                   --Ron Paul (www.ronpaul2008.com)
+Thanks in advance to anyone who can help.
 
-
-
-On Sat, Feb 14, 2009 at 20:16, Fundu <fundu_1999@yahoo.com> wrote:
-> i'm running ubuntu 8.04 with gcc-4.2
-> and i'm getting
->
-> mb_con.h:43: warning: 'struct query_resp' declared inside parameter list
-> mb_con.h:43: warning: its scope is only this definition or declaration, which is probably not what you want
->
-> here's a snippet of how .h file looks
->
-> struct query_resp_type
-> {
->  int type;
-> } query_resp;
-};
->
-> void send_req(struct query_resp* resp);
-void send_req(struct query_resp_type* resp);
->
->
-> what i don't understand is why this warning when i have declared the struct before the function in the header.
->
-> what am i missing ?
->
-> thanks in advance !
->
->
->
->
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+-- 
+Bryan
+<><
