@@ -1,47 +1,61 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: running out of file descriptors
-Date: Mon, 16 Feb 2009 13:06:31 +0000
-Message-ID: <18841.25815.270749.45139@cerise.gclements.plus.com>
-References: <444391460902152148u11d4a973ka5a630898405d1c6@mail.gmail.com>
-	<3605561d0902152218t431d9edbuf87397bdc9af999@mail.gmail.com>
-	<444391460902152309h179bd75agdded10ca6af135d@mail.gmail.com>
+From: ben <brouits@free.fr>
+Subject: Re: warning: =?UTF-8?B?4oCYc3RydWN0IOKAmSBkZWNsYXJlZCBpbnNpZGUgcA==?=
+ =?UTF-8?B?YXJhbWV0ZXIgbGlzdA==?=
+Date: Mon, 16 Feb 2009 18:03:26 +0100
+Message-ID: <49999C5E.1000401@free.fr>
+References: <875251.26275.qm@web63406.mail.re1.yahoo.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <444391460902152309h179bd75agdded10ca6af135d@mail.gmail.com>
+In-Reply-To: <875251.26275.qm@web63406.mail.re1.yahoo.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Bryan Christ <bryan.christ@gmail.com>
-Cc: Joe Damato <ice799@gmail.com>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+To: linux-c-programming@vger.kernel.org
 
+=46undu a =C3=A9crit :
+> i'm running ubuntu 8.04 with gcc-4.2=20
+> and i'm getting=20
+>=20
+> mb_con.h:43: warning: =E2=80=98struct query_resp=E2=80=99 declared in=
+side parameter list
+> mb_con.h:43: warning: its scope is only this definition or declaratio=
+n, which is probably not what you want
+> here's a snippet of how .h file looks
+>=20
+> struct query_resp_type
+> {
+>   int type;
+> } query_resp;
+you defined here _both a type and a variable_.
+this should not be done inside a .h file...
 
-Bryan Christ wrote:
+maybe you expected to redefine a type, and forgot to 'typedef' ?
+=3D=3D
+struct query_resp_type {
+  int type;
+};
 
-> >> I am writing a multi-threaded application which services hundreds of
-> >> remote connections for data transfer.  Several instances of this
-> >> program are run simultaneously.  The problem is that whenever the
-> >> total number of active user connections (cumulative total of all open
-> >> sockets tallied from all process instances) reaches about 700 the
-> >> system appears to run out of file descriptors.  I have tried raising
-> >> the open files limit via "ulimit -n" and by using the setrlimit()
-> >> facility.  Neither of these seem to help.  I am currently having to
-> >> limit the number of processes running on the system to 2 instances
-> >> allowing no more than 256 connections each.
-> >
-> > Have you tried editing /etc/security/limits.conf  (or equivalent file
-> > on your system) to increase the max number of open files?
-> 
-> It seems that would be the same as setting RLIMIT_NOFILE via
-> setrlimt() or the same as using the userspace tool "ulimit -n".  Am I
-> wrong?  Isn't this the same?
+typedef struct query_resp_type query_resp;
+=3D=3D
+after such a typedef, you will be able to use type 'query_resp'
+(note that 'struct' is not part of the type name)
 
-Is your daemon running as root? If not, it cannot increase any hard
-resource limit. Are you checking the return value (and errno) from
-setrlimit()?
+> void send_req(struct query_resp* resp);
+wrong. type 'struct query_resp' does not exist.
+but 'struct query_resp_type' does.
+>=20
+>=20
+> what i don't understand is why this warning when i have declared the =
+struct before the function in the header.
+typo issue.
 
-BTW, what do you mean by "appears to run out of file descriptors"?
-Which system call fails, and with what error?
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+> what am i missing ?
+see above
+> thanks in advance !
+>=20
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
