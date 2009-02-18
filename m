@@ -1,33 +1,34 @@
-From: Holger Kiehl <Holger.Kiehl@dwd.de>
-Subject: Re: running out of file descriptors
-Date: Wed, 18 Feb 2009 07:07:28 +0000 (GMT)
-Message-ID: <Pine.LNX.4.64.0902180702590.32165@diagnostix.dwd.de>
-References: <444391460902152148u11d4a973ka5a630898405d1c6@mail.gmail.com> 
- <3605561d0902152218t431d9edbuf87397bdc9af999@mail.gmail.com> 
- <444391460902152309h179bd75agdded10ca6af135d@mail.gmail.com> 
- <200902160701.14982.eric@cisu.net>  <444391460902160935t5b244463nec095fedc45f3707@mail.gmail.com>
-  <18841.56827.356161.98320@cerise.gclements.plus.com>
- <444391460902171051x31c7a307mf5d8a088ecd4f9aa@mail.gmail.com>
+From: "Srinivas G." <srinivasg@esntechnologies.co.in>
+Subject: how to specify multiple input files for "objcopy" command
+Date: Wed, 18 Feb 2009 16:10:35 +0530
+Message-ID: <F5BA82141F7AA94885B9643C77EEA5F21043AF@mail.esntechnologies.co.in>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <444391460902171051x31c7a307mf5d8a088ecd4f9aa@mail.gmail.com>
+Content-class: urn:content-classes:message
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
-Content-Transfer-Encoding: 7bit
-To: Bryan Christ <bryan.christ@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org, linux-apps@vger.kernel.org
+Cc: hjl@lucon.org
 
-On Tue, 17 Feb 2009, Bryan Christ wrote:
+Dear All,
 
-> Thanks Glynn.
->
-> Well according to these values I'm only using about 1500 file
-> descriptors out of the 560178.
->
-If I remember correctly you are using sockets. How many sockets does
-your system have in TIME_WAIT? You can check this with 'netstat -nt|wc -l'.
-If you open and close TCP sockets at a high rate you will soon find
-that you hit a limit here as well.
+I am able to create a elf32-i386 format output file with "objcopy"
+command by giving the binary file as input. The command is as follows.
 
-Holger
+# objcopy -I binary -O elf32-i386 -B i386 testing_file.cubin obj_out.o
+
+	Where testing_file.cubin is binary object file which is
+generated from nvcc compiler.
+
+However, I am NOT able to generate the ONE output file from MULTIPLE
+input files. Could any one suggest me for specifying the multiple input
+files?
+
+Is there any other command which does the same?
+
+Thanks in advance.
+
+With Regards,
+Srinivas G
