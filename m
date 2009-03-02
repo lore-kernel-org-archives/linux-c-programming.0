@@ -1,100 +1,51 @@
-From: "Srinivas G." <srinivasg@esntechnologies.co.in>
-Subject: Assembler errors in optimization level 3 (-O3)  -  gcc (4.1.2)
-Date: Wed, 25 Feb 2009 18:49:03 +0530
-Message-ID: <F5BA82141F7AA94885B9643C77EEA5F210463D@mail.esntechnologies.co.in>
-References: <F5BA82141F7AA94885B9643C77EEA5F210463C@mail.esntechnologies.co.in>
+From: Qiuyang Wu <Qiuyang.Wu@synopsys.com>
+Subject: pread/pwrite bug on linux (RHEL)?
+Date: Mon, 2 Mar 2009 13:10:46 -0800
+Message-ID: <293BC70BB130E648A6631DB2F05B6E10019D6B21B3@US01WXMBX1.internal.synopsys.com>
+References: <b9ec419f0903021120g62814b6embe8eeaf354f8b535@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Return-path: <linux-gcc-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
-In-Reply-To: <F5BA82141F7AA94885B9643C77EEA5F210463C@mail.esntechnologies.co.in>
-Sender: linux-gcc-owner@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Return-path: <linux-apps-owner@vger.kernel.org>
+In-Reply-To: <b9ec419f0903021120g62814b6embe8eeaf354f8b535@mail.gmail.com>
+Content-Language: en-US
+Sender: linux-apps-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-gcc@vger.kernel.org, linux-c-programming@vger.kernel.org, linux-apps@vger.kernel.org
-Cc: pradeep.rautela@gmail.com, Glynn Clements <glynn@gclements.plus.com>, Richard Dengler <rdengler@arcor.de>, uday.karan@gmail.com, brouits@free.fr
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>, "linux-gcc@vger.kernel.org" <linux-gcc@vger.kernel.org>, "linux-apps@vger.kernel.org" <linux-apps@vger.kernel.org>
+Cc: "qiuyang.wu@gmail.com" <qiuyang.wu@gmail.com>
 
-Dear All,
 
-I have written an application where I used a few ASM statements in it.
-The statements are very simple and they look like as shown below.
+Hi All,
 
-asm
-(
-	"next:\n\t"
-#ifdef __x86_64__
-	"pop %rax\n\t"
-	"pop %rcx"		
-#else
-	"popl %eax\n\t"
-	"popl %ecx"		
-#endif
-);
+Are there any known bugs with pread/pwrite on RHEL Linux when the disk partition is close to full?
 
-asm
-(
-	"xorl %eax, %eax\n\t"
-	"cpuid\n\t"
-	"cmpl $4, %eax\n\t" 	// check if cpuid supports leaf 4
-	"jl .single_core\n\t"	// Single core
-	"movl $4, %eax\n\t"	
-	"movl $0, %ecx\n\t"	// start with index = 0; Leaf 4 reports
-);					// at least one valid cache
-level
-asm
-(
-	"cpuid"
-	: "=a" (Regeax)
-	:
-	: "%ebx", "%ecx", "%edx"
-);		
-asm
-(
-	"jmp .multi_core\n"
-	".single_core:\n\t"
-	"xor %eax, %eax\n"
-	".multi_core:"
-);
+Reduced a complex application fatal down to a simple program just opens a regular file and performs 1M sequential pwrite() of size 8KB blocks; at every 100th write, does a pread() to load the very first 8KB block and validate its content still matching what was originally written.
 
-I am able to compile the application in optimization level 2 (-O2) where
-as when I specify the optimization level (-O3) I end up with the
-following errors.
+What I observed are the following when running on different machines and writing/reading to a disk partition nearly full with slightly more than 1GB of free space according to 'df' (the program is the only process accessing the disk) -
 
-{standard input}: Assembler messages:
-{standard input}:275: Error: symbol `next' is already defined 
-{standard input}:532: Error: symbol `.single_core' is already defined 
-{standard input}:534: Error: symbol `.multi_core' is already defined 
-{standard input}:579: Error: symbol `next' is already defined 
-{standard input}:590: Error: symbol `next' is already defined 
-{standard input}:614: Error: symbol `next' is already defined 
-{standard input}:637: Error: symbol `next' is already defined 
-{standard input}:690: Error: symbol `.single_core' is already defined 
-{standard input}:692: Error: symbol `.multi_core' is already defined 
-{standard input}:1007: Error: symbol `.single_core' is already defined 
-{standard input}:1009: Error: symbol `.multi_core' is already defined 
-{standard input}:1045: Error: symbol `.single_core' is already defined 
-{standard input}:1047: Error: symbol `.multi_core' is already defined 
-{standard input}:1083: Error: symbol `.single_core' is already defined 
-{standard input}:1085: Error: symbol `.multi_core' is already defined 
-{standard input}:1196: Error: symbol `.single_core' is already defined 
-{standard input}:1198: Error: symbol `.multi_core' is already defined
+* Linux 2.6.9-55.ELsmp #1 SMP Fri Apr 20 16:36:54 EDT 2007 x86_64 x86_64 x86_64 GNU/Linux  (RHEL4)
 
-I have searched the google and did not find any solution. However, I
-have gone through the following link and there is no much luck to me.
+BEHAVIOR: pwrite() works for many iterations, then pread() suddenly returns data of the requested size but filled with 0's, and strerror shows errno="No such file or directory", condition
+      if(size_to_read != pread(fd, buf, size_to_read, ...)) ...
+is not triggered and application has to check errno immediately after every call to pread.
 
-http://lists.atrpms.net/pipermail/atrpms-users/2005-July/003451.html
+CONCLUSION: serious bug, why does pread() return the expected size filled with 0? and why doesn't pwrite() fail earlier so application has a chance to bail out and stop pushing more data to the file?
 
-One thing, I can mention here is, I did update the packages through YUM
-command only. The system configuration is as follows.
+* Linux 2.6.18-8.el5 #1 SMP Fri Jan 26 14:15:14 EST 2007 x86_64 x86_64 x86_64 GNU/Linux (RHEL5)
 
-1) DELL 64 Bit - Pentium(R) D CPU 3.00 GHz
-2) 1 GB RAM
-3) Linux - CENTOS - 5.2 with default kernel version - 2.6.18-92.el5
-4) gcc version 4.1.2 20071124
+BEHAVIOR: pwrite() works for much fewer iterations, then pread() errors out again with errno="No such file or directory", and condition (size_to_read!=pread(...)) is asserted at the meantime, which is slightly better but application still very hard to recover.
 
-Please suggest me a solution to getridof from the above errors.
+CONCLUSION: Bug, still, pwrite() should error out earlier if not enough space to commit data, instead of fail on pread() as it's often catastrophic for application to handle.
 
-Thanks in advance.
+Interestingly, with Suse Linux Enterprise which has an older kernel version, the behavior seems much more defensive and sane
 
-Thanks and Regards,
-Srinivas G
+* Linux 2.6.5-7.244-smp #1 SMP Mon Dec 12 18:32:25 UTC 2005 x86_64 x86_64 x86_64 GNU/Linux
+
+BEHAVIOR: pwrite() works for a few iterations and errors out with errno="Disk quota exceeded" before pread() fails, application easily traps and handles without data lose.
+
+
+Any pointers either to any known bugs or anything I might be missing are highly appreciated!
+
+Thanks
+Qiuyang
+
