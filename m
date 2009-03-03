@@ -1,51 +1,80 @@
-From: Qiuyang Wu <Qiuyang.Wu@synopsys.com>
-Subject: pread/pwrite bug on linux (RHEL)?
-Date: Mon, 2 Mar 2009 13:10:46 -0800
-Message-ID: <293BC70BB130E648A6631DB2F05B6E10019D6B21B3@US01WXMBX1.internal.synopsys.com>
-References: <b9ec419f0903021120g62814b6embe8eeaf354f8b535@mail.gmail.com>
+From: "Srinivas G." <srinivasg@esntechnologies.co.in>
+Subject: RE: Assembler errors in optimization level 3 (-O3)  -  gcc (4.1.2)
+Date: Tue, 3 Mar 2009 20:03:19 +0530
+Message-ID: <F5BA82141F7AA94885B9643C77EEA5F21348D8@mail.esntechnologies.co.in>
+References: <F5BA82141F7AA94885B9643C77EEA5F210463C@mail.esntechnologies.co.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Return-path: <linux-apps-owner@vger.kernel.org>
-In-Reply-To: <b9ec419f0903021120g62814b6embe8eeaf354f8b535@mail.gmail.com>
-Content-Language: en-US
-Sender: linux-apps-owner@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Return-path: <linux-gcc-owner@vger.kernel.org>
+Content-class: urn:content-classes:message
+Sender: linux-gcc-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>, "linux-gcc@vger.kernel.org" <linux-gcc@vger.kernel.org>, "linux-apps@vger.kernel.org" <linux-apps@vger.kernel.org>
-Cc: "qiuyang.wu@gmail.com" <qiuyang.wu@gmail.com>
+To: "Srinivas G." <srinivasg@esntechnologies.co.in>, linux-gcc@vger.kernel.org, linux-c-programming@vger.kernel.org, linux-apps@vger.kernel.org
+Cc: pradeep.rautela@gmail.com, Glynn Clements <glynn@gclements.plus.com>, Richard Dengler <rdengler@arcor.de>, uday.karan@gmail.com, brouits@free.fr
 
+> asm
+> (
+> 	"next:\n\t"
+> #ifdef __x86_64__
+> 	"pop %rax\n\t"
+> 	"pop %rcx"
+> #else
+> 	"popl %eax\n\t"
+> 	"popl %ecx"
+> #endif
+> );
+> 
+> asm
+> (
+> 	"xorl %eax, %eax\n\t"
+> 	"cpuid\n\t"
+> 	"cmpl $4, %eax\n\t" 	// check if cpuid supports leaf 4
+> 	"jl .single_core\n\t"	// Single core
+> 	"movl $4, %eax\n\t"
+> 	"movl $0, %ecx\n\t"	// start with index = 0; Leaf 4 reports
+> );					// at least one valid cache
+level
+> asm
+> (
+> 	"cpuid"
+> 	: "=a" (Regeax)
+> 	:
+> 	: "%ebx", "%ecx", "%edx"
+> );
+> asm
+> (
+> 	"jmp .multi_core\n"
+> 	".single_core:\n\t"
+> 	"xor %eax, %eax\n"
+> 	".multi_core:"
+> );
+> 
 
-Hi All,
+Dear All,
 
-Are there any known bugs with pread/pwrite on RHEL Linux when the disk partition is close to full?
+The label redefinition in inline ASM was fixed. The actual error is due
+to the function was called more  than 3 times and in every place the
+code was replaced. So, it was showed the redefinition error. However, by
+looking at the following paragraph and links, I have fixed the error.
 
-Reduced a complex application fatal down to a simple program just opens a regular file and performs 1M sequential pwrite() of size 8KB blocks; at every 100th write, does a pread() to load the very first 8KB block and validate its content still matching what was originally written.
+GCC allows (and requires) you to specify register constraints in your
+inline assembly code, so the optimizer always know about it; thus,
+inline assembly code is really made of patterns, not forcibly exact
+code.
 
-What I observed are the following when running on different machines and writing/reading to a disk partition nearly full with slightly more than 1GB of free space according to 'df' (the program is the only process accessing the disk) -
+Thus, you can put your assembly into CPP macros, and inline C functions,
+so anyone can use it in as any C function/macro. Inline functions
+resemble macros very much, but are sometimes cleaner to use. Beware that
+in all those cases, code will be duplicated, so only local labels (of 1:
+style) should be defined in that asm code. However, a macro would allow
+the name for a non local defined label to be passed as a parameter (or
+else, you should use additional meta-programming methods). Also, note
+that propagating inline asm code will spread potential bugs in them; so
+watch out doubly for register constraints in such inline asm code.
 
-* Linux 2.6.9-55.ELsmp #1 SMP Fri Apr 20 16:36:54 EDT 2007 x86_64 x86_64 x86_64 GNU/Linux  (RHEL4)
+http://lists.apple.com/archives/xcode-users/2005/apr/msg00107.html
 
-BEHAVIOR: pwrite() works for many iterations, then pread() suddenly returns data of the requested size but filled with 0's, and strerror shows errno="No such file or directory", condition
-      if(size_to_read != pread(fd, buf, size_to_read, ...)) ...
-is not triggered and application has to check errno immediately after every call to pread.
-
-CONCLUSION: serious bug, why does pread() return the expected size filled with 0? and why doesn't pwrite() fail earlier so application has a chance to bail out and stop pushing more data to the file?
-
-* Linux 2.6.18-8.el5 #1 SMP Fri Jan 26 14:15:14 EST 2007 x86_64 x86_64 x86_64 GNU/Linux (RHEL5)
-
-BEHAVIOR: pwrite() works for much fewer iterations, then pread() errors out again with errno="No such file or directory", and condition (size_to_read!=pread(...)) is asserted at the meantime, which is slightly better but application still very hard to recover.
-
-CONCLUSION: Bug, still, pwrite() should error out earlier if not enough space to commit data, instead of fail on pread() as it's often catastrophic for application to handle.
-
-Interestingly, with Suse Linux Enterprise which has an older kernel version, the behavior seems much more defensive and sane
-
-* Linux 2.6.5-7.244-smp #1 SMP Mon Dec 12 18:32:25 UTC 2005 x86_64 x86_64 x86_64 GNU/Linux
-
-BEHAVIOR: pwrite() works for a few iterations and errors out with errno="Disk quota exceeded" before pread() fails, application easily traps and handles without data lose.
-
-
-Any pointers either to any known bugs or anything I might be missing are highly appreciated!
-
-Thanks
-Qiuyang
+Thanks and Regards,
+Srinivas G
 
