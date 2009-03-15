@@ -1,7 +1,7 @@
-From: Steve Graegert <graegerts@gmail.com>
+From: Sergio Luis <eeeesti@gmail.com>
 Subject: Re: How does one get the description of an errno value
-Date: Sun, 15 Mar 2009 14:10:21 +0100
-Message-ID: <6a00c8d50903150610i53825905n6e8a2512bd04d567@mail.gmail.com>
+Date: Sun, 15 Mar 2009 10:09:57 -0300
+Message-ID: <ce0170d90903150609g68092d04s9c8a5605dd0c694b@mail.gmail.com>
 References: <gpim9l$dia$1@ger.gmane.org>
 	 <6a00c8d50903150420ke10afcfs7c78a11355c5957a@mail.gmail.com>
 	 <49BCDBBA.3000209@yahoo.com.br>
@@ -13,35 +13,19 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=domainkey-signature:mime-version:received:in-reply-to:references
          :date:message-id:subject:from:to:cc:content-type
          :content-transfer-encoding;
-        bh=M3gboxjldCALJJlnyB3yUDxzMiwuXZlKRfoJxq8+nNY=;
-        b=wqD3+jo42SPNuxeWCVzVQzozLz4JvFyPP3qHzqyyNy+HESaAamDgJOnY/krhtu33fK
-         7maaREIYgY24hgeCLgmbIPKjv5T3Hzw3yVZY28JOozYqVTqSMxmgDL32cO8YWsZu6QYj
-         Pfd6gDzqXV3Qv10pN99ZH6p8BSPfqIeq/wQ9Q=
+        bh=8jK2Caq0eB3zbegMv0Fv5ND1mG8CVsCGdiNpN5UnR3c=;
+        b=OprimqCQNiWdZjLn1hVdshiV7pYorIESkx/hB1W6KqNmfJgpJfl12updeOlJbADFf4
+         g33G3wRT5hpAYS5IwA3wP9FhlKgfCf5qUu4ZWjsNkTUK+KPgf/PV1b2FfltnCPfsY4DW
+         bjHHKMFQzNERaRuykcgwEy92OZSwuCaM8jUm4=
 In-Reply-To: <49BCDBBA.3000209@yahoo.com.br>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
 To: Tiago Maluta <maluta_tiago@yahoo.com.br>
-Cc: Angel Tsankov <fn42551@fmi.uni-sofia.bg>, linux-c-programming@vger.kernel.org
+Cc: Steve Graegert <graegerts@gmail.com>, Angel Tsankov <fn42551@fmi.uni-sofia.bg>, linux-c-programming@vger.kernel.org
 
-Tiago,
-
-You're correct.  MAX_ERRNO is a custom macro being defined elsewhere
-and actually expands to to sys_nerr.  I picked that code from some
-examples I've prepared some years ago.  Sorry for the inconvenience
-but I think you get the idea.  see perror(3) for more info.
-
-	\Steve
-
---
-
-Steve Graegert
-www.graegert.com
-
-
-
-On Sun, Mar 15, 2009 at 11:43 AM, Tiago Maluta
-<maluta_tiago@yahoo.com.br> wrote:
+On Sun, Mar 15, 2009 at 7:43 AM, Tiago Maluta <maluta_tiago@yahoo.com.b=
+r> wrote:
 > Steve,
 >
 >> The following code snippet should do it. =A0It basically sets errno
@@ -57,6 +41,15 @@ On Sun, Mar 15, 2009 at 11:43 AM, Tiago Maluta
 >
 > I've searched in headers on /usr/include for MAX_ERRNO but not found.
 > Where MAX_ERRNO is defined?
+
+you could define it with something like this:
+
+#ifndef MAX_ERRNO
+#define MAX_ERRNO 4095
+#endif
+
+Sergio
+
 >
 > A *very* simple workaround was check for "Unknown" word, so I tried:
 >
@@ -84,7 +77,6 @@ On Sun, Mar 15, 2009 at 11:43 AM, Tiago Maluta
 > Best regards,
 >
 > --tm
->
 >
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
