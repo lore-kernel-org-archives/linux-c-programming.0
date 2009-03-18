@@ -1,93 +1,94 @@
-From: "Srinivas G." <srinivasg@esntechnologies.co.in>
-Subject: Non Portable pthread (-np) API for thread creation in suspend mode
-Date: Tue, 17 Mar 2009 18:26:18 +0530
-Message-ID: <F5BA82141F7AA94885B9643C77EEA5F2134DFA@mail.esntechnologies.co.in>
+From: xcomp@arcor.de
+Subject: swapcontext and free memory
+Date: Wed, 18 Mar 2009 19:05:51 +0100 (CET)
+Message-ID: <18142048.1237399551641.JavaMail.ngmail@webmail17.arcor-online.net>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arcor.de; s=mail-in;
+	t=1237399551; bh=tjGhiQAnqToNs1S1c55Me2C8nRFdzEd22VaGbdmzNpc=;
+	h=Message-ID:Date:From:To:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	b=U7w/hgmjboOJEcJpMkpnrTSUFB8XcEtbU+G06Cad4lVfmGRR7+0cx2T9++nFQDjhV
+	 LJjbWAd2rOPKR3bYXfSb2jzTbOmTs5ByQDRNpLYQUZjE1H6bDAMznsm0sI6xWY0Gdq
+	 GDlRXZZ/2Riv7D3ru9lTZr3+rAyiMzQaWMmOplyk=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
-To: linux-c-programming@vger.kernel.org, linux-apps@vger.kernel.org, linux-gcc@vger.kernel.org
-Cc: Glynn Clements <glynn@gclements.plus.com>, bert.wesarg@googlemail.com, Richard Dengler <rdengler@arcor.de>, pradeep.rautela@gmail.com, uday.karan@gmail.com, brouits@free.fr, Manish Katiyar <mkatiyar@gmail.com>
+To: linux-c-programming@vger.kernel.org
 
-Dear All,
+Hi all,
+I have written a small test case which simply creates a new context, sw=
+aps to it and returns to the main function. I am allocating memory for =
+the ucontext_t structures and the stack on which the context is execute=
+d using malloc. Because of this I also want to deallocate the memory ag=
+ain using free. The problem is I can't deallocate the memory after swap=
+ping back. It runs only if all three free() calls are commented out. Ot=
+herwise a segmentation fault occurs. Does swapcontext handle this on it=
+s own? Can anyone explain this behavior? I didn't find anything concern=
+ing this problem in the web.
+I am running this program on Ubuntu 8.04 with the following system info=
+rmation: Linux ubuntu8041 2.6.24-23-generic #1 SMP i686 GNU/Linux
 
-I have implemented a threading program using the pthread library on Cen=
-tOS - 5.2 Linux system. (The CentOS is an Enterprise Linux distribution=
- based on the freely available sources from Red Hat Enterprise Linux.) =
-However, I need to create a pthread that is initially suspended. But, I=
- did not find any API in the pthread library which does the my requirem=
-ent. So, I googled and found some of the FreeBSD thread API which is as=
- follows.
+The test program is the following one:
+---
+#include <stdlib.h>
+#include <stdio.h>
 
-pthread_attr_setcreatesuspend_np
-pthread_suspend_np
-pthread_resume_np=20
+#include <ucontext.h>
 
-pthread_attr_setcreatesuspend_np =A0- prepare attribute for creation of=
- suspended thread. I have also seen that the "_np" stands for "non port=
-able" API. (The functions with the pthread_ prefix and _np suffix are n=
-ot portable extensions to POSIX threads.)
+#define STACKSIZE 4096
 
-My question is, how can I use the "_np" API on my Linux box. I guess, t=
-he "_np" API is available in "libthr" shared library. So, I tried to do=
-wnload the "libthr" shared library, but there is no luck to me.=20
-
-I have also one more question, Shall I use the "libthr" shared library =
-on my CENTOS without affecting the "libpthread" library. If possible, p=
-lease suggest me.
-
-I can also able to implement the suspend and resume functionality with =
-the following mechanism. But I have also seen that with "libthr" we get=
- better performance than "libpthread". Please look at the following lin=
-k. That is the reason, I want to use the "libthr" on my CENTOS Linux bo=
-x.
-
-http://www.dslreports.com/forum/r19082719-FreeBSD-libthr-libpthread
-
-static int ready_to_go =3D 0;
-static pthread_mutex_t suspend_mutex =3D PTHREAD_MUTEX_INITIALIZER;
-static pthread_cond_t suspend_cond =3D PTHREAD_COND_INITIALIZER;
-
-static void *func(void *arg) {
-=A0=A0=A0=A0=A0=A0=A0 pthread_mutex_lock(&suspend_mutex);
-=A0=A0=A0=A0=A0=A0=A0 while (ready_to_go =3D=3D 0) {
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 pthread_cond_wait(&suspend_c=
-ond, &suspend_mutex);
-=A0=A0=A0=A0=A0=A0=A0 }
-=A0=A0=A0=A0=A0=A0=A0 pthread_mutex_unlock(&suspend_mutex);
-=A0=A0=A0=A0=A0=A0=A0 /* Now do our thing */
-=A0=A0=A0=A0=A0=A0=A0 ...
-=A0=A0=A0=A0=A0=A0=A0 return NULL;
+void thread_function() {
+	printf("\nthread_function was called...");
 }
 
-void spawn_thread(void) {
-=A0=A0=A0=A0=A0=A0=A0 pthread_attr_t attr;
-=A0=A0=A0=A0=A0=A0=A0 pthread_t thread;
+int main(int argc, char** argv) {
+	printf("\nStart");
 
-=A0=A0=A0=A0=A0=A0=A0 pthread_attr_init(&attr);
-=A0=A0=A0=A0=A0=A0=A0 /* We don't need to join this thread */
-=A0=A0=A0=A0=A0=A0=A0 pthread_attr_setdetachstate(&attr, PTHREAD_CREATE=
-_DETACHED);
-=A0=A0=A0=A0=A0=A0=A0 pthread_create(&thread, &attr, func, NULL);
-=A0=A0=A0=A0=A0=A0=A0 pthread_attr_destroy(&attr);
+	ucontext_t *main_context, *thread_context;
 
-=A0=A0=A0=A0=A0=A0=A0 /* Do some stuff */
-=A0=A0=A0=A0=A0=A0=A0 ...
-=A0=A0=A0=A0=A0=A0=A0 /* Now tell thread to continue */
-=A0=A0=A0=A0=A0=A0=A0 pthread_mutex_lock(&suspend_mutex);
-=A0=A0=A0=A0=A0=A0=A0 ready_to_go =3D 1;
-=A0=A0=A0=A0=A0=A0=A0 pthread_mutex_unlock(&suspend_mutex);
-=A0=A0=A0=A0=A0=A0=A0 pthread_cond_signal(&suspend_cond);
+	main_context =3D (ucontext*) malloc(sizeof(ucontext));
+	thread_context =3D (ucontext*) malloc(sizeof(ucontext));
+
+	void* thread_stack =3D malloc(STACKSIZE);
+
+	printf("\n\nAllocated memory:\n\tmain_context:\t%p\n\tthread_context:\=
+t%p\n\tthread_stack:\t%p", main_context, thread_context, thread_stack);
+
+	getcontext(thread_context);
+	thread_context->uc_stack.ss_sp =3D thread_stack;
+	thread_context->uc_stack.ss_size =3D sizeof(thread_stack);
+	thread_context->uc_stack.ss_flags =3D 0;
+	thread_context->uc_flags =3D 0;
+	thread_context->uc_link =3D main_context;
+	sigemptyset(&(thread_context->uc_sigmask));
+	makecontext(thread_context, thread_function, 0);
+
+	swapcontext(main_context, thread_context);
+
+	printf("\n\nswapcontext() returned. Freeing memory starts now...");
+
+	free(thread_stack);
+	printf("\nthread_stack was deallocated...");
+
+	free(thread_context);
+	printf("\nthread_context was deallocated...");
+
+	free(main_context);
+	printf("\nmain_context was deallocated...");
+
+	printf("\n\nEnd");
 }
+---
 
-Thanks in advance.
+Best,
+Matthias :-)
 
-With Regards,
-Srinivas G
-
+Zerrei=DFen Sie die Netze der Phisher, Hacker und Betr=FCger!
+Ihre Internet-Sicherheits-Seiten auf Arcor.de bieten alle Infos und Hil=
+fsmittel, die Sie zum sicheren Surfen brauchen! Play it safe!
+http://www.arcor.de/footer-sicherheit/
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
