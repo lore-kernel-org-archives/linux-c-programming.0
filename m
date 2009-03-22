@@ -1,26 +1,33 @@
-From: Canaan Kao <canaan.kao@gmail.com>
+From: "Ardhan Madras" <ajhwb@knac.com>
 Subject: Re: Socket programming
-Date: Sun, 22 Mar 2009 21:00:14 +0800
-Message-ID: <160bbd1a0903220600g5b93ddaau32e160c856bb77e6@mail.gmail.com>
-References: <20090322054220.1C330C2D@resin14.mta.everyone.net>
+Date: Sun, 22 Mar 2009 06:31:16 -0700
+Message-ID: <20090322063116.1C31F627@resin17.mta.everyone.net>
+Reply-To: <ajhwb@knac.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=kIyJE15F4yq9uUYTnAyVBwCHc5OcfYbyY5M3bWwq1OE=;
-        b=heZCPdzgEgy7t+a3Up6QhweRQ9AZ9UaiHUcbewEdj1kSAFkgDZ1VP0D9KwEOpLgXwH
-         HaB6/qYLrFem7a8vN6gjCWiH8JlCUz/sfombN1TWGM+ex1ltBHj5CtNP+A3l+Fs15Tzi
-         5/QLb78FAfrVQZHgXZ/c3cfnHlkqgbFzPDQGA=
-In-Reply-To: <20090322054220.1C330C2D@resin14.mta.everyone.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: ajhwb@knac.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Canaan Kao <canaan.kao@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
+
+Dear Canaan,
+
+Thanks for your reply. It's a great clue :)
+btw, i have one more question... 
+
+In the receiver, do i need to allocate for example
+bar->name member manually? or it's done by recv() ?
+
+
+--- canaan.kao@gmail.com wrote:
+
+From:	Canaan Kao <canaan.kao@gmail.com>
+To:	ajhwb@knac.com
+Cc:	linux-c-programming@vger.kernel.org
+Subject: Re: Socket programming
+Date:	Sun, 22 Mar 2009 21:00:14 +0800
 
 Dear Ardhan,
 
@@ -35,14 +42,13 @@ struct foo
  };
 
 
- struct foo *bar =3D malloc (sizeof(struct foo));
+ struct foo *bar = malloc (sizeof(struct foo));
 
- if(NULL!=3Dbar)bar->mySize=3Dsizeof(struct foo);
+ if(NULL!=bar)bar->mySize=sizeof(struct foo);
 
  /* fill the structure, then send */
 
-=46inally, your receiver will get the size of foo in the beginning of t=
-he stream.
+Finally, your receiver will get the size of foo in the beginning of the stream.
 
 Best regards,
 Canaan
@@ -57,9 +63,9 @@ On Sun, Mar 22, 2009 at 8:42 PM, Ardhan Madras <ajhwb@knac.com> wrote:
 >
 > struct foo
 > {
-> =A0char name[16];
-> =A0char pix[1024];
-> =A0int id;
+>  char name[16];
+>  char pix[1024];
+>  int id;
 > } bar;
 >
 > If i want to send or receive data i just call
@@ -74,12 +80,12 @@ On Sun, Mar 22, 2009 at 8:42 PM, Ardhan Madras <ajhwb@knac.com> wrote:
 >
 > struct foo
 > {
-> =A0char *name;
-> =A0char *pix;
-> =A0int id;
+>  char *name;
+>  char *pix;
+>  int id;
 > }
 >
-> struct foo *bar =3D malloc (sizeof(struct foo));
+> struct foo *bar = malloc (sizeof(struct foo));
 > /* fill the structure, then send */
 >
 > How to receive the data? since there are no way
@@ -89,16 +95,19 @@ On Sun, Mar 22, 2009 at 8:42 PM, Ardhan Madras <ajhwb@knac.com> wrote:
 >
 >
 > _____________________________________________________________
-> Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.k=
-nac.com
+> Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 >
 --
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 the body of a message to majordomo@vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+
+_____________________________________________________________
+Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
