@@ -1,17 +1,33 @@
-From: Volker Kokula <kokula@informatik.uni-wuerzburg.de>
+From: "Ardhan Madras" <ajhwb@knac.com>
 Subject: Re: Socket programming
-Date: Sun, 22 Mar 2009 14:41:22 +0100
-Message-ID: <49C64002.2040007@informatik.uni-wuerzburg.de>
-References: <20090322063116.1C31F627@resin17.mta.everyone.net>
+Date: Sun, 22 Mar 2009 07:08:53 -0700
+Message-ID: <20090322070853.1C31EAD6@resin17.mta.everyone.net>
+Reply-To: <ajhwb@knac.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20090322063116.1C31F627@resin17.mta.everyone.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: ajhwb@knac.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Volker Kokula <kokula@informatik.uni-wuerzburg.de>
 Cc: linux-c-programming@vger.kernel.org
+
+Hi Volker,
+
+Thanks for let me know. actually, there are no security 
+concerns in my program. What do you means with 'unportable?' 
+do you means CPU bit type? like integer size?, i want to 
+learn socket programming, so i must understand it from scratch, 
+not simply by using a library wrapper.
+
+
+--- kokula@informatik.uni-wuerzburg.de wrote:
+
+From: Volker Kokula <kokula@informatik.uni-wuerzburg.de>
+To: ajhwb@knac.com
+CC: linux-c-programming@vger.kernel.org
+Subject: Re: Socket programming
+Date: Sun, 22 Mar 2009 14:41:22 +0100
 
 Hi Ardhan,
 
@@ -29,3 +45,9 @@ Volker
 
 [1] http://oss.metaparadigm.com/json-c/
 [2] http://sourceforge.net/projects/csoap/
+
+
+
+
+_____________________________________________________________
+Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
