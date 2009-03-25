@@ -1,34 +1,62 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Finding how much data is available for read from a SOCK_SEQPACKET
-Date: Wed, 25 Mar 2009 15:05:07 +0000
-Message-ID: <18890.18467.865404.614181@cerise.gclements.plus.com>
-References: <C5EFBA45.17C2D%fgrieu@gmail.com>
+From: =?ISO-2022-JP?B?GyRCTEBOPBsoQg==?= <longapple@gmail.com>
+Subject: pass a local variable to a function
+Date: Wed, 25 Mar 2009 08:21:48 -0800
+Message-ID: <56b13acf0903250921w1934942bma7280055c97a9db3@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <C5EFBA45.17C2D%fgrieu@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type:content-transfer-encoding;
+        bh=p2NDt1cfdcgBDTsbdUbeOx66JVIP/lq4TfEEGs+MAOk=;
+        b=hW4gEPGhHxycEVxjse2xAilSJJtRlW/wVBSmKKQfcuSGA+PumHHkjSxSgWUvZns+5s
+         JyZPxrXqnSr19gn6ZTyyeDNZXigiK86+i1et8r+rRNIBexgCFs4wV4d2ciu3YXQB3OEe
+         Jl2Q13iRGXYBXWe1p5r4HwcGRmpIn8hJiE0w4=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Francois Grieu <fgrieu@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="windows-1252"
+To: linux-c-programming@vger.kernel.org
 
+Hi guys,
 
-Francois Grieu wrote:
+This is my first email in this list, any help is much appreciated.
+As I know, it's not allowed to pass a local variable to a function,
+because the stack where local variable resides will be reused by other
+functions.
+eg:
+=A0=A0=A0=A0 1=A0 #include <stdio.h>
+=A0=A0=A0=A0 2
+=A0=A0=A0=A0 3=A0 char *fetch();
+=A0=A0=A0=A0 4
+=A0=A0=A0=A0 5=A0 int main(int argc, char *argv[]){
+=A0=A0=A0=A0 6=A0=A0=A0=A0=A0=A0=A0=A0=A0 char *string;
+=A0=A0=A0=A0 7=A0=A0=A0=A0=A0=A0=A0=A0=A0 string =3D fetch();
+=A0=A0=A0=A0 8=A0=A0=A0=A0=A0=A0=A0=A0=A0 printf("%s\n", string);
+=A0=A0=A0=A0 9=A0=A0=A0=A0=A0=A0=A0=A0=A0 exit(0);
+=A0=A0=A0 10=A0 }
+=A0=A0=A0 11
+=A0=A0=A0 12=A0 char *fetch(){
+=A0=A0=A0 13=A0=A0=A0=A0=A0=A0=A0=A0=A0 char string[10];
+=A0=A0=A0 14 =A0=A0=A0=A0=A0=A0=A0=A0 scanf("%s", string);
+=A0=A0=A0 15 =A0=A0=A0=A0=A0=A0=A0=A0 return string;
+=A0=A0=A0 16=A0 }
 
-> I have a working program that receives blocks of data from a
-> SOCK_SEQPACKET using a blocking read(). So far I use a
-> fixed-size buffer of the maximum size.
-> 
-> I would like to query for the size available, malloc a block
-> of the appropriate size, then read. Is that feasible?
+When the application is executed, after input "a", it will produce
+unknown characters, like "8=8A=E8=BF=F4=FFO". Which is like what I expe=
+ct
 
-It doesn't look like it. Unfortunately, ioctl(SIOCINQ) returns the
-total number of bytes in all queued incoming packets, not the next
-packet.
+However, if I change line 13 to:
+=A0=A0=A0 13=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 char string[1024];
 
-You could malloc() a maximum size packet then realloc() it once you've
-received the data.
+When I type "a", it echos "a", which is out of my expectation
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Why does it behave like this?
+
+Thanks in advance,
+longapple
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
