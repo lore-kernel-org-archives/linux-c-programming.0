@@ -1,170 +1,150 @@
 From: "Anil Vishnoi" <vishnoianil@gmail.com>
 Subject: RE: Socket programming
-Date: Fri, 27 Mar 2009 03:12:09 +0530
-Message-ID: <000901c9ae5b$bc7549f0$355fddd0$@com>
-References: <20090322063116.1C31F627@resin17.mta.everyone.net> <160bbd1a0903220824o14c100eeqc28f8a745b62228b@mail.gmail.com>
+Date: Fri, 27 Mar 2009 03:28:10 +0530
+Message-ID: <000d01c9ae5d$f90b7900$eb226b00$@com>
+References: <20090322054220.1C330C2D@resin14.mta.everyone.net> <e694f9e00903221139s7bfa84hb295698fe86e864a@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:from:to:cc:references
+        h=domainkey-signature:received:received:from:to:references
          :in-reply-to:subject:date:message-id:mime-version:content-type
-         :content-transfer-encoding:x-mailer:thread-index:content-language;
-        bh=pL2gUC3XjINyiIIRZewSG7RJZn0g2DJGL5Q00RNXld8=;
-        b=GAVSd7igrZ4xMfOtMZwF7f1sKDR5EHIZ3LJWv+zn8jCT5ZZYvAX5fHu68QXVhi9h1w
-         Fl8nYl4wlHTB0n9dtqTtz737OecckGz2VzUOfuKVLRjqtoH/Oa7AMGts5vg/E6otRYol
-         5JFxkegUHami6B75ZzhAD+ge0mR+cgo9EVD7A=
-In-Reply-To: <160bbd1a0903220824o14c100eeqc28f8a745b62228b@mail.gmail.com>
+         :content-transfer-encoding:x-mailer:thread-index:content-language
+         :x-cr-hashedpuzzle:x-cr-puzzleid;
+        bh=AXd43HuU4VtLj4efn9PV0yueaBO5MFWqayXkzOcpGqM=;
+        b=CzYnq5U0MKBj1GOE+j5bwDS08MnzJ2hRQEGbGfqgEBiJ2yI1gDayrs88Caus9AMrZX
+         5/Bt4MHAgfgjiQi/LTIykdmDlSGPoNlijlEBi8ENGcED1S4+LOnuOtVRxcT/20mWC5//
+         8pyM6tntFJkRgmm8nwxc0W572cO6WFLJZREJE=
+In-Reply-To: <e694f9e00903221139s7bfa84hb295698fe86e864a@mail.gmail.com>
 Content-Language: en-us
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: 'Canaan Kao' <canaan.kao@gmail.com>, ajhwb@knac.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: 'Jon Mayo' <jon.mayo@gmail.com>, ajhwb@knac.com, linux-c-programming@vger.kernel.org
 
-Ardhan,
-Book suggested by Canaan is really good one, I also recommend.
+Hi,
+	I think solution suggested by Jon is the complete one, because if I understand correctly your intent is to replicate the dynamic data which is pointed by the pointer member of the struct foo too on the other side of socket. Solution given by Canaan will possibly solve the half of the problem, but by that way you will not be able to send the content pointed by *name & *pix in the struct foo. So you need to send those data as well across the socket (which jon is doing) and need to allocate the memory equal to the string pointed by the *name & *pix and need to cast accordingly.
 
-Cheers
-Anil=20
+Cheers 
+Anil 
 
 -----Original Message-----
-=46rom: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Canaan =
-Kao
-Sent: Sunday, 22 March 2009 20:55
-To: ajhwb@knac.com
-Cc: linux-c-programming@vger.kernel.org
+From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Jon Mayo
+Sent: Monday, 23 March 2009 00:09
+To: ajhwb@knac.com; linux-c-programming@vger.kernel.org
 Subject: Re: Socket programming
 
-Dear Ardhan,
-
-We need to allocate the bar->name manually in general.
-
-About the related socket programming issues, I recommend you one book.
-UNIX Network Programming, Volume 1, Second Edition: Networking APIs:
-Sockets and XTI, Prentice Hall, 1998, ISBN 0-13-490012-X.
-
-Best regards,
-Canaan
-
-On Sun, Mar 22, 2009 at 9:31 PM, Ardhan Madras <ajhwb@knac.com> wrote:
-> Dear Canaan,
+On Sun, Mar 22, 2009 at 5:42 AM, Ardhan Madras <ajhwb@knac.com> wrote:
+> Hi All,
 >
-> Thanks for your reply. It's a great clue :)
-> btw, i have one more question...
->
-> In the receiver, do i need to allocate for example
-> bar->name member manually? or it's done by recv() ?
->
->
-> --- canaan.kao@gmail.com wrote:
->
-> From: =A0 Canaan Kao <canaan.kao@gmail.com>
-> To: =A0 =A0 ajhwb@knac.com
-> Cc: =A0 =A0 linux-c-programming@vger.kernel.org
-> Subject: Re: Socket programming
-> Date: =A0 Sun, 22 Mar 2009 21:00:14 +0800
->
-> Dear Ardhan,
->
-> You can add a mySize data member in struct foo.
+> I was written small network utility in Linux 2.6, glibc 2.7.
+> I have been using send() and recv() system call in SOCK_STREAM
+> to send or receive fixed size data. for example, i write my data
+> structure like this:
 >
 > struct foo
-> =A0{
-> =A0unsigned mySize;
-> =A0char *name;
-> =A0char *pix;
-> =A0int id;
-> =A0};
+> {
+>  char name[16];
+>  char pix[1024];
+>  int id;
+> } bar;
 >
->
-> =A0struct foo *bar =3D malloc (sizeof(struct foo));
->
-> =A0if(NULL!=3Dbar)bar->mySize=3Dsizeof(struct foo);
->
-> =A0/* fill the structure, then send */
->
-> Finally, your receiver will get the size of foo in the beginning of t=
-he
-stream.
->
-> Best regards,
-> Canaan
->
-> On Sun, Mar 22, 2009 at 8:42 PM, Ardhan Madras <ajhwb@knac.com> wrote=
-:
->> Hi All,
->>
->> I was written small network utility in Linux 2.6, glibc 2.7.
->> I have been using send() and recv() system call in SOCK_STREAM
->> to send or receive fixed size data. for example, i write my data
->> structure like this:
->>
->> struct foo
->> {
->> =A0char name[16];
->> =A0char pix[1024];
->> =A0int id;
->> } bar;
->>
->> If i want to send or receive data i just call
->>
->> send (socket, &bar, sizeof(struct foo), 0);
->>
->> or to receive:
->> recv (socket, &bar, sizeof(struct foo), 0);
->>
->> My problem is how to receive dynamic sized data? for
->> example this structure:
->>
->> struct foo
->> {
->> =A0char *name;
->> =A0char *pix;
->> =A0int id;
->> }
->>
->> struct foo *bar =3D malloc (sizeof(struct foo));
->> /* fill the structure, then send */
->>
->> How to receive the data? since there are no way
->> to the receiver to know data sizes?
->>
->> Thanks for your help.
->>
->>
->> _____________________________________________________________
->> Listen to KNAC, Hit the Home page and Tune In Live! --->
-http://www.knac.com
->> --
->> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
->
->
->
->
-> _____________________________________________________________
-> Listen to KNAC, Hit the Home page and Tune In Live! --->
-http://www.knac.com
->
+(cut)
+
+When I deal with serializing/deserializing data over a stream socket I
+prefer to define a few common "atoms" and build a complete system from
+that. For example I see you have char and int in your struct.
+
+/* p : pointer to one or more ints
+ * count : number of ints
+ */
+int recv_int (int s, int *p, unsigned count)
+{
+ int total, res;
+
+ /* a loop that ensures the entire data is sent - if you wish to have
+a program that handles multiple sockets using select() you need to do
+this differently, like with one big read into a large buffer */
+ for(total=0; total < (count * sizeof *p); total+=res) {
+   res=recv (s, (char*)p+total, (count * sizeof *p)-total, 0);
+   if (res=<0) return 0; /* closed or there was an error */
+ }
+
+ /* you could byte swap each element after receiving the data */
+
+ return total;
+}
+
+/* p : pointer to one or more ints
+ * count : number of ints
+ */
+int send_int (int s, int *p, unsigned count)
+{
+ int total, res;
+
+ /* you could byte swap each element before sending */
+
+
+ /* a loop that ensures the entire data is sent - if you wish to have
+a program that handles multiple sockets using select() you need to do
+this differently, like copy encoded data into a large output buffer
+first */
+ for(total=0; total < (count * sizeof *p); total+=res) {
+   res=recv (s, (char*)p+total, (count * sizeof *p)-total, 0);
+   if (res=<0) return 0; /* closed or there was an error */
+ }
+
+ return total;
+}
+
+/* for completeness - not significantly different from recv()/send() */
+int recv_char(int s, char *p, unsigned count) { return recv (s, p,
+count * sizeof *p, 0); }
+int send_char(int s, char *p, unsigned count) { return send (s, p,
+count * sizeof *p, 0); }
+
+
+
+Then from those atoms you build up calls for your particular data structure:
+
+int recv_foo(int s, struct foo *f)
+{
+ int res;
+ /* if you want name and pix to be variable size you could read an
+int for the length, then malloc() space for it, then read the bytes in
+*/
+ res=recv_char(s, f->name, sizeof f->name);
+ if (res<=0) return res;
+ res=recv_char(s, f->pix, sizeof f->name);
+ if (res<=0) return res;
+ res=recv_int(s, &f->id, 1);
+ if (res<=0) return res;
+ return 1;
+}
+
+
+I didn't actually try or compile any of it, just typed up a rough idea
+of how you can do it.
+
+A popular alternatives to your hand made binary protocol include:
+* Just use an text based protocol. That's how HTTP, SMTP, NNTP, IRC, etc work.
+* BEEP Core protocol - text based with easy ways for handling binary data
+* ASN.1 - a standardized encoding and description format for binary
+data (mainly for protocols). asn1c is a utility to generate C
+serialize stubs from ASN.1 descriptions.
+* SunRPC and XDR - part of 'rpcgen' utility for defining standard
+SunRPC encode/decode.
+* XML rpc - a standardized form for using XML as a protocol.
+
+If you must have binary I would recommend you go with ASN.1 or SunRPC
+over writing your own thing. But overall I would recommend one of the
+text based options. The stuff to learn about socket programming will
+still be there even if you use someone else to serialize the data for
+your. Encoding data is a completely different skill that is separate
+from socket programming.
 --
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 the body of a message to majordomo@vger.kernel.org
 More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
