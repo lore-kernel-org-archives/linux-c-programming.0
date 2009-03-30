@@ -1,79 +1,58 @@
-From: Fabian Ischia <fischia@somanetworks.com>
-Subject: Re: Linux process...
-Date: Mon, 30 Mar 2009 07:36:15 -0400
-Message-ID: <49D0AEAF.1070607@somanetworks.com>
-References: <34e1241d0903292306m3e879639u4752e821349c84ee@mail.gmail.com>
+From: "Srinivas G." <srinivasg@esntechnologies.co.in>
+Subject: Is it possible to use the FreeBSD libthr.a library file on a Redhat Linux box?
+Date: Mon, 30 Mar 2009 22:59:20 +0530
+Message-ID: <F5BA82141F7AA94885B9643C77EEA5F213527D@mail.esntechnologies.co.in>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <34e1241d0903292306m3e879639u4752e821349c84ee@mail.gmail.com>
-Sender: linux-c-programming-owner@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Return-path: <linux-gcc-owner@vger.kernel.org>
+Content-class: urn:content-classes:message
+Sender: linux-gcc-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: beginner_h4x3r <nightdecoder@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-gcc@vger.kernel.org, linux-apps@vger.kernel.org, linux-c-programming@vger.kernel.org
 
- From the example code, I think the answer is a bit simpler than it 
-looks like. The address space is "duplicated" not "shared". Whatever you 
-do in one process "after" the fork will not affect the other process.
-The Child process has not initialized the variable, so being a stack 
-variable it just contains garbage.
+Dear All,
 
-Fabian
+I have written an application where I have used the libpthread library
+for creating the pthreads. However, to get the maximum optimization, I
+want to use the libthr.a library instead of libpthread library. However,
+when I tried to use on my Redhat box, I end up with following errors.
 
-beginner_h4x3r wrote:
-> Hi All..
->
-> I am a beginner hacker, i want to learn Linux from scratch. I read
-> some resources on Linux's process management. Process duplicates it's
-> page table to it's child process, right? so i wrote demonstrate code
-> to prove this.
->
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <unistd.h>
-> #include <sys/types.h>
-> #include <sys/wait.h>
->
-> int main (void) {
->   pid_t child;
->   int stack_int;
->
->   child = fork ();
->   if (child == 0) {
->       sleep (1); /* ;p */
->       printf ("child process stack_int value %i, address: %p\n",
-> stack_int, &stack_int);
->       exit (0);
->     }
->   if (child == -1) {
->       perror ("fork");
->       return -1;
->     }
->   stack_int = 32;
->   printf ("main process stack_int value %i, address: %p\n", stack_int,
-> &stack_int);
->   waitpid (child, NULL, 0);
->
->   return 0;
-> }
->
-> The output is:
-> main process stack_int value 32, address: 0xbf9c66ec
-> child process stack_int value 8495092, address: 0xbf9c66ec
->
-> stack_int value is different from parent and it's child.
->
-> My question: why the stack_int has a same address between parent and
-> it's child ?, but confusedly... they have a different value, i was
-> though it should be different, since process duplicate it's page to
-> child, please explain me. ;)
->
-> Thanks before.
->
-> --- curious_hacker
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->   
+../lib/linux/libthr.a(thr_sem.o): In function `_sem_init':
+thr_sem.c:(.text+0x100): undefined reference to `ksem_init'
+thr_sem.c:(.text+0x115): undefined reference to `ksem_destroy'
+../lib/linux/libthr.a(thr_sem.o): In function `_sem_destroy':
+thr_sem.c:(.text+0x216): undefined reference to `ksem_destroy'
+../lib/linux/libthr.a(thr_sem.o): In function `_sem_timedwait':
+thr_sem.c:(.text+0x2ad): undefined reference to `ksem_timedwait'
+../lib/linux/libthr.a(thr_sem.o): In function `_sem_wait':
+....
+....
+....
+
+collect2: ld returned 1 exit status
+make: *** [target] Error 1
+
+I understand that the "ksem_init" is not available on the Redhat box.
+Then, I have tried to use the libc.so.7 from FreeBSD. I have included
+the libc.so.7 in my application to getridof the above undefined
+references. Even though, I end up with the following errors.
+
+/usr/bin/ld: errno@@FBSD_1.0: TLS definition in /lib/libc.so.6 section 
+.tbss mismatches non-TLS definition in ../lib/linux/libc.so section 
+.bss
+/lib/libc.so.6: could not read symbols: Bad value
+
+Here, the lib/libc.so.6 is a Redhat libc library where as 
+../lib/linux/libc.so is a FreeBSD library (libc.so.7). 
+
+Is it possible to use the FreeBSD libthr.a library file on a Redhat
+Linux box? 
+
+Please let me know the whether it is possible to use the libthr.a
+library on Redhat box or not.
+
+Thanks in advance.
+
+With Regards,
+Srinivas G
