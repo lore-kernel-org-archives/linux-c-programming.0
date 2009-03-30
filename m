@@ -1,54 +1,70 @@
-From: "Beau Gould \(OSS\)" <beau@open-source-staffing.com>
-Subject: [JOB] Linux Kernel Engineer, Portland, OR | 80-100k - Relo/H1B OK
-Date: Thu, 26 Mar 2009 23:27:15 -0400
-Message-ID: <72381C508F504184A2CA6E88B8C3325B@EMACHINE>
+From: beginner_h4x3r <nightdecoder@gmail.com>
+Subject: Linux process...
+Date: Mon, 30 Mar 2009 13:06:30 +0700
+Message-ID: <34e1241d0903292306m3e879639u4752e821349c84ee@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type:content-transfer-encoding;
+        bh=d6DCzpD6kkBCF9b8xSTKT21EFdLj1QEwaAPNNo9rgDs=;
+        b=DnaM/WGtpjf6bOch+8yaHa//aeqGfBQwXN3GeAYlbnEc9HM2mna65G3ubrJsBQf8Xq
+         2bbcZcZ72EZdFE1R4ns8TDW77ry7flPp+m3eGQ+K/viFXNo3UFQDcZX3IdealdPqlU1G
+         5XcA8MWwT1pMqJY+JHHTadwbE39i0DY84BAIQ=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
-*** Candidates interested in relocating to the Portland area encouraged
-to apply.  Relocation expenses covered. 
-*** H1B visa holders OK to apply - Our client will transfer.  You must
-reside in the USA. 
+Hi All..
 
-Our Portland, Oregon client is the leader in memory virtualization
-software. The company's platform eliminates application bottlenecks
-associated with memory, and transforms memory into a shared, networked
-resource available to servers in the data center. Their products scale
-across commodity hardware, take advantage of existing data center
-equipment, and are implemented without application changes to deliver
-unmatched performance. 
+I am a beginner hacker, i want to learn Linux from scratch. I read
+some resources on Linux's process management. Process duplicates it's
+page table to it's child process, right? so i wrote demonstrate code
+to prove this.
 
-The Linux Kernel Engineer will be responsible for developing product
-capabilities in the areas of I/O subsystem and drivers, file systems,
-device drivers, file data related memory management, as well as
-associated user space tools and utilities.
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-Basic Qualifications 
-* Education: Masters Degree in Computer Science 
-* Overall Experience: 2-5 years or equivalent experience 
-* 2 years of experience in Kernel development, preferably Linux 
-* Fluency in C is expected, as are solid written and verbal
-communications skills 
-* Kernel-level expertise in the implementation of Linux Device Drivers
-and File systems 
+int main (void) {
+  pid_t child;
+  int stack_int;
 
-Desired Qualifications 
-* Deep knowledge in the design, implementation of Kernels and Operating
-Systems 
-* Deep understanding of Linux Kernels Virtual memory, Storage/File and
-I/O subsystems 
-* Development Experience on a contemporary Linux-2.6 Kernel is a must 
+  child = fork ();
+  if (child == 0) {
+      sleep (1); /* ;p */
+      printf ("child process stack_int value %i, address: %p\n",
+stack_int, &stack_int);
+      exit (0);
+    }
+  if (child == -1) {
+      perror ("fork");
+      return -1;
+    }
+  stack_int = 32;
+  printf ("main process stack_int value %i, address: %p\n", stack_int,
+&stack_int);
+  waitpid (child, NULL, 0);
 
-To be considered, please submit your resume along with your salary
-requirements to bg @ capitalmarketsp.com 
+  return 0;
+}
 
-Beau Gould 
-Executive Advisor 
-Capital Markets Placement 
-bg @ capitalmarketsp.com 
+The output is:
+main process stack_int value 32, address: 0xbf9c66ec
+child process stack_int value 8495092, address: 0xbf9c66ec
 
+stack_int value is different from parent and it's child.
+
+My question: why the stack_int has a same address between parent and
+it's child ?, but confusedly... they have a different value, i was
+though it should be different, since process duplicate it's page to
+child, please explain me. ;)
+
+Thanks before.
+
+--- curious_hacker
