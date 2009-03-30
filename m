@@ -1,64 +1,79 @@
-From: Mohana Sundaram <ksmoha@gmail.com>
+From: Fabian Ischia <fischia@somanetworks.com>
 Subject: Re: Linux process...
-Date: Mon, 30 Mar 2009 12:41:38 +0530
-Message-ID: <7fd0b9b40903300011o6aa51396l73873553cf09f2e7@mail.gmail.com>
+Date: Mon, 30 Mar 2009 07:36:15 -0400
+Message-ID: <49D0AEAF.1070607@somanetworks.com>
 References: <34e1241d0903292306m3e879639u4752e821349c84ee@mail.gmail.com>
-	 <49D0639E.3060101@einfochips.com>
-	 <34e1241d0903292357ha2fb36av5480578eddc1c67d@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=P9oNDE/b3JGSn2yq6Tix7Noh1wynYVcOJbIQSj6P/d0=;
-        b=hSDJGhkR6aSN2w79SJhInsXbwFJAVVbPFPHKnAMVMDSPTycAC0JVn/MKir3pabIM+b
-         0pFz90zvn95imaEmZbCWyPsiql7RuhX8btNy4PCcqbE1xe+FQenJ3ssihEg6Eh2O7MAu
-         64A8dsx7B5jFJ9Dw2pYcCc7WEZIp+SV/Fs44Q=
-In-Reply-To: <34e1241d0903292357ha2fb36av5480578eddc1c67d@mail.gmail.com>
+In-Reply-To: <34e1241d0903292306m3e879639u4752e821349c84ee@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: beginner_h4x3r <nightdecoder@gmail.com>
-Cc: Rahul K Patel <rahulk.patel@einfochips.com>, linux-c-programming@vger.kernel.org
+Cc: linux-c-programming@vger.kernel.org
 
-Please read about virtual memory.. In a nutshell the printed addresses
-are virtual addresses not absolute addresses.
+ From the example code, I think the answer is a bit simpler than it 
+looks like. The address space is "duplicated" not "shared". Whatever you 
+do in one process "after" the fork will not affect the other process.
+The Child process has not initialized the variable, so being a stack 
+variable it just contains garbage.
 
-Thanks,
-- Mohan.
-The expert at anything was once a beginner.
+Fabian
 
-
-
-
-On Mon, Mar 30, 2009 at 12:27, beginner_h4x3r <nightdecoder@gmail.com> =
-wrote:
-> Hi Rahul,
+beginner_h4x3r wrote:
+> Hi All..
 >
-> What is the means of process's base address and offset? It's means
-> child's base address is offset? how to know child's process stack_int
-> address in my demonstration code.
+> I am a beginner hacker, i want to learn Linux from scratch. I read
+> some resources on Linux's process management. Process duplicates it's
+> page table to it's child process, right? so i wrote demonstrate code
+> to prove this.
 >
-> Thanks in advance.
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+> #include <sys/types.h>
+> #include <sys/wait.h>
+>
+> int main (void) {
+>   pid_t child;
+>   int stack_int;
+>
+>   child = fork ();
+>   if (child == 0) {
+>       sleep (1); /* ;p */
+>       printf ("child process stack_int value %i, address: %p\n",
+> stack_int, &stack_int);
+>       exit (0);
+>     }
+>   if (child == -1) {
+>       perror ("fork");
+>       return -1;
+>     }
+>   stack_int = 32;
+>   printf ("main process stack_int value %i, address: %p\n", stack_int,
+> &stack_int);
+>   waitpid (child, NULL, 0);
+>
+>   return 0;
+> }
+>
+> The output is:
+> main process stack_int value 32, address: 0xbf9c66ec
+> child process stack_int value 8495092, address: 0xbf9c66ec
+>
+> stack_int value is different from parent and it's child.
+>
+> My question: why the stack_int has a same address between parent and
+> it's child ?, but confusedly... they have a different value, i was
+> though it should be different, since process duplicate it's page to
+> child, please explain me. ;)
+>
+> Thanks before.
 >
 > --- curious_hacker
->
-> On Mon, Mar 30, 2009 at 1:15 PM, Rahul K Patel
-> <rahulk.patel@einfochips.com> wrote:
->> it's offset address and not absolute address.
->> base addresses of your parent and child process will be different so
->> final absolute address (base + offset) will be different for both.
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
 > the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
->
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>   
