@@ -1,107 +1,70 @@
 From: leo mueller <llug.dan@googlemail.com>
-Subject: problems with free()
-Date: Tue, 28 Apr 2009 11:20:29 +0200
-Message-ID: <c93f91ee0904280220x663ff91fibeca0886af04458f@mail.gmail.com>
+Subject: Re: problems with free()
+Date: Tue, 28 Apr 2009 13:10:11 +0200
+Message-ID: <c93f91ee0904280410p76ef99dfye5ef0a6cb98de2af@mail.gmail.com>
 References: <c93f91ee0904280218o2f844cd0u2262db407ca8f468@mail.gmail.com>
+	 <c93f91ee0904280220x663ff91fibeca0886af04458f@mail.gmail.com>
+	 <6eee1c40904280341n4e332026i7d9800fd4f8059b4@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=00504502d1a45c3819046899f921
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=gamma;
         h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:content-type;
-        bh=LXa0O2Ed8XbWMlnk4yOYlyJcOU8YO+JeG+NsPNx59GU=;
-        b=JNhPmFoGQIg0ExGPYs1M7vesK+lHQriuphUTxeZXM0GSRUbJTuYU6oJObKdRDjBZUm
-         PoDv1RmtK+kp2jXkbudZwXMROjytn1E9jeRfV4A7EA4oBMIjyDfGIKnd8cpR9i3K/zYF
-         /z+OqlO1tGEzZ4FOyOp/Y+pE4NYP4DSx9jAwM=
-In-Reply-To: <c93f91ee0904280218o2f844cd0u2262db407ca8f468@mail.gmail.com>
+         :date:message-id:subject:from:to:cc:content-type
+         :content-transfer-encoding;
+        bh=62IghJzbmrZmIs5mkRxLXdZN84rhjpsym7sUyWWUhoM=;
+        b=FnmacRDZhFNW95oGOdFmaCTmnP4+hJnDZMSFVvpnsIvW/fE60Gw+QCQIU8YCCdzCFs
+         C1Vm5YXwvsSrY63yRgI6+Z+Lo0uwg5iwMem1OFg0lxoHiPyaUxfvrA2Fol/JRFcBa70l
+         DjaWTXtkT41wzCvB3uMVYeoDqf6589yk0lEuo=
+In-Reply-To: <6eee1c40904280341n4e332026i7d9800fd4f8059b4@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: Vadiraj <vadiraj.cs@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
---00504502d1a45c3819046899f921
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+hi vadiraj,
 
-hi all,
+thanks for your answer! first i thought about that, too, but if i do a
+simple ...
 
-i got a little problem with free() ... i am allocating mem for a
-special struct and putting it afterwards
-into a linked list. allocating works fine, but freeing not. i'm
-tracking the program with htop. after
-allocating, the percentage of mem usage stays constant ...
+char *x = (char *) malloc(1024 * 1024 * 100);
+memset(x, 0, 1024 * 1024 * 100);
+free(x);
 
-the test-file is attached.
+... and put some sleeps in between (& before return)... i can see (->
+htop) that
+the % of mem is decreasing during runtime.... hmm...
 
-any help is appreciated. big thanks :)
-
---00504502d1a45c3819046899f921
-Content-Type: text/x-csrc; charset=US-ASCII; name="test.c"
-Content-Disposition: attachment; filename="test.c"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_fu2dq3dt0
-
-I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDxzdGRsaWIuaD4KI2luY2x1ZGUgPHN0cmluZy5o
-PgojaW5jbHVkZSA8dW5pc3RkLmg+Cgp0eXBlZGVmIHVuc2lnbmVkIGxvbmcgbG9uZyBub2RlaW5m
-Owp0eXBlZGVmIHVuc2lnbmVkIGxvbmcgbG9uZyBoYXNoaW5mOwoKc3RydWN0IG5vZGUgewogICAg
-aGFzaGluZiBoYXNoOwogICAgbm9kZWluZiBpbmZvOwogICAgc3RydWN0IG5vZGUgKnBhcmVudDsK
-ICAgIHN0cnVjdCBsZXZlbGNhY2hlICpjaGlsZHM7Cn07CgpzdHJ1Y3QgbGV2ZWxjYWNoZSB7CiAg
-ICB1bnNpZ25lZCBpbnQgc2l6ZTsKICAgIHVuc2lnbmVkIGludCBsYXN0OwogICAgc3RydWN0IG5v
-ZGUgKipsaXN0Owp9OwoKc3RydWN0IGNhY2hlIHsKICAgIHN0cnVjdCBsZXZlbGNhY2hlICpyb290
-OwogICAgc3RydWN0IG5vZGUgKmxhc3Rfbm9kZTsKfTsKCnN0cnVjdCBzdGFja2ZyYW1lIHsKICAg
-IHN0cnVjdCBsZXZlbGNhY2hlICpsYzsKICAgIHN0cnVjdCBzdGFja2ZyYW1lICpuZXh0Owp9OwoK
-dm9pZCByZWxlYXNlKCk7CmlubGluZSB2b2lkIHB1c2hfdG9fc3RhY2soc3RydWN0IGxldmVsY2Fj
-aGUgKik7CnZvaWQgZnJlZV9zdGFjaygpOwppbmxpbmUgdm9pZCBhZGRfdG9fbGlzdChzdHJ1Y3Qg
-bm9kZSAqKTsKc3RydWN0IHN0YWNrZnJhbWUgKnNmYWxsb2MoKTsKc3RydWN0IG5vZGUgKm5hbGxv
-YygpOwpzdHJ1Y3QgbGV2ZWxjYWNoZSAqbGNhbGxvYyhpbnQpOwp2b2lkIGxjcmVhbGxvYyhzdHJ1
-Y3QgbGV2ZWxjYWNoZSAqLCBpbnQpOwoKc3RydWN0IHN0YWNrZnJhbWUgKmdhcmJhZ2U7CgovKgog
-KiBQdXNoZXMgZWxlbWVudCB0byBnYXJiYWdlIHN0YWNrCiAqLwppbmxpbmUgdm9pZCBwdXNoX3Rv
-X3N0YWNrKHN0cnVjdCBsZXZlbGNhY2hlICpsKQp7CiAgICBzdHJ1Y3Qgc3RhY2tmcmFtZSAqc2Y7
-CgogICAgc2YgPSBzZmFsbG9jKCk7CiAgICBzZi0+bGMgPSBsOwogICAgc2YtPm5leHQgPSBnYXJi
-YWdlOwogICAgCiAgICBnYXJiYWdlID0gc2Y7Cn0KCQovKgogKiBGcmVlcyBnYXJiYWdlIHN0YWNr
-CiAqLwp2b2lkIGZyZWVfc3RhY2soKQp7CiAgICBpbnQgaTsKICAgIGludCBqID0gMDsKICAgIHZv
-aWQgKnJjOwogICAgc3RydWN0IHN0YWNrZnJhbWUgKnNmOwogICAgCiAgICB3aGlsZShnYXJiYWdl
-ICE9IE5VTEwpewogICAgICAgIHNmID0gZ2FyYmFnZS0+bmV4dDsKICAgICAgICAKICAgICAgICBn
-YXJiYWdlLT5uZXh0ID0gTlVMTDsKICAgICAgICAKICAgICAgICBmb3IoaSA9IDA7IGkgPCBnYXJi
-YWdlLT5sYy0+c2l6ZTsgKytpKXsKICAgICAgICAgICAgaWYoZ2FyYmFnZS0+bGMtPmxpc3RbaV0g
-IT0gTlVMTCl7CiAgICAgICAgICAgICAgICBqKys7CiAgICAgICAgICAgICAgICBwcmludGYoImZy
-ZWUgYWRyOiAweCV4XG4iLCAodW5zaWduZWQgaW50KSBnYXJiYWdlLT5sYy0+bGlzdFtpXSk7CiAg
-ICAgICAgICAgICAgICByYyA9IHJlYWxsb2MoZ2FyYmFnZS0+bGMtPmxpc3RbaV0sIDApOwogICAg
-ICAgICAgICAgICAgcHJpbnRmKCJmcmVlIGFkcjogMHgleFxuIiwgKHVuc2lnbmVkIGludCkgcmMp
-OwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIGZyZWUoZ2FyYmFnZS0+bGMtPmxpc3Qp
-OwogICAgICAgIGZyZWUoZ2FyYmFnZS0+bGMpOwogICAgICAgIGZyZWUoZ2FyYmFnZSk7CiAgICAg
-ICAgCiAgICAgICAgZ2FyYmFnZSA9IHNmOwogICAgfQogICAgCiAgICBwcmludGYoIiVkIGVsZW0g
-ZnJlZWQuXG4iLCBqKTsKfQoKLyoKICogQWxsb2NhdGlvbiBvZiBhIHN0YWNrZnJhbWUKICovCnN0
-cnVjdCBzdGFja2ZyYW1lICpzZmFsbG9jKCkKewogICAgc3RydWN0IHN0YWNrZnJhbWUgKnNmID0g
-KHN0cnVjdCBzdGFja2ZyYW1lICopIG1hbGxvYyhzaXplb2Yoc3RydWN0IHN0YWNrZnJhbWUpKTsK
-ICAgIAogICAgaWYoIXNmKXsKICAgICAgICBmcHJpbnRmKHN0ZGVyciwgImVycm9yOiBtYWxsb2Mg
-c3RhY2tmcmFtZVxuIik7CiAgICAgICAgcmVsZWFzZSgpOwogICAgICAgIGV4aXQoMSk7CiAgICB9
-CgogICAgbWVtc2V0KHNmLCAwLCBzaXplb2Yoc3RydWN0IHN0YWNrZnJhbWUpKTsKICAgIHJldHVy
-biBzZjsKfQoKLyoKICogQWxsb2NhdGlvbiBvZiBhIHNpbmdsZSBub2RlCiAqLwpzdHJ1Y3Qgbm9k
-ZSAqbmFsbG9jKCkKewogICAgc3RydWN0IG5vZGUgKm4gPSAoc3RydWN0IG5vZGUgKikgbWFsbG9j
-KHNpemVvZihzdHJ1Y3Qgbm9kZSkpOwogICAgCiAgICBpZighbil7CiAgICAgICAgZnByaW50Zihz
-dGRlcnIsICJlcnJvcjogbWFsbG9jIG5vZGVcbiIpOwogICAgICAgIHJlbGVhc2UoKTsKICAgICAg
-ICBleGl0KDEpOwogICAgfQoKICAgIG1lbXNldChuLCAwLCBzaXplb2Yoc3RydWN0IG5vZGUpKTsK
-ICAgIHJldHVybiBuOwp9CgovKgogKiBBbGxvY2F0aW9uIG9mIGEgbGV2ZWxjYWNoZSBlbGVtZW50
-CiAqLwpzdHJ1Y3QgbGV2ZWxjYWNoZSAqbGNhbGxvYyhpbnQgbikKewogICAgaW50IGk7CiAgICBz
-dHJ1Y3QgbGV2ZWxjYWNoZSAqbDsKCiAgICBpZighbikKICAgICAgICByZXR1cm4gTlVMTDsKCiAg
-ICBsID0gKHN0cnVjdCBsZXZlbGNhY2hlICopIG1hbGxvYyhzaXplb2Yoc3RydWN0IGxldmVsY2Fj
-aGUpKTsKCiAgICBpZighbCl7CiAgICAgICAgZnByaW50ZihzdGRlcnIsICJlcnJvcjogbWFsbG9j
-IGxldmVsY2FjaGVcbiIpOwogICAgICAgIHJlbGVhc2UoKTsKICAgICAgICBleGl0KDEpOwogICAg
-fQogICAgCiAgICBsLT5saXN0ID0gKHN0cnVjdCBub2RlICoqKSBtYWxsb2Moc2l6ZW9mKHN0cnVj
-dCBub2RlICopICogbik7CgogICAgaWYoIWwtPmxpc3QpewogICAgICAgIGZwcmludGYoc3RkZXJy
-LCAiZXJyb3I6IG1hbGxvYyBub2RlIGxpc3RcbiIpOwogICAgICAgIHJlbGVhc2UoKTsKICAgICAg
-ICBleGl0KDEpOwogICAgfQogICAgCiAgICBsLT5zaXplID0gbjsKICAgIGwtPmxhc3QgPSAwOwoK
-ICAgIGZvcihpID0gMDsgaSA8IGwtPnNpemU7ICsraSkKICAgICAgICBsLT5saXN0W2ldID0gTlVM
-TDsKCiAgICByZXR1cm4gbDsKfQoKLyoKICogRHJvcHMgb3VyIHdob2xlIGNhY2hlCiAqLwp2b2lk
-IHJlbGVhc2UoKQp7CiAgICBmcmVlX3N0YWNrKCk7Cn0KCi8qCiAqIE1haW4gcm91dGluZQogKi8K
-aW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQp7CiAgICBpbnQgaSwgajsKICAgIHN0cnVj
-dCBsZXZlbGNhY2hlICpsOwoKICAgIGdhcmJhZ2UgPSBOVUxMOwoKICAgIGZvcihpID0gMDsgaSA8
-IDIwMDsgKytpKXsKICAgICAgICBsID0gbGNhbGxvYygyMDAwKTsKICAgICAgICAKICAgICAgICBm
-b3IoaiA9IDA7IGogPCBsLT5zaXplOyArK2opewogICAgICAgICAgICBsLT5saXN0W2pdID0gbmFs
-bG9jKCk7CiAgICAgICAgICAgIGwtPmxpc3Rbal0tPmhhc2ggPSBqOwogICAgICAgICAgICBsLT5s
-aXN0W2pdLT5pbmZvID0gajsKICAgICAgICAgICAgcHJpbnRmKCJhbGxvYyBhZHI6IDB4JXhcbiIs
-ICh1bnNpZ25lZCBpbnQpIGwtPmxpc3Rbal0pOwogICAgICAgIH0KICAgICAgICAKICAgICAgICBw
-dXNoX3RvX3N0YWNrKGwpOwogICAgfQoKICAgIHJlbGVhc2UoKTsKICAgIAogICAgc2xlZXAoNSk7
-CiAgICByZXR1cm4gMDsKfQo=
---00504502d1a45c3819046899f921--
+2009/4/28 Vadiraj <vadiraj.cs@gmail.com>:
+>
+> On Tue, Apr 28, 2009 at 2:50 PM, leo mueller <llug.dan@googlemail.com>
+> wrote:
+>>
+>> hi all,
+>>
+>> i got a little problem with free() ... i am allocating mem for a
+>> special struct and putting it afterwards
+>> into a linked list. allocating works fine, but freeing not. i'm
+>> tracking the program with htop. after
+>> allocating, the percentage of mem usage stays constant ...
+>>
+>> the test-file is attached.
+>>
+>> any help is appreciated. big thanks :)
+>
+> free() will put the chunk into the free pool of the process and not free
+> away from the
+> process. When you do a malloc again it would first try from the free pool,
+> if it finds
+> the size requested in the free pool it will give you the same.
+> Hence you would not see any change.
+>
+> You can check that by, freeing an address and then requesting the same size.
+> You will see that address freed and address allocated will be same in most
+> of
+> the case.
+>
+> Hope this helps.
+>
