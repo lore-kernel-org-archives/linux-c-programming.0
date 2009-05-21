@@ -1,114 +1,48 @@
-From: Nicle <ynicle@gmail.com>
-Subject: Re: How to lseek the larger file > 2GB under linux
-Date: Mon, 18 May 2009 12:38:50 +0800
-Message-ID: <d13fb4990905172138y2a30ed5cq412874621f605282@mail.gmail.com>
-References: <d13fb4990905170840j6ac84b0ej758582e5ffb5fa8c@mail.gmail.com>
-	 <d13fb4990905170842l5f700842k43db34f44ef2f829@mail.gmail.com>
-	 <87tz3ju2eu.fsf@erwin.mina86.com>
-	 <d13fb4990905172137l1a4a9c92k47988da28ad4b7b1@mail.gmail.com>
+From: Ad van den Broek <advandenbroek.nl@gmail.com>
+Subject: PIPE questions for Linux 2.4 setup
+Date: Thu, 21 May 2009 16:56:36 +0200
+Message-ID: <9f924d250905210756l5db654abkf9c9fbc4170717ac@mail.gmail.com>
+Reply-To: AdvandenBroek.nl@gmail.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=PpYaQz7f235+iEII5YAaTBw57VUQS98HSQ0u8i8pgk4=;
-        b=dznvczfAs/u9V42pWSejS7khVsB1Z8Jd7rcGmxV8dff738DU5sNFxIck0h+HEgce07
-         FIzeS9v2tB4U414XmvyIByYA6td/EUytYtHNT0HYvhTU2yIyoG5kDF2Ko2auOHSL/Wmy
-         UgIL9i+Ane8mEQEryZElPQbDe9KjFCcy3GqBA=
-In-Reply-To: <d13fb4990905172137l1a4a9c92k47988da28ad4b7b1@mail.gmail.com>
+        h=domainkey-signature:mime-version:received:reply-to:date:message-id
+         :subject:from:to:content-type:content-transfer-encoding;
+        bh=mXcuVyFuz7N6A3A/TGmayos20ZbiiClaEW4wtt8li+Q=;
+        b=XlVs1rgzUlGrQpdaxY6NpNzHQMy+2HSv2JwRkX2u3SxX0pKBrctEria+3KgowW7LOK
+         XhUpzhPSjxILnkM9KFAlIROyEGLwqKclyM/kQyL2J77B35x1+zmQkbsoM4yAvX5gnCsi
+         eTKNnlWz5LKs2uh3p5XWmZ97nmfQdOe842hS8=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Michal Nazarewicz <mina86@tlen.pl>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-Hi Michal,
+Dear C/Linux friends,
 
-The "LL" does make my prog work :)
+We wanted to increase PIPE_SIZE (from 4K to 8K on linux 2.4 on an AMD
+LX800 system).
+The result is a segmentation error as soon as Read() is reading more
+data than 4K
+from the pipe.
+So pipe data seems to be damaged.
+If we change PIPE_SIZE back tot 4K everything is running fine.
+Question-1: Any suggestion to prevent this segmentation error ?
 
-Thanks for your help!!
+* PIPE_SIZE
+If you look in the linux kernel code for PIPE_SIZE
+("include/linux/pipe_fs_i.h") you find:
+#define PIPE_SIZE PAGE_SIZE
+I don't know if #define PIPE_SIZE PAGE_SIZE is necessary or just a
+simple shortcut.
+Question-2: Is it OK if PIPE_SIZE > PAGE_SIZE ?
 
-Best Regard
-Nicle Yang
+* PAGE_SIZE
+Question-3: Is it OK to increase Page_size on linux 2.4 on AMD LX800 system ?
+Which aspects are limiting the user to config the PAGE_SIZE ?
 
+-- 
 
->
->
-> 2009/5/18 Michal Nazarewicz <mina86@tlen.pl>
->>
->> Nicle <ynicle@gmail.com> writes:
->> > I have a file > 2GB, and my job is seeking the file to pos: 2.1G.
->> > But, it seems that the lseek64 doesn't work.
->>
->> > #define _LARGEFILE64_SOURCE
->> > #include ...
->> >
->> > int main() {
->> > =A0int fd =3D -1;
->> > =A0long long pos =3D (long long) 2*1024*1024*1024 + 10; // over 2G
->>
->> A long shot, but try (2LL << 30) (the "LL" is important). =A0I don't
->> expect that will make it work but if you're out of ideas... ;)
->>
->> > =A0fd =3D open(FILENAME, O_WRONLY|O_LARGEFILE);
->> > =A0if (fd < 0) { /* ... */ }
->> >
->> > =A0if (lseek64(fd, pos, SEEK_SET) < 0)
->> > =A0 =A0 =A0fprintf(stderr, "Failed seeking to %lld, %s\n", pos, st=
-rerror(errno));
->> >
->> > =A0return 0;
->> > }
->>
->> > =A0Then the building cmd: =A0 gcc -o test test.c -D_FILE_OFFSET_BI=
-TS=3D64
->> > =A0Output: =A0 =A0 =A0 =A0 =A0 =A0> =A0 =A0 Failed seeking to 2147=
-483658, Success.
->> >
->> > The return val of lseek64 =A0was "<0", but the strerror told me "S=
-uccess".
->>
->> BTW. The following works fine for me:
->>
->> #v+
->> #define _LARGEFILE64_SOURCE
->>
->> #include <errno.h>
->> #include <fcntl.h>
->> #include <stdio.h>
->> #include <string.h>
->> #include <sys/stat.h>
->> #include <sys/types.h>
->> #include <unistd.h>
->>
->> #define RUN(expr) if ((expr) < 0) { perror(#expr); return 1; } else =
-(void)0
->>
->> int main(void) {
->> =A0 =A0 =A0 =A0const long long pos =3D (2LL << 30) + 10;
->> =A0 =A0 =A0 =A0int fd;
->>
->> =A0 =A0 =A0 =A0RUN(fd =3D open("deleteme", O_WRONLY | O_LARGEFILE | =
-O_CREAT, 0600));
->> =A0 =A0 =A0 =A0RUN(lseek64(fd, pos, SEEK_SET));
->> =A0 =A0 =A0 =A0RUN(write(fd, "a", 1));
->> =A0 =A0 =A0 =A0return 0;
->> }
->> #v-
->>
->> --
->> Best regards, =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
- =A0 =A0 =A0 =A0 =A0 =A0 _ =A0 =A0 _
->> =A0.o. | Liege of Serenly Enlightened Majesty of =A0 =A0 =A0o' \,=3D=
-=2E/ `o
->> =A0..o | Computer Science, =A0Michal "mina86" Nazarewicz =A0 (o o)
->> =A0ooo +--<mina86*tlen.pl>--<jid:mina86*jabber.org>--ooO--(_)--Ooo--
->
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+With best regards,
+Ad van den Broek
