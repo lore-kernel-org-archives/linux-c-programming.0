@@ -1,44 +1,70 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: "Ardhan Madras" <ajhwb@knac.com>
 Subject: Re: Help on pipe
-Date: Fri, 10 Jul 2009 18:40:38 +0100
-Message-ID: <19031.32022.804076.200185@cerise.gclements.plus.com>
-References: <34e1241d0907092322h5aea016cj437168a43ebfe50e@mail.gmail.com>
-	<op.uwubc1lg7p4s8u@amdc030.digital.local>
+Date: Fri, 10 Jul 2009 11:21:22 -0700
+Message-ID: <20090710112122.60FA2DF8@resin13.mta.everyone.net>
+Reply-To: <ajhwb@knac.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: base64
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <op.uwubc1lg7p4s8u@amdc030.digital.local>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: =?utf-8?B?TWljaGHFgiBOYXphcmV3aWN6?= <m.nazarewicz@samsung.com>
-Cc: Ardhan Madras <nightdecoder@gmail.com>, linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="windows-1254"
+To: linux-c-programming@vger.kernel.org
 
-
-Micha=B3 Nazarewicz wrote:
-
-> >     waitpid(pid, &ret, 0);
-> >     close(fds[1]);
->=20
-> No need to close.
-
-There definitely is a need to close, but it should be fclose(stream)
-*before* the waitpid(). As David points out, sort won't terminate
-until it has finished reading its input.
-
-David Lee wrote:
-
-> The sort program is waiting for an EOF (^D).
-
-Ctrl-D isn't EOF unless you're reading from a terminal. The TTY driver
-"sends EOF" (i.e. causes read() to return a zero count) when you press
-Ctrl-D (by default) if the driver is in canonical mode. Ctrl-D doesn't
-have any significance in other contexts.
-
---=20
-Glynn Clements <glynn@gclements.plus.com>
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+TXkgZGVtbyBjYW4gcnVuLiBpIHVzZSAtV2FsbCBmbGFnLCB0aGUgImNvbnN0IGNoYXIgKmFyZ3Zb
+Ml0gPSB7DQoic29ydCIsIE5VTEwgfSIgYXMgeW91IHNhaWQgd2FybmVkIHdpdGg6DQoNCnBpcGUu
+YzozNTogd2FybmluZzogcGFzc2luZyBhcmd1bWVudCAyIG9mICdleGVjdmUnIGZyb20gaW5jb21w
+YXRpYmxlDQpwb2ludGVyIHR5cGUuDQoNCmJ1dCBpdCdzIHBlcmZlY3QgZm9yICAiY2hhciAqIGNv
+bnN0IGFyZ3ZbMl0gPSB7ICJzb3J0IiwgTlVMTCB9Ig0KDQphbmQgaSBkZWZpbmUgImludCByZXQi
+IGZvciBib3RoIHByb2Nlc3MsIGJ1dCBpIHVuZGVzdGFuZCBmb3JraW5nDQptZWNoYW5pc20gb24g
+R05VL0xpbnV4Lg0KDQpzb3JyeSBpIGRvbid0IHdyaXRlIHRoZSBjb2RlIGNsZWFubHkuLiBNeSBw
+b2ludCBpcyBvbmx5IHRvIG1ha2UgdGhlDQoic29ydCIgd29ya2luZywgaW0gbm93IHVuZGVyc3Rh
+bmQgdGhhdCAic29ydCIgd2lsbCBhbHdheXMgd2FpdCBmb3INCmlucHV0IHVudGlsIGl0J3MgZW5k
+IChwZWVyIGNsb3NlZCB0aGUgaW5wdXQpLg0KDQpUaGFuayB5b3UgdmVyeSBtdWNoLg0KDQoNCg0K
+MjAwOS83LzEwIE1pY2hhxYIgTmF6YXJld2ljeiA8bS5uYXphcmV3aWN6QHNhbXN1bmcuY29tPjoN
+Cj4gT24gRnJpLCAxMCBKdWwgMjAwOSAwODoyMjo1NCArMDIwMCwgQXJkaGFuIE1hZHJhcyA8bmln
+aHRkZWNvZGVyQGdtYWlsLmNvbT4NCj4gd3JvdGU6DQo+DQo+PiAjaW5jbHVkZSA8c3lzL3R5cGVz
+Lmg+DQo+PiAjaW5jbHVkZSA8c3lzL3dhaXQuaD4NCj4+ICNpbmNsdWRlIDx1bmlzdGQuaD4NCj4+
+ICNpbmNsdWRlIDxzdGRpby5oPg0KPj4gI2luY2x1ZGUgPHN0cmluZy5oPg0KPj4NCj4+IGludCBt
+YWluKHZvaWQpDQo+PiB7DQo+PiAgcGlkX3QgcGlkOw0KPj4gIGludCBmZHNbMl0sIHJldDsNCj4+
+ICBjb25zdCBjaGFyICpzb3J0ID0gIi91c3IvYmluL3NvcnQiOw0KPg0KPiAic3RhdGljIGNvbnN0
+IGNoYXIgc29ydFtdIiB3b3VsZCBiZSBiZXR0ZXIgSU1PLg0KPg0KPj4gIGNoYXIgKmFyZ3ZbMl0g
+PSB7ICJzb3J0IiwgTlVMTCB9Ow0KPg0KPiAic3RhdGljIGNvbnN0IGNoYXIgKmFyZ3ZbXSIgaXMg
+ZGVmaW5pdGx5IGJldHRlciBoZXJlIGFuZCBkb2VzIG5vdCBwcm9kdWNlDQo+IHdhcm5pbmdzLiAg
+WW91ciBjb2RlIGRpc2NhcmRzICJjb25zdCIgZnJvbSBwb2ludGVyIChhIHN0cmluZyBsaXRlcmFs
+KS4NCj4NCj4+ICByZXQgPSBwaXBlKGZkcyk7DQo+PiAgaWYgKHJldCA9PSAtMSkgew0KPj4gICAg
+cGVycm9yKCJwaXBlIik7DQo+PiAgICByZXR1cm4gLTE7DQo+PiAgfQ0KPj4gIHBpZCA9IGZvcmso
+KTsNCj4+ICBpZiAocGlkID09IC0xKSB7DQo+PiAgICBwZXJyb3IoImZvcmsiKTsNCj4+ICAgIHJl
+dHVybiAtMTsNCj4+ICB9DQo+DQo+IFBlcnNvbmFsbHkgSSBwcmVmZmVyIHNvbWV0aGluZyBsaWtl
+Og0KPg0KPiAgc3dpdGNoIChmb3JrKCkpIHsNCj4gIGNhc2UgLTE6IC8qIGVycm9yICovICBicmVh
+azsNCj4gIGNhc2UgIDA6IC8qIGNoaWxkICovICBicmVhazsNCj4gIGRlZmF1bHQ6IC8qIHBhcmVu
+dCAqLw0KPiAgfQ0KPg0KPiBidXQgc3VpdCB5b3Vyc2VsZi4NCj4NCj4+ICBpZiAocGlkID09IDAp
+IHsNCj4+ICAgIGludCByZXQ7DQo+DQo+IE5vIG5lZWQgdG8gZGVmaW5lIHRoaXMgdmFyaWFibGUg
+aGVyZS4gIFlvdSBhbHJlYWR5IGhhdmUgc3VjaCB2YXJpYWJsZS4NCj4NCj4+DQo+PiAgICBjbG9z
+ZShmZHNbMV0pOw0KPj4gICAgZHVwMihmZHNbMF0sIFNURElOX0ZJTEVOTyk7DQo+Pg0KPj4gICAg
+cmV0ID0gZXhlY3ZlKHNvcnQsIGFyZ3YsIE5VTEwpOw0KPj4gICAgaWYgKHJldCA9PSAtMSkgew0K
+Pj4gICAgICBwZXJyb3IoImV4ZWN2ZSIpOw0KPj4gICAgfQ0KPj4gICAgY2xvc2UoZmRzWzBdKTsN
+Cj4+ICAgIF9leGl0KDApOw0KPg0KPiBObyBuZWVkIHRvIGNsb3NlKCksIGFuZCBfZXhpdCgwKSBz
+aG91bGQgYmUgX2V4aXQoMSkgKG9yIC0xIGlmIHlvdSB3aWxsKQ0KPiBzaW5jZSB0aGUgY2hpbGVk
+IGZpbmlzaGVkIHdpdGggZXJyb3IuDQo+DQo+PiAgfQ0KPj4gIGVsc2Ugew0KPj4gICAgRklMRSAq
+c3RyZWFtOw0KPj4NCj4+ICAgIGNsb3NlKGZkc1swXSk7DQo+PiAgICBzdHJlYW0gPSBmZG9wZW4o
+ZmRzWzFdLCAidyIpOw0KPj4gICAgaWYgKCFzdHJlYW0pIHsNCj4+ICAgICAgcGVycm9yKCJmZG9w
+ZW4iKTsNCj4+ICAgICAgcmV0dXJuIC0xOw0KPj4gICAgfQ0KPj4gICAgZnByaW50ZihzdHJlYW0s
+ICJ0aGlzXG4iKTsNCj4+ICAgIGZwcmludGYoc3RyZWFtLCAibWVhbnNcbiIpOw0KPj4gICAgZnBy
+aW50ZihzdHJlYW0sICJ3YXJcbiIpOw0KPj4gICAgZmZsdXNoKHN0cmVhbSk7DQo+DQo+IEFuZCBo
+ZXJlLCByZXBsYWNlIGZmbHVzaCgpIHdpdGggZmNsb3NlKCkuICBJdCBzZWVtcywgZGF0YSBpcyBi
+dWZmZXJlZCBvbg0KPiBrZXJuZWwgbGV2ZWwsIG5vdCBvbmx5IGxpYmMgbGV2ZWwgYW5kIGZmbHVz
+aCgpIGNhbm5vdCBoYW5kbGUgdGhhdC4NCj4NCj4+ICAgIHdhaXRwaWQocGlkLCAmcmV0LCAwKTsN
+Cj4+ICAgIGNsb3NlKGZkc1sxXSk7DQo+DQo+IE5vIG5lZWQgdG8gY2xvc2UuDQo+DQo+PiAgfQ0K
+Pj4gIHJldHVybiAwOw0KPj4gfQ0KPg0KPiAtLQ0KPiBCZXN0IHJlZ2FyZHMsICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBfICAgICBfDQo+ICAuby4gfCBMaWVnZSBv
+ZiBTZXJlbmx5IEVubGlnaHRlbmVkIE1hamVzdHkgb2YgICAgICAgICBvJyBcLD0uLyBgbw0KPiAg
+Li5vIHwgQ29tcHV0ZXIgU2NpZW5jZSwgIE1pY2hhxYIgIm1pbmE4NiIgTmF6YXJld2ljeiAgICAg
+IChvIG8pDQo+ICBvb28gKy08bS5uYXphcmV3aWN6QHNhbXN1bmcuY29tPi08bWluYTg2QGphYmJl
+ci5vcmc+LW9vTy0tKF8pLS1Pb28tLQ0KPg0KPg0KLS0NClRvIHVuc3Vic2NyaWJlIGZyb20gdGhp
+cyBsaXN0OiBzZW5kIHRoZSBsaW5lICJ1bnN1YnNjcmliZSBsaW51eC1jLXByb2dyYW1taW5nIiBp
+bg0KdGhlIGJvZHkgb2YgYSBtZXNzYWdlIHRvIG1ham9yZG9tb0B2Z2VyLmtlcm5lbC5vcmcNCk1v
+cmUgbWFqb3Jkb21vIGluZm8gYXQgIGh0dHA6Ly92Z2VyLmtlcm5lbC5vcmcvbWFqb3Jkb21vLWlu
+Zm8uaHRtbA0KDQoNCg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fDQpMaXN0ZW4gdG8gS05BQywgSGl0IHRoZSBIb21lIHBhZ2Ug
+YW5kIFR1bmUgSW4gTGl2ZSEgLS0tPiBodHRwOi8vd3d3LmtuYWMuY29t
