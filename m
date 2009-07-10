@@ -1,49 +1,84 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: PIPE questions for Linux 2.4 setup
-Date: Thu, 21 May 2009 20:51:52 +0100
-Message-ID: <18965.45272.721883.642962@cerise.gclements.plus.com>
-References: <9f924d250905210756l5db654abkf9c9fbc4170717ac@mail.gmail.com>
+From: Ardhan Madras <nightdecoder@gmail.com>
+Subject: Help on pipe
+Date: Fri, 10 Jul 2009 13:22:54 +0700
+Message-ID: <34e1241d0907092322h5aea016cj437168a43ebfe50e@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <9f924d250905210756l5db654abkf9c9fbc4170717ac@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type:content-transfer-encoding;
+        bh=3UBxoN/d57M6DQ+dCGb+Ke4H9LZEufC1NAoV9oM4YyA=;
+        b=pQX4S6gQk84VZJHJCdqi2/+76T0fHjPpuen945SgnzJ+7mpZ9ntOGUEnUIKu4aqPFz
+         jV12YGkGsuoQfp+okNtI4EBTpdvY6ZTdfZ3HXbJ5DnDob+2VRoY62OVH1xbyb3//jG0d
+         aouvGmGRzlRvAMXnu6gxkIlWxmDa0nz0hrris=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: AdvandenBroek.nl@gmail.com
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Hi,
 
-Ad van den Broek wrote:
+I'm writing pipe demo:
 
-> Dear C/Linux friends,
-> 
-> We wanted to increase PIPE_SIZE (from 4K to 8K on linux 2.4 on an AMD
-> LX800 system).
-> The result is a segmentation error as soon as Read() is reading more
-> data than 4K
-> from the pipe.
-> So pipe data seems to be damaged.
-> If we change PIPE_SIZE back tot 4K everything is running fine.
-> Question-1: Any suggestion to prevent this segmentation error ?
-> 
-> * PIPE_SIZE
-> If you look in the linux kernel code for PIPE_SIZE
-> ("include/linux/pipe_fs_i.h") you find:
-> #define PIPE_SIZE PAGE_SIZE
-> I don't know if #define PIPE_SIZE PAGE_SIZE is necessary or just a
-> simple shortcut.
-> Question-2: Is it OK if PIPE_SIZE > PAGE_SIZE ?
-> 
-> * PAGE_SIZE
-> Question-3: Is it OK to increase Page_size on linux 2.4 on AMD LX800 system ?
-> Which aspects are limiting the user to config the PAGE_SIZE ?
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 
-The page size is hardcoded in silicon; you can't change it in
-software.
+int main(void)
+{
+  pid_t pid;
+  int fds[2], ret;
+  const char *sort = "/usr/bin/sort";
+  char *argv[2] = { "sort", NULL };
 
-And the kernel itself no longer refers to PIPE_SIZE (it did in earlier
-2.6 versions), so there's not much point in changing it.
+  ret = pipe(fds);
+  if (ret == -1) {
+    perror("pipe");
+    return -1;
+  }
+  pid = fork();
+  if (pid == -1) {
+    perror("fork");
+    return -1;
+  }
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+  if (pid == 0) {
+    int ret;
+
+    close(fds[1]);
+    dup2(fds[0], STDIN_FILENO);
+
+    ret = execve(sort, argv, NULL);
+    if (ret == -1) {
+      perror("execve");
+    }
+    close(fds[0]);
+    _exit(0);
+  }
+  else {
+    FILE *stream;
+
+    close(fds[0]);
+    stream = fdopen(fds[1], "w");
+    if (!stream) {
+      perror("fdopen");
+      return -1;
+    }
+    fprintf(stream, "this\n");
+    fprintf(stream, "means\n");
+    fprintf(stream, "war\n");
+    fflush(stream);
+    waitpid(pid, &ret, 0);
+    close(fds[1]);
+  }
+  return 0;
+}
+
+I want to send parent's data to the child as "sort" input, i don't
+know why sort doesn't receive the data. Did i made mistake here?
+
+Thanks before.
