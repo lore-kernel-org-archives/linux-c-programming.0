@@ -1,65 +1,139 @@
-From: =?ISO-8859-2?Q?Mirski_Pawe=B3?= <mirskip87@gmail.com>
-Subject: Re: Problem with infinite loop in signal handler
-Date: Tue, 28 Jul 2009 08:45:42 +0200
-Message-ID: <62c21b850907272345s34829764m41763d41e54c65a@mail.gmail.com>
-References: <62c21b850907220942p60fd9362kcbd82158ce685dd8@mail.gmail.com>
-	 <9b6278b80907221331m39d4adf0oc6cd8057d9cd6565@mail.gmail.com>
-	 <62c21b850907242234r5ec8f6f9tc8ccb2e412306312@mail.gmail.com>
-	 <20090726135838.GA5951@balu.adler.nest>
+From: Rahul K Patel <rahulk.patel@einfochips.com>
+Subject: Re: memory address represented as a string
+Date: Tue, 28 Jul 2009 15:39:23 +0530
+Message-ID: <4A6ECE53.9010607@einfochips.com>
+References: <2a46ebd60907260039g290268b7i3183ee785994b86@mail.gmail.com>	 <b21328ed0907260114w547eb3fax61927111cdcf9d3c@mail.gmail.com> <2a46ebd60907260126q5ba0f7fdr48c6af8728737f3@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:content-type
-         :content-transfer-encoding;
-        bh=ZZuEgv4xwf2lEBhjXLIVdqgkP6o8SGUr8RHOTep4hkI=;
-        b=cOM4+EPgNZZnitsaANa2YhfvYnuogNqeOQz1S5ZCOK8OMasjsrUnlwMxDnAGhl4GaA
-         tEpsUZgrxIisxJ3Z6ojnBAe7wKn69p/oO2BlFDc5J3EuhfjUKey9qaR80aGO7/kOiL75
-         SxjzQJMnBsFKmqPZcRv97Cz4ex9zzLW7I9A+k=
-In-Reply-To: <20090726135838.GA5951@balu.adler.nest>
+In-Reply-To: <2a46ebd60907260126q5ba0f7fdr48c6af8728737f3@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: Saurabh Sehgal <saurabh.r.s@gmail.com>
+Cc: Eric Polino <aluink@gmail.com>, linux-c-programming@vger.kernel.org
 
-Hello,
-Not exactly infinite loop but sigsuspend. Infinite loop was only
-example to show the problem. Without printf in sig handler problem
-also occures.
-I am writing simple stop-the-world garbage collector so I need this
-construction to stop (almost)all threads in application. I think only
-solution for this problem is not using any stream that client
-application may use.
-Thanks for help anyway :)
+Hi,
 
-W dniu 26 lipca 2009 15:58 u=BFytkownik Gunnar Larisch
-<gunmuc@googlemail.com> napisa=B3:
-> Hi Mirski,
+Saurabh Sehgal wrote:
+> Hi all,
 >
-> your signal handler function:
+> Thanks for the reply !
 >
->> >> void suspend(int sig) {
->> >> =A0 =A0printf("suspending\n");
->> >> =A0 =A0fflush(stdout);
->> >> =A0 =A0while(1);
->> >> }
+> I was able to write this function successfully.
 >
-> Have you also tried your programm without calling printf and fflush i=
-n the
-> signal handler? Do you know the manpage signal (7) ? There is a list =
-of
-> Async-signal-safe functions.
+> This would lead me to my next question.
 >
-> Can you tell me, why you need an endless loop in the signal
-> handler?
+> Is there anyway to test if a memory address is valid or not without causing a
+> segmentation fault and catching this maybe in a signal handler ?
 >
-> Regards,
-> Gunnar
+> Is there a safe way in the same function " void * foo (char * addr)"
+> to check that
+> if the address contained in the string represented by "char * addr"  is valid
+> before returning it.
+>   
+
+static inline int is_invalid_addr( const void *p )
+{
+       int dev_null_fd = open("/dev/null", O_RDWR);
+       if(dev_null_fd < 0)
+          return -1;
+   
+        /* HACK: on some systems we can not write to check for pointer 
+validity */
+        size_t ret = fcntl( dev_null_fd, F_GETLK, p );
+
+        ret = ( errno == EFAULT );
+        errno = 0;
+        return ret;
+}
+
+You can use this function to check whether given address is accessible.
+
+-- Rahul Patel.
+> Thank you !
 >
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+> Saurabh
+>
+> On Sun, Jul 26, 2009 at 4:14 AM, Eric Polino<aluink@gmail.com> wrote:
+>   
+>> sure, you can just write a function that declares a void * and uses it as a
+>> regular numeric type such as int or whatnot and parses the string
+>> representation as a numeric value into that variable.  You can do stuff the
+>> same as you would with any other integer type, "x += 10; x -= 18;".  So the
+>> function would look something like
+>>
+>> void *foo(const char *addr){
+>>   void *parsed_value = 0;
+>>   ....
+>>   /* Parse addr into parsed_value */
+>>   ....
+>>   /* parsed_value == value_described_by(addr) */
+>>
+>>   return parsed_value;
+>> }
+>>
+>> Parsing addr into parsed_value is left as an exercise to the reader ;)
+>>
+>> "None are more hopelessly enslaved than those who falsely believe they are
+>> free."
+>>                                      --Goethe
+>>
+>> "Freedom is living without government coercion."
+>>                   --Ron Paul (www.ronpaul2008.com)
+>>
+>>
+>> On Sun, Jul 26, 2009 at 03:39, Saurabh Sehgal <saurabh.r.s@gmail.com> wrote:
+>>     
+>>> Hi all,
+>>>
+>>> I had a quick question:
+>>>
+>>> Let's say I design a function with the signature:
+>>>
+>>> void * foo( char * addr ) ; ,
+>>>
+>>> where addr is a string that represents a valid memory address  ...
+>>> so the way someone can call this function is ...
+>>>
+>>> char * addr = "0xae456778" // assume this is a valid memory address on
+>>> the machine
+>>> foo( addr ) ;
+>>>
+>>> Is it possible to take this address in string form, and assign it to
+>>> an actual pointer of void * type ?
+>>> I want the function "foo" to return a pointer pointing to the memory
+>>> location as indicated
+>>> by the string passed in.
+>>>
+>>> Thank you !
+>>>
+>>> Saurabh
+>>> --
+>>> To unsubscribe from this list: send the line "unsubscribe
+>>> linux-c-programming" in
+>>> the body of a message to majordomo@vger.kernel.org
+>>> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>>>       
+>>     
+>
+>
+>
+>   
+-- 
+_____________________________________________________________________
+Disclaimer: This e-mail message and all attachments transmitted with it
+are intended solely for the use of the addressee and may contain legally
+privileged and confidential information. If the reader of this message
+is not the intended recipient, or an employee or agent responsible for
+delivering this message to the intended recipient, you are hereby
+notified that any dissemination, distribution, copying, or other use of
+this message or its attachments is strictly prohibited. If you have
+received this message in error, please notify the sender immediately by
+replying to this message and please delete it from your computer. Any
+views expressed in this message are those of the individual sender
+unless otherwise stated.Company has taken enough precautions to prevent
+the spread of viruses. However the company accepts no liability for any
+damage caused by any virus transmitted by this email.
+_____________________________________________________________________
+ 
