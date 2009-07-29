@@ -1,27 +1,54 @@
-From: "Trevor Woollacott" <trevorw@pharos-avantgard.com>
-Subject: RE: What compiler is doing when we pass unnecessary parameters in scanf
-Date: Wed, 29 Jul 2009 18:02:22 +0200
-Message-ID: <009701ca1065$f784d760$706bd90a@mtn.co.za>
+From: Aneesh Bhasin <contact.aneesh@gmail.com>
+Subject: Fwd: What compiler is doing when we pass unnecessary parameters in 
+	scanf
+Date: Wed, 29 Jul 2009 22:02:42 +0530
+Message-ID: <f662f0210907290932t1e8f7a66xd3ac82e0c41e00b2@mail.gmail.com>
+References: <24719839.post@talk.nabble.com> <f662f0210907290855m57c191e2pb8ba28dc3d87f780@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:in-reply-to:references
+         :from:date:message-id:subject:to:content-type
+         :content-transfer-encoding;
+        bh=SV/LNRz0oDASxluSOYdzdLlZ/YcXd3envaCQUrPrM2Q=;
+        b=tvmRI0tcnOLnCIGT2O92LtLWOjaC9dMJE9rcbjoypTK67/ZMpuNmA6paoSD4Ern3yM
+         25l72M+nbMpNrN0TKTqtAitcUvbK7nDPj/tQeFKAZn0kvObYanxS4zhtALCufU9ctAe+
+         yUUR97XmN3FRT95aupbrRsj63s5gGyADgXFiU=
+In-Reply-To: <f662f0210907290855m57c191e2pb8ba28dc3d87f780@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"; reply-type="original"
-To: linux-c-programming@vger.kernel.org, Kaushik.Sarkar@netapp.com
+Content-Type: text/plain; charset="iso-8859-1"
+To: linux-c-programming@vger.kernel.org
 
-> -----Original Message-----
-> From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
-> programming-owner@vger.kernel.org] On Behalf Of RAM_LOCK
-> Sent: Wednesday, 29 July 2009 04:19 PM
-> To: linux-c-programming@vger.kernel.org
-> Subject: What compiler is doing when we pass unnecessary parameters in
-> scanf
->
+----forgot to add list as cc------
+
+Hi Kaushik,
+
+any extra non-whitespace, non "%" characters are matched against the
+input given from stdin - if they match, it is ignored and if it
+doesn't match, no further input is taken.
+
+In case of your second scenario, when you specify "p:%d" as string,
+the program expects the input to be of the format "p:<some number>"
+but since you give 100 as the input, no value is assigned to the
+variable p (you can check the return value of scanf - its zero) and
+hence, whatever junk value is in variable p, it is used for further
+calculation.
+
+With the second scenario, try giving the input as "p:100" and then p
+should get value 100 as expected...
+
+Hope that helps.
+Aneesh
+
+On Wed, Jul 29, 2009 at 7:48 PM, RAM_LOCK <Kaushik.Sarkar@netapp.com> w=
+rote:
 >
 > Hi,
-> In the second scenario what value is it printing when i have given
-> extra
+> In the second scenario what value is it printing when i have given ex=
+tra
 > parameter in scanf?
 > Does it vary from compiler to compiler?
 >
@@ -32,12 +59,12 @@ To: linux-c-programming@vger.kernel.org, Kaushik.Sarkar@netapp.com
 >
 > void main ()
 > {
->         int p;
->         float i=0;
->         printf ("enter the principal amount\n");
->         scanf ("%d",&p);
->         i = (p*5*5)/100;
->         printf ("Interterest is : %f\n",i);
+> =A0 =A0 =A0 =A0int p;
+> =A0 =A0 =A0 =A0float i=3D0;
+> =A0 =A0 =A0 =A0printf ("enter the principal amount\n");
+> =A0 =A0 =A0 =A0scanf ("%d",&p);
+> =A0 =A0 =A0 =A0i =3D (p*5*5)/100;
+> =A0 =A0 =A0 =A0printf ("Interterest is : %f\n",i);
 > }
 > root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> ./a.out
 > enter the principal amount
@@ -52,12 +79,12 @@ To: linux-c-programming@vger.kernel.org, Kaushik.Sarkar@netapp.com
 >
 > void main ()
 > {
->         int p;
->         float i=0;
->         printf ("enter the principal amount\n");
->         scanf ("p:%d",&p);
->         i = (p*5*5)/100;
->         printf ("Interterest is : %f\n",i);
+> =A0 =A0 =A0 =A0int p;
+> =A0 =A0 =A0 =A0float i=3D0;
+> =A0 =A0 =A0 =A0printf ("enter the principal amount\n");
+> =A0 =A0 =A0 =A0scanf ("p:%d",&p);
+> =A0 =A0 =A0 =A0i =3D (p*5*5)/100;
+> =A0 =A0 =A0 =A0printf ("Interterest is : %f\n",i);
 > }
 > root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> ./a.out
 > enter the principal amount
@@ -65,53 +92,18 @@ To: linux-c-programming@vger.kernel.org, Kaushik.Sarkar@netapp.com
 > Interterest is : -9321198.000000
 >
 > --
-> View this message in context: http://www.nabble.com/What-compiler-is-
-> doing-when-we-pass-unnecessary-parameters-in-scanf-
-> tp24719839p24719839.html
+> View this message in context: http://www.nabble.com/What-compiler-is-=
+doing-when-we-pass-unnecessary-parameters-in-scanf-tp24719839p24719839.=
+html
 > Sent from the linux-c-programming mailing list archive at Nabble.com.
 >
 > --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-
-> programming" in
+> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
+gramming" in
 > the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-Hi
-
-With scenario II your input of 100 is not matching, so you end up with 
-whatever value was stored at &p before the scanf.
-i.e.
-
-(gdb) r
-Starting program: ./a.out
-
-Breakpoint 1, main () at test.c:6
-6             float i=0;
-(gdb) p p
-$4 = -37284792
-(gdb) s
-7             printf ("enter the principal amount\n");
-(gdb) s
-enter the principal amount
-8             scanf ("p:%d",&p);
-(gdb) s
-100
-9             i = (p*5*5)/100;
-(gdb) p p
-$6 = -37284792
-(gdb) s
-10            printf ("Interterest is  : %f\n",i); }
-(gdb) s
-Interterest is : -9321198.000000
-
-Here you can see p = -37284792 before and after your scanf
-Then i = (-37284792*5*5)/100 = -9321198.000000
-
-If you check the value returned by scanf, you can determine how many input 
-values were successfully matched. In the case where you entered 100 in 
-scenario I, scanf would have returned 1, and in scenario II it would have 
-returned 0.
-
-Regards,
-Trevor 
-
+> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
