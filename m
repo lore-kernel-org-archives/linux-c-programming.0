@@ -1,7 +1,7 @@
 From: RAM_LOCK <Kaushik.Sarkar@netapp.com>
 Subject: What compiler is doing when we pass unnecessary parameters in scanf
-Date: Wed, 29 Jul 2009 07:18:26 -0700 (PDT)
-Message-ID: <24719837.post@talk.nabble.com>
+Date: Wed, 29 Jul 2009 07:18:47 -0700 (PDT)
+Message-ID: <24719839.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -19,7 +19,7 @@ Does it vary from compiler to compiler?
 Scenario : I
 -------------
 root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> cat simple-interest.c
-#include 
+#include <stdio.h>
 
 void main ()
 {
@@ -39,7 +39,7 @@ Interterest is : 25.000000
 Scenario : II
 -------------
 > cat simple-interest.c
-#include 
+#include <stdio.h>
 
 void main ()
 {
@@ -56,6 +56,6 @@ enter the principal amount
 Interterest is : -9321198.000000
 
 -- 
-View this message in context: http://www.nabble.com/What-compiler-is-doing-when-we-pass-unnecessary-parameters-in-scanf-tp24719837p24719837.html
+View this message in context: http://www.nabble.com/What-compiler-is-doing-when-we-pass-unnecessary-parameters-in-scanf-tp24719839p24719839.html
 Sent from the linux-c-programming mailing list archive at Nabble.com.
 
