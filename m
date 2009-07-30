@@ -1,134 +1,72 @@
-From: "Sarkar, Kaushik" <Kaushik.Sarkar@netapp.com>
-Subject: RE: What compiler is doing when we pass unnecessary parameters in scanf
-Date: Wed, 29 Jul 2009 23:30:45 +0530
-Message-ID: <4A2CF3C24E05B348A46BAF5A7C4593D40593B58B@BTCMVEXC1-PRD.hq.netapp.com>
-References: <009701ca1065$f784d760$706bd90a@mtn.co.za>
+From: leo mueller <llug.dan@googlemail.com>
+Subject: mmap() returns with -EINVAL
+Date: Thu, 30 Jul 2009 15:19:05 +0200
+Message-ID: <c93f91ee0907300619q2dc38f49q1092b363ed28687@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/mixed; boundary=0016e64be264df686d046fec258f
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-class: urn:content-classes:message
-In-Reply-To: <009701ca1065$f784d760$706bd90a@mtn.co.za>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=s2q5LOblFhHsrtMTZDI+x3T060wZjPGAuaO7sHkfCrM=;
+        b=gctpnLpPZrNVmc87oB9F5KcjVZ0lYrLgUIE+o36RkqlE5xTGicrJZ/PKCevy/WgPjF
+         vg2F2RI9g0Up/xVprPAsZPEwg/voG4/N3o1m9li+iJ3J7aLWkoa1IUh8AucuDbpz+ALu
+         /XtisEEg0XeEpsurhP2DDVyFd6AEo1L7ahCeU=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Trevor Woollacott <trevorw@pharos-avantgard.com>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Thanks Trevor for your details explaination...
-It is clear to me now... thanks again for clearing this concept :)
+--0016e64be264df686d046fec258f
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
+hi all,
 
+in my attached code snippet i try to mmap the incoming socket data
+accoring to the kernel documentation
+which can also be found online:
+http://lxr.linux.no/linux+v2.6.30/Documentation/networking/packet_mmap.txt
 
------Original Message-----
-From: Trevor Woollacott [mailto:trevorw@pharos-avantgard.com] 
-Sent: Wednesday, July 29, 2009 9:32 PM
-To: linux-c-programming@vger.kernel.org; Sarkar, Kaushik
-Subject: RE: What compiler is doing when we pass unnecessary parameters
-in scanf
+by doing a mmap() my program exits with -EINVAL and up to now i have
+no clue why... parametes should be right.
 
-> -----Original Message-----
-> From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-
-> programming-owner@vger.kernel.org] On Behalf Of RAM_LOCK
-> Sent: Wednesday, 29 July 2009 04:19 PM
-> To: linux-c-programming@vger.kernel.org
-> Subject: What compiler is doing when we pass unnecessary parameters in
-> scanf
->
->
-> Hi,
-> In the second scenario what value is it printing when i have given
-> extra
-> parameter in scanf?
-> Does it vary from compiler to compiler?
->
-> Scenario : I
-> -------------
-> root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> cat simple-interest.c
-> #include <stdio.h>
->
-> void main ()
-> {
->         int p;
->         float i=0;
->         printf ("enter the principal amount\n");
->         scanf ("%d",&p);
->         i = (p*5*5)/100;
->         printf ("Interterest is : %f\n",i);
-> }
-> root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> ./a.out
-> enter the principal amount
-> 100
-> Interterest is : 25.000000
->
->
-> Scenario : II
-> -------------
-> > cat simple-interest.c
-> #include <stdio.h>
->
-> void main ()
-> {
->         int p;
->         float i=0;
->         printf ("enter the principal amount\n");
->         scanf ("p:%d",&p);
->         i = (p*5*5)/100;
->         printf ("Interterest is : %f\n",i);
-> }
-> root@kaushik_Fedora11 ~/C/LET_US_C/ch-1> ./a.out
-> enter the principal amount
-> 100
-> Interterest is : -9321198.000000
->
-> --
-> View this message in context: http://www.nabble.com/What-compiler-is-
-> doing-when-we-pass-unnecessary-parameters-in-scanf-
-> tp24719839p24719839.html
-> Sent from the linux-c-programming mailing list archive at Nabble.com.
->
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-
-> programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+do you have any idea?
 
-Hi
+big thanks,
+daniel
 
-With scenario II your input of 100 is not matching, so you end up with 
-whatever value was stored at &p before the scanf.
-i.e.
+--0016e64be264df686d046fec258f
+Content-Type: text/plain; charset=US-ASCII; name="err.txt"
+Content-Disposition: attachment; filename="err.txt"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_fxrig4vu0
 
-(gdb) r
-Starting program: ./a.out
-
-Breakpoint 1, main () at test.c:6
-6             float i=0;
-(gdb) p p
-$4 = -37284792
-(gdb) s
-7             printf ("enter the principal amount\n");
-(gdb) s
-enter the principal amount
-8             scanf ("p:%d",&p);
-(gdb) s
-100
-9             i = (p*5*5)/100;
-(gdb) p p
-$6 = -37284792
-(gdb) s
-10            printf ("Interterest is  : %f\n",i); }
-(gdb) s
-Interterest is : -9321198.000000
-
-Here you can see p = -37284792 before and after your scanf
-Then i = (-37284792*5*5)/100 = -9321198.000000
-
-If you check the value returned by scanf, you can determine how many
-input 
-values were successfully matched. In the case where you entered 100 in 
-scenario I, scanf would have returned 1, and in scenario II it would
-have 
-returned 0.
-
-Regards,
-Trevor 
-
+dHlwZWRlZiB1bnNpZ25lZCBjaGFyICpyaW5nX2J1ZmZfdDsKClsuLi5dCgpyaW5nX2J1ZmZfdCBj
+cmVhdGVfdmlydF9yaW5nKGludCBzb2NrKQp7CiAgICBpbnQgcmV0OwogICAgcmluZ19idWZmX3Qg
+cmI7CiAgICBzdHJ1Y3QgdHBhY2tldF9yZXEgcmVxOwoKICAgIG1lbXNldCgmcmVxLCAwLCBzaXpl
+b2YocmVxKSk7CgogICAgZGJnKCJwYWdlc2l6ZTogJWRcbiIsIGdldHBhZ2VzaXplKCkpOwoKICAg
+IHJlcS50cF9ibG9ja19zaXplID0gZ2V0cGFnZXNpemUoKTsKICAgIHJlcS50cF9mcmFtZV9zaXpl
+ID0gVFBfUlhfRlJBTUVfU0laOwogICAgcmVxLnRwX2Jsb2NrX25yID0gVFBfUlhfQkxPQ0tTOwog
+ICAgcmVxLnRwX2ZyYW1lX25yID0gcmVxLnRwX2Jsb2NrX3NpemUgLyByZXEudHBfZnJhbWVfc2l6
+ZSAqIHJlcS50cF9ibG9ja19ucjsKCiAgICByZXQgPSBzZXRzb2Nrb3B0KHNvY2ssIFNPTF9TT0NL
+RVQsIFBBQ0tFVF9SWF9SSU5HLCAodm9pZCAqKSAmcmVxLCBzaXplb2YocmVxKSk7CiAgICBpZihy
+ZXQgPCAwKXsKICAgICAgICBlcnIoInNldHNvY2tvcHQ6IGNyZWF0aW9uIG9mIHJ4IHJpbmcgZmFp
+bGVkOiAlZCAtICIsIGVycm5vKTsKICAgICAgICBwZXJyb3IoIiIpOwogICAgICAgIGdvdG8gX291
+dF9lcnI7CiAgICB9CgogICAgcmIgPSBtbWFwKDAsIChzaXplX3QpIHJlcS50cF9ibG9ja19uciAq
+IHJlcS50cF9ibG9ja19zaXplLCBQUk9UX1JFQUQgfCBQUk9UX1dSSVRFLCBNQVBfU0hBUkVELCBz
+b2NrLCAwKTsKICAgIGlmKHJiID09IE1BUF9GQUlMRUQpewogICAgICAgIGVycigibW1hcDogY2Fu
+bm90IG1tYXAgdGhlIHJ4IHJpbmc6ICVkIC0gIiwgZXJybm8pOwogICAgICAgIHBlcnJvcigiIik7
+CiAgICAgICAgZ290byBfb3V0X21tYXA7CiAgICB9CgogICAgZGJnKCJrZXJuZWwgcmluZ2J1ZmYg
+YWxsb2NhdGVkXG4iKTsKCiAgICByZXR1cm4gcmI7Cgpfb3V0X21tYXA6CiAgICBkZXN0cm95X3Zp
+cnRfcmluZyhzb2NrLCByYik7Cl9vdXRfZXJyOgogICAgY2xvc2Uoc29jayk7CiAgICBleGl0KDEp
+Owp9CgpbLi4uXQoKdm9pZCBkZXN0cm95X3ZpcnRfcmluZyhpbnQgc29jaywgcmluZ19idWZmX3Qg
+cmIpCnsKICAgIGludCByZXQ7CiAgICBzdHJ1Y3QgdHBhY2tldF9yZXEgcmVxOwoKICAgIG1lbXNl
+dCgmcmVxLCAwLCBzaXplb2YocmVxKSk7CiAgICByZXQgPSBzZXRzb2Nrb3B0KHNvY2ssIFNPTF9Q
+QUNLRVQsIFBBQ0tFVF9SWF9SSU5HLCAodm9pZCAqKSAmcmVxLCBzaXplb2YocmVxKSk7CiAgICBp
+ZihyZXQgPCAwKXsKICAgICAgICBlcnIoInNldHNvY2tvcHQ6IGRlc3RydWN0aW9uIG9mIHJ4IHJp
+bmcgZmFpbGVkOiAlZCAtICIsIGVycm5vKTsKICAgICAgICBwZXJyb3IoIiIpOwogICAgfQoKCWlm
+KHJiKXsKICAgICAgICBtdW5tYXAocmIsIFRQX1JYX0JMT0NLUyAqIGdldHBhZ2VzaXplKCkpOwog
+ICAgICAgIHJiID0gMDsKICAgIH0KICAgIAogICAgZGJnKCJrZXJuZWwgcmluZ2J1ZmYgZGVhbGxv
+Y2F0ZWRcbiIpOwp9CgoK
+--0016e64be264df686d046fec258f--
