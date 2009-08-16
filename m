@@ -1,35 +1,51 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: how compiler decide the range of real numbers in C...
-Date: Thu, 30 Jul 2009 18:46:53 +0100
-Message-ID: <19057.56461.639732.848186@cerise.gclements.plus.com>
-References: <24743191.post@talk.nabble.com>
+From: Reto Glauser <linux@blinkeye.ch>
+Subject: Re: mmap() returns with -EINVAL
+Date: Sun, 16 Aug 2009 16:11:19 +0200
+Message-ID: <4A881387.1080701@blinkeye.ch>
+References: <c93f91ee0907300619q2dc38f49q1092b363ed28687@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <24743191.post@talk.nabble.com>
+In-Reply-To: <c93f91ee0907300619q2dc38f49q1092b363ed28687@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: RAM_LOCK <Kaushik.Sarkar@netapp.com>
+To: leo mueller <llug.dan@googlemail.com>
 Cc: linux-c-programming@vger.kernel.org
 
+On 07/30/2009 03:19 PM,  leo mueller wrote:
+>
+> by doing a mmap() my program exits with -EINVAL and up to now i have
+> no clue why... parametes should be right.
+>
+> do you have any idea?
+>
 
-RAM_LOCK wrote:
+maybe somethings wrong with your socket. mmap-ping a fd for example only works
+if you open the fd O_RDWR, e.g.:
 
-> Say 16 bit compiler (for ex Turbo C) uses 2's compliment to find the range of
-> signed integer.
-> Say for 16 bit n=16. Now applying 2's compliment equation : -2^(n-1)  to
-> 2^(n-1) -1
-> so for n=16 : The range is -32768 to 32767
-> 
-> This is ok. The question arises when it tell about real constant's range.
-> For 16 bit compiler the range of real constant is : -3.4e38 to 3.4e38
-> 
-> How they arrived to this real constant range?
-> 
-> Can any one share the mathematical calculation behind it?
+   /** Open a file for writing.
+    *  - Creating the file if it doesn't exist.
+    *  - Truncating it to 0 size if it already exists. (not really needed)
+    *
+    * Note: "O_WRONLY" mode is not sufficient when mmap-ing.
+   **/
+   fd = open( FILEPATH, O_RDWR | O_CREAT | O_TRUNC, ( mode_t )0600 );
+   if ( fd == -1 )
+   {
+      perror( "Error opening file for writing" );
+      exit( EXIT_FAILURE );
+   }
 
-	http://en.wikipedia.org/wiki/IEEE_754-1985
+   /**
+    * Now the file is ready to be mmap-ped.
+   **/
+   map = mmap( 0, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0 );
+   if ( map == MAP_FAILED )
+   {
+      close( fd );
+      perror( "Error mmapping the file" );
+      exit( EXIT_FAILURE );
+   }
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+
