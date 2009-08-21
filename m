@@ -1,81 +1,89 @@
-From: Joe <longapple@gmail.com>
-Subject: strange stack limit behavior when allocating more than 2GB mem on 
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: strange stack limit behavior when allocating more than 2GB mem on 
 	32bit machine
-Date: Thu, 20 Aug 2009 19:47:28 -0800
-Message-ID: <56b13acf0908202047k2bf536f9vf993394d42059b8e@mail.gmail.com>
+Date: Fri, 21 Aug 2009 07:58:02 +0100
+Message-ID: <19086.17786.445616.394966@cerise.gclements.plus.com>
+References: <56b13acf0908202047k2bf536f9vf993394d42059b8e@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:date:message-id:subject
-         :from:to:content-type:content-transfer-encoding;
-        bh=+NSzNL8GbFEA6vnNV6GGdKF7LImXCpDlwRXk/OUaAk4=;
-        b=PLqlqg1WFBcZ509Rw1eF0zT90yVzW3zYZefQWqzhDP1jjfRbJHmxlJtj49aL1fXMTH
-         Ka30M/LANiGDanOys/yPwjqW74xZ49jV6w9ExZ3S2Tn4/r4V2ivaYkSRGnzGaIi4B1u5
-         XmRkC7CAhxih3uZHKr+oK5QlrU8ywxSR0rqqM=
+In-Reply-To: <56b13acf0908202047k2bf536f9vf993394d42059b8e@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
-
-Hi,
-
-Here I encounter something which I can't understand.
-What I want to do is to allocate ~2.5GB mem, it fails when stack limit
-is unlimited, but succeeded when stack limit is 10240.
-
-Here is the code:
-
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-int main(int argc, char *argv[])
-{
-        char *p;
-        long i;
-        size_t n;
-
-        if (argc != 2 || atol(argv[1]) <= 0) {
-                fprintf(stderr, "usage: malloc value (MB)\n");
-                return 1;
-        }
-        n = 1024 * 1024 * atol(argv[1]);
-        if (!(p = malloc(n))) {
-                perror("malloc failed");
-                return 2;
-        }
-        printf("Malloc succeeded\n");
-        free(p);
-        return 0;
-}
+To: Joe <longapple@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
 
-and here is what confused me:
+Joe wrote:
 
-$ uname -a
-Linux stone 2.6.9-11.ELsmp #1 SMP Fri May 20 18:26:27 EDT 2005 i686
-i686 i386 GNU/Linux <==== 32bit system
-$ free -m
-             total       used       free     shared    buffers     cached
-Mem:          2024       1996         28          0         30       1401
--/+ buffers/cache:        563       1461
-Swap:        10236          0      10236
-$ ulimit -s
-10240
-$ ./malloc 2500
-Malloc succeeded               <======= succeeds when stack limit is 10240
-$ ulimit -s unlimited
-$ ./malloc 2500
-malloc failed: Cannot allocate memory   <======== fails when stack
-limit is unlimited???
+> Here I encounter something which I can't understand.
+> What I want to do is to allocate ~2.5GB mem, it fails when stack limit
+> is unlimited, but succeeded when stack limit is 10240.
 
+> $ ulimit -s
+> 10240
+> $ ./malloc 2500
+> Malloc succeeded               <======= succeeds when stack limit is 10240
+> $ ulimit -s unlimited
+> $ ./malloc 2500
+> malloc failed: Cannot allocate memory   <======== fails when stack
+> limit is unlimited???
+> 
+> 
+> BTW, there is no such problem on 64bit machine
+> 
+> 
+> Could you please give some insight on this?
 
-BTW, there is no such problem on 64bit machine
+A 32-bit system has a 4 GiB address space. The top GiB is reserved for
+the kernel. If you set a stack size of unlimited, 2 GiB are reserved
+for the stack and shared libraries, causing shared libraries to be
+mapped at 1GiB and up. This leaves around 860 MiB for the heap.
 
+The result is that there isn't any areay of the address space which is
+large enough for a single 2500 MiB allocation:
 
-Could you please give some insight on this?
+glynn@cerise:~ $ ulimit -s 8192
+glynn@cerise:~ $ cat /proc/self/maps
+08048000-08053000 r-xp 00000000 08:01 3966484    /bin/cat
+08053000-08054000 r--p 0000a000 08:01 3966484    /bin/cat
+08054000-08055000 rw-p 0000b000 08:01 3966484    /bin/cat
+080a4000-080c6000 rw-p 080a4000 00:00 0          [heap]
+b7f67000-b7f68000 rw-p b7f67000 00:00 0 
+b7f68000-b80a0000 r-xp 00000000 08:01 9784624    /lib/libc-2.9.so
+b80a0000-b80a2000 r--p 00138000 08:01 9784624    /lib/libc-2.9.so
+b80a2000-b80a3000 rw-p 0013a000 08:01 9784624    /lib/libc-2.9.so
+b80a3000-b80a6000 rw-p b80a3000 00:00 0 
+b80bd000-b80be000 rw-p b80bd000 00:00 0 
+b80be000-b80bf000 r-xp b80be000 00:00 0          [vdso]
+b80bf000-b80db000 r-xp 00000000 08:01 9785919    /lib/ld-2.9.so
+b80db000-b80dc000 r--p 0001b000 08:01 9785919    /lib/ld-2.9.so
+b80dc000-b80dd000 rw-p 0001c000 08:01 9785919    /lib/ld-2.9.so
+bf81e000-bf833000 rw-p bffeb000 00:00 0          [stack]
 
-Regards
+glynn@cerise:~ $ ulimit -s unlimited
+glynn@cerise:~ $ cat /proc/self/maps 
+08048000-08053000 r-xp 00000000 08:01 3966484    /bin/cat
+08053000-08054000 r--p 0000a000 08:01 3966484    /bin/cat
+08054000-08055000 rw-p 0000b000 08:01 3966484    /bin/cat
+0a016000-0a038000 rw-p 0a016000 00:00 0          [heap]
+40000000-4001c000 r-xp 00000000 08:01 9785919    /lib/ld-2.9.so
+4001c000-4001d000 r--p 0001b000 08:01 9785919    /lib/ld-2.9.so
+4001d000-4001e000 rw-p 0001c000 08:01 9785919    /lib/ld-2.9.so
+4001e000-4001f000 r-xp 4001e000 00:00 0          [vdso]
+4001f000-40020000 rw-p 4001f000 00:00 0 
+40037000-4016f000 r-xp 00000000 08:01 9784624    /lib/libc-2.9.so
+4016f000-40171000 r--p 00138000 08:01 9784624    /lib/libc-2.9.so
+40171000-40172000 rw-p 0013a000 08:01 9784624    /lib/libc-2.9.so
+40172000-40176000 rw-p 40172000 00:00 0 
+bfb35000-bfb4a000 rw-p bffeb000 00:00 0          [stack]
+
+If you were to allocate 1900 MiB, the allocation would succeed with
+e.g. "ulimit -s 8192" (the allocation coming from the heap) or with
+"ulimit -s unlimited" (the allocation coming from the stack), but
+would fail with intermediate values, as neither region is large
+enough.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
