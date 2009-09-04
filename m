@@ -1,57 +1,47 @@
-From: Zhenwen Xu <helight.xu@gmail.com>
-Subject: Re: Changing syscall table
-Date: Fri, 4 Sep 2009 08:31:03 +0800
-Message-ID: <20090904003103.GB4465@helight>
-Reply-To: Zhenwen Xu <helight.xu@gmail.com>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: Byte ordering
+Date: Fri, 4 Sep 2009 19:04:49 +0700
+Message-ID: <34e1241d0909040504l7a60b9d6xe5daaf2f53658824@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:date:from:to:subject
-         :message-id:reply-to:mime-version:content-type:content-disposition
-         :user-agent;
-        bh=E2BRv3U45Dv70YseVyZ4Gdc55AOqbnUfGsZoYJC6yjY=;
-        b=XgCWr+U+BdLCgxx2TeHEKfuMxeT4AIzmNDHptlZa1jQCn/BbxldmA9apGCH4j+lojg
-         ApnNmMKcY+076wwfWI9Hjebe0F2VmbhSgBVt9Ai34100nIWCKF+AVisVCGUXKDLEBEuu
-         Htv4JjLoRata8Zdy/OYpxX4Ws9tNL+a83rKvs=
-Content-Disposition: inline
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=c2z2zOVZZwhOfPCXY7c4/0QHrvzWotb4Kk5gAUksebM=;
+        b=wlRQ2QsSnKbba7xhTyIdfKf0ca6VeTYENKsJ9tVztG3BlaoNwarEgUtJbW1B9unr+m
+         L0bOSH+6tLT618wSVtRf/LgPQP/2GF3HR3Mqt2xexIzFQP3qRD+Rk+jVGuJrGCrCPLNP
+         djkuNZ788PkKisXKOFzv7Lc30m3Jq9VEGUINk=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+Hi all,
 
-On Thu, Sep 03, 2009 at 08:27:42AM +0300, Jonathan Nell wrote:
-> 2009/9/3 Zhenwen Xu <helight.xu@gmail.com>:
-> > On Tue, Sep 01, 2009 at 08:57:58PM +0300, Jonathan Nell wrote:
-> >> I'm trying to wrap the
-> >> SG_IO ioctl call (i.e. trap it in the kernel) and have that dump the
-> >> data from (struct sg_io_hdr).dxferp.
-> >> Having issues with doing the kernel trap in the newer kernel versions
-> >> though (trying on 2.6.30). The syscall table is now read-only but for
-> >> some reason my set_memory_rw() call is failing... Any ideas how to do
-> >> this properly?
-> >>
-> >> Here are the relevant bits of code:
-> >
-> > try read this:
-> > http://zhwen.org/xlog/2009/03/%e6%88%aa%e8%8e%b7linux%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8.htm
-> >
-> > here is the demo.
-> > http://zhwen.org/coding/cat_syscall.c
-> 
-> Thanks for this. WIll try it today. How come you don't get a kernel
-> paging error? Where are you making the syscall read/write?
-I have tested this demo successfully for all syscall except fork.
+Given some codes:
 
-this program is fail in fork! I haven't find the reason!
+...
+unsigned int val = 0x0a0b0c0d;
+unsigned char *str;
 
-PS: forget to linux-c-programming@vger.kernel.org
--- 
---------------------------------
-http://zhwen.org - Open and Free
+str = (unsigned char *) &val;
+printf("%.2x %.2x %.2x %.2x\n", *str, *(str + 1), *(str + 2), *(str + 3));
+...
 
--- 
---------------------------------
-http://zhwen.org - Open and Free
+the output is  " 0d 0c 0b 0a "
+
+the given codes try to divide a 32 bit integer into it's 8 bit nibbles.
+with bit shifting and masking ( that you all teach me.... thanks u ;)
+) i can get it correctly:
+
+printf("%.2x %.2x %.2x %.2x\n", val >> 24 & 0xff, val >> 16 & 0xff,
+val >> 8 & 0xff, val & 0xff));  /* 0a 0b 0c 0d */
+
+but when address it with pointer to character i got it reversed, could
+you please explain me why pointer to character reverse the ordering?
+if what i need is only to reverse the ordering (pointer to character
+index) to get a valid order? and if this a valid method?
+
+              - Randi
