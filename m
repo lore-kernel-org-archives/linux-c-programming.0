@@ -1,86 +1,42 @@
-From: Saurabh Sehgal <saurabh.r.s@gmail.com>
+From: Bert Wesarg <bert.wesarg@googlemail.com>
 Subject: Re: Division in loop
-Date: Tue, 8 Sep 2009 10:47:59 -0400
-Message-ID: <2a46ebd60909080747r6e7d10afxcf004762621810dc@mail.gmail.com>
+Date: Tue, 8 Sep 2009 16:57:07 +0200
+Message-ID: <36ca99e90909080757o6b9e0d4i927af10186060f73@mail.gmail.com>
 References: <34e1241d0909080740m5a3c3098xa48f275f2cf2fd3b@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
+        d=googlemail.com; s=gamma;
         h=domainkey-signature:mime-version:received:in-reply-to:references
          :date:message-id:subject:from:to:cc:content-type
          :content-transfer-encoding;
-        bh=CBxWsL+aiFykl30NDTfhiF4pYg+aJgFbYRBq/wUNej4=;
-        b=wNj8EENaq27VNPZD0NQ30z5LzK1oG40uFBNBCTAbRH0/fvi9BfM4HIqBWuFy4zVdhb
-         q3ygXou1o5PEhC/GF1Fd31rM/QIp7pmZ83jshVwew7bt5eNk/7dsmp74GRozOZPdcvQJ
-         iQgoy82K6Tq4rvboYsykkoKeTVG1PR6TUwdvU=
+        bh=eZgVIg82NA+/g38pwu2MhSg9HfdqBo6HOAS5lFWRGdU=;
+        b=dhXrL9JoGcelXeZ+DgWdKO2oZCMTQb7tM9+BavlcQRxrRhK2S57qQke4Wl2QlSmeDd
+         jQkCUi8JemUNwqaHHb4fbK2XKxn+Ayk4phw0bJhiQDuX/iFYIoX4m22bvDa6f4/kfrdS
+         cToNrMzhV5eLF1MFojbW0p1PHgA1dVeJDITIo=
 In-Reply-To: <34e1241d0909080740m5a3c3098xa48f275f2cf2fd3b@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
 To: Randi Botse <nightdecoder@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-Where do you initialize the variable size and to what value ?
-
-On Tue, Sep 8, 2009 at 10:40 AM, Randi Botse <nightdecoder@gmail.com> w=
-rote:
->
+On Tue, Sep 8, 2009 at 16:40, Randi Botse<nightdecoder@gmail.com> wrote=
+:
 > hi all,
->
-> ....
-> int fd, fdp;
-> unsigned int size;
-> int progress =3D 0;
-> size_t bytes =3D 0;
-> void *buffer;
-> ....
->
-> /* open fd from a device then create fdp, allocate buffer,, etc. */
+Hi,
+
 >
 > while (bytes < size) {
-> =A0 =A0 =A0 =A0ret =3D read(fd, buffer + bytes, size - bytes);
-> =A0 =A0 =A0 =A0if (ret =3D=3D -1) {
-> =A0 =A0 =A0 =A0 =A0 =A0perror("read");
-> =A0 =A0 =A0 =A0 =A0 =A0return -1;
-> =A0 =A0 =A0 =A0}
-> =A0 =A0 =A0 =A0ret =3D write(fdp, buffer + bytes, ret);
-> =A0 =A0 =A0 =A0if (ret =3D=3D -1) {
-> =A0 =A0 =A0 =A0 =A0 =A0perror("write");
-> =A0 =A0 =A0 =A0 =A0 =A0return -1;
-> =A0 =A0 =A0 =A0}
-> =A0 =A0 =A0 =A0bytes +=3D ret;
+:
 >
-> =A0 =A0 =A0 =A0progress =3D (int) ((bytes / size) * 100);
-> =A0 =A0 =A0 =A0printf("\rcompleted: %i%%", progress);
-> =A0 =A0 =A0 =A0fflush(stdout);
-> =A0 =A0}
->
-> ....
->
-> I run this loop to receive some data, the printf() seem not updated,
-> the progress output is
-> always in it's initial value until the loop was finished. but when i =
-do...
->
-> progress =3D (int) ((bytes / 2) * 100); /* change size to 2 (or rando=
-m number) */
->
-> then it's works... what's wrong here???
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+> =C2=A0 =C2=A0 =C2=A0 =C2=A0progress =3D (int) ((bytes / size) * 100);
+This is an integer division, and because bytes is always smaller than
+size will result in 0. You should cast bytes to double, or multiply by
+100 first and than divide by size.
 
-
-
---
-Saurabh Sehgal
-E-mail: =A0 =A0 saurabh.r.s@gmail.com
-Phone: =A0 =A0 647-831-5621
-LinkedIn: http://www.linkedin.com/pub/1/7a3/436
+Bert
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
