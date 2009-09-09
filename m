@@ -1,7 +1,7 @@
 From: Eric Bambach <bot403@cisu.net>
 Subject: Re: Division in loop
-Date: Tue, 8 Sep 2009 21:57:38 -0500
-Message-ID: <200909082157.38271.eric@cisu.net>
+Date: Tue, 8 Sep 2009 21:52:50 -0500
+Message-ID: <200909082152.50247.eric@cisu.net>
 References: <34e1241d0909080740m5a3c3098xa48f275f2cf2fd3b@mail.gmail.com> <34e1241d0909081937y5ecbd0davf7edbba9d9b201a0@mail.gmail.com> <34e1241d0909081939x2d20ab45t57fe3f760ae447d0@mail.gmail.com>
 Reply-To: eric@cisu.net
 Mime-Version: 1.0
@@ -94,5 +94,6 @@ wrote:
 > linux-c-programming" in the body of a message to majordomo@vger.kernel.org
 > More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-Wow. I feel silly. Ignore my previous message. It's late here and I missed the 
-fflush().
+Your printf statements are being buffered by the system. If enough of them 
+accumulate you will see them being printed "inside the loop". You need to 
+disable  buffering or print to STDERR.
