@@ -1,31 +1,29 @@
-From: Alessandro Pignotti <alexpigna.dev@gmail.com>
-Subject: Using PAT features from user space
-Date: Sat, 12 Sep 2009 18:20:52 -0700
-Message-ID: <95b4a97b0909121820m2c912878t6b7cbff7f4fbacd6@mail.gmail.com>
+From: leo mueller <llug.dan@googlemail.com>
+Subject: ioctl() to get information of wlan mode (a/b/g/n) ?
+Date: Fri, 18 Sep 2009 14:11:47 +0200
+Message-ID: <c93f91ee0909180511k5bb4f2dcu4f3509dcd3281a66@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
+        d=googlemail.com; s=gamma;
         h=domainkey-signature:mime-version:received:date:message-id:subject
          :from:to:content-type;
-        bh=xYHTuh5bBlnzye74NpZPcBj6BFu0QR8KFiZ6lxS4RU4=;
-        b=H5r00AKg7ywL+il8e4oMq2mGFXlW7Hm/xs8vU+9MpJvDlxgsL29VnwSPQg1eiQt7hw
-         kQigrD/PKoK/PtjuGB00+hRqGewPc2kV4wBTeo9dQwVFzT4XMmQcrVqz1FPeNA3dRhgi
-         2jTdOL6mDe0RBK1hSAyhBcf79mdRMfcsiFLfo=
+        bh=OYNFY1rz4dn9TtvxO0Xn4GGKgRbOYmcA1u59399CUhU=;
+        b=YIimNegK/jElrcaVPFliDQCVynt7WXsBtEWDv+8dkhD1Jl2KCfulFStMGqBQXpOmIh
+         MzdWbSGN9gBjzBcpcT/Xqf6y2QySjL6cPSkJWlHrnNhXvgFPpZnyW1VuokrO6JfFYJ1I
+         5Tre1oJrGNKES4fDrs0LCJw6rkUi1NBUq6zzw=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-Hi everyone,
+hi all,
 
-I'm writing an high performance application on x86-64 that allocate
-some memory to store a write only journal. I was wondering if there is
-a way to ask the kernel to mark such pages as write combining memory.
-More in general, it's possible to use PAT from userspace? I was
-expecting some mmap flag like MAP_NOCACHE, but there not seems to be
-any such flags.
+is there a possibility to determine in which wlan mode my card/driver
+currently works?
+like an ioctl()-call or sth... ? is it also possible to fetch wlan
+statistics (rx/tx) via ioctl()?
+if yes, which params are neccessary?
 
-Regards,
-Alessandro
+big thx & nice weekend
