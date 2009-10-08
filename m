@@ -1,39 +1,30 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Question about core files
-Date: Thu, 8 Oct 2009 01:28:03 +0100
-Message-ID: <19149.12819.386168.598502@cerise.gclements.plus.com>
-References: <Pine.LNX.4.64.0910061349060.9660@praktifix.dwd.de>
-	<19148.7405.580856.157196@cerise.gclements.plus.com>
-	<Pine.LNX.4.64.0910071331030.29237@diagnostix.dwd.de>
+From: tblue <ashley.glenister@ukonline.co.uk>
+Subject: Unicode to CP1252
+Date: Thu, 8 Oct 2009 04:48:14 -0700 (PDT)
+Message-ID: <25802503.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <Pine.LNX.4.64.0910071331030.29237@diagnostix.dwd.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Holger Kiehl <Holger.Kiehl@dwd.de>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
 
-Holger Kiehl wrote:
+Hi,
 
-> >> Most the time I compile my application without the -g option due to
-> >> performance reasons.
-> >
-> > The -g switch has absolutely no effect upon performance. It simply
-> > causes and additional section to be added to the resulting binary.
-> > When the program is run normally (i.e. not under gdb), that section
-> > won't be mapped. The only downside to -g is that it increases the size
-> > of the file.
-> 
-> But when executing the program will it not read the whole binary which
-> is much larger with debug information and so will take longer (just the
-> first reading of the binary)?
+ I need to convert a windows ANSI test file to unicode in Linux. Later the 
+data needs to be saved from Unicode to ANSI.
 
-No. Binaries aren't "read", they're mapped (with mmap); pages are read
-into memory on demand. The loader only maps the sections which are
-actually required, which doesn't include the debug sections.
+Can anyone recommend a function call that would allow me to achieve this. An
+example code showing how to use it would be a bonus.
+
+Thankyou.
+Regards
+Blue.
+
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+View this message in context: http://www.nabble.com/Unicode-to-CP1252-tp25802503p25802503.html
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
