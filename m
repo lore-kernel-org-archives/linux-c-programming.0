@@ -1,132 +1,43 @@
-From: shiva kumar <shiva@serc.iisc.ernet.in>
-Subject: Re: C program help
-Date: Fri, 9 Oct 2009 05:10:38 -0700 (PDT)
-Message-ID: <25820023.post@talk.nabble.com>
-References: <25522429.post@talk.nabble.com>
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: Re: Question about core files
+Date: Fri, 9 Oct 2009 12:12:52 +0000 (GMT)
+Message-ID: <Pine.LNX.4.64.0910091210220.12677@diagnostix.dwd.de>
+References: <Pine.LNX.4.64.0910061349060.9660@praktifix.dwd.de>
+ <19148.7405.580856.157196@cerise.gclements.plus.com>
+ <Pine.LNX.4.64.0910071331030.29237@diagnostix.dwd.de>
+ <19149.12819.386168.598502@cerise.gclements.plus.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <25522429.post@talk.nabble.com>
+In-Reply-To: <19149.12819.386168.598502@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset="us-ascii"; format="flowed"
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn@gclements.plus.com>
+Cc: linux-c-programming@vger.kernel.org
 
+On Thu, 8 Oct 2009, Glynn Clements wrote:
 
-here is solution
- 
-#include <stdio.h>
-#include <stdlib.h>
+>
+> Holger Kiehl wrote:
+>
+>>>> Most the time I compile my application without the -g option due to
+>>>> performance reasons.
+>>>
+>>> The -g switch has absolutely no effect upon performance. It simply
+>>> causes and additional section to be added to the resulting binary.
+>>> When the program is run normally (i.e. not under gdb), that section
+>>> won't be mapped. The only downside to -g is that it increases the size
+>>> of the file.
+>>
+>> But when executing the program will it not read the whole binary which
+>> is much larger with debug information and so will take longer (just the
+>> first reading of the binary)?
+>
+> No. Binaries aren't "read", they're mapped (with mmap); pages are read
+> into memory on demand. The loader only maps the sections which are
+> actually required, which doesn't include the debug sections.
+>
+Thanks for the clarification!
 
-int main()
-{
-    int x;
-    int answer;
-    int right;
-    int wrong;
-    int righta[100];
-    int wronga[100];
-    int i;
-
-    printf("This is a program of sum\n");
-    right = 0; /*Initialization of right value*/
-    wrong = 0; /*Initialization of wrong value*/
-    for(x = 1; x <= 10; x++)
-    {
-          printf("What is %d + %d: ", x, x);
-          scanf("%d", &answer);
-          printf("The sum is %d\n", answer);
-          printf("\a");
-          if(answer == x + x)
-          {
-             printf("%d is RIGHT answer\n", answer);
-             righta[right]=answer;
-             right++; /*Saves and increases the amount of right answers*/
-          }
-          else
-          {
-             printf("%d is WRONG answer\n", answer);
-             wronga[wrong] = answer;
-             wrong++; /*Saves and increases th      }
-    }
-    righta[right]=0;
-    wronga[wrong]=0;
-    printf("The right answers are %d and the wrong are %d\n", right, wrong);
-    printf("The right answers are ");
-    for(i=0;righta[i];i++){
-        printf("%d\t",righta[i]);
-    }
-    printf("\nThe wrong answers are ");
-    for(i=0;wronga[i];i++){
-        printf("%d\t",wronga[i]);
-    }
-    fflush(stdin);
-    getchar();
-}
-
-
-
-e amount of wrong answers*/
-             printf("The correct answer is %d\n", x + x);
-                                                                                              
-
-
-
-
-
-spiros85 wrote:
-> 
-> Hi guys of dear forum!I am a new programmer in C programming language and
-> i have a question for you about the following C code:
-> #include <stdio.h>
-> #include <stdlib.h>
-> 
-> int main()
-> {
->     int x;
->     int answer;
->     int right;
->     int wrong;
->     printf("This is a program of sum\n");
->     right = 0; /*Initialization of right value*/
->     wrong = 0; /*Initialization of wrong value*/
->     for(x = 1; x <= 10; x++)[QUOTE][/QUOTE]
->     {
->           printf("What is %d + %d: ", x, x);
->           scanf("%d", &answer);
->           printf("The sum is %d\n", answer);
->           printf("\a");
->           if(answer == x + x)
->           {
->              printf("%d is RIGHT answer\n", answer);
->              right++; /*Saves and increases the amount of right answers*/
->           }
->           else
->           {
->              printf("%d is WRONG answer\n", answer);
->              b[10] = answer;
->              wrong++; /*Saves and increases the amount of wrong answers*/
->              printf("The correct answer is %d\n", x + x);
->           }
->     }
->     printf("The right answers are %d and the wrong are %d\n", right,
-> wrong);
->     fflush(stdin);
->     getchar();
-> }
->  
-> First, I use DEV C++ compiler!This program asks from user to find the sum
-> of 1+1,2+2 until for loop reaches 10.As you can observe with right++ and
-> wrong++ i can define and print to the screen the amount of right or wrong
-> numbers!
-> My question is how could I define the number of correct and wrong numbers
-> in collaboration with their amount?For example:
-> The right answers are 8 and wrong are 2
-> The right answers are 2 4 6 8 10 12 14 16
-> The wrong answers are 22 44
-> 
-
--- 
-View this message in context: http://www.nabble.com/C-program-help-tp25522429p25820023.html
-Sent from the linux-c-programming mailing list archive at Nabble.com.
-
+Holger
