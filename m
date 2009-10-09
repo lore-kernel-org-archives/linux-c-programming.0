@@ -1,115 +1,132 @@
-From: Manish Katiyar <mkatiyar@gmail.com>
-Subject: Re: Question about core files
-Date: Fri, 9 Oct 2009 00:17:34 +0530
-Message-ID: <ea11fea30910081147k26afa2c0g4234617fac5ce234@mail.gmail.com>
-References: <Pine.LNX.4.64.0910061349060.9660@praktifix.dwd.de> 
-	<ea11fea30910060741i3538ca36hcf5ce9ee7cf78bff@mail.gmail.com> 
-	<Pine.LNX.4.64.0910071319230.29237@diagnostix.dwd.de> <ea11fea30910070654u2664e60kf4f0642edd7f024f@mail.gmail.com> 
-	<Pine.LNX.4.64.0910071416310.29237@diagnostix.dwd.de> <ea11fea30910071036g154fcd81o1dde7e22cb070729@mail.gmail.com>
+From: shiva kumar <shiva@serc.iisc.ernet.in>
+Subject: Re: C program help
+Date: Fri, 9 Oct 2009 05:10:38 -0700 (PDT)
+Message-ID: <25820023.post@talk.nabble.com>
+References: <25522429.post@talk.nabble.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :from:date:message-id:subject:to:cc:content-type
-         :content-transfer-encoding;
-        bh=Crg8nXiuGf1XVmKitvXTM2TtrNrzHyAyx7P6/mXquR0=;
-        b=AncAil78FpAeZ75arFPjnbe2Kf6x4Xp56KLdof5F48yGSRXAPgLd2GEcaLlM0idPCv
-         qkmmzlJD3LcN2lrti/5AEdheOXtA30CU8zxdOxXeo/Jv924jmRiCZeUbLuEGZHZAqFiz
-         dY9DKGw3Z4t3VEhbA+sv0yrMoi6LMlEygusqI=
-In-Reply-To: <ea11fea30910071036g154fcd81o1dde7e22cb070729@mail.gmail.com>
+In-Reply-To: <25522429.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: Holger Kiehl <Holger.Kiehl@dwd.de>
-Cc: linux-c-programming@vger.kernel.org
-
-On Wed, Oct 7, 2009 at 11:06 PM, Manish Katiyar <mkatiyar@gmail.com> wr=
-ote:
-> On Wed, Oct 7, 2009 at 7:51 PM, Holger Kiehl <Holger.Kiehl@dwd.de> wr=
-ote:
->> Hello Manish
->>
->> On Wed, 7 Oct 2009, Manish Katiyar wrote:
->>
->>> Hi Holger,
->>>
->>> I don't have the source code, so a bit hard to guess. But you can t=
-ry
->>> to find out which member of your fsa structure is at offset 236 (0x=
-ec)
->>> and look around those lines in the function where you are accessing
->>> that member.
->>>
->>> I am trying to download the AFD source code, which looks like it wi=
-ll
->>> take ages on my slow broadband. Hopefully I can help after that.
->>>
->> If you download, please take afd-1.4.0-0.20.beta.tar.bz2 because tha=
-t
->> is the one that caused the error. You can get it from:
->>
->> =A0 ftp://ftp.dwd.de/pub/afd/development/afd-1.4.0-0.20.beta.tar.bz2
->>
->> You will find the relevant code in src/fd.c.
-
-Hi Holger,
-
-Have you been able to trace the bug ?
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
 
->
-> Hi Holger,
->
-> (gdb) set $offset =3D (int)(&((struct filetransfer_status *)0)->host_=
-status)
-> (gdb) p $offset
-> $5 =3D 236
-> (gdb) p/x 236
-> $6 =3D 0xec
->
-> host_status is at offset 236. In the function start_process I can see
-> that this is used at places by dereferencing below
-> "fsa[fsa_pos].host_status ".
->
-> At this point my guess would be that you are getting fsa_pos as
-> something illegal ie.. probably you are trying to access beyond the
-> array. Since this is an input to the function, you can just check its
-> value at the start and assert if that is ok and within reasonable
-> range.
->
-> HTH
->
->
->>
->> Holger
->>
->
->
->
-> --
-> Thanks -
-> Manish
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> [$\*.^ -- I miss being one of them
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
+here is solution
+ 
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int x;
+    int answer;
+    int right;
+    int wrong;
+    int righta[100];
+    int wronga[100];
+    int i;
+
+    printf("This is a program of sum\n");
+    right = 0; /*Initialization of right value*/
+    wrong = 0; /*Initialization of wrong value*/
+    for(x = 1; x <= 10; x++)
+    {
+          printf("What is %d + %d: ", x, x);
+          scanf("%d", &answer);
+          printf("The sum is %d\n", answer);
+          printf("\a");
+          if(answer == x + x)
+          {
+             printf("%d is RIGHT answer\n", answer);
+             righta[right]=answer;
+             right++; /*Saves and increases the amount of right answers*/
+          }
+          else
+          {
+             printf("%d is WRONG answer\n", answer);
+             wronga[wrong] = answer;
+             wrong++; /*Saves and increases th      }
+    }
+    righta[right]=0;
+    wronga[wrong]=0;
+    printf("The right answers are %d and the wrong are %d\n", right, wrong);
+    printf("The right answers are ");
+    for(i=0;righta[i];i++){
+        printf("%d\t",righta[i]);
+    }
+    printf("\nThe wrong answers are ");
+    for(i=0;wronga[i];i++){
+        printf("%d\t",wronga[i]);
+    }
+    fflush(stdin);
+    getchar();
+}
 
 
 
---=20
-Thanks -
-Manish
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[$\*.^ -- I miss being one of them
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+e amount of wrong answers*/
+             printf("The correct answer is %d\n", x + x);
+                                                                                              
+
+
+
+
+
+spiros85 wrote:
+> 
+> Hi guys of dear forum!I am a new programmer in C programming language and
+> i have a question for you about the following C code:
+> #include <stdio.h>
+> #include <stdlib.h>
+> 
+> int main()
+> {
+>     int x;
+>     int answer;
+>     int right;
+>     int wrong;
+>     printf("This is a program of sum\n");
+>     right = 0; /*Initialization of right value*/
+>     wrong = 0; /*Initialization of wrong value*/
+>     for(x = 1; x <= 10; x++)[QUOTE][/QUOTE]
+>     {
+>           printf("What is %d + %d: ", x, x);
+>           scanf("%d", &answer);
+>           printf("The sum is %d\n", answer);
+>           printf("\a");
+>           if(answer == x + x)
+>           {
+>              printf("%d is RIGHT answer\n", answer);
+>              right++; /*Saves and increases the amount of right answers*/
+>           }
+>           else
+>           {
+>              printf("%d is WRONG answer\n", answer);
+>              b[10] = answer;
+>              wrong++; /*Saves and increases the amount of wrong answers*/
+>              printf("The correct answer is %d\n", x + x);
+>           }
+>     }
+>     printf("The right answers are %d and the wrong are %d\n", right,
+> wrong);
+>     fflush(stdin);
+>     getchar();
+> }
+>  
+> First, I use DEV C++ compiler!This program asks from user to find the sum
+> of 1+1,2+2 until for loop reaches 10.As you can observe with right++ and
+> wrong++ i can define and print to the screen the amount of right or wrong
+> numbers!
+> My question is how could I define the number of correct and wrong numbers
+> in collaboration with their amount?For example:
+> The right answers are 8 and wrong are 2
+> The right answers are 2 4 6 8 10 12 14 16
+> The wrong answers are 22 44
+> 
+
+-- 
+View this message in context: http://www.nabble.com/C-program-help-tp25522429p25820023.html
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
