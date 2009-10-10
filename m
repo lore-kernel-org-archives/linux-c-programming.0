@@ -1,74 +1,65 @@
-From: SriKrishna Erra <erra_krishna@yahoo.co.in>
-Subject: Reading UTF16 input from STDIN using fgetws()
-Date: Fri, 9 Oct 2009 08:12:58 -0700 (PDT)
-Message-ID: <25822791.post@talk.nabble.com>
+From: Glynn Clements <glynn@gclements.plus.com>
+Subject: Re: Question about core files
+Date: Sat, 10 Oct 2009 09:35:08 +0100
+Message-ID: <19152.18236.807486.755513@cerise.gclements.plus.com>
+References: <Pine.LNX.4.64.0910061349060.9660@praktifix.dwd.de>
+	<ea11fea30910060741i3538ca36hcf5ce9ee7cf78bff@mail.gmail.com>
+	<Pine.LNX.4.64.0910071319230.29237@diagnostix.dwd.de>
+	<ea11fea30910070654u2664e60kf4f0642edd7f024f@mail.gmail.com>
+	<Pine.LNX.4.64.0910071416310.29237@diagnostix.dwd.de>
+	<ea11fea30910071036g154fcd81o1dde7e22cb070729@mail.gmail.com>
+	<Pine.LNX.4.64.0910091158400.12677@diagnostix.dwd.de>
+	<ea11fea30910090515p5c21b577i96078f78b253f6f8@mail.gmail.com>
+	<Pine.LNX.4.64.0910091238000.12677@diagnostix.dwd.de>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+In-Reply-To: <Pine.LNX.4.64.0910091238000.12677@diagnostix.dwd.de>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: Holger Kiehl <Holger.Kiehl@dwd.de>
+Cc: Manish Katiyar <mkatiyar@gmail.com>, linux-c-programming@vger.kernel.org
 
 
-Hi all,
-I am trying to read UTF16 input from STDIN using fgetws() on LINUX.
+Holger Kiehl wrote:
 
-man pages of fgetws() says,
-fgetws() converts the input string from the encoding either specified by
-"LC_CTYPE" or specified in fopen() to wide character string.
+> How can I find which register is fsa_pos?
 
-My intention is to read UTF16 input from STDIN not from a file. For this i
-will not use any fopen() because  the input is direct from STDIN. 
+fsa_pos is a parameter, and doesn't appear to be changed within the
+function, so I would expect "print fsa_pos" to give the correct value.
 
-So i will use direct "STDIN" in fgetws() like
-fgetws(buf,count,stdin);
+AFAICT, the following portion of the disassembly:
 
-As deault LC_CTYPE value is "utf-8" on linux (also on all unix flavours),
-fgetws() is treating the input as utf-8 and trying to convert to a wide
-character string.
+    0x0000000000404b49 <start_process+121>: movslq 0x24(%rsp),%rax
+    0x0000000000404b4e <start_process+126>: imul   $0x8f8,%rax,%r14
+    0x0000000000404b55 <start_process+133>: mov    %r14,%rax
+    0x0000000000404b58 <start_process+136>: add    0x225441(%rip),%rax        # 0x629fa0 <fsa>
+    0x0000000000404b5f <start_process+143>: mov    0xec(%rax),%edx
+    0x0000000000404b65 <start_process+149>: test   $0x1,%dl
 
-My input contains UTF16 strings and it has "0xfeff" BOM as first character.
-As fgetws() treating the input is in utf-8, 0xfe(first byte of BOM) will be
-an invalid sequence in utf-8 and also 0xff (second byte of BOM) is an EOF.
-So fgetws() is returning nothing.
+corresponds to the expression
 
-If i use fopen() then there will be no issues because i will pass the input
-ecnoding as parameter to fopen() like  fopen("filename","r,ccs=UTF16-LE");
+	fsa[fsa_pos].host_status & DO_NOT_DELETE_DATA
 
-With this fgetws() will treat the input as UTF16 and will convert the input
-from UTF16 to a wide character string.
+0x24(%rsp) is fsa_pos, $0x8f8 (2296) is the size of each element of
+fsa[], 0x225441(%rip) is fsa, 0xec is the offset of the host_status
+field.
 
-So no issues with fopen().
+So:
 
-But my requirement is input from STDIN.
+    movslq 0x24(%rsp),%rax	# %rax = fsa_pos
+    imul   $0x8f8,%rax,%r14	# %r14 = fsa_pos * sizeof(fsa[i]) = &fsa[fsa_pos] - &fsa[0]
+    mov    %r14,%rax		# %rax = &fsa[fsa_pos] - &fsa[0]
+    add    0x225441(%rip),%rax	# %rax = &fsa[fsa_pos]
+    mov    0xec(%rax),%edx      # %edx = fsa[fsa_pos].host_status
 
-Please let me know how to set the encoding "ccs=UTF-16LE" to STDIN so that
-fgetws() will consider the STDIN input in UTF16 form.
+Based upon this, %r14 should contain fsa_pos * 2296, so:
 
-I have also tried fdopen() but no use. 
-fdopen(int fd,mode);
+>     (gdb) info registers
+>     r14            0xfffffffffffff708       -2296
 
-There is a requirement that the mode parameter vaues in fdopen() should be
-the same as of the one used in fopen().
+Which suggests that fsa_pos is -1.
 
-But we are not at all using fopen() and the default encoding of STDIN is
-utf-8. 
-So when fdopen(fd,"ccs=utf-16le"); is used, it returns nothing as there is a
-mismatch in encodings i.e defualt of STDIN is utf-8 and fdopen is passing
-utf-16LE.
-
-So please let me know how to change the encoding of STDIN i.e how to set
-encoding "ccs=UTF-16LE" to STDIN 
-
-In windows, we hava _setmode() but in LINUX no such provision because LINUX
-will treat text & Binary files as same.
-
-Thanks in Advance.
-
-regards,
-Srikrishna Erra.
 -- 
-View this message in context: http://www.nabble.com/Reading-UTF16-input-from-STDIN-using-fgetws%28%29-tp25822791p25822791.html
-Sent from the linux-c-programming mailing list archive at Nabble.com.
-
+Glynn Clements <glynn@gclements.plus.com>
