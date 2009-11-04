@@ -1,34 +1,47 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: bare minimum SMTP implementation
-Date: Fri, 30 Oct 2009 20:45:54 +0000
-Message-ID: <19179.20610.797481.859834@cerise.gclements.plus.com>
-References: <19475730.21256910810841.JavaMail.root@wombat>
+From: Logan Lee <logan.w.lee@student.uts.edu.au>
+Subject: Re: How to send mail from Linux in C
+Date: Wed, 04 Nov 2009 23:02:56 +1100
+Message-ID: <1257336176.20632.0.camel@user-desktop>
+References: <28288134.11256799032169.JavaMail.root@wombat>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <19475730.21256910810841.JavaMail.root@wombat>
+In-Reply-To: <28288134.11256799032169.JavaMail.root@wombat>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
 To: darshan.ghumare@gmail.com
 Cc: linux-c-programming@vger.kernel.org
 
+2009-10-29 (=EB=AA=A9), 02:50 -0400, darshan.ghumare@gmail.com =EC=93=B0=
+=EC=8B=9C=EA=B8=B8:
+> ./a.out smtp.gmail.com 25
+> Please enter the message: 220 mx.google.com ESMTP 34sm776965yxf.47
+> HELO
+> 250 mx.google.com at your service
+> MAIL FROM:<darshan.ghumare@gmail.com>
+> 530 5.7.0 Must issue a STARTTLS command first. 34sm776965yxf.47
+>=20
+> =20
+> This is simple c  program which try to connect to given ip@port.
+> =20
+> Thank you very much.
+Can you send me the source of your program? I'm interested that's all.
 
-darshan.ghumare@gmail.com wrote:
+>=20
+> --
+> This message was sent on behalf of darshan.ghumare@gmail.com at openS=
+ubscriber.com
+> http://www.opensubscriber.com/messages/linux-c-programming@vger.kerne=
+l.org/topic.html
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
+gramming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
-> In my project one thread will have a task to send mail. It can be
-> send to say gmail also.
-> But if you try to connect smtp.gmail.cm@25 then after greeting gmail
-> ask you to setup SSL.
-> I have search a lot for SMTP implementation that support STARTTLS,
-> many of them consume about 800+kb. As my project is run on embedded
-> system this is not feasible to me.
-> If anybody knows any implementation that support above STARTTLS
-> still consume less memory?
-> Many of them ask for OpenSSL but that consume 800kb+ memory hence
-> not feasible for me.
-
-	http://www.google.com/search?q=embedded%20SSL
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
