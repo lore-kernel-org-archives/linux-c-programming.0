@@ -1,47 +1,46 @@
-From: Logan Lee <logan.w.lee@student.uts.edu.au>
-Subject: Re: How to send mail from Linux in C
-Date: Wed, 04 Nov 2009 23:02:56 +1100
-Message-ID: <1257336176.20632.0.camel@user-desktop>
-References: <28288134.11256799032169.JavaMail.root@wombat>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: select() timeout question
+Date: Wed, 25 Nov 2009 03:29:33 -0500
+Message-ID: <34e1241d0911250029g5e56e1cdxe7abfce03eb15836@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <28288134.11256799032169.JavaMail.root@wombat>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=iqRN4OUztZnXUDGONefaMRnaHw9dcNFCW4+rIGPIEvM=;
+        b=gwk35XvXJnig+nwiPFgDuYcSX9S9i+Fo2g2FkzTTHuhmpmvNL2q/lO43X9mOZBaeVJ
+         A3XOZ9SeCnYOd3mLcaJJcKEk1fHQ93E8fGi7IaF98B0x5gDqDeWypnnELWInSXEgYhF2
+         ioWahntNutJnYRgUgvB+dDBoK2FVi9pnXVE7o=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: darshan.ghumare@gmail.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-2009-10-29 (=EB=AA=A9), 02:50 -0400, darshan.ghumare@gmail.com =EC=93=B0=
-=EC=8B=9C=EA=B8=B8:
-> ./a.out smtp.gmail.com 25
-> Please enter the message: 220 mx.google.com ESMTP 34sm776965yxf.47
-> HELO
-> 250 mx.google.com at your service
-> MAIL FROM:<darshan.ghumare@gmail.com>
-> 530 5.7.0 Must issue a STARTTLS command first. 34sm776965yxf.47
->=20
-> =20
-> This is simple c  program which try to connect to given ip@port.
-> =20
-> Thank you very much.
-Can you send me the source of your program? I'm interested that's all.
+Hi All,
 
->=20
-> --
-> This message was sent on behalf of darshan.ghumare@gmail.com at openS=
-ubscriber.com
-> http://www.opensubscriber.com/messages/linux-c-programming@vger.kerne=
-l.org/topic.html
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Im now learning the Linux's select() system call,
 
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+#include <sys/select.h>
+
+int select(int fd, fd_set *rset, fd_set *wset, fd_set *excepfs, struct
+timeval *timeout);
+
+I want to receive notification when the given file descriptor is ready
+to read, i use TCP socket connection to demonstrate this, one for the
+sender and other for the receiver, with normal condition, when the
+sender send data via write(), the select() returns and tell the
+receiver there are data to read.
+
+My question is: what happen when the receiver's select() is reaching
+it's timeout while the sender send data? should the notification and
+it's data lost (discarded)?
+
+Based on my above experiment, select() never fail to notify although
+it's in timeout state, and i awalys can read the data, i'm curious
+with this, but i'm not sure if this always right.
+
+Thanks before.
+
+                                            Randi,
