@@ -1,46 +1,33 @@
 From: Randi Botse <nightdecoder@gmail.com>
-Subject: select() timeout question
-Date: Wed, 25 Nov 2009 03:29:33 -0500
-Message-ID: <34e1241d0911250029g5e56e1cdxe7abfce03eb15836@mail.gmail.com>
+Subject: Re: select() timeout question
+Date: Wed, 25 Nov 2009 03:58:26 -0500
+Message-ID: <34e1241d0911250058j47bb2bebo8a8763b4188b8541@mail.gmail.com>
+References: <34e1241d0911250029g5e56e1cdxe7abfce03eb15836@mail.gmail.com>
+	 <da5b0fda0911250038k4f6b87e7o3fd39e4c2db5ce86@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:date:message-id:subject
-         :from:to:content-type;
-        bh=iqRN4OUztZnXUDGONefaMRnaHw9dcNFCW4+rIGPIEvM=;
-        b=gwk35XvXJnig+nwiPFgDuYcSX9S9i+Fo2g2FkzTTHuhmpmvNL2q/lO43X9mOZBaeVJ
-         A3XOZ9SeCnYOd3mLcaJJcKEk1fHQ93E8fGi7IaF98B0x5gDqDeWypnnELWInSXEgYhF2
-         ioWahntNutJnYRgUgvB+dDBoK2FVi9pnXVE7o=
+        h=domainkey-signature:mime-version:received:in-reply-to:references
+         :date:message-id:subject:from:to:content-type;
+        bh=UDFBjE+hgTy19TzxZgTVWUvgCdREAX0fv8SNoAvqma8=;
+        b=LLzNJFA5Xs3NWVH7h57YxcN6zgIgCpNla3c+M/3osUsipkcVr30NYK6SQQIFtFHXzj
+         bg3jEllnynu21lEF3S9jFqhlzEaS2X1LnSZRF01I1+rsAdn/JZdmTQOFahi+zQne6yGM
+         DTCYsrzcw2eW1KHg6547FB6h1ioVJT1p7yE7Y=
+In-Reply-To: <da5b0fda0911250038k4f6b87e7o3fd39e4c2db5ce86@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: Sam Liao <phyomh@gmail.com>, linux-c-programming@vger.kernel.org
 
-Hi All,
+Hi Sam,
 
-Im now learning the Linux's select() system call,
+That's means the data is buffered right?, is it guaranteed?
 
-#include <sys/select.h>
+                         - Randi
 
-int select(int fd, fd_set *rset, fd_set *wset, fd_set *excepfs, struct
-timeval *timeout);
-
-I want to receive notification when the given file descriptor is ready
-to read, i use TCP socket connection to demonstrate this, one for the
-sender and other for the receiver, with normal condition, when the
-sender send data via write(), the select() returns and tell the
-receiver there are data to read.
-
-My question is: what happen when the receiver's select() is reaching
-it's timeout while the sender send data? should the notification and
-it's data lost (discarded)?
-
-Based on my above experiment, select() never fail to notify although
-it's in timeout state, and i awalys can read the data, i'm curious
-with this, but i'm not sure if this always right.
-
-Thanks before.
-
-                                            Randi,
+On Wed, Nov 25, 2009 at 3:38 AM, Sam Liao <phyomh@gmail.com> wrote:
+> You will get the data for next select call.
+>
+> -Sam
