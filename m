@@ -1,64 +1,60 @@
-From: "Ardhan Madras" <ajhwb@knac.com>
-Subject: Re: select() timeout question
-Date: Fri, 27 Nov 2009 21:43:10 -0800
-Message-ID: <20091127214310.FCC998C@resin13.mta.everyone.net>
-Reply-To: <ajhwb@knac.com>
+From: Toan Pham <tpham3783@gmail.com>
+Subject: Dynamic make target
+Date: Wed, 2 Dec 2009 12:49:35 -0500
+Message-ID: <ffb2c0280912020949i3db06e02i118df36e13aaaf41@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=cwyqGCnxfLC7rfQhdZ9GwV2uFFyT5i0lMW1s8tfkt3o=;
+        b=BntGEReIOuU11Xa6MdRnaKLZxaz7UErtWXWgedk8XVbnkbGJ/QHQHSYQu3ol+aSpRq
+         vjRD+HOxTNHNiyLh+mnBwAKXBPoduO2yHlLQlKRbkq17JwFYvtcy0O4sMg4NB08EwTbJ
+         Li4Nj9fZtiIiegPovNuTB9qDifjB9VfB1N5vo=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Randi Botse <nightdecoder@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Hi Randi,
+hi all,
 
-Basically the select syscall check the kernel buffer or in other words it just waiting to be notified by the kernel that there are pending data to read/write, it doesn't store any file-descriptor's related data.
+I do not know where to ask this question perhaps this mailing list is
+best because it had to do with c complilation.
 
-                 - Ardhan
+I would like to set up a make target dynamicly.  for example
 
+when one issue command:  make sda1
+it auto compile and install to a mount point @ /mnt/sda1
 
---- nightdecoder@gmail.com wrote:
-
-From:	Randi Botse <nightdecoder@gmail.com>
-To:	linux-c-programming@vger.kernel.org
-Subject: select() timeout question
-Date:	Wed, 25 Nov 2009 03:29:33 -0500
-
-Hi All,
-
-Im now learning the Linux's select() system call,
-
-#include <sys/select.h>
-
-int select(int fd, fd_set *rset, fd_set *wset, fd_set *excepfs, struct
-timeval *timeout);
-
-I want to receive notification when the given file descriptor is ready
-to read, i use TCP socket connection to demonstrate this, one for the
-sender and other for the receiver, with normal condition, when the
-sender send data via write(), the select() returns and tell the
-receiver there are data to read.
-
-My question is: what happen when the receiver's select() is reaching
-it's timeout while the sender send data? should the notification and
-it's data lost (discarded)?
-
-Based on my above experiment, select() never fail to notify although
-it's in timeout state, and i awalys can read the data, i'm curious
-with this, but i'm not sure if this always right.
-
-Thanks before.
-
-                                            Randi,
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+similiarly: make sda2 would compile and install to /mnt/sda2
 
 
+i know that in a makefile one can accomplish this by setting up two targets, ie.
+
+sda1:
+       make all
+       mount /dev/sda1 /mnt/sda1
+       cp releases/* /mnt/sda1
+       umount /mnt/sda1
+
+sda2:
+       make all
+       mount /dev/sda1 /mnt/sda2
+       cp releases/* /mnt/sda2
+       umount /mnt/sda2
 
 
-_____________________________________________________________
-Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
+i am curious if we can simplify everything by having a make target
+like this when no matches found
+
+$param1:
+       make all
+       mount /dev/sda1 /mnt/$param1
+       cp releases/* /mnt/$param1
+       umount /mnt/$param1
+
+thank you,
+
+Toan
