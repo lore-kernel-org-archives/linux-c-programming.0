@@ -1,111 +1,106 @@
-From: Manish Katiyar <mkatiyar@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: Dynamic make target
-Date: Wed, 2 Dec 2009 23:50:43 +0530
-Message-ID: <ea11fea30912021020tc720492i498d316482500ab9@mail.gmail.com>
+Date: Thu, 3 Dec 2009 05:30:59 +0000
+Message-ID: <19223.19731.226635.428929@cerise.gclements.plus.com>
 References: <ffb2c0280912020949i3db06e02i118df36e13aaaf41@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :from:date:message-id:subject:to:cc:content-type
-         :content-transfer-encoding;
-        bh=9gkmqdjlQ+Tc1Ml4HEiwBSE33TNtFVdpHoJ30VCz0B0=;
-        b=jQCErc7wWTsWzL2pjxQyZfEmuY9Nshk6JT3KEyzTVBRkYpinb+UWCAFa6QyJNI6lbZ
-         xYVFe/WYTMx8oFOvi4qOtmi0EkoQkhyJ+VuetH44sxKbvTFEofD7CDLeomuxN2rGuGIr
-         Niusoke2C9glRa2vW2Tlyv0nwSuLnfD/6FBPw=
 In-Reply-To: <ffb2c0280912020949i3db06e02i118df36e13aaaf41@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
 To: Toan Pham <tpham3783@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On Wed, Dec 2, 2009 at 11:19 PM, Toan Pham <tpham3783@gmail.com> wrote:
-> hi all,
->
+
+Toan Pham wrote:
+
 > I do not know where to ask this question perhaps this mailing list is
 > best because it had to do with c complilation.
->
-> I would like to set up a make target dynamicly. =A0for example
->
-> when one issue command: =A0make sda1
+> 
+> I would like to set up a make target dynamicly.  for example
+> 
+> when one issue command:  make sda1
 > it auto compile and install to a mount point @ /mnt/sda1
->
+> 
 > similiarly: make sda2 would compile and install to /mnt/sda2
->
->
-> i know that in a makefile one can accomplish this by setting up two t=
-argets, ie.
->
+> 
+> 
+> i know that in a makefile one can accomplish this by setting up two targets, ie.
+> 
 > sda1:
-> =A0 =A0 =A0 make all
-> =A0 =A0 =A0 mount /dev/sda1 /mnt/sda1
-> =A0 =A0 =A0 cp releases/* /mnt/sda1
-> =A0 =A0 =A0 umount /mnt/sda1
->
+>        make all
+>        mount /dev/sda1 /mnt/sda1
+>        cp releases/* /mnt/sda1
+>        umount /mnt/sda1
+> 
 > sda2:
-> =A0 =A0 =A0 make all
-> =A0 =A0 =A0 mount /dev/sda1 /mnt/sda2
-> =A0 =A0 =A0 cp releases/* /mnt/sda2
-> =A0 =A0 =A0 umount /mnt/sda2
->
->
+>        make all
+>        mount /dev/sda1 /mnt/sda2
+>        cp releases/* /mnt/sda2
+>        umount /mnt/sda2
+> 
+> 
 > i am curious if we can simplify everything by having a make target
 > like this when no matches found
-
-
-Will something like this help ?
-
-/tmp/test> make
-echo "Making defaults"
-Making defaults
-
-/tmp/test> make TARGET=3Dmanish
-echo manish is target;
-manish is target
-
-/tmp/test> cat Makefile
-ifeq ("$(origin TARGET)", "command line")
-$(TARGET):
-	echo $@ is target;
-else
-all:
-	echo "Making defaults"
-endif
-
-
-
->
+> 
 > $param1:
-> =A0 =A0 =A0 make all
-> =A0 =A0 =A0 mount /dev/sda1 /mnt/$param1
-> =A0 =A0 =A0 cp releases/* /mnt/$param1
-> =A0 =A0 =A0 umount /mnt/$param1
->
-> thank you,
->
-> Toan
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
->
+>        make all
+>        mount /dev/sda1 /mnt/$param1
+>        cp releases/* /mnt/$param1
+>        umount /mnt/$param1
 
+You could use a pattern rule, e.g.:
 
+	sda%:
+	       make all
+	       mount /dev/$@ /mnt/$@
+	       cp releases/* /mnt/$@
+	       umount /mnt/$@
 
---=20
-Thanks -
-Manish
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[$\*.^ -- I miss being one of them
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+But that's really abusing make; it's better to use variables for this,
+e.g.:
+
+	DISC = sda1
+
+	install:
+	       make all
+	       mount /dev/$(DISC) /mnt/$(DISC)
+	       cp releases/* /mnt/$(DISC)
+	       umount /mnt/$(DISC)
+
+and use e.g.:
+
+	make install DISC=sda1
+
+Beyond that:
+
+1. Don't use "make" in commands; use $(MAKE) instead. This will work
+if your make program is actually called e.g. gmake, make-3.81, etc. 
+Also, if you use "make -n", $(MAKE) will perform a recursive "make -n"
+rather than just printing the "make" command.
+
+1a. But only invoke $(MAKE) explicitly if you need to force a
+particular sequence. It's usually preferable to list the target as a
+prerequisite, e.g.:
+
+	install: all
+
+rather than:
+
+	install:
+		$(MAKE) all
+
+2. Use $(INSTALL) rather than "cp". "install" will replace files
+atomically, while "cp" overwrites the destination in-place. This fails
+if the destination is an executable which is in-use, and can cause
+problems due to parallel builds attempting to proceed with an
+incomplete source file.
+
+3. "phony" targets shouldn't be over-used. Their behaviour can be
+non-intuitive with respect to parallel builds, and executing commands
+unconditionally becomes a nuisance once a project gets large.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
