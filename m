@@ -1,106 +1,90 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Dynamic make target
-Date: Thu, 3 Dec 2009 05:30:59 +0000
-Message-ID: <19223.19731.226635.428929@cerise.gclements.plus.com>
-References: <ffb2c0280912020949i3db06e02i118df36e13aaaf41@mail.gmail.com>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: thread: reentrant question
+Date: Thu, 24 Dec 2009 13:41:30 -0500
+Message-ID: <34e1241d0912241041v60c031a2kc31fdb3b4ebbd317@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <ffb2c0280912020949i3db06e02i118df36e13aaaf41@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=PwYWgfEe0l4SGQKI3KgUlaV6kmPpwSmZEcdS96fy8C0=;
+        b=H/gDeSGLshnMO9QT1MJxQs2hQJBzTwVQeUSRhPk/3fVYjY1/MVyU5rtOOuWXt/hZ/v
+         LefPZcxSARqjAq6TUjIqWyu7+EMiOhlgpZirA5z2FiT/XP3e5bAxCzxBJrvQTRSCXysh
+         F8fv90deo2+AW+RQ0Rjjkc825aHc2/mNl2dwM=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Toan Pham <tpham3783@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+
+Hi all,
+
+I'm now learning thread reentrancy on Linux, so i write simple codes
+for demonstration:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+void *func(void *data)
+{
+    char *ptr;
+
+    ptr = malloc(8);
+    printf("thread%i -> ptr at: %p\n", *(int*) data, ptr);
+    free(ptr);
+    return NULL;
+}
+
+#define NTHREAD 5
+
+int main(void)
+{
+    pthread_t thread[NTHREAD];
+    int i;
+
+    for (i = 0; i < NTHREAD; i++)
+        if (pthread_create(&thread[i], NULL, func, (void*) &i))
+            return -1;
+    for (i = 0; i < NTHREAD; i++)
+        pthread_join(thread[i], NULL);
+    return 0;
+}
 
 
-Toan Pham wrote:
+I know the func() function is not reentrant, worst printf() debugging
+told me that's each thread pointer to character (ptr) may has same
+address, like this output:
 
-> I do not know where to ask this question perhaps this mailing list is
-> best because it had to do with c complilation.
-> 
-> I would like to set up a make target dynamicly.  for example
-> 
-> when one issue command:  make sda1
-> it auto compile and install to a mount point @ /mnt/sda1
-> 
-> similiarly: make sda2 would compile and install to /mnt/sda2
-> 
-> 
-> i know that in a makefile one can accomplish this by setting up two targets, ie.
-> 
-> sda1:
->        make all
->        mount /dev/sda1 /mnt/sda1
->        cp releases/* /mnt/sda1
->        umount /mnt/sda1
-> 
-> sda2:
->        make all
->        mount /dev/sda1 /mnt/sda2
->        cp releases/* /mnt/sda2
->        umount /mnt/sda2
-> 
-> 
-> i am curious if we can simplify everything by having a make target
-> like this when no matches found
-> 
-> $param1:
->        make all
->        mount /dev/sda1 /mnt/$param1
->        cp releases/* /mnt/$param1
->        umount /mnt/$param1
+thread1 -> ptr at: 0x9a80128
+thread1 -> ptr at: 0x9a80138
+thread2 -> ptr at: 0x9a801d8
+thread4 -> ptr at: 0x9a801d8
+thread4 -> ptr at: 0x9a801d8
 
-You could use a pattern rule, e.g.:
+I try to modify the func() by not free ptr to be:
 
-	sda%:
-	       make all
-	       mount /dev/$@ /mnt/$@
-	       cp releases/* /mnt/$@
-	       umount /mnt/$@
+void *func(void *data)
+{
+    char *ptr;
 
-But that's really abusing make; it's better to use variables for this,
-e.g.:
+    ptr = malloc(8);
+    printf("thread%i -> ptr at: %p\n", *(int*) data, ptr);
+    /* free(ptr); */
+    return NULL;
+}
 
-	DISC = sda1
+And the result is i always got different address of each thread's ptr, such as:
 
-	install:
-	       make all
-	       mount /dev/$(DISC) /mnt/$(DISC)
-	       cp releases/* /mnt/$(DISC)
-	       umount /mnt/$(DISC)
+thread0 -> ptr at: 0x8db2098
+thread1 -> ptr at: 0x8db2138
+thread2 -> ptr at: 0x8db21d8
+thread3 -> ptr at: 0x8db2278
+thread4 -> ptr at: 0x8db2318
 
-and use e.g.:
+Can you explain me why this happen? how about my printf() debugging
+method? it's works for this demonstration?
+Thanks before.
 
-	make install DISC=sda1
-
-Beyond that:
-
-1. Don't use "make" in commands; use $(MAKE) instead. This will work
-if your make program is actually called e.g. gmake, make-3.81, etc. 
-Also, if you use "make -n", $(MAKE) will perform a recursive "make -n"
-rather than just printing the "make" command.
-
-1a. But only invoke $(MAKE) explicitly if you need to force a
-particular sequence. It's usually preferable to list the target as a
-prerequisite, e.g.:
-
-	install: all
-
-rather than:
-
-	install:
-		$(MAKE) all
-
-2. Use $(INSTALL) rather than "cp". "install" will replace files
-atomically, while "cp" overwrites the destination in-place. This fails
-if the destination is an executable which is in-use, and can cause
-problems due to parallel builds attempting to proceed with an
-incomplete source file.
-
-3. "phony" targets shouldn't be over-used. Their behaviour can be
-non-intuitive with respect to parallel builds, and executing commands
-unconditionally becomes a nuisance once a project gets large.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+              - Randi
