@@ -1,36 +1,91 @@
-From: vignesh1988i <softvig88@gmail.com>
-Subject: Re: C program help
-Date: Mon, 28 Dec 2009 20:50:32 -0800 (PST)
-Message-ID: <26951151.post@talk.nabble.com>
-References: <25522429.post@talk.nabble.com>
+From: darshan.ghumare@gmail.com
+Subject: Msync Invalid Arg
+Date: Tue, 29 Dec 2009 06:52:05 -0500
+Message-ID: <22791256.21262087525518.JavaMail.root@wombat>
+Reply-To: darshan.ghumare@gmail.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <25522429.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 To: linux-c-programming@vger.kernel.org
 
+Whne I try to execute following code then  get an erro message that "Invalid Argumemt" in msync. 
 
 
-           1) SEE , wat i feel is that you can have a count after u answer
-for the question u ask using printf statement... that count must be
-initilized to 0 which will act as a question number. . 
-           2) And since u are a beginner in C , iam suggesting u to make use
-of two arrays where u can have one for right answers and other for wrong
-answers.... 
-           3) In the array of right answers  where u are checking ur answer
-== x+x , inside that statement assign the count to the right answerd array
-as:
-                              right[i]=count;
-           4) if ur if becomes false , in else same u must do as above but
-that should be :
-                              wrong[j]=count;
-after this u would get ur desired output....... any doubts , mail me
-:softvig88@gmail.com
-thank u
--- 
-View this message in context: http://old.nabble.com/C-program-help-tp25522429p26951151.html
-Sent from the linux-c-programming mailing list archive at Nabble.com.
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/errno.h>
+#include <sys/time.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <linux/types.h>
 
+int main()
+{
+	int fd;
+	char data[20];
+	__u8 *start_addr,*end_addr;
+	int PageSize;
+
+	if ( (PageSize = sysconf(_SC_PAGE_SIZE)) < 0) {
+	    perror("sysconf() Error=");
+		    return -1;
+	}
+	printf("PageSize = %d\n",PageSize);
+
+	if((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1)
+	{ 
+		printf("Error opening /dev/mem\n");
+		return -1;
+	}
+
+	start_addr = mmap(0, PageSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd,
+										0);
+	if(start_addr == MAP_FAILED)
+	{
+		printf("enc_status map failed %s\n", strerror(errno));
+		return -1;
+	}
+
+	end_addr = start_addr + (4096 - 1);
+	strcpy(data, "Test Msg");
+	printf("\n%s:Writing NVRAM.......\n", __FUNCTION__);
+	if(write(fd, data, strlen(data)) <= 0)
+	{
+		printf("%s: Not able to write on NVRAM. %s.\n", __FUNCTION__,
+				strerror(errno));
+		return -1;
+	}
+	printf("\n%s:Synching NVRAM.......\n", __FUNCTION__);
+	if(msync(start_addr, PageSize, MS_SYNC) <= 0)
+	{
+		printf("%s: Not able to sync to NVRAM. %s.\n", __FUNCTION__,
+				strerror(errno));
+		return -1;
+	}
+	printf("\n%s:reading NVRAM.......\n", __FUNCTION__);
+	strcpy(data, "");
+	if(read(fd, data, sizeof(data)) <= 0)
+	{
+		printf("%s: Not able to read on NVRAM. %s.\n", __FUNCTION__,
+				strerror(errno));
+		return -1;
+	}
+	printf("%s: data  %s.\n", __FUNCTION__, data);
+	return 0;
+}
+
+
+--
+This message was sent on behalf of darshan.ghumare@gmail.com at openSubscriber.com
+http://www.opensubscriber.com/messages/linux-c-programming@vger.kernel.org/topic.html
