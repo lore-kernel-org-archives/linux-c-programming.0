@@ -1,91 +1,103 @@
-From: darshan.ghumare@gmail.com
-Subject: Msync Invalid Arg
-Date: Tue, 29 Dec 2009 06:52:05 -0500
-Message-ID: <22791256.21262087525518.JavaMail.root@wombat>
-Reply-To: darshan.ghumare@gmail.com
+From: Michal Nazarewicz <mina86@tlen.pl>
+Subject: Re: Msync Invalid Arg
+Date: Tue, 29 Dec 2009 15:30:24 +0100
+Message-ID: <87vdfphmyn.fsf@erwin.mina86.com>
+References: <22791256.21262087525518.JavaMail.root@wombat>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-Sender: linux-c-programming-owner@vger.kernel.org
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
+Return-path: <linux-kernel-owner+glk-linux-kernel-3=40m.gmane.org-S1752092AbZL2Oak@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:sender:from:to:cc:subject
+         :references:x-url:x-pgp-fp:x-pgp:date:in-reply-to:message-id
+         :user-agent:mime-version:content-type;
+        bh=dEMYing2CqxoZ97wgIutMgkbB2n4potI+VjJiUWhxfc=;
+        b=wgWDOv76l5xgFuGmGondQ00q8q6Pbr2WM+3UgBOVEQ+a5TBAQpnzTiIWToZ3QbjelZ
+         duL/kQOvplk1kP+9O6KsySId10VsMYrDBVxnnf/oXtI8qrP+SSaRgx3hXDiJmCLVqVTN
+         BGUD2zE73jWDMpA24swrsA5euVnU+6RJkDqj0=
+In-Reply-To: <22791256.21262087525518.JavaMail.root@wombat> (darshan ghumare's
+	message of "Tue, 29 Dec 2009 06:52:05 -0500")
+Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: darshan.ghumare@gmail.com
+Cc: linux-c-programming@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Whne I try to execute following code then  get an erro message that "Invalid Argumemt" in msync. 
+--=-=-=
+Content-Transfer-Encoding: quoted-printable
 
+darshan.ghumare@gmail.com writes:
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/errno.h>
-#include <sys/time.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <linux/types.h>
+> Whne I try to execute following code I get "Invalid Argumemt" error
+> message in msync.
 
-int main()
-{
-	int fd;
-	char data[20];
-	__u8 *start_addr,*end_addr;
-	int PageSize;
+/* Code rewritten to be shorter */
 
-	if ( (PageSize = sysconf(_SC_PAGE_SIZE)) < 0) {
-	    perror("sysconf() Error=");
-		    return -1;
-	}
-	printf("PageSize = %d\n",PageSize);
-
-	if((fd = open("/dev/mem", O_RDWR | O_SYNC)) == -1)
-	{ 
-		printf("Error opening /dev/mem\n");
-		return -1;
-	}
-
-	start_addr = mmap(0, PageSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd,
-										0);
-	if(start_addr == MAP_FAILED)
-	{
-		printf("enc_status map failed %s\n", strerror(errno));
-		return -1;
-	}
-
-	end_addr = start_addr + (4096 - 1);
-	strcpy(data, "Test Msg");
-	printf("\n%s:Writing NVRAM.......\n", __FUNCTION__);
-	if(write(fd, data, strlen(data)) <= 0)
-	{
-		printf("%s: Not able to write on NVRAM. %s.\n", __FUNCTION__,
-				strerror(errno));
-		return -1;
-	}
-	printf("\n%s:Synching NVRAM.......\n", __FUNCTION__);
-	if(msync(start_addr, PageSize, MS_SYNC) <= 0)
-	{
-		printf("%s: Not able to sync to NVRAM. %s.\n", __FUNCTION__,
-				strerror(errno));
-		return -1;
-	}
-	printf("\n%s:reading NVRAM.......\n", __FUNCTION__);
-	strcpy(data, "");
-	if(read(fd, data, sizeof(data)) <= 0)
-	{
-		printf("%s: Not able to read on NVRAM. %s.\n", __FUNCTION__,
-				strerror(errno));
-		return -1;
-	}
-	printf("%s: data  %s.\n", __FUNCTION__, data);
-	return 0;
-}
+> #include <fcntl.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <sys/mman.h>
+> #include <unistd.h>
+>=20
+> #define DIE_IF(cnd, msg) do{ if (cnd) { perror(msg); return 1; } }while(0)
+>=20
+> int main(void)
+> {
+> 	char data[20];
+> 	void *addr;
+> 	int fd, ret;
+>=20
+> 	fd =3D open("/dev/mem", O_RDWR | O_SYNC);
+> 	DIE_IF(fd < 0, "open");
+>=20
+> 	addr =3D mmap(0, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> 	DIE_IF(addr =3D=3D MAP_FAILED, "mmap");
+>=20
+> 	strcpy(data, "Test Msg");
+> 	ret =3D write(fd, data, strlen(data));
+> 	DIE_IF(ret < 0, "write");
+>=20
+> 	ret =3D msync(addr, 4096, MS_SYNC);
+> 	DIE_IF(ret < 0, "msync");
+>=20
+> 	ret =3D lseek(fd, 0, SEEK_SET);
+> 	DIE_IF(ret < 0, "lseek");
+>=20
+> 	memset(data, 0, sizeof data);
+> 	ret =3D read(fd, data, sizeof data);
+> 	DIE_IF(ret < 0, "read");
+> 	printf("Read: %s.\n", data);
+>=20
+> 	return 0;
+> }
 
 
---
-This message was sent on behalf of darshan.ghumare@gmail.com at openSubscriber.com
-http://www.opensubscriber.com/messages/linux-c-programming@vger.kernel.org/topic.html
+The msync(2) fails because /dev/mem driver (drivers/char/mem.c) does not
+implement fsync file operation which is used by msync(2) system call.
+
+This sort of makes sense since there is no need to sync the /dev/mem
+file -- there is no backing storage on hard drive or anywhere, when you
+write data there you write directly to the memory and same goes for
+reading.
+
+Anyhow, I'm Ccing this to linux-kernel as maybe we need a dummy fsync
+operation for /dev/mem which would do nothing and return zero?
+
+=2D-
+Best regards,                                         _     _
+ .o. | Liege of Serenly Enlightened Majesty of      o' \,=3D./ `o
+ ..o | Computer Science,  Michal "mina86" Nazarewicz   (o o)
+ ooo +--<mina86*tlen.pl>--<jid:mina86*jabber.org>--ooO--(_)--Ooo--
+
+--=-=-=
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.12 (GNU/Linux)
+
+iEYEARECAAYFAks6EokACgkQUyzLALfG3x4DJQCffDNvg08atG4/kAtlS3cNVARo
+cJYAniaVQS2Lo5kytNwCJe1JQh/j4uvN
+=2ln3
+-----END PGP SIGNATURE-----
+--=-=-=--
