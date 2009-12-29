@@ -1,29 +1,36 @@
-From: Randi Botse <nightdecoder@gmail.com>
-Subject: Re: thread: reentrant question
-Date: Sun, 27 Dec 2009 20:12:46 +0700
-Message-ID: <34e1241d0912270512o55107050o55db3e04f7325670@mail.gmail.com>
-References: <34e1241d0912241041v60c031a2kc31fdb3b4ebbd317@mail.gmail.com>
-	 <edf0f34e0912241130y20f6a9daj7085e57ee498e211@mail.gmail.com>
-	 <34e1241d0912252132y48945feek8c803ccb8625cbbc@mail.gmail.com>
-	 <edf0f34e0912261323x4a65a539g2748dd32c9521b36@mail.gmail.com>
+From: vignesh1988i <softvig88@gmail.com>
+Subject: Re: C program help
+Date: Mon, 28 Dec 2009 20:50:32 -0800 (PST)
+Message-ID: <26951151.post@talk.nabble.com>
+References: <25522429.post@talk.nabble.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type;
-        bh=cEVP2/tk/HQiiDOaZYIshMJk/NcwgUIGBXBRt2roWwA=;
-        b=XKGRCfyWB+s/nz2YC4NOlF3JZcbno2gi5N/P8IQc8Z7vY78H/JETY/z6UBr0dOTubJ
-         ILfmws5XJHciK/YJOKL6wZOHLO/batrWROYaINLitGXVKubDW/EWinlFe1Hdp5FCNYpb
-         HXACVNZABVjunNvons6/YbsbwEwRj/V8j9L6k=
-In-Reply-To: <edf0f34e0912261323x4a65a539g2748dd32c9521b36@mail.gmail.com>
+In-Reply-To: <25522429.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: vinit dhatrak <vinit.dhatrak@gmail.com>
-Cc: mina86@tlen.pl, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-Thanks all for your times. It help me so much.
 
-               Randi
+
+           1) SEE , wat i feel is that you can have a count after u answer
+for the question u ask using printf statement... that count must be
+initilized to 0 which will act as a question number. . 
+           2) And since u are a beginner in C , iam suggesting u to make use
+of two arrays where u can have one for right answers and other for wrong
+answers.... 
+           3) In the array of right answers  where u are checking ur answer
+== x+x , inside that statement assign the count to the right answerd array
+as:
+                              right[i]=count;
+           4) if ur if becomes false , in else same u must do as above but
+that should be :
+                              wrong[j]=count;
+after this u would get ur desired output....... any doubts , mail me
+:softvig88@gmail.com
+thank u
+-- 
+View this message in context: http://old.nabble.com/C-program-help-tp25522429p26951151.html
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
