@@ -1,7 +1,7 @@
 From: Nanakos Chrysostomos <linuxcprog@wired-net.gr>
 Subject: Re: float
-Date: Fri, 08 Jan 2010 19:19:53 +0200
-Message-ID: <4B476939.6000600@wired-net.gr>
+Date: Fri, 08 Jan 2010 19:21:31 +0200
+Message-ID: <4B47699B.7000906@wired-net.gr>
 References: <a24b3c171001080830l4bb72defr32b60386e4e45ae9@mail.gmail.com>	<4B476184.9070407@wired-net.gr> <87hbqwwmgb.fsf@erwin.mina86.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -31,6 +31,8 @@ On 8/1/2010 19:11, Michal Nazarewicz wrote:
 >  variable number of arguments it is promoted to double.
 >
 >   
-It could then be:
+Sorry for the previous one...
+it could be then.
 
-printf("%lf", (double)i);
+printf("%f",(double)i);
+
