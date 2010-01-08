@@ -1,7 +1,7 @@
 From: Nanakos Chrysostomos <linuxcprog@wired-net.gr>
 Subject: Re: float
-Date: Fri, 08 Jan 2010 18:47:00 +0200
-Message-ID: <4B476184.9070407@wired-net.gr>
+Date: Fri, 08 Jan 2010 18:40:55 +0200
+Message-ID: <4B476017.2050406@wired-net.gr>
 References: <a24b3c171001080830l4bb72defr32b60386e4e45ae9@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
