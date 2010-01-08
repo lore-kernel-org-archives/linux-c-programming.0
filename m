@@ -1,36 +1,20 @@
-From: andrej.gelenberg@udo.edu
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: float
-Date: Fri, 08 Jan 2010 19:00:46 +0100
-Message-ID: <cone.1262973646.709094.2988.1000@eeekiste>
+Date: Fri, 8 Jan 2010 22:05:31 +0000
+Message-ID: <19271.44075.324002.807391@cerise.gclements.plus.com>
 References: <a24b3c171001080830l4bb72defr32b60386e4e45ae9@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
+In-Reply-To: <a24b3c171001080830l4bb72defr32b60386e4e45ae9@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; format="flowed"; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"
 To: phoenixxz <vim.xxz@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-Hi,
 
-work for me.
-
-cat >test.c <<END
-#include <stdio.h>
-int main(){
- float i=1.34;
- printf("%f\n",i);
- return 0;
-}
-END
-gcc -o test test.c && ./test
-
-output:
-1.340000
-
-phoenixxz writes:
+phoenixxz wrote:
 
 > float i=1.34;
 > printf("%f",i);
@@ -38,7 +22,30 @@ phoenixxz writes:
 > 
 > ->> 0
 > why?
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+You need to include <stdio.h> and write a main() function ;)
+
+Beyond that: stdout will be line-buffered (if it's associated with a
+terminal, block-buffered otherwise), so you should add a "\n" to the
+end of the format string.
+
+The lack of line buffering might have an effect if the program
+terminates abnormally (exit() or returning from main() should cause
+buffered streams to be flushed).
+
+A working example:
+
+	$ cat test.c
+	#include <stdio.h>
+	int main(void)
+	{
+	    float i=1.34;
+	    printf("%f\n",i);
+	    return 0;
+	}
+	$ gcc test.c
+	$ ./a.out
+	1.340000
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
