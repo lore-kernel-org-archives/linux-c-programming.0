@@ -1,59 +1,57 @@
 From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Help on a memory leak issue
-Date: Mon, 11 Jan 2010 20:37:51 +0000
-Message-ID: <19275.35871.267090.666667@cerise.gclements.plus.com>
-References: <8eec89ee1001110705k3257bd80r2a719a67b0bda641@mail.gmail.com>
+Subject: Re: line buffered stdin
+Date: Mon, 11 Jan 2010 20:51:48 +0000
+Message-ID: <19275.36708.583271.381994@cerise.gclements.plus.com>
+References: <4B4B5173.20504@max01.eu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <8eec89ee1001110705k3257bd80r2a719a67b0bda641@mail.gmail.com>
+In-Reply-To: <4B4B5173.20504@max01.eu>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: =?UTF-8?B?VcSfdXIgQVRB?= <ataugur@gmail.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: Bastian Ruppert <ng@max01.eu>
+Cc: linux-c-programming@vger.kernel.org
 
 
-U=C4=9Fur ATA wrote:
+Bastian Ruppert wrote:
 
-> I have a client server application which uses a local file socket.
-> When i connect to the server part and then close the connection the
-> memory usage stays the same indicating that the resources aren't
-> freed. Other then this memory leak problem everything is working fine=
-=2E
-> Messeages are sent and received. After each message is sent/received
-> rss indicator in the ps command increases with different amounts for
-> each different message. When the rss reaches around 64MB the program
-> stops working and freezes. Then it needs to be restarted.
-> I couldn't find a solution to this problem anywhere on the web so
-> thanks in advance if someone could be of help.
-> Below is the result of uname -a:
-> Linux server 2.6.27.7-smp #2 SMP Thu Nov 20 22:32:43 CST 2008 i686
-> Pentium III (Katmai) GenuineIntel GNU/Linux
-> Slackware 12.2 is running on that kernel and my source for the server=
- part is:
+> under Linux stdin is line buffered,
 
-Whatever is causing the leak isn't in the portion of the code which
-you posted.
+More precisely, it's line buffered if stdin is a tty, fully-buffered
+otherwise.
 
-Also:
+> that means you can read one byte with
+> following statement:
+> 
+> read(0,&myvar,1);
+> 
+> You get the byte after typing one or more chars AND return.
+> 
+> But i need this function to return after every char entered in stdin.
+> 
+> Is there a function that reads stdin without line buffering?
 
-> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0struct sockaddr_un client_name;
-> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0socklen_t client_name_len =3D 0; // =
-it should be >=3D 0 otherwise accept returns EINVAL
-> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0int client_socket_fd;
-> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0client_socket_fd =3D accept(socket_f=
-d, &client_name, &client_name_len);
+User-space buffering of a stream (i.e. a "FILE *") can be controlled
+with setvbuf() (or the other functions described in the setvbuf(3)
+manpage).
 
-If you want accept to initialise client_name, you should initialise
-client_name_len to the size of the buffer, i.e.:
+However, the terminal driver also performs line-buffering by default
+(so that you can edit the current line with Backspace, Ctrl-W,
+Ctrl-U). This can be disabled with tcsetattr() (see ern0's reply for
+details), although this also disables the use of Ctrl-D to generate
+EOF.
 
-	client_name_len =3D sizeof client_name;
+> Is it possible to disable the linebuffer or to reduce the buffersize to one?
+> Does this kind of manupilation have consequences for the hole system or 
+> just for the app doing this?
 
---=20
+setvbuf() only applies to a specific process. tcsetattr() affects the
+terminal device, so you must restore the state upon termination (both
+normal termination via exit() or return from main(), and abnormal
+termination via a signal), upon suspension (i.e. SIGTSTP; you can't
+catch SIGSTOP), or if you invoke a child process (via e.g. system())
+which might need to use the terminal.
+
+-- 
 Glynn Clements <glynn@gclements.plus.com>
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
