@@ -1,82 +1,81 @@
-From: Sam Liao <phyomh@gmail.com>
-Subject: Re: Help on a memory leak issue
-Date: Tue, 12 Jan 2010 16:02:03 +0800
-Message-ID: <da5b0fda1001120002je8f34e0lc8956ed8a88c55e@mail.gmail.com>
-References: <8eec89ee1001110705k3257bd80r2a719a67b0bda641@mail.gmail.com>
-	 <19275.35871.267090.666667@cerise.gclements.plus.com>
+From: bfabf <bfabfshbadfv@gmail.com>
+Subject: How to convert DRM protected music and movies to
+ MP4/AVI/MOV/MP3/WMV/AAC...
+Date: Thu, 14 Jan 2010 23:05:55 -0800 (PST)
+Message-ID: <27173151.post@talk.nabble.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=LkFRPBwRzaO0qJ6VJ+mp+Lbr9Nqpjboweix82zK1Yno=;
-        b=U+j+XOpYJ4BWB7LS0aqTG2HEs7pXiwC5UkTRUd7TED7lpygfKSMzjJoPZxiPXHbVei
-         mVOPiPe8I+53YDsYp6pu4fAfmjuHN5B7r84HLW6X7iKXX6KKzNtwdR9pUP8gZpWwySys
-         g5VquunhUsg7zokqw6dNmomjXn4/vocZZHgCw=
-In-Reply-To: <19275.35871.267090.666667@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: =?UTF-8?B?VcSfdXIgQVRB?= <ataugur@gmail.com>, linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+To: linux-c-programming@vger.kernel.org
 
-Instead of read each line in details, have a try for valgrind.
 
--Sam
+How to convert DRM protected music and movies to MP4/AVI/MOV/MP3/WMV/AAC...
 
-On Tue, Jan 12, 2010 at 4:37 AM, Glynn Clements
-<glynn@gclements.plus.com> wrote:
->
-> U=C4=9Fur ATA wrote:
->
->> I have a client server application which uses a local file socket.
->> When i connect to the server part and then close the connection the
->> memory usage stays the same indicating that the resources aren't
->> freed. Other then this memory leak problem everything is working fin=
-e.
->> Messeages are sent and received. After each message is sent/received
->> rss indicator in the ps command increases with different amounts for
->> each different message. When the rss reaches around 64MB the program
->> stops working and freezes. Then it needs to be restarted.
->> I couldn't find a solution to this problem anywhere on the web so
->> thanks in advance if someone could be of help.
->> Below is the result of uname -a:
->> Linux server 2.6.27.7-smp #2 SMP Thu Nov 20 22:32:43 CST 2008 i686
->> Pentium III (Katmai) GenuineIntel GNU/Linux
->> Slackware 12.2 is running on that kernel and my source for the serve=
-r part is:
->
-> Whatever is causing the leak isn't in the portion of the code which
-> you posted.
->
-> Also:
->
->> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0struct sockaddr_un client_name;
->> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0socklen_t client_name_len =3D 0; //=
- it should be >=3D 0 otherwise accept returns EINVAL
->> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0int client_socket_fd;
->> =C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0client_socket_fd =3D accept(socket_=
-fd, &client_name, &client_name_len);
->
-> If you want accept to initialise client_name, you should initialise
-> client_name_len to the size of the buffer, i.e.:
->
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0client_name_len =3D sizeof client_name;
->
-> --
-> Glynn Clements <glynn@gclements.plus.com>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =C2=A0http://vger.kernel.org/majordomo-info.ht=
-ml
->
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Many people ask me the same question: "I purchased videos on iTunes, but I
+can't play them on my video player, because they are in some 'protected' M4V
+format that only works on iPods. How can I convert iTunes videos to MPEG or
+WMV format so I can play them on My portable video device such as Archos and
+Creative Zen?"
+
+I searched on Google, Yahoo answers and post the question on large number of
+forums, unfortunately, after scouring the Web for days, I couldn't find a
+FREE way to convert M4V to MPEG, WMV or AVI format.
+
+Then I tried to burn the iTunes video onto a DVD and re-import it into
+iTunes just like how to remove the protection from the iTunes audios (M4P)
+by burning it onto a CD and re-import it as mp3. I failed, cause iTunes
+doesnt have a DVD burning option, then I used Nero, but it still doesnt work
+as Nero doesnt supports M4V format. 
+
+And finally, a software solution. I came across a few kinds of converters on
+Google search, they are Tunebite, Daniusoft and Noteburner. When I was
+testing the free trials one by one, what makes me comfortable is the
+Daniusoft media converter .
+
+http://www.mac-dvd-ripper-soft.com/media-converter-daniu.html Daniusoft
+Media Converter software can remove DRM from protected wmv, wma, m4p, m4v,
+m4a, aac files that purchased and downloaded from online music store and
+convert to general video and audio formats, you can enjoy playing on
+portable media players, such as iPod, Zune, Creative Zen, MP3 player, PSP.
+
+Stpe 1: Download and install the
+http://www.mac-dvd-ripper-soft.com/download/daniu/daniu-digital-media-converter_full286_556168.exe
+DRM Removal Tool
+
+Stpe 2: Run the software and click Add.. button to load WMA or M4A, M4B,
+AAC, WMV, M4P, M4V, ASF files
+
+http://www.mac-dvd-ripper-soft.com/images/guides/daniu/daniu-media.jpg
+
+Step 3: Choose output formats. If you want to convert protected audio files,
+please select Convert audio to list; If you want to convert protected video
+files, please select Convert video to list.
+
+Stpe 4: Start remove DRM and convert your DRM protected music and videos by
+click on Start button.
+
+Tips: 
+
+You can click Settings button to custom preference for output files.
+
+1: If you still want to watch other common video/audio even HD video on your
+portable video device you can choose
+http://www.mac-dvd-ripper-soft.com/media-converter-pro-daniu.html Daniusoft
+Media Converter Pro because Daniusoft Media Converter only support DRM audio
+and DRM video.
+2: More DRM Removal Tools:
+A: http://www.mac-dvd-ripper-soft.com/digital-music-converter-daniu.html
+Digital Music Converter
+B: http://www.mac-dvd-ripper-soft.com/wma-mp3-converter-daniu.html WMA MP3
+Converter
+C: http://www.mac-dvd-ripper-soft.com/itunes-to-itunes-transfer-cucu.html
+iTunes to iTunes Transfer
+D: http://www.mac-dvd-ripper-soft.com Best DVD Ripper
+
+-- 
+View this message in context: http://old.nabble.com/How-to-convert-DRM-protected-music-and-movies-to-MP4-AVI-MOV-MP3-WMV-AAC...-tp27173151p27173151.html
+Sent from the linux-c-programming mailing list archive at Nabble.com.
+
