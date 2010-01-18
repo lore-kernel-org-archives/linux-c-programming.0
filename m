@@ -1,8 +1,8 @@
-From: bfabf <bfabfshbadfv@gmail.com>
+From: candicef <candicefdgfdgdfg@googlemail.com>
 Subject: How to convert DRM protected music and movies to
  MP4/AVI/MOV/MP3/WMV/AAC...
-Date: Thu, 14 Jan 2010 23:05:55 -0800 (PST)
-Message-ID: <27173151.post@talk.nabble.com>
+Date: Mon, 18 Jan 2010 00:35:03 -0800 (PST)
+Message-ID: <27207435.post@talk.nabble.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -76,6 +76,6 @@ iTunes to iTunes Transfer
 D: http://www.mac-dvd-ripper-soft.com Best DVD Ripper
 
 -- 
-View this message in context: http://old.nabble.com/How-to-convert-DRM-protected-music-and-movies-to-MP4-AVI-MOV-MP3-WMV-AAC...-tp27173151p27173151.html
+View this message in context: http://old.nabble.com/How-to-convert-DRM-protected-music-and-movies-to-MP4-AVI-MOV-MP3-WMV-AAC...-tp27207435p27207435.html
 Sent from the linux-c-programming mailing list archive at Nabble.com.
 
