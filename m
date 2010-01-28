@@ -1,39 +1,34 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: =?utf-8?B?UmU6IFJlOiBGdW5jdGlvbiBwb2ludGVycw==?=
-Date: Sun, 24 Jan 2010 07:59:11 +0000
-Message-ID: <19291.64975.167901.592298@cerise.gclements.plus.com>
-References: <27253432.post@talk.nabble.com>
-	<19288.9425.111644.585101@cerise.gclements.plus.com>
-	<70016fb31001231427n225eb4f6i5c78da6f9223cf01@mail.gmail.com>
-	<201001241003091879376@gmail.com>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: function cast?
+Date: Thu, 28 Jan 2010 13:05:42 +0700
+Message-ID: <34e1241d1001272205y32e92727pab9ee3cf310dcbc7@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <201001241003091879376@gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:date:message-id:subject
+         :from:to:content-type;
+        bh=dgZLT+0//um+YkELI6fpn22n0ls3Run1C22GeIr+TnA=;
+        b=jeZrR0AFVcGgCWoANM6vchuv8/JrIXuS2n38+GdHugBNF6ERSxkeSnb/UjzrlI2voB
+         7JPz2dFfsdAqBPODYZtZOYfXhtcTQmc/dermx7jd/R+25mtjC3cTwYB4Yi1N4hELF2lr
+         rHLFllfllXwOOTbOaj9RvO+6gKLhOpCaP/rzE=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: =?utf-8?B?c2ltb24=?= <unbutun@gmail.com>
-Cc: =?utf-8?B?TWlsaW5kIEEgQ2hvdWRoYXJ5?= <milindchoudhary.lkml@gmail.com>, =?utf-8?B?a3VtYXIxMQ==?= <ravikumar.chakram@gmail.com>, =?utf-8?B?bGludXgtYy1wcm9ncmFtbWluZw==?= <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hi All,
 
-simon wrote:
+Sometimes i see codes are written like this:
 
-> char (*pa())[4]; 
-> is this mean that an pa function pointer with return value like a char a[4] and it's argument is nothing ?
-> 
-> right?
+(void) printf(fmt);
 
-Wrong.
+- or -
 
-1. pa is not a pointer to a function, it's a function which returns a
-pointer. "()" has higher precedence than "*", so "*pa()" is parsed as
-"*(pa())" (function returning pointer) rather than "(*pa)()" (pointer
-to function).
+(void) close(fd);
 
-2. An empty parameter list "()" indicates that the function takes
-unspecified arguments. A function which takes no arguments has
-"(void)" as the parameter list.
+What these means? i think it is not necessary to put that 'void' on a
+statement, or it just like when we cast a data type? so the email
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Thanks,
