@@ -1,66 +1,48 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Ever Increasing memory but not freed
-Date: Thu, 28 Jan 2010 18:18:33 +0000
-Message-ID: <19297.54521.4493.408471@cerise.gclements.plus.com>
-References: <8eec89ee1001280220n88091bds74f974f45ad27087@mail.gmail.com>
-	<19297.33143.803345.127596@cerise.gclements.plus.com>
-	<8eec89ee1001280442x2c60f0a4gf8c9ec87d5e82610@mail.gmail.com>
+From: "phil song" <philsong@techtrex.com>
+Subject: Re: Re: function cast?
+Date: Mon, 1 Feb 2010 12:33:07 +0800
+Message-ID: <201002011233052965296@techtrex.com>
+References: <34e1241d1001272205y32e92727pab9ee3cf310dcbc7@mail.gmail.com>,
+ <34e1241d1001272209j3c5ae625seb555dbc5889d8a2@mail.gmail.com>,
+ <ea11fea31001272220w6e8aa529y7c9eb39bb6294729@mail.gmail.com>
+Reply-To: philsong@techtrex.com
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: base64
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <8eec89ee1001280442x2c60f0a4gf8c9ec87d5e82610@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1252"
-To: =?UTF-8?B?VcSfdXIgQVRB?= <ataugur@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="windows-1254"
+To: Manish Katiyar <mkatiyar@gmail.com>, Randi Botse <nightdecoder@gmail.com>
+Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
+SEksTWFuaXNoIEthdGl5YXIhDQoNCgl0aGFua3MsSSBzZWUgdG9vIG5vdy4NCg0KPT09PT09PSAy
+MDEwLTAxLTI4IDE0OjI0OjU4IFRoZSBsZXR0ZXIgd2hpY2ggeW91IHdyaXR0ZWQgYmVmb3JlOj09
+PT09PT0NCg0KPk9uIFRodSwgSmFuIDI4LCAyMDEwIGF0IDExOjM5IEFNLCBSYW5kaSBCb3RzZSA8
+bmlnaHRkZWNvZGVyQGdtYWlsLmNvbT4gd3JvdGU6DQo+PiAoc29ycnkgZm9yIG15IGZpcnN0IHVu
+Y29tcGxldGUgZW1haWwsIHBsZWFzZSBhYmFuZG9uIHRoZSBmaXJzdCBtYWlsKQ0KPj4NCj4+IEhp
+IEFsbCwNCj4+DQo+PiBTb21ldGltZXMgaSBzZWUgY29kZXMgYXJlIHdyaXR0ZW4gbGlrZSB0aGlz
+Og0KPj4NCj4+ICh2b2lkKSBwcmludGYoZm10KTsNCj4+DQo+PiAtIG9yIC0NCj4+DQo+PiAodm9p
+ZCkgY2xvc2UoZmQpOw0KPj4NCj4+IFdoYXQgdGhlc2UgbWVhbnM/IGkgdGhpbmsgaXQgaXMgbm90
+IG5lY2Vzc2FyeSB0byBwdXQgdGhhdCAndm9pZCcgb24gYQ0KPj4gc3RhdGVtZW50LCBvciBpdCBq
+dXN0IGxpa2Ugd2hlbiB3ZSBjYXN0IGEgZGF0YSB0eXBlIGxpa2U6DQo+Pg0KPj4gZG91YmxlIGQg
+PSA5My40MzsNCj4+IGludCBpID0gKGludCkgZDsNCj4+DQo+PiBidXQgd2h5IHRob3NlIGZ1bmN0
+aW9uIG5lZWQgdG8gYmUgY2FzdGVkIGluIGEgJ3ZvaWQnID8NCj4NCj5Tb21lIHRpbWUgaXQgaXMg
+YWxzbyB0byBzaHV0IHVwIHN0YXRpYyBhbmFseXNpcyB0b29scywgd2hpY2ggbWlnaHQNCj5jcmli
+IGlmIHRoZSBmdW5jdGlvbiBpcyBzdXBwb3NlZCB0byByZXR1cm4gYSB2YWx1ZSBhbmQgeW91IGhh
+dmUgbm90DQo+dXNlZCB0aGUgcmV0dXJuIHZhbHVlLiBJdCBtaWdodCBiZSBpbnRlbnRpb25hbCBv
+ciB5b3UgbWlnaHQgaGF2ZSBqdXN0DQo+bWlzc2VkLiBTbyBpbm9yZGVyIHRvIHNob3cgdGhhdCBp
+dCBpcyBpbnRldGlvbmFsIG5vdCB0byB1c2UgdGhlIHJldHVybg0KPnZhbHVlIHdlIHR5cGVjYXN0
+IGl0Lg0KPg0KPlRoYW5rcyAtDQo+TWFuaXNoDQo+DQo+Pg0KPj4gVGhhbmtzLA0KPj4gLS0NCj4+
+IFRvIHVuc3Vic2NyaWJlIGZyb20gdGhpcyBsaXN0OiBzZW5kIHRoZSBsaW5lICJ1bnN1YnNjcmli
+ZSBsaW51eC1jLXByb2dyYW1taW5nIiBpbg0KPj4gdGhlIGJvZHkgb2YgYSBtZXNzYWdlIHRvIG1h
+am9yZG9tb0B2Z2VyLmtlcm5lbC5vcmcNCj4+IE1vcmUgbWFqb3Jkb21vIGluZm8gYXQgoGh0dHA6
+Ly92Z2VyLmtlcm5lbC5vcmcvbWFqb3Jkb21vLWluZm8uaHRtbA0KPj4NCj4NCj4NCj4NCj4tLSAN
+Cj5UaGFua3MgLQ0KPk1hbmlzaA0KPj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0N
+Cj5bJFwqLl4gLS0gSSBtaXNzIGJlaW5nIG9uZSBvZiB0aGVtDQo+PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PQ0KPi0tDQo+VG8gdW5zdWJzY3JpYmUgZnJvbSB0aGlzIGxpc3Q6IHNl
+bmQgdGhlIGxpbmUgInVuc3Vic2NyaWJlIGxpbnV4LWMtcHJvZ3JhbW1pbmciIGluDQo+dGhlIGJv
+ZHkgb2YgYSBtZXNzYWdlIHRvIG1ham9yZG9tb0B2Z2VyLmtlcm5lbC5vcmcNCj5Nb3JlIG1ham9y
+ZG9tbyBpbmZvIGF0ICBodHRwOi8vdmdlci5rZXJuZWwub3JnL21ham9yZG9tby1pbmZvLmh0bWwN
+Cg0KPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9DQoJCQkNCg0KU2luY2Vy
+ZWx5DQogDQpwaGlsIHNvbmcNCnBoaWxzb25nQHRlY2h0cmV4LmNvbQ0KMjAxMC0wMi0wMQ0K
 
-U=C4=9Fur ATA wrote:
-
-> 1) I have tried getrusage() command and it didn't work for slackware
-> 12.2 (Linux 2.6.27.7 kernel). It was returning zero no matter what an=
-d
-> I read somewhere on the internet that it doesn't work for linux to ge=
-t
-> memory usage. That's why I wrote my own function.
-
-Sorry, my mistake; on Linux, it only records CPU usage and page
-faults, not memory. You can get equivalent information from
-/proc/<pid>/{stat,statm,status}.
-
-> 2) Yes, it is up to the kernel to release unused memory blocks on
-> demand but what I am wondering is why the program crashes every time
-> RSS reaches exactly the same amount which is almost 65MBs.
-
-Coincidence? On an unloaded system, RSS will correlate closely with
-virtual memory usage.
-
-Is there an RSS limit (ulimit -m) in effect? If there is, the process
-may start to swap when the limit is reached. If there are any
-timing-related bugs, this could cause them to manifest.
-
-> 3) My system has 1GB of free RAM and free memory exists every time a
-> lot more than needed.
-> 4) For some method calls RSS usage doesn't increase for subsequent
-> calls but for some it increases every time. Otherwise it wouldn't be =
-a
-> problem if the memory usage stabilized on some level but it doesn't.
-
-That tends to suggest a memory leak. Examining virtual memory usage
-may help to confirm or deny this.
-
-> 5) What is interesting is that in every method call RSS increases by
-> 4K segments if it does. That made me think it is something related to
-> the newly created stack in each method call.
-
-4K is the x86 page size; any memory allocated by the kernel will be in
-multiples of 4K.
-
---=20
-Glynn Clements <glynn@gclements.plus.com>
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
