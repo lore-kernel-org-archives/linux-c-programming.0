@@ -1,48 +1,25 @@
-From: "phil song" <philsong@techtrex.com>
-Subject: Re: Re: function cast?
-Date: Mon, 1 Feb 2010 12:33:07 +0800
-Message-ID: <201002011233052965296@techtrex.com>
-References: <34e1241d1001272205y32e92727pab9ee3cf310dcbc7@mail.gmail.com>,
- <34e1241d1001272209j3c5ae625seb555dbc5889d8a2@mail.gmail.com>,
- <ea11fea31001272220w6e8aa529y7c9eb39bb6294729@mail.gmail.com>
-Reply-To: philsong@techtrex.com
+From: Holger Kiehl <Holger.Kiehl@dwd.de>
+Subject: How to use CRC32 of SSE 4.2 on i3/5/7?
+Date: Mon, 8 Feb 2010 11:41:04 +0000 (GMT)
+Message-ID: <alpine.LRH.2.00.1002081130110.11287@praktifix.dwd.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: base64
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1254"
-To: Manish Katiyar <mkatiyar@gmail.com>, Randi Botse <nightdecoder@gmail.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: TEXT/PLAIN; format="flowed"; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-SEksTWFuaXNoIEthdGl5YXIhDQoNCgl0aGFua3MsSSBzZWUgdG9vIG5vdy4NCg0KPT09PT09PSAy
-MDEwLTAxLTI4IDE0OjI0OjU4IFRoZSBsZXR0ZXIgd2hpY2ggeW91IHdyaXR0ZWQgYmVmb3JlOj09
-PT09PT0NCg0KPk9uIFRodSwgSmFuIDI4LCAyMDEwIGF0IDExOjM5IEFNLCBSYW5kaSBCb3RzZSA8
-bmlnaHRkZWNvZGVyQGdtYWlsLmNvbT4gd3JvdGU6DQo+PiAoc29ycnkgZm9yIG15IGZpcnN0IHVu
-Y29tcGxldGUgZW1haWwsIHBsZWFzZSBhYmFuZG9uIHRoZSBmaXJzdCBtYWlsKQ0KPj4NCj4+IEhp
-IEFsbCwNCj4+DQo+PiBTb21ldGltZXMgaSBzZWUgY29kZXMgYXJlIHdyaXR0ZW4gbGlrZSB0aGlz
-Og0KPj4NCj4+ICh2b2lkKSBwcmludGYoZm10KTsNCj4+DQo+PiAtIG9yIC0NCj4+DQo+PiAodm9p
-ZCkgY2xvc2UoZmQpOw0KPj4NCj4+IFdoYXQgdGhlc2UgbWVhbnM/IGkgdGhpbmsgaXQgaXMgbm90
-IG5lY2Vzc2FyeSB0byBwdXQgdGhhdCAndm9pZCcgb24gYQ0KPj4gc3RhdGVtZW50LCBvciBpdCBq
-dXN0IGxpa2Ugd2hlbiB3ZSBjYXN0IGEgZGF0YSB0eXBlIGxpa2U6DQo+Pg0KPj4gZG91YmxlIGQg
-PSA5My40MzsNCj4+IGludCBpID0gKGludCkgZDsNCj4+DQo+PiBidXQgd2h5IHRob3NlIGZ1bmN0
-aW9uIG5lZWQgdG8gYmUgY2FzdGVkIGluIGEgJ3ZvaWQnID8NCj4NCj5Tb21lIHRpbWUgaXQgaXMg
-YWxzbyB0byBzaHV0IHVwIHN0YXRpYyBhbmFseXNpcyB0b29scywgd2hpY2ggbWlnaHQNCj5jcmli
-IGlmIHRoZSBmdW5jdGlvbiBpcyBzdXBwb3NlZCB0byByZXR1cm4gYSB2YWx1ZSBhbmQgeW91IGhh
-dmUgbm90DQo+dXNlZCB0aGUgcmV0dXJuIHZhbHVlLiBJdCBtaWdodCBiZSBpbnRlbnRpb25hbCBv
-ciB5b3UgbWlnaHQgaGF2ZSBqdXN0DQo+bWlzc2VkLiBTbyBpbm9yZGVyIHRvIHNob3cgdGhhdCBp
-dCBpcyBpbnRldGlvbmFsIG5vdCB0byB1c2UgdGhlIHJldHVybg0KPnZhbHVlIHdlIHR5cGVjYXN0
-IGl0Lg0KPg0KPlRoYW5rcyAtDQo+TWFuaXNoDQo+DQo+Pg0KPj4gVGhhbmtzLA0KPj4gLS0NCj4+
-IFRvIHVuc3Vic2NyaWJlIGZyb20gdGhpcyBsaXN0OiBzZW5kIHRoZSBsaW5lICJ1bnN1YnNjcmli
-ZSBsaW51eC1jLXByb2dyYW1taW5nIiBpbg0KPj4gdGhlIGJvZHkgb2YgYSBtZXNzYWdlIHRvIG1h
-am9yZG9tb0B2Z2VyLmtlcm5lbC5vcmcNCj4+IE1vcmUgbWFqb3Jkb21vIGluZm8gYXQgoGh0dHA6
-Ly92Z2VyLmtlcm5lbC5vcmcvbWFqb3Jkb21vLWluZm8uaHRtbA0KPj4NCj4NCj4NCj4NCj4tLSAN
-Cj5UaGFua3MgLQ0KPk1hbmlzaA0KPj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0N
-Cj5bJFwqLl4gLS0gSSBtaXNzIGJlaW5nIG9uZSBvZiB0aGVtDQo+PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PQ0KPi0tDQo+VG8gdW5zdWJzY3JpYmUgZnJvbSB0aGlzIGxpc3Q6IHNl
-bmQgdGhlIGxpbmUgInVuc3Vic2NyaWJlIGxpbnV4LWMtcHJvZ3JhbW1pbmciIGluDQo+dGhlIGJv
-ZHkgb2YgYSBtZXNzYWdlIHRvIG1ham9yZG9tb0B2Z2VyLmtlcm5lbC5vcmcNCj5Nb3JlIG1ham9y
-ZG9tbyBpbmZvIGF0ICBodHRwOi8vdmdlci5rZXJuZWwub3JnL21ham9yZG9tby1pbmZvLmh0bWwN
-Cg0KPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9ID0gPSA9DQoJCQkNCg0KU2luY2Vy
-ZWx5DQogDQpwaGlsIHNvbmcNCnBoaWxzb25nQHRlY2h0cmV4LmNvbQ0KMjAxMC0wMi0wMQ0K
+Hello
 
+In my application I use a lot of crc32 checksum calculation in a little
+C function. I now have access to a system with an i7 which does have
+crc32 as an instruction. How can I make use of this instruction in
+my program? Most likely one can do this directly via assembler code, but
+is there support for this via libc?
+
+Can someone please show me how I could use hardware accelerated crc32
+checksum calculation in my code?
+
+Thanks,
+Holger
