@@ -1,85 +1,82 @@
-From: Khalifa Rouis <rouis.khalifa@gmail.com>
+From: ern0 <ern0@linkbroker.hu>
 Subject: Re: Multiplayer game
-Date: Tue, 23 Feb 2010 19:11:28 +0100
-Message-ID: <8f760ca11002231011p649cda4cib80243bd287884ec@mail.gmail.com>
+Date: Tue, 23 Feb 2010 21:33:26 +0100
+Message-ID: <4B843B96.40401@linkbroker.hu>
 References: <27707442.post@talk.nabble.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:in-reply-to:references
-         :from:date:message-id:subject:to:cc:content-type
-         :content-transfer-encoding;
-        bh=8CRdyhfiJ0V/yGy/tW0eepKA6TZaTVI6Wzau/6PKY6s=;
-        b=XRnzQDFRxEMCsP39VRjc1DDKRJNCZPFd7Ze/MS12yly/YYA6kDQMsyyk7Nkak1tME2
-         a+ZIK+luwATKXOBrCM1mbk0IuQeVNVJQ8ceV+xsSIsDfe7yOjO68Rr4e3j453K8naBUB
-         +LLy2KG52qfJHYDmxJqwx4Pb0K6+dS6+yL+aI=
 In-Reply-To: <27707442.post@talk.nabble.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: iliali16 <iliali16@gmail.com>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: 
 Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+> since I am not a good C programmer 
 
-This is a taught situation you have here ...
+1. It's the smallest problem, wheter you're familiar with C programming 
+or not.
 
-Well, IMHO, you'll need sockets no matter what design/implementation
-you think of. So you probably misunderstood the requirements. (they
-probably prohibit the use of a certain type of sockets or protocols,
-=2E..)
-About the atomic movements, one way would be considering critical
-sections in your code and using some synchronization algorithms
-(dining philosophers problem).
+A multiplayer game has several property, which are hard to implement 
+each, and even harder to implement together. They are:
+- managing a common scene wich is controlled by asynchronous user events;
+- setting up communication infrastructure between a server and at least 
+two clients;
+- everything must be pretty quick.
 
-Hope this will help and good luck with your assignment
+2. Sockets: if the game is designed for LAN, socket is OK. But if your 
+players are using internet, HTTP is a better choice - you can't sure 
+that your players' firewall will enable using UDP, but HTTP is always 
+enabled. It has overhead, and a bit harder to implement.
 
-On 23 February 2010 18:50, iliali16 <iliali16@gmail.com> wrote:
->
-> Hi Guys I am currently developing a multiplayer game for my assignmen=
-t now I
-> have problem since I am not a good C programmer and I am trying to de=
-velop a
-> game which has to be multiplayer and each player should be able to ac=
-cess a
-> map and move around on it and be able to see the other players moving=
- as
-> well. But how would I make them connect to the server since it will b=
-e
-> remote and I can't make use of sockets (these are the requirments).Al=
-so how
-> can I make the movements of each player atomic since I don't want the=
- system
-> to interupt one of the player and when it allocates the CPU back to i=
-t the
-> other players have already been moved when the first player had to mo=
-ve
-> before them. Thanks for any ideas since I want to do my proper design=
- then
-> implement. Thanks
-> --
-> View this message in context: http://old.nabble.com/Multiplayer-game-=
-tp27707442p27707442.html
-> Sent from the linux-c-programming mailing list archive at Nabble.com.
->
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =C2=A0http://vger.kernel.org/majordomo-info.ht=
-ml
->
+3. Sync
 
+> Also how
+> can I make the movements of each player atomic since I don't want the system
+> to interupt one of the player and when it allocates the CPU back to it the
+> other players have already been moved when the first player had to move
+> before them. 
 
+Yep, you're right, you've found it: it's the most important problem of 
+the multi-user worlds. The solution is not trivial, but it's not rocket 
+science, and I assume there're lot of good documentations on the net in 
+this topic.
 
---=20
-Khalifa ROUIS
-rouis.khalifa@gmail.com
-http://pagesperso.univ-brest.fr/~e20603429/
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+The problem is, that say, two players are pressing fire button at the 
+very same moment, but both of them can see that the other player was 
+launching the rocket a bit later than other player. That leads to chaos.
+
+The solution is:
+- time sync and
+- message queuing.
+
+Time sync: the server and each client (player) as well must have a 
+clock, which are syncronized. It will be quite useful, see below.
+
+Message queuing:
+- When a player takes any action, it musn't be handled by the client 
+immediatelly: the event just has to sent to the server.
+- The server receives and queues the events arriving from clients. The 
+most important: the server assigns a time stamp for each event. The 
+value of the timestamp is some millisecs ahead (it must be enough for 
+sending the message back to the client).
+- The server sends the appropiate (soon upcoming, useful for the 
+receiver client etc.) events to the clients (even ones which are 
+generated by the same client, they just get back their events with 
+timestamp).
+- The client receives events, and performs the appropiate action, but 
+not immediatelly, they're firing the action at the moment, which is 
+described in the event's timestamp.
+- If the time is synced between server and clients, all actions will be 
+performed on each client at the very same moment. Because all clients 
+are running the same code, and all clients has the same data (position 
+of players etc.), every client will do the very same.
+- It a client can't perform the event in-time, it must be download the 
+actual scene state from the server.
+
+And it's just the top of the iceberg.
+-- 
+ern0.scene.plus4.amiga.code.muzak
+Haben Sie Fragen?
+
