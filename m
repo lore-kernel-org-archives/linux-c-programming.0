@@ -1,49 +1,45 @@
-From: iliali16 <iliali16@gmail.com>
-Subject: Re: Multiplayer game
-Date: Tue, 23 Feb 2010 14:58:58 -0800 (PST)
-Message-ID: <27712027.post@talk.nabble.com>
-References: <27707442.post@talk.nabble.com>
+From: =?UTF-8?B?SnVsaWFuIFRob23DqQ==?= <frostisch@yahoo.de>
+Subject: Descriptor Passing without unix domain sockets or streams ?
+Date: Mon, 19 Apr 2010 21:30:16 +0200
+Message-ID: <4BCCAF48.3060809@yahoo.de>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <27707442.post@talk.nabble.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.de; s=s1024; t=1271705337; bh=FLvWkvTf6Iq+Xb8PyvyTAsxKJ8GUWX46Q6+FZbgFe3I=; h=Received:X-Yahoo-SMTP:X-YMail-OSG:X-Yahoo-Newman-Property:Message-ID:Date:From:User-Agent:MIME-Version:To:Subject:X-Enigmail-Version:Content-Type:Content-Transfer-Encoding; b=eoT9Jbd/urPzXKCxzDzITNUU8kQur/4W2inmONMuq0jBIjSAGtFfuwQA+tSuaK5tdOqoYi4ydFXZStPL2z7ullf0dc2Ukr1xnbJ6XJZrGbjh3BhUq1SVc1KPa21r5WUsdRATnUBSZl6ogTtiSChnNewhnAgfUfFBp4dfGFo9pUU=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="macroman"
 To: linux-c-programming@vger.kernel.org
 
+Hello Mailing list,
 
-Well I am sure I cannot use sockets it is stated. It is assumed that the game
-is run on a unix/linux server and the users make use of their machines as
-terminals so evryone controls his player in the game but can also see the
-others beauce all players aim is to reach at some position in the map. who
-reaches first wins the control is done by the arrows up/down/left/right. I
-think using putty as terminal is the best so people would be able run the
-game and if there is an open session of the game before they opened it it
-will give them option to join or not so if they join they will be put in a
-random free position and they will see the other players aiming at the goal
-so they will be able to start playing imigitly. This is the way it should
-work. About atomic functionality I was thinking about semaphores. Do you
-think that is the way to go about it. I haven't got much time to finish my
-design because it is high time start coding since I am not that good at C.
-Thanks for all suggestions till now and for any future of these.10x agian
+i have a problem passing a file descriptor from one process to another.
 
-iliali16 wrote:
-> 
-> Hi Guys I am currently developing a multiplayer game for my assignment now
-> I have problem since I am not a good C programmer and I am trying to
-> develop a game which has to be multiplayer and each player should be able
-> to access a map and move around on it and be able to see the other players
-> moving as well. But how would I make them connect to the server since it
-> will be remote and I can't make use of sockets (these are the
-> requirments).Also how can I make the movements of each player atomic since
-> I don't want the system to interupt one of the player and when it
-> allocates the CPU back to it the other players have already been moved
-> when the first player had to move before them. Thanks for any ideas since
-> I want to do my proper design then implement. Thanks 
-> 
+I have two processes A and B. Both are running in different network and
+filesystem namespaces, so it is impossible to use unix domain sockets o=
+r
+net sockets to pass a file descriptor from process A to process B.
 
--- 
-View this message in context: http://old.nabble.com/Multiplayer-game-tp27707442p27712027.html
-Sent from the linux-c-programming mailing list archive at Nabble.com.
+The usage of STREAMS is also impossible, as you can see in
+	http://fixunix.com/unix/84093-streams-pipes-ioctl-i_sendfd.html
 
+[quotation begin]
+	Linux doesn't have STREAMS, which are the System V way
+	of doing this task. ...
+[quotation end]
+
+Are there additional possibilities for file descriptor passing like
+using a named pipe or something like that or does anybody know
+a good workaround for this problem ?
+
+Thank you very much !!
+  Julian Thom=C3=A9
+
+	=09
+___________________________________________________________=20
+Telefonate ohne weitere Kosten vom PC zum PC: http://messenger.yahoo.de
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
