@@ -1,45 +1,107 @@
-From: =?UTF-8?B?SnVsaWFuIFRob23DqQ==?= <frostisch@yahoo.de>
-Subject: Descriptor Passing without unix domain sockets or streams ?
-Date: Mon, 19 Apr 2010 21:30:16 +0200
-Message-ID: <4BCCAF48.3060809@yahoo.de>
+From: "Petrin, Benjamin" <b.petrin@WPI.EDU>
+Subject: Using netlink to obtain arp table entries only returns stale entries
+Date: Wed, 19 May 2010 16:43:30 -0400
+Message-ID: <495305EC7917D242A523BB811E017DEF010E5DB42FD3@EXCHANGEMAIL.admin.wpi.edu>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.de; s=s1024; t=1271705337; bh=FLvWkvTf6Iq+Xb8PyvyTAsxKJ8GUWX46Q6+FZbgFe3I=; h=Received:X-Yahoo-SMTP:X-YMail-OSG:X-Yahoo-Newman-Property:Message-ID:Date:From:User-Agent:MIME-Version:To:Subject:X-Enigmail-Version:Content-Type:Content-Transfer-Encoding; b=eoT9Jbd/urPzXKCxzDzITNUU8kQur/4W2inmONMuq0jBIjSAGtFfuwQA+tSuaK5tdOqoYi4ydFXZStPL2z7ullf0dc2Ukr1xnbJ6XJZrGbjh3BhUq1SVc1KPa21r5WUsdRATnUBSZl6ogTtiSChnNewhnAgfUfFBp4dfGFo9pUU=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wpi.edu; s=_dkim;
+	t=1274301812; bh=GcLz8/q940LiUOa+kD/CPbgSosMRs0ZQb8I719DDgTI=;
+	h=From:To:Date:Subject:Message-ID:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	b=OBrD7xw3MDBOBlV5pjQgkQp6yi57eby7jd1PLPBbA0sGRkd5X7+7LSjpwe7WfNkkr
+	 SjehgpbkDCynZhvFuQrtEgeiOVrKMJ08yhAbdCrAPKHqz9SlH1Wi/FXYqYXc3P8lXE
+	 RIyhp4NB8uLUsNsE5q/aNU43fE5zCmgF49GvJquE=
+Content-Language: en-US
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="macroman"
-To: linux-c-programming@vger.kernel.org
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-Hello Mailing list,
+Hello.
 
-i have a problem passing a file descriptor from one process to another.
+I'm trying to retrieve neighbors from the ARP neighbor table using netlink. I've written a sample app that mostly works. The problem is, it is only retrieving "stale" neighbors, not "reachable" or any other state. This is happening despite the fact that I am using the NUD_REACHABLE flag. It seems no matter what I use as the flag, I still get the same results.
 
-I have two processes A and B. Both are running in different network and
-filesystem namespaces, so it is impossible to use unix domain sockets o=
-r
-net sockets to pass a file descriptor from process A to process B.
+I'm not very familiar with netlink, so I've modeled most of the code after this link: http://linux-hacks.blogspot.com/2009/01/sample-code-to-learn-netlink.html.
 
-The usage of STREAMS is also impossible, as you can see in
-	http://fixunix.com/unix/84093-streams-pipes-ioctl-i_sendfd.html
+I know I must be doing something right getting this far, but I can't seem to figure out what is missing. Any ideas?
 
-[quotation begin]
-	Linux doesn't have STREAMS, which are the System V way
-	of doing this task. ...
-[quotation end]
+Thanks,
+Benjamin
 
-Are there additional possibilities for file descriptor passing like
-using a named pipe or something like that or does anybody know
-a good workaround for this problem ?
 
-Thank you very much !!
-  Julian Thom=C3=A9
+#include <stdio.h>
+#include <string.h>
+#include <netinet/in.h>
+#include <linux/rtnetlink.h>
 
-	=09
-___________________________________________________________=20
-Telefonate ohne weitere Kosten vom PC zum PC: http://messenger.yahoo.de
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+int main(int argc, char** argv) {
+    struct {
+        struct nlmsghdr n;
+        struct ndmsg r;
+    } req;
+
+    struct rtattr *rta;
+    int status;
+    char buf[16384];
+    struct nlmsghdr *nlmp;
+    struct ndmsg *rtmp;
+    struct rtattr *rtatp;
+    int rtattrlen;
+    struct in_addr *inp;
+
+    char lladdr[6];
+    char ipv4string[INET_ADDRSTRLEN];
+
+    int fd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE);
+
+    memset(&req, 0, sizeof(req));
+    req.n.nlmsg_len = NLMSG_LENGTH(sizeof(struct ndmsg));
+    req.n.nlmsg_flags = NLM_F_REQUEST | NLM_F_ROOT | NLM_F_REQUEST;
+    req.r.ndm_state = NUD_REACHABLE;
+    req.n.nlmsg_type = RTM_GETNEIGH;
+    req.r.ndm_family = AF_INET; 
+
+    rta = (struct rtattr *)(((char *)&req) + NLMSG_ALIGN(req.n.nlmsg_len));
+    rta->rta_len = RTA_LENGTH(4);
+
+    status = send(fd, &req, req.n.nlmsg_len, 0);
+
+    if (status < 0) {
+        //error sending
+    }
+
+    status = recv(fd, buf, sizeof(buf), 0);
+
+    if (status < 0) {
+        //error receiving
+    }
+
+    for(nlmp = (struct nlmsghdr *)buf; status > sizeof(*nlmp);){
+
+        int len = nlmp->nlmsg_len;
+        int req_len = len - sizeof(*nlmp);
+
+        if (req_len<0 || len>status || !NLMSG_OK(nlmp, status)) {
+            printf("error");
+        }
+
+        rtmp = (struct ndmsg *)NLMSG_DATA(nlmp);
+        rtatp = (struct rtattr *)IFA_RTA(rtmp);
+
+        rtattrlen = IFA_PAYLOAD(nlmp);
+
+        for (; RTA_OK(rtatp, rtattrlen); rtatp = RTA_NEXT(rtatp, rtattrlen)) {       
+            if(rtatp->rta_type == NDA_DST){
+                inp = (struct in_addr *)RTA_DATA(rtatp);
+                inet_ntop(AF_INET, inp, ipv4string, INET_ADDRSTRLEN);
+                printf("addr: %s",ipv4string);
+            }
+        }
+
+        status -= NLMSG_ALIGN(len);
+        nlmp = (struct nlmsghdr*)((char*)nlmp + NLMSG_ALIGN(len));
+    }
+
+    return 0;
+}
