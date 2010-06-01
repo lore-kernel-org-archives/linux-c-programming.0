@@ -1,62 +1,65 @@
-From: Randi Botse <nightdecoder@gmail.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: C Question
-Date: Tue, 1 Jun 2010 07:59:37 -0400
-Message-ID: <AANLkTik-eE99MeOMhJKcINHwzyzT_BcduarrMLVWvCDs@mail.gmail.com>
+Date: Tue, 1 Jun 2010 14:18:10 +0100
+Message-ID: <19461.2194.469920.784076@cerise.gclements.plus.com>
 References: <AANLkTimNataepVFhtn4kSv_kGv1wTBHMAOgeZTK0hgW-@mail.gmail.com>
 	<87r5l09pjt.fsf@erwin.mina86.com>
 	<AANLkTilJ0HUomkRuJwrywTcmVoeAAmQb2MTZbwoT57fn@mail.gmail.com>
 	<87r5ktfttj.fsf@erwin.mina86.com>
+	<AANLkTik-eE99MeOMhJKcINHwzyzT_BcduarrMLVWvCDs@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:received:in-reply-to
-         :references:date:message-id:subject:from:to:cc:content-type
-         :content-transfer-encoding;
-        bh=DQf67noUbCBdFBn5MkmqAXHG+rWaO5EdEeHBSJwv01w=;
-        b=B3lgVm+9W8RotLccCl9f4aXEE7gWIb4vNfkRmv1EavyqFrpSozOr3c+f/O9/mQiQC3
-         0FUWEYp9JIDjSnEql5aOgMhu4WwygGn3aMARDhng2uk6BcNTdgKfBqrI6sGPAcbhBX0O
-         xcRPK4yo59j3u26WxY0XA896Ssxb/UZGO2JPM=
-In-Reply-To: <87r5ktfttj.fsf@erwin.mina86.com>
+In-Reply-To: <AANLkTik-eE99MeOMhJKcINHwzyzT_BcduarrMLVWvCDs@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
-To: Michal Nazarewicz <mina86@tlen.pl>
-Cc: linux-c-programming@vger.kernel.org
+To: Randi Botse <nightdecoder@gmail.com>
+Cc: Michal Nazarewicz <mina86@tlen.pl>, linux-c-programming@vger.kernel.org
 
-That's clear now, i was though the 'unindexed' strings (in this case
-index 1, 2, 3, and 5) remains unintialized (not initialized to NULL).
 
-Thanks very much.
+Randi Botse wrote:
 
-Randi,
+> >> Sorry but, i just having another question, consider this code:
+> >>
+> >> const char *my_strings[] =3D {
+> >> =A0 =A0 [0] =3D "index0",
+> >> =A0 =A0 [4] =3D "index4",
+> >> =A0 =A0 [6] =3D "index6"
+> >> };
+> >
+> > NULLs will be written at indexes 1, 2, 3 and 5. =A0There will be to=
+tal of
+> > 7 pointers (the last one will point to "index6").
+>=20
+> That's clear now, i was though the 'unindexed' strings (in this case
+> index 1, 2, 3, and 5) remains unintialized (not initialized to NULL).
 
-2010/5/30 Michal Nazarewicz <mina86@tlen.pl>:
-> Randi Botse <nightdecoder@gmail.com> writes:
->> Yes, the N_(x) macro used for localization that i discard in my ques=
-tion.
->>
->> Sorry but, i just having another question, consider this code:
->>
->> const char *my_strings[] =3D {
->> =A0 =A0 [0] =3D "index0",
->> =A0 =A0 [4] =3D "index4",
->> =A0 =A0 [6] =3D "index6"
->> };
->
-> NULLs will be written at indexes 1, 2, 3 and 5. =A0There will be tota=
-l of
-> 7 pointers (the last one will point to "index6").
->
-> --
-> Best regards, =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
- =A0 =A0 =A0 =A0 =A0 =A0 _ =A0 =A0 _
-> =A0.o. | Liege of Serenly Enlightened Majesty of =A0 =A0 =A0o' \,=3D.=
-/ `o
-> =A0..o | Computer Science, =A0Michal "mina86" Nazarewicz =A0 (o o)
-> =A0ooo +--<mina86-tlen.pl>--<jid:mina86-jabber.org>--ooO--(_)--Ooo--
->
+If you specify an initialiser, the entire object is initialised. If
+you specify an incomplete initialiser, the unspecified elements are
+initialised to the appropriate zero value (0, 0.0, '\0', NULL, etc).
+
+The C99 standard says (6.7.8p21):
+
+       [#21]  If  there  are fewer initializers in a brace-enclosed
+       list than there are elements or members of an aggregate,  or
+       fewer  characters  in a string literal used to initialize an
+       array of known size than there are elements  in  the  array,
+       the   remainder   of  the  aggregate  shall  be  initialized
+       implicitly the same as  objects  that  have  static  storage
+       duration.
+
+This applies to both traditional C89 sequential initialisers and C99
+designated initialisers. It allows you to initialise large arrays or
+structures without having to specify every element; e.g.:
+
+	int array[1000] =3D {0};
+	struct foo f =3D {0};
+
+will initialise the entire array or structure to zero.
+
+--=20
+Glynn Clements <glynn@gclements.plus.com>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
