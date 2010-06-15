@@ -1,17 +1,33 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: "Ardhan Madras" <ajhwb@knac.com>
 Subject: Re: POSIX Message Queues
-Date: Sat, 12 Jun 2010 14:40:07 +0100
-Message-ID: <19475.36407.405869.794968@cerise.gclements.plus.com>
-References: <20100612021011.2461323D@resin16.mta.everyone.net>
+Date: Mon, 14 Jun 2010 20:34:26 -0700
+Message-ID: <20100614203426.2456FD00@resin06.mta.everyone.net>
+Reply-To: <ajhwb@knac.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20100612021011.2461323D@resin16.mta.everyone.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ajhwb@knac.com
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn@gclements.plus.com>
 Cc: linux-c-programming@vger.kernel.org
+
+It was mq_open(), sorry my bad ;p
+
+I did umask(0001) before creating the queue, it's works now. 'Program A' that requested O_RDWR flag to the queue can send and receive message as 'Program B' did. I also try to demonstrating this problem with another machine (Linux of course), as result i can O_RDWR'ed program A queue flag without have to call umask() first. Is this behavior can be set through system configuration?
+
+fchmod() also works here, sorry, but what do you mean with 'not portable'?, do you mean fchmod() intended to be used only for file, in other words "not every system support fchmod() with message queue descriptor" right?
+
+               Ardhan,
+
+
+--- glynn@gclements.plus.com wrote:
+
+From:	Glynn Clements <glynn@gclements.plus.com>
+To:	<ajhwb@knac.com>
+Cc:	<linux-c-programming@vger.kernel.org>
+Subject: Re: POSIX Message Queues
+Date:	Sat, 12 Jun 2010 14:40:07 +0100
 
 
 Ardhan Madras wrote:
@@ -54,3 +70,13 @@ exists.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+
+
+
+_____________________________________________________________
+Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
