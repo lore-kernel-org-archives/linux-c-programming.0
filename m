@@ -1,41 +1,67 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: POSIX Message Queues
-Date: Tue, 15 Jun 2010 16:33:25 +0100
-Message-ID: <19479.40261.468578.991824@cerise.gclements.plus.com>
-References: <20100614203426.2456FD00@resin06.mta.everyone.net>
+From: Balachandar <bala1486@gmail.com>
+Subject: Use of double pointer in linux kernel Hash list implementation
+Date: Wed, 16 Jun 2010 22:50:17 -0400
+Message-ID: <AANLkTilGln3yZRl1muugML4Qg_1rcTXTf3UeAIzLTOJT@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20100614203426.2456FD00@resin06.mta.everyone.net>
-Sender: linux-c-programming-owner@vger.kernel.org
-List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: ajhwb@knac.com
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: multipart/alternative; boundary=00c09f9b0c6d0dccab048930e6c7
+Return-path: <kernelnewbies-bounce@nl.linux.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:date:message-id
+         :subject:from:to:content-type;
+        bh=Q9LDIPqXnCQv0msqGHOhzrDrzHkpSnWmeEMTVUsB1d0=;
+        b=HN/ToyXYfJXojrYka6S2uC0Gd/WBaQ4Kt8TXqpblf7KD0LNxztP6B+cgjbGXD0HmE3
+         ls5Vaw9NcDzMy3OJo1e92y8xVAGllXDBQn8osehowsD6t3W+FAFcUs8Evxrp+F4tqbDe
+         /atq6Xb342XhNtEUMDbzPaIEQAJckW//NndEA=
+Sender: kernelnewbies-bounce@nl.linux.org
+Errors-to: kernelnewbies-bounce@nl.linux.org
+List-help: <mailto:ecartis@nl.linux.org?Subject=help>
+List-unsubscribe: <mailto:kernelnewbies-request@nl.linux.org?Subject=unsubscribe>
+List-software: Ecartis version 1.0.0
+List-Id: <linux-c-programming.vger.kernel.org>
+List-subscribe: <mailto:kernelnewbies-request@nl.linux.org?Subject=subscribe>
+List-owner: <mailto:ecartis-owner@nl.linux.org>
+List-post: <mailto:kernelnewbies@nl.linux.org>
+List-archive: <http://mail.nl.linux.org/kernelnewbies/>
+To: kernelnewbies@nl.linux.org, linux-c-programming@vger.kernel.org
 
+--00c09f9b0c6d0dccab048930e6c7
+Content-Type: text/plain; charset=ISO-8859-1
 
-Ardhan Madras wrote:
+Hi,
+  I am trying to understand Linux Kernel implementation of linked list and
+hash table. A link to the implementation is
+here<http://lxr.linux.no/linux+v2.6.34/include/linux/list.h>.
+I understood the linked list implementation. But i am little confused of why
+double pointers is being used in hlist (**pprev). Link for hlist is
+here<http://lxr.linux.no/linux+v2.6.34/include/linux/list.h#L554>.
+I understand that hlist is used in implementation of hash table since head
+of the list requires only one pointer and it saves space. Why cant it be
+done using single pointer (just *prev like the linked list)? Please help me.
 
-> It was mq_open(), sorry my bad ;p
-> 
-> I did umask(0001) before creating the queue, it's works now. 'Program
-> A' that requested O_RDWR flag to the queue can send and receive
-> message as 'Program B' did. I also try to demonstrating this problem
-> with another machine (Linux of course), as result i can O_RDWR'ed
-> program A queue flag without have to call umask() first. Is this
-> behavior can be set through system configuration?
+Thanks,
+Bala
 
-A process' umask is inherited from its parent. For interactive
-sessions, you can set it in your ~/.profile or similar. For daemons
-started by init, you can set it in the rc script which starts the
-daemon.
+--00c09f9b0c6d0dccab048930e6c7
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-> fchmod() also works here, sorry, but what do you mean with 'not
-> portable'?, do you mean fchmod() intended to be used only for file, in
-> other words "not every system support fchmod() with message queue
-> descriptor" right?
+<div>Hi,</div><div>=A0=A0I am trying to understand Linux Kernel implementat=
+ion of linked list and hash table. A link to the implementation is <a href=
+=3D"http://lxr.linux.no/linux+v2.6.34/include/linux/list.h">here</a>. I und=
+erstood the linked list implementation. But i am little confused of why dou=
+ble pointers is being used in hlist (**pprev). Link for hlist is <a href=3D=
+"http://lxr.linux.no/linux+v2.6.34/include/linux/list.h#L554">here</a>. I u=
+nderstand that hlist is used in implementation of hash table since head of =
+the list requires only one pointer and it saves space. Why cant it be done =
+using single pointer (just *prev like the linked list)? Please help me.</di=
+v>
+<div><br></div><div>Thanks,</div><div>Bala</div>
 
-Yes.
+--00c09f9b0c6d0dccab048930e6c7--
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+--
+To unsubscribe from this list: send an email with
+"unsubscribe kernelnewbies" to ecartis@nl.linux.org
+Please read the FAQ at http://kernelnewbies.org/FAQ
+
