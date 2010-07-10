@@ -1,40 +1,45 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: dlopen(3) many threads global variable
-Date: Sat, 3 Jul 2010 09:06:55 +0100
-Message-ID: <19502.61343.821398.46931@cerise.gclements.plus.com>
-References: <i0l6p0$2g2$1@dough.gmane.org>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Subject: Slow signal delivery to server process with heavy I/O
+Date: Sat, 10 Jul 2010 18:08:09 -0500
+Message-ID: <AANLkTimehfszGlcsKm4wt2byyNTb8cGD7DQSBK_W2Ome@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <i0l6p0$2g2$1@dough.gmane.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:date:message-id
+         :subject:from:to:content-type;
+        bh=mYk1RXX3HRl9hI2v5xZSIGmJcDSBqBtq9diqBGPak/w=;
+        b=Qw+5+4Y0fiVhrBmApa/Xn7c/q7gJeVhGGsoThomV8c4NMj771nyfSQxTCQOvx4IuA5
+         Y5jo5nqlMQZPSrzq5bOlvx6Yt00xOY9xVeiirSEWXW34qoQVKLlvSWG6TzAuvYDERDnz
+         zJPrD35Yt6EAzu2KVHrSt2nkDcKtlGiBJmWUU=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Hicham Mouline <hicham@mouline.org>
-Cc: linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hi All,
 
-Hicham Mouline wrote:
+I've noticed that asynchronous signals such as SIGINT, SIGTERM etc are
+delivered to my process long after the signal is sent if the receiving
+process is handling lots of I/O.  My process is a multi-threaded web
+server.  It's got one thread waiting on 'select' to accept incoming
+connections and a thread pool which reads the data with 'recv'.
 
-> There is a .so shared dynamic library the main source file of which contains 
-> a global variable.
-> 
-> In my main funtion, I call dlopen() on the same .so file from 16 different 
-> threads. I do nothing to ensure the call is not done at the same time.
-> 
-> Very roughly speaking (and please can you provide precision if possible), 
-> the executable code of the .so file is loaded into the main process virtual 
-> memory after the dlopen has succeeded. (Note the main binary is not linked 
-> against the .so file)
-> 
-> Will there be 16 copies of the executable code from the .so file in the 
-> process?
+When I batter the web server with incoming traffic and I try to
+shutdown the server by sending a SIGINT or SIGTERM, I have observed
+that the web server finishes handling the incoming traffic before the
+kernel dispatches the signal to the process.  It appears that the
+'select' and 'recv' calls are getting highest priority with regard to
+scheduling.
 
-No.
+I realize this test may appear unnatural and is perhaps unrealistic,
+but I would like to be able to shutdown my server gracefully within a
+reasonable amount of time, no matter what kind of load it is handling.
+ Don't want to have to wait several minutes for my signals to get
+handled under heavy load.  Could someone please explain why signal
+delivery is slow under these conditions?
 
-> IN particular, will there be 16 copies of the global variable?
+Thanks in advance,
 
-No.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Dallas
