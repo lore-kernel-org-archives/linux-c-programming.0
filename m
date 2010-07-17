@@ -1,46 +1,32 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: Slow signal delivery to server process with heavy I/O
-Date: Mon, 12 Jul 2010 17:14:54 +0100
-Message-ID: <19515.16254.883236.904506@cerise.gclements.plus.com>
-References: <AANLkTimehfszGlcsKm4wt2byyNTb8cGD7DQSBK_W2Ome@mail.gmail.com>
-	<19513.50328.712544.577528@cerise.gclements.plus.com>
-	<AANLkTikkVpOnl5DQ8wPm9OIDR70YcTI-LVf9KACK39In@mail.gmail.com>
-	<19514.33382.135366.743597@cerise.gclements.plus.com>
-	<4C3ABF09.3090808@linkbroker.hu>
+From: ratheesh k <ratheesh.ksz@gmail.com>
+Subject: User mode linux- kernel module
+Date: Sat, 17 Jul 2010 22:13:59 +0530
+Message-ID: <AANLkTin-xKyGFy9pFAtXs-PTJYWLvQ66zdHA7Wvv8bSq@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4C3ABF09.3090808@linkbroker.hu>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:date:message-id
+         :subject:from:to:content-type;
+        bh=VfZJt4b9H2N3MhSkxV+j0SHJPEFt2rHRxk69GgDBVdw=;
+        b=w9oRV00nJsu3O5u4VqpVqiMVD5vhMfYT7Um+zjfSEvDUNUHjeZpE51IH5MxEHnOOlN
+         oxVQHttjKI8sQvr/m098/1bHQ1ObfRkYWG2pviPdrOGNFkIa+iYiji3nFsswQmd5O0xM
+         ClAJ83eXh4xY8cd4Q9qqAy4hNK4b02+mealZM=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ern0 <ern0@linkbroker.hu>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org, linux-newbie@vger.kernel.org
 
+Hi ,
 
-ern0 wrote:
+ i have ubuntu linux  on my 64 bit machine . I have successully built
+and  up an instance of UML  which is 32 bit . I am able to establish
+networking also .
 
-> > The kernel selects one thread which hasn't blocked the signal.
-> 
-> So if you want to catch signals ASAP, is it a good strategy to
-> - leave one thread for signal catching, it may perform sleeps;
-> - other threads should block all signals?
+ I would like to build a simple hello world kernel module on host 64
+bit machine , which should be loaded in UML . How do i build the same
+?
 
-You should also set that thread to use real-time scheduling, and
-mlock() any memory it requires.
-
-The former ensures that, once the thread becomes runnable, it takes
-precedence over other (non-real-time) threads. The latter ensures that
-it can actually execute the signal-handling code in a reasonable time
-(a thread which is normally idle is prone to having its memory paged
-out).
-
-Both of these are subject to resource limits. In particular, the
-default for RLIMIT_RTPRIO is usually zero, which prevents selecting
-real-time scheduling. The reason is that a real-time process takes
-precedence over all non-real-time processes; if a real-time process
-gets stuck in a loop, it will prevent non-real-time processes from
-getting any CPU. RLIMIT_RTTIME can be used to mitigate this issue.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Thanks,
+Ratheesh
