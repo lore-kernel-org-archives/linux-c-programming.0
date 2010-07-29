@@ -1,7 +1,7 @@
 From: Victor Rodriguez <vm.rod25@gmail.com>
 Subject: Re: Error in compiling a module
-Date: Thu, 29 Jul 2010 08:56:31 -0500
-Message-ID: <AANLkTimJ+FCxy9-zRme57R_f3E2aq+395xt3eybnb46G@mail.gmail.com>
+Date: Thu, 29 Jul 2010 08:56:49 -0500
+Message-ID: <AANLkTineiEaq_cf4O3QOMF-C2Ozsyaj6wfZHZxm1GrF=@mail.gmail.com>
 References: <AANLkTikcGVVaofeUZtvPs+jpA11uXs-baTZ8O8NvH94i@mail.gmail.com>
 	<AANLkTikqZ5YWqgnHbB3Y03kZfC0OpJ7POYKSeU6JESVt@mail.gmail.com>
 	<AANLkTimkzbse8B0_kUMbaP-DT8Zm1CnZxOnCA+S5CHnE@mail.gmail.com>
@@ -13,9 +13,9 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=domainkey-signature:mime-version:received:received:in-reply-to
          :references:date:message-id:subject:from:to:cc:content-type;
         bh=mAtSvq2M9R7FVlhV5Cjg5vcpptQ1xJHKfQ5G3N2uQSg=;
-        b=WbOdZUPZ28S/NuVCruZEchqAXfgdywyFt68AWkBacL4yHpz9Gqs8Qg8C1y7Itm2bWt
-         5nFHJCa6tpZxjedSWPSLThwvfI/XG9NSM7Yh0YUbrUwFxrlzebElBmDk9E1ezpbbGLCc
-         6IDLp+3g8SffzvM118ZpQZSFtu/PYMm38UEhU=
+        b=GnLtKFICnmmia6SSkJV7bRmtQWs0o0dD7/SWEvQoMgycJLD2aYe0suv3kDXHdjM/HT
+         gIU40fuQL4ajbRNuQxuyaYkjksD/N1nqMfGpSTbdilJQrBzgXISd21OgAJ7iiIqofVSf
+         RUHe+PH+MWQJaAR/6E1qh1CuVJ4QCg/wKOwFU=
 In-Reply-To: <AANLkTimeJrRs4Bd1aw--FKPYyqcuu8_O-Xi5G0FOh0yd@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
