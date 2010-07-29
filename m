@@ -1,82 +1,63 @@
-From: Victor Rodriguez <vm.rod25@gmail.com>
+From: Michal Nazarewicz <mina86@tlen.pl>
 Subject: Re: Error in compiling a module
-Date: Thu, 29 Jul 2010 08:56:49 -0500
-Message-ID: <AANLkTineiEaq_cf4O3QOMF-C2Ozsyaj6wfZHZxm1GrF=@mail.gmail.com>
+Date: Thu, 29 Jul 2010 18:21:45 +0200
+Message-ID: <87lj8u9s2u.fsf@erwin.mina86.com>
 References: <AANLkTikcGVVaofeUZtvPs+jpA11uXs-baTZ8O8NvH94i@mail.gmail.com>
 	<AANLkTikqZ5YWqgnHbB3Y03kZfC0OpJ7POYKSeU6JESVt@mail.gmail.com>
 	<AANLkTimkzbse8B0_kUMbaP-DT8Zm1CnZxOnCA+S5CHnE@mail.gmail.com>
 	<AANLkTimeJrRs4Bd1aw--FKPYyqcuu8_O-Xi5G0FOh0yd@mail.gmail.com>
 Mime-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:received:received:in-reply-to
-         :references:date:message-id:subject:from:to:cc:content-type;
-        bh=mAtSvq2M9R7FVlhV5Cjg5vcpptQ1xJHKfQ5G3N2uQSg=;
-        b=GnLtKFICnmmia6SSkJV7bRmtQWs0o0dD7/SWEvQoMgycJLD2aYe0suv3kDXHdjM/HT
-         gIU40fuQL4ajbRNuQxuyaYkjksD/N1nqMfGpSTbdilJQrBzgXISd21OgAJ7iiIqofVSf
-         RUHe+PH+MWQJaAR/6E1qh1CuVJ4QCg/wKOwFU=
+        h=domainkey-signature:received:received:sender:from:to:cc:subject
+         :references:x-face:face:x-url:x-pgp-fp:x-pgp:date:in-reply-to
+         :message-id:user-agent:mime-version:content-type;
+        bh=2sFZGMl/rO6Goh2zQ1XtkV4vC5XLPNJyI0M9szy6cKI=;
+        b=lySJz++8RDazdWZw9/ZtUthUJ1iQRv+w/oaQcin+EyaK8LePVtqUO9q33gJWnFZkU9
+         UNE2DwwHHenD/KMESzZNvu6HIkt58i2LtTHnSSxQX9+/om/UeWVGJESXOHkKzk7tYtQi
+         spduAqWR6ixCSP1HBkp/LqMxejdi6n3PQ+ius=
 In-Reply-To: <AANLkTimeJrRs4Bd1aw--FKPYyqcuu8_O-Xi5G0FOh0yd@mail.gmail.com>
+	(Mulyadi Santosa's message of "Thu, 29 Jul 2010 11:51:04 +0700")
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: Mulyadi Santosa <mulyadi.santosa@gmail.com>
 Cc: Balachandar <bala1486@gmail.com>, kernelnewbies@nl.linux.org, linux-c-programming@vger.kernel.org
 
-On Wed, Jul 28, 2010 at 11:51 PM, Mulyadi Santosa
-<mulyadi.santosa@gmail.com> wrote:
->
+--=-=-=
+Content-Transfer-Encoding: quoted-printable
+
+Mulyadi Santosa <mulyadi.santosa@gmail.com> writes:
+
 > Hi...
 >
 > On Thu, Jul 29, 2010 at 00:28, Balachandar <bala1486@gmail.com> wrote:
-> > Thank you for your help. I figured out the mistake. I missed a
-> > semicolon in one of the header file that was included in the file that
-> > showed the error.
+>> Thank you for your help. I figured out the mistake. I missed a
+>> semicolon in one of the header file that was included in the file that
+>> showed the error.
 >
 > I think it would be great if you and some guys here write about
 > "mistakes I ever did when I write kernel codes" in kernelnewbies
 > wiki....so that others might learn about it.
->
-> Just 2 cents suggestion...
->
-> --
-> regards,
->
-> Mulyadi Santosa
-> Freelance Linux trainer and consultant
->
-> blog: the-hydra.blogspot.com
-> training: mulyaditraining.blogspot.com
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
+Personally, I see it as a suggestion for a wikibooks or similar.
 
-Hey think it is a really god idea to write about common mistakes in
-kernel codes.  I have one , I realize  that when you just copy and
-paste the code for the makefiles from the Internet or PDF's it doesn't
-compile the first time, you have to eliminate some tabs spaces  first;
-for example in the The Linux Kernel Module Programming Guide there is
-a simple hello-1.c and its makefile is .
+=2D-=20
+Best regards,                                         _     _
+ .o. | Liege of Serenly Enlightened Majesty of      o' \,=3D./ `o
+ ..o | Computer Science,  Michal "mina86" Nazarewicz   (o o)
+ ooo +--<mina86-tlen.pl>--<jid:mina86-jabber.org>--ooO--(_)--Ooo--
 
-obj-m += hello-1.o
-all:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-clean:
-        make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+--=-=-=
+Content-Type: application/pgp-signature
 
-when you run make in the terminal
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.14 (GNU/Linux)
 
-make[1]: *** No rule to make target `-C'.  Stop.
-
-Could appear
-
-you have to copy in plain text or type yourself. well it is not a real
-kenrel problem but mya help to others i realize it happens the first
-time I compiled my "simplest module"
-
-Thanks
-
-Victor
+iEYEARECAAYFAkxRqqQACgkQUyzLALfG3x6yVACgj/mqMXs6NPjB5fZtNvP/XWRX
+fBMAn05bcssh0vb2BzRbFi3jGk16GVrI
+=2tJ1
+-----END PGP SIGNATURE-----
+--=-=-=--
