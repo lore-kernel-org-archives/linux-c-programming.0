@@ -1,88 +1,56 @@
-From: hong zhang <henryzhang62@yahoo.com>
+From: Javier Martinez Canillas <martinez.javier@gmail.com>
 Subject: Re: strcut casts unsigned long
-Date: Fri, 13 Aug 2010 14:25:09 -0700 (PDT)
-Message-ID: <929805.17464.qm@web57903.mail.re3.yahoo.com>
-References: <AANLkTikAiKKtzMcpt14W3veeiOe1JV57RyfG3L1L=OPh@mail.gmail.com>
+Date: Fri, 13 Aug 2010 17:49:14 -0400
+Message-ID: <AANLkTinGyk2y94XDtDL7cdnPZkwMWaT2MrkBWrtEQmxU@mail.gmail.com>
+References: <AANLkTikAiKKtzMcpt14W3veeiOe1JV57RyfG3L1L=OPh@mail.gmail.com> <929805.17464.qm@web57903.mail.re3.yahoo.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s1024; t=1281734709; bh=wqzyV6kDRr22QltUgNHpJZFDt6sqhea4P60ZuWEvSjo=; h=Message-ID:X-YMail-OSG:Received:X-Mailer:Date:From:Subject:To:Cc:In-Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding; b=4QLsbvvCf4lQpiMGDKUKALriM/JKK1hnfYow3xrB0tGoeKdgiOH2rQ6kwzdPmQ6PjZ/5DI3loQH0FFJRcwjSN2s3gcwlgV453qnLAKAjwXVIZ/48wh4RpGkgcW/Wcf107zaI3xn6MAE8a48Rgu36OJQdvvpq5z6/C2edylfrKOU=
-In-Reply-To: <AANLkTikAiKKtzMcpt14W3veeiOe1JV57RyfG3L1L=OPh@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:mime-version:received:in-reply-to
+         :references:from:date:message-id:subject:to:content-type
+         :content-transfer-encoding;
+        bh=EWrUbsxP9/2AN1kBscX1xdO74da3mXs10eK6SPmHywo=;
+        b=S7IHZw2j9v0Q9HG7ejsvwjNkWcfNPY4jZV7V49UHOXXtbUs+1uPIcZ2JnWQM43UXe4
+         c8eBtBAdF+JM6ng4BP7+3z69Cx8En6RGPm/Pi1lrNGj8N5OFi7XZRLgRaQougavS997E
+         oRZHsmGpVflNhhnTE8p2POfTNSnPUKRHJuVnI=
+In-Reply-To: <929805.17464.qm@web57903.mail.re3.yahoo.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: ratheesh k <ratheesh.ksz@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="macroman"
+To: linux-c-programming@vger.kernel.org
 
-Ratheesh,
+>
+> But does skb->_skb_dst allocate memory any where? It is unsigned long=
+=2E This is hard part for me to understand. Any explain why unsigned lo=
+ng
+> _skb_dst can be that?
+>
 
-Thanks for reply.=20
+skb->_skb_dst is a pointer. A pointer is nothing else that a variable
+that stores a memory value (i.e: 0x0012ff5C). This value represent a
+memory address. Usually pointers are defined as * type, so the
+compiler can make type checking when analizing language expressions.
+But you could represent as a generic void * pointer. In the kernel,
+memoryaddresses are usually represented as variables of types unsigned
+long.
 
-But does skb->_skb_dst allocate memory any where? It is unsigned long. =
-This is hard part for me to understand. Any explain why unsigned long
-_skb_dst can be that?
+To make an analogy, char and int variables are integers, but you
+usually use char variables to represent ASCII codes. You can cast a
+char to an int, even when int is  meant to represent integers. The
+same way you could store a memory address either in a void * or
+unsigned long variable.
 
----henry
+I don't know why it is use unsigned long, but I guess that the GNU C
+standard says that unsigned long it is the same size that the cpu word
+size in all architechtures.
 
---- On Fri, 8/13/10, ratheesh k <ratheesh.ksz@gmail.com> wrote:
+Best regards,
 
-> From: ratheesh k <ratheesh.ksz@gmail.com>
-> Subject: Re: strcut casts unsigned long
-> To: "hong zhang" <henryzhang62@yahoo.com>
-> Cc: linux-c-programming@vger.kernel.org
-> Date: Friday, August 13, 2010, 1:44 AM
-> On Fri, Aug 13, 2010 at 7:47 AM, hong
-> zhang <henryzhang62@yahoo.com>
-> wrote:
-> > List,
-> >
-> > I have C question on skbuff.h.
-> > skb->_skb_dst is defined as unsigned long and
-> dst_entry is struct.
-> >
-> > Why strct dst_entry casts unsigned long
-> skb->_skb_dst?
-> >
-> > See below
-> >
-> > static inline struct dst_entry *skb_dst(const struct
-> sk_buff *skb)
-> > {
-> > =A0 =A0 =A0 =A0return (struct dst_entry
-> *)skb->_skb_dst;
-> > }
-> >
-> > Appreciate any answer!
-> >
-> > --henry
->=20
-> skb->_skb_dst can be a pointer to both destination cache
-> or=A0 routing
-> table . We could type cast to any of those .
->=20
-> -Ratheesh
->=20
->=20
->=20
->=20
->=20
->=20
->=20
->=20
->=20
->=20
->=20
-> \\> --
-> > To unsubscribe from this list: send the line
-> "unsubscribe linux-c-programming" in
-> > the body of a message to majordomo@vger.kernel.org
-> > More majordomo info at =A0http://vger.kernel.org/majordomo-info.htm=
-l
-> >
->=20
-
-
-     =20
+-----------------------------------------
+Javier Mart=C3=ADnez Canillas
++595 981 88 66 58
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
