@@ -1,43 +1,31 @@
-From: Jason <lcprog@lakedaemon.net>
+From: =?utf-8?B?TWljaGHFgiBOYXphcmV3aWN6?= <m.nazarewicz@samsung.com>
 Subject: Re: [OT] git branches and command prompts
-Date: Thu, 26 Aug 2010 16:16:29 -0400
-Message-ID: <4C76CB9D.6060702@lakedaemon.net>
+Date: Fri, 27 Aug 2010 02:46:18 +0200
+Message-ID: <op.vh2m3gcu7p4s8u@localhost>
 References: <4C76CACB.5000409@lakedaemon.net>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <4C76CACB.5000409@lakedaemon.net>
+In-reply-to: <4C76CACB.5000409@lakedaemon.net>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="macroman"; format="flowed	delsp=yes"
+To: linux-c-programming@vger.kernel.org, Jason <lcprog@lakedaemon.net>
 
-Sorry, TB mangled the formatting.  Hopefully quoting helps. :-(
+Since we are sharing, mine is at
+<http://github.com/mina86/dot-files/blob/master/bashrc>. Also, from wha=
+t
+I know, bash-completion package has some funky command meant to be used
+in prompt.
 
-Jason wrote:
-> All,
-> 
-> if you're like me, you play with a lot of open source code.  A lot of it 
-> is now in git repositories.  I frequently forget which branch I'm on in 
-> each project, particularly with Android/Cyanogen.  Here's a hack I 
-> figured out that helps me out, place it in ~/.bashrc :
-> 
-> ### begin ####
-> PROMPT_COMMAND="echo -n \${PWD};
->    if git branch >/dev/null 2>&1; then
->       echo -n \"(\$(git branch | grep ^* | cut -d ' ' -f 2-))\"
->    fi"
-> PS1="\n[\[\033[01;34m\]\u\[\033[00m\]@\h] $ "
-> export PROMPT_COMMAND PS1
-> ### end ######
-> 
-> Here's the result:
-> 
-> /home/jason
-> [jason@phantom] $ cd src/foss/git.git
-> /home/jason/src/foss/git.git (master)
-> [jason@phantom] $ git checkout git_shell_dir_opt
-> Switched to branch 'git_shell_dir_opt'
-> /home/jason/src/foss/git.git (git_shell_dir_opt)
-> [jason@phantom] $
-> 
+--=20
+Best regards,                                        _     _
+| Humble Liege of Serenely Enlightened Majesty of  o' \,=3D./ `o
+| Computer Science,  Micha=C5=82 "mina86" Nazarewicz       (o o)
++----[mina86*mina86.com]---[mina86*jabber.org]----ooO--(_)--Ooo--
+
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
