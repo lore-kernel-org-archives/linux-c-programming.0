@@ -1,7 +1,7 @@
 From: "Ardhan Madras" <ajhwb@knac.com>
-Subject: Re: POSIX Message Queues
-Date: Thu, 2 Sep 2010 02:51:56 -0700
-Message-ID: <20100902025156.8C23C442@resin17.mta.everyone.net>
+Subject: Re: POSIX Message Queues [solved]
+Date: Thu, 2 Sep 2010 03:52:24 -0700
+Message-ID: <20100902035224.8C1DA10B@resin07.mta.everyone.net>
 Reply-To: <ajhwb@knac.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -9,8 +9,21 @@ Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Glynn Clements <glynn@gclements.plus.com>
-Cc: linux-c-programming@vger.kernel.org
+To: ajhwb@knac.com
+Cc: glynn@gclements.plus.com, linux-c-programming@vger.kernel.org
+
+        I admit, this will be an embarrassing question, the both process need to know when to send the message (process A) and when to receive it (process B), I forget the classic UNIX's stuff called synchronisation tool like semaphore. I really forget this magic ;). But anyway, thanks for reading self-answered question.
+
+        Ardhan
+
+
+--- ajhwb@knac.com wrote:
+
+From:	"Ardhan Madras" <ajhwb@knac.com>
+To:	"Glynn Clements" <glynn@gclements.plus.com>
+Cc:	<linux-c-programming@vger.kernel.org>
+Subject: Re: POSIX Message Queues
+Date:	Thu, 2 Sep 2010 02:51:56 -0700
 
 Hi all,
 
@@ -67,6 +80,16 @@ Yes.
 
 -- 
 Glynn Clements <glynn@gclements.plus.com>
+
+
+
+
+_____________________________________________________________
+Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
 
 
 
