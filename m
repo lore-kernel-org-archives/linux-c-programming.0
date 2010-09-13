@@ -1,98 +1,24 @@
-From: "Ardhan Madras" <ajhwb@knac.com>
-Subject: Re: POSIX Message Queues [solved]
-Date: Thu, 2 Sep 2010 03:52:24 -0700
-Message-ID: <20100902035224.8C1DA10B@resin07.mta.everyone.net>
-Reply-To: <ajhwb@knac.com>
+From: ratheesh k <ratheesh.ksz@gmail.com>
+Subject: File size events.
+Date: Mon, 13 Sep 2010 19:41:29 +0530
+Message-ID: <AANLkTin9vEu5ouV6Qopk7U_zG8=Z_gwHebZsZxxUzjXh@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:date:message-id
+         :subject:from:to:content-type;
+        bh=C1Dy5HE7b87VHi29Mna+APrTGrsHBvS82etrtrG/Fb0=;
+        b=nPs94kiCT6CZTzHUWXhDXx6+kiVhn54Yv50Q6xhMjTMuQYqdIzogLOW3BnI9bjSS4R
+         Qb64hZVb0BKCNzPvWsnInFrrm3oFU6VkhjFhpw/v1+VoflStCoOCdq2ddPrFu3VIHT6Z
+         N7KEwW7Mkqe+211DfAOrlOZJl1s2RyDO4dNF0=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: ajhwb@knac.com
-Cc: glynn@gclements.plus.com, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-        I admit, this will be an embarrassing question, the both process need to know when to send the message (process A) and when to receive it (process B), I forget the classic UNIX's stuff called synchronisation tool like semaphore. I really forget this magic ;). But anyway, thanks for reading self-answered question.
-
-        Ardhan
-
-
---- ajhwb@knac.com wrote:
-
-From:	"Ardhan Madras" <ajhwb@knac.com>
-To:	"Glynn Clements" <glynn@gclements.plus.com>
-Cc:	<linux-c-programming@vger.kernel.org>
-Subject: Re: POSIX Message Queues
-Date:	Thu, 2 Sep 2010 02:51:56 -0700
-
-Hi all,
-
-        I use message queue to exchange data between 2 unrelated process, as shown below
-
-Program A:
-while (1) {
-    mq_receive(); /* wait and receive request */
-    /* process request */
-    mq_send(); /* reply the request result */
-}
-
-Program B:
-mq_send(); /* send request */
-mq_receive(); /* process result */
-
-        How it's possible to process A that call mq_send() receive it's *own* send data using mq_receive(), so process B that intended to read the message (mq_receive()) could not read it?, the problem is *sometime* happen, at most program A reply what program B requested. Did I miss something here?
-
-        Ardhan
-
-
-
---- glynn@gclements.plus.com wrote:
-
-From: Glynn Clements <glynn@gclements.plus.com>
-To: <ajhwb@knac.com>
-Cc: <linux-c-programming@vger.kernel.org>
-Subject: Re: POSIX Message Queues
-Date: Tue, 15 Jun 2010 16:33:25 +0100
-
-
-Ardhan Madras wrote:
-
-> It was mq_open(), sorry my bad ;p
-> 
-> I did umask(0001) before creating the queue, it's works now. 'Program
-> A' that requested O_RDWR flag to the queue can send and receive
-> message as 'Program B' did. I also try to demonstrating this problem
-> with another machine (Linux of course), as result i can O_RDWR'ed
-> program A queue flag without have to call umask() first. Is this
-> behavior can be set through system configuration?
-
-A process' umask is inherited from its parent. For interactive
-sessions, you can set it in your ~/.profile or similar. For daemons
-started by init, you can set it in the rc script which starts the
-daemon.
-
-> fchmod() also works here, sorry, but what do you mean with 'not
-> portable'?, do you mean fchmod() intended to be used only for file, in
-> other words "not every system support fchmod() with message queue
-> descriptor" right?
-
-Yes.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
-
-
-
-
-_____________________________________________________________
-Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
-
-
-_____________________________________________________________
-Listen to KNAC, Hit the Home page and Tune In Live! ---> http://www.knac.com
+I have an application which keep on writing to one file /tmp/rat.txt.
+I would like to handle an event when the file size exceed 20kb . How
+to get this event ? Is there an event chain , i could register with ?
+is there any other easy mechanism ?
