@@ -1,37 +1,27 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: pthread_once
-Date: Wed, 22 Sep 2010 21:28:06 +0100
-Message-ID: <19610.26326.338860.417523@cerise.gclements.plus.com>
-References: <AANLkTi=Vf3_GZHY7njqezmZNkmqvF6+NLXLc_WTmZtzU@mail.gmail.com>
+From: Vasiliy G Tolstov <v.tolstov@selfip.ru>
+Subject: get in kernel module committed_as under 2.6.18 rhel kernel
+Date: Thu, 23 Sep 2010 11:40:18 +0400
+Message-ID: <1285227618.28983.5.camel@vase.work>
+Reply-To: v.tolstov@selfip.ru
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <AANLkTi=Vf3_GZHY7njqezmZNkmqvF6+NLXLc_WTmZtzU@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=selfip.ru; s=dk;
+	h=Content-Transfer-Encoding:Mime-Version:Message-ID:Date:Content-Type:To:Reply-To:From:Subject; bh=oylGrV6Tzm81xwGXLmxYV3IV+vc9NjCstErKxfTTqA4=;
+	b=ea1vxZ9XXgSBI2rmVwLs3qQs43MuzuqcDDmEXK2uYGtUvpyuLH0UAMJxFt2f+UIv5EAHjNfm8yUBnJsC7x63tzgq7J4eHFuHfQZz3Lcj7H/YZ0uOOQpuHg+nhO+aqIio;
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ratheesh k <ratheesh.ksz@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, linux-rt-users@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
+Hello. I need to get Committed_AS undex 2.6.18 in my kernel module. How
+can i do that? I'm check this under fs/proc/proc_misc.c i need to access
+vm_committed_space that defined as atomic_t. But it in kernel data and
+not export to modules. How can i avoid this?
 
-ratheesh k wrote:
-
-> I have an embedded box running 2.6.18 linux with rt patch.
-> 
-> I am developing an  userspace application which need timer_create() .
-> I have a big desktop machine with a 4 GB ram, running only linux
-> 2.6.18 ( not rt linux ) . I would like to compile and test it on this
-> Desktop PC .
-> 
-> I compiled my program and linked with librt.a on my Desktop PC. But
-> when i run my program , it says
-> 
-> undefined symbol: pthread_once
-> 
-> what could be the problem, ???
-
-pthread_once is defined in libpthread, which you should be linking
-against if you're using librt.
+Thank's.
 
 -- 
-Glynn Clements <glynn@gclements.plus.com>
+Vasiliy G Tolstov <v.tolstov@selfip.ru>
+Selfip.Ru
+
