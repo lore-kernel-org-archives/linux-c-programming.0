@@ -1,28 +1,29 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: pthread_once
-Date: Fri, 24 Sep 2010 18:59:09 +0100
-Message-ID: <19612.59117.84253.497561@cerise.gclements.plus.com>
-References: <20100924083614.1E6E32C2@resin07.mta.everyone.net>
+From: Jens Meyler <jens.meyler@googlemail.com>
+Subject: Controlling the ibook apple logo with ioctl?
+Date: Sun, 26 Sep 2010 11:56:21 +0200
+Message-ID: <AANLkTi=H9wuwAdtWjGp+Km-i1HF0JWxdbtuF=xxHBbD9@mail.gmail.com>
+References: <AANLkTim=sgc6wiXnc46uTZGYEhgFVSYuXFae+n-rh=WT@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20100924083614.1E6E32C2@resin07.mta.everyone.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:in-reply-to
+         :references:date:message-id:subject:from:to:content-type;
+        bh=7cl/Q8HSKKkDwVYFpd55d//xYk/+SF5SKRWWrAqFfLc=;
+        b=WN7Rszmjn8gW9PynsuVTt/lezdBLIi9jA16jZLeLYaKmP1/Xw+zHypYegYT1REDTYa
+         mUM3cqhmEfRknvzbFmi9CfhplabiDnOacZYn46jsXjHjPETem1R3GioqLH4FoT/2OmOc
+         SiMqEg9bVtEQ6470c8wo7ww1xxwXh/JtwWhBg=
+In-Reply-To: <AANLkTim=sgc6wiXnc46uTZGYEhgFVSYuXFae+n-rh=WT@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: ajhwb@knac.com
-Cc: ratheesh.ksz@gmail.com, linux-c-programming@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
+Hi all,
 
-Ardhan Madras wrote:
+do you know whether there's an ioctl call for turning the apple logo
+led on and off or for dimming it? Examples? ;-)
 
-> > pthread_once is defined in libpthread, which you should be linking
-> > against if you're using librt.
-> 
-> Sory but did you mean we also need linking to libpthread when using librt?
-
-Yes; librt requires libpthread. If you use shared libraries, it should
-get linked automatically, but that doesn't work with static libraries.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Thanks for help.
+-jens
