@@ -1,46 +1,49 @@
 From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: printf and long double
-Date: Mon, 4 Oct 2010 02:33:18 +0100
-Message-ID: <19625.11998.318578.160832@cerise.gclements.plus.com>
+Date: Mon, 4 Oct 2010 02:44:26 +0100
+Message-ID: <19625.12666.629645.64590@cerise.gclements.plus.com>
 References: <20101003225652.GA3618@dinofilaria.home>
+	<AANLkTi=rmOmUX2cKxdjPwB1Bo3233TYqhR8O=HN1AnV5@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20101003225652.GA3618@dinofilaria.home>
+In-Reply-To: <AANLkTi=rmOmUX2cKxdjPwB1Bo3233TYqhR8O=HN1AnV5@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: Nanakos Chrysostomos <nanakos@wired-net.gr>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Gedare Bloom <gedare@gwmail.gwu.edu>
+Cc: Nanakos Chrysostomos <nanakos@wired-net.gr>, linux-c-programming@vger.kernel.org
 
 
-Nanakos Chrysostomos wrote:
+Gedare Bloom wrote:
 
-> I have the above C code snippet. I am trying to get a resonable
-> result in a fixed form with printf for a long double value but with
-> no luck. What am I doing wrong?
+> > =A0 =A0 =A0 =A0printf("%llf %lle\n",c,c);
+>=20
+> I think you want %llg instead of %llf.  g is for double-precision, f
+> is for single.
 
-> 	long double c = powl(10.0L,30.0L);
-> 
-> 	printf("%llf %lle\n",c,c);
+That is incorrect. The difference between %f, %e and %g is the
+notation used.
 
-> # gcc -DDOUBLE -msse2 -mfpmath=sse -m64 -m128bit-long-double  long.c -lm
-> #./a.out
-> 
-> 1000000000000000000024696061952.000000 1.000000e+30
-> 
-> The second result is right but how can I get a fixed right result for the first one?
-> The fixed precision should be a lot bigger than this according to the IEEE-754 standard.
-> I am using a 64-bit machine with Debian Squeeze x86-64 version.
+%f uses normal decimal notation, %e uses scientific (exponential)
+notation, %g uses either notation depending upon what is appropriate
+for the magnitude of the value, specifically: %e for values whose
+exponent is greater than the precision or less than -4, %f otherwise.
 
-On x86, long double is 80 bits, which is roughly 24 decimal digits.
+It is impossible to pass a single-precision "float" to printf() etc
+due to C's implicit conversion rules: passing a "float" as an argument
+whose type isn't specified by a function prototype results in the
+value being converted to "double".
 
-The -m128bit-long-double flag only changes the alignment, not the
-accuracy of the calculations.
+Also, using the "ll" modifier for floating-point conversions ("%llf"
+etc) is a GNU extension. The C99 standard specifies the "L" modifier
+for "long double" conversions ("%Lf" etc); the "ll" modifier only
+applies to integer conversions.
 
-The only reason why you're getting different results for %f and %e is
-that the default precision of 6 refers to 6 decimal places for %f but
-to 6 significant digits for %e.
-
--- 
+--=20
 Glynn Clements <glynn@gclements.plus.com>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
