@@ -1,61 +1,54 @@
-From: Chrysostomos Nanakos <nanakos@wired-net.gr>
+From: Bogdan Cristea <cristeab@gmail.com>
 Subject: Re: printf and long double
-Date: Mon, 04 Oct 2010 14:54:46 +0300
-Message-ID: <4CA9C086.1050401@wired-net.gr>
-References: <20101003225652.GA3618@dinofilaria.home> <19625.11998.318578.160832@cerise.gclements.plus.com>
+Date: Mon, 4 Oct 2010 15:03:27 +0300
+Message-ID: <201010041503.27721.cristeab@gmail.com>
+References: <20101003225652.GA3618@dinofilaria.home> <19625.11998.318578.160832@cerise.gclements.plus.com> <4CA9C086.1050401@wired-net.gr>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <19625.11998.318578.160832@cerise.gclements.plus.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:received:received:from:organization:to:subject
+         :date:user-agent:references:in-reply-to:cc:mime-version:content-type
+         :content-transfer-encoding:message-id;
+        bh=p7XN8FrnmxNxeUcvnx4+QwW7SNBygikK2gZraCUN24o=;
+        b=x9k1HEdy/TwDuMlgOGEQfWCsMb4kXrCqCYl6ZLQ2t/nyYsRuVm0tWhkaaSE8eYuXq7
+         O3hKPRcyHLMwrd2q7vk0Ow8AGztVWFuGdygsdQerxby93P70tIVYsP0ZjUYPKeDna+X6
+         ZKEK8lsKr8YOx/dfiQsvMUWNJ8bwNg9YCh/YA=
+In-Reply-To: <4CA9C086.1050401@wired-net.gr>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-To: Glynn Clements <glynn@gclements.plus.com>, linux-c-programming@vger.kernel.org
+Content-Type: Text/Plain; charset="us-ascii"
+To: Chrysostomos Nanakos <nanakos@wired-net.gr>
+Cc: linux-c-programming@vger.kernel.org
 
-  On 4/10/2010 4:33 =CF=80=CE=BC, Glynn Clements wrote:
-> Nanakos Chrysostomos wrote:
->
->> I have the above C code snippet. I am trying to get a resonable
->> result in a fixed form with printf for a long double value but with
->> no luck. What am I doing wrong?
->> 	long double c =3D powl(10.0L,30.0L);
->>
->> 	printf("%llf %lle\n",c,c);
-> On x86, long double is 80 bits, which is roughly 24 decimal digits.
+On Monday 04 October 2010 14:54:46 you wrote:
+> I wish I could get 24 decimal digits precision with the current long 
+> double (80-bit). I can't get more than 15 digits even in a simple division.
+> I think that the extended-precision can't give more than 19 decimal 
+> digits of precision (log(10,2^64)=19.2). The quadruple precision can 
+> give at most 34 decimal digits (log(10,2^113)=34).
+> 
+> Please consider the example below:
+> --------------------------------------------------
+> long double a = 1.0L/7.0L;
+> printf("%Lf\n",a);
+> --------------------------------------------------
+> 
+> Can't get more than 15 digits precision....-:(
+> Is this a compiler problem or libc's problem? In x86_64 machines the 
+> long double values supposed to give at least 106-bit precision even when 
+> implemented in software. Is gcc compliant with the quadruple notation?
 
+Have you tried to specify manually the number of digits after the decimal 
+point ?
 
-I wish I could get 24 decimal digits precision with the current long=20
-double (80-bit). I can't get more than 15 digits even in a simple divis=
-ion.
-I think that the extended-precision can't give more than 19 decimal=20
-digits of precision (log(10,2^64)=3D19.2). The quadruple precision can=20
-give at most 34 decimal digits (log(10,2^113)=3D34).
+	long double a = 1.0L/7.0L;
+	printf("%'.100Lf\n",a);
 
-Please consider the example below:
---------------------------------------------------
-long double a =3D 1.0L/7.0L;
-printf("%Lf\n",a);
---------------------------------------------------
+On a 64 bits machine the output is:
 
-Can't get more than 15 digits precision....-:(
-Is this a compiler problem or libc's problem? In x86_64 machines the=20
-long double values supposed to give at least 106-bit precision even whe=
-n=20
-implemented in software. Is gcc compliant with the quadruple notation?
+0.1428571428571428571409210675491330277964152628555893898010253906250000000000000000000000000000000000
 
-
-
-
-> The -m128bit-long-double flag only changes the alignment, not the
-> accuracy of the calculations.
->
-> The only reason why you're getting different results for %f and %e is
-> that the default precision of 6 refers to 6 decimal places for %f but
-> to 6 significant digits for %e.
->
-
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+regards
+Bogdan
