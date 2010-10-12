@@ -1,7 +1,7 @@
 From: darshan.ghumare@gmail.com
-Subject: upgrade firmware
-Date: Tue, 12 Oct 2010 01:44:28 -0400
-Message-ID: <3463007.21286862268057.JavaMail.root@wombat>
+Subject: Not able to upgrade firmware through serial port
+Date: Tue, 12 Oct 2010 01:40:22 -0400
+Message-ID: <8239415.11286862022251.JavaMail.root@wombat>
 Reply-To: darshan.ghumare@gmail.com
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
