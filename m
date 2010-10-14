@@ -1,93 +1,34 @@
-From: darshan.ghumare@gmail.com
-Subject: Not able to upgrade firmware through serial port
-Date: Tue, 12 Oct 2010 01:40:22 -0400
-Message-ID: <8239415.11286862022251.JavaMail.root@wombat>
-Reply-To: darshan.ghumare@gmail.com
+From: ratheesh k <ratheesh.ksz@gmail.com>
+Subject: Multiple shared libraries.
+Date: Thu, 14 Oct 2010 18:26:23 +0530
+Message-ID: <AANLkTim05jXryypVSyQYChuUK_Y3X8Mg63fSq-w7E+G_@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:received:received:date:message-id
+         :subject:from:to:content-type;
+        bh=PYrfbhtTBsCK6NMvq/aDYlnvxzeeJ+0mq5cfBGlpNFs=;
+        b=DG+E41xAQs1x2FIvJu+Cuia59n0UlfPsPjWVWjHdnoYV6w+53Hqj1WBWh4c0OzW/8E
+         MCx7nfTX9aXMDEo5aVMB9+urdVPY/v4L2lvFN7WfquDLLsP1i5IuP8LehKGbX0vEiHkx
+         zxcx6lmNiCmSZ9ETLJmmJylbY0HSj/K5/nZfg=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
+I have 3 libraries  , say A,B ,C .
 
-Hi,
+C is first compiled as shared library with -fPic option.
+B is using C. and is also compiled with  -fPic option.
 
-   This is Darshan (darshan.ghumare@gmail.com).
-   I have a Linux based board which has one serial port (so, stdin == stdout == stderr == /dev/ttyS0). I want to send Firmware over a serial port using Y-Modem protocol. But, when I poll on given fd (after sending ASCII 'C') its got time out. Please tell me what could be problem here. I am using HyperTerminal which is connected to my board's serial port. So, neither the HyperTerminal (only when it has launched dialogue box to send firmware to the board using Y-Modem) able to read data send by the board nor board able to read data send by the HyperTerminal. But when I type on HyperTeminal then the board got the key-strokes (thats why I can atleast browse through the GUI).
-   The same serial port is being used to render (VT100 based) GUI. I have managed to disable printk(s) after user-mode is up & running.
-   Yes one more thing, I have also tried rz(1) but still facing the same problem.
-
-    My current serial port settings is,
-
-int serial_init()
-{
-     int serial_port_fd = -1;
-     tcflag_t serial_baud =  B115200;
-     struct termios old_attr,new_attr;
-
-    memset(&new_attr,'0',sizeof(new_attr));
-    memset(&old_attr,'0',sizeof(old_attr));
-
-    serial_port_fd = open(SERIAL_PORT,O_RDWR | O_NOCTTY);
-    if(serial_port_fd == -1) {
-        log_msg(MODULE("serial_init : %s"),strerror(errno));
-        return -1;
-    }
-
-    if(tcgetattr(serial_port_fd,&old_attr) == -1) {
-        log_msg(MODULE("serial_init : %s"),strerror(errno));
-        close(serial_port_fd);
-        serial_port_fd = -1;
-        return -1;
-    }
-
-    new_attr.c_cflag = serial_baud | CRTSCTS | CLOCAL | CREAD | CS8;
-    new_attr.c_iflag = IGNPAR; //| ICRNL;
-    new_attr.c_cc[VEOF] = 4;
-    new_attr.c_cc[VMIN] = 1;
-
-    if(tcflush(serial_port_fd,TCIOFLUSH) == -1) {
-        log_msg(MODULE("serial_init : %s"),strerror(errno));
-        close(serial_port_fd);
-        serial_port_fd = -1;
-        return -1;
-    }
-
-    if(tcsetattr(serial_port_fd,TCSANOW,&new_attr) == -1) {
-        log_msg(MODULE("serial_init : %s"),strerror(errno));
-        close(serial_port_fd);
-        serial_port_fd = -1;
-        return -1;
-    }
-
-    if(set_nonblocking(serial_port_fd) == -1) {
-        log_msg(MODULE("serial_init : Not able to set fd non-blocking"));
-        close(serial_port_fd);
-        serial_port_fd = -1;
-        return -1;
-    }
-
-    if(init_pollfd_slot(SERV_SERIAL_CONN,serial_port_fd,(POLLIN | POLLRDNORM | POLLRDBAND)) != 0) {
-        log_msg("%s: Not able to init pollfd slots.\n",__FUNCTION__);
-        close(serial_port_fd);
-        serial_port_fd = -1;
-        return -1;
-    }
-    dup(0);
-    dup(0);
-    printf("(%s:%d)%d END\n", __FUNCTION__, __LINE__, fcntl(serial_port_fd, F_GETFL));
-    return 0;
-}
+I buit library A.  in A , there are calls to function implemented in
+B. A is also built with -fPic option.
 
 
-    Thank you in anticipation.
+I  coded an application say x. X is linked with library A
+dynamically.  X is called function in A. When i run the program , it
+says "cant resolve symbols " for those functions in C .
 
-Regards
-Darshan
-
-
---
-This message was sent on behalf of darshan.ghumare@gmail.com at openSubscriber.com
-http://www.opensubscriber.com/messages/linux-c-programming@vger.kernel.org/topic.html
+i tried linking   X with A, B and C with no result . Any clue ?
