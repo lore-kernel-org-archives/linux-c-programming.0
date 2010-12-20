@@ -1,68 +1,51 @@
-From: Michal Nazarewicz <mina86@tlen.pl>
+From: Tim Walberg <twalberg@comcast.net>
 Subject: Re: union to get parts of integer
-Date: Mon, 20 Dec 2010 15:44:48 +0100
-Message-ID: <87aak0tsf3.fsf@erwin.mina86.com>
-References: <AANLkTikAB_-kO_cmD5VQRtztx=4V9NDcmU4uWBDE=ON8@mail.gmail.com>
+Date: Mon, 20 Dec 2010 09:30:08 -0600
+Message-ID: <20101220153008.GH16355@comcast.net>
+References: <AANLkTikAB_-kO_cmD5VQRtztx=4V9NDcmU4uWBDE=ON8@mail.gmail.com> <87aak0tsf3.fsf@erwin.mina86.com>
+Reply-To: Tim Walberg <twalberg@comcast.net>
 Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha1; protocol="application/pgp-signature"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:sender:from:to:cc:subject
-         :in-reply-to:references:user-agent:x-face:face:x-url:x-pgp-fp:x-pgp
-         :date:message-id:mime-version:content-type;
-        bh=NtOBctq6V+tNYh85JrqV0Lvxy5rcVj8sdNEqF26tVRs=;
-        b=Ae2D9n5tZ871VMJ76AdKNlipvCwp/qoBVNOpSu/7/r6xRvpHa14+GyH3anaiQLzcSf
-         9Vrj0b2rvjrE6amIFGK2WyKK4UtYntq6mCwDxJRtYsA1Y2TSI/FWaV3serbhfXKaalgC
-         gbUn8VGxdzcxbPuuW8oabvCqDWPnGoXjdFD7Y=
-In-Reply-To: <AANLkTikAB_-kO_cmD5VQRtztx=4V9NDcmU4uWBDE=ON8@mail.gmail.com>
-	(ratheesh k.'s message of "Mon, 20 Dec 2010 16:10:17 +0530")
+Content-Disposition: inline
+In-Reply-To: <87aak0tsf3.fsf@erwin.mina86.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-To: ratheesh k <ratheesh.ksz@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Michal Nazarewicz <mina86@tlen.pl>
+Cc: ratheesh k <ratheesh.ksz@gmail.com>, linux-c-programming@vger.kernel.org
 
---=-=-=
-Content-Transfer-Encoding: quoted-printable
+It's likely that either the union or direct pointer expressions yield
+more efficient code, as they can probably be compiled to direct byte-width
+load/store instructions, rather than shifts and logical ands... However,
+if the code's not in a critical path for performance, it probably won't
+matter. And on some architectures, there may not be byte-width operations,
+I guess...
 
-ratheesh k <ratheesh.ksz@gmail.com> writes:
 
-> typedef struct {
-> char parts[4];
-> } node ;
->
-> int i=3D0x12345678
->
-> ((node *)&i)->parts[0];
-> ((node *)&i)->parts[1];
-> ((node *)&i)->parts[2];
-> ((node *)&i)->parts[3];
->
-> Is there any mechanism to split into bytes using the power of union ?
 
-The above should work (assuming of course that sizeof(int) =3D=3D 4).  The
-following should work as well:
+On 12/20/2010 15:44 +0100, Michal Nazarewicz wrote:
+>>	
+>>	((char *)&i)[0].
+>>	
+>>	However, are you sure that you need this?  Don't you need "(i & 255)",
+>>	"((i >> 8) & 255)", etc. instead?
+>>	
+>>	-- 
+>>	Best regards,                                         _     _
+>>	 .o. | Liege of Serenly Enlightened Majesty of      o' \,=./ `o
+>>	 ..o | Computer Science,  Michal "mina86" Nazarewicz   (o o)
+>>	 ooo +--<mina86-tlen.pl>--<jid:mina86-jabber.org>--ooO--(_)--Ooo--
 
-((char *)&i)[0].
 
-However, are you sure that you need this?  Don't you need "(i & 255)",
-"((i >> 8) & 255)", etc. instead?
+End of included message
 
-=2D-=20
-Best regards,                                         _     _
- .o. | Liege of Serenly Enlightened Majesty of      o' \,=3D./ `o
- ..o | Computer Science,  Michal "mina86" Nazarewicz   (o o)
- ooo +--<mina86-tlen.pl>--<jid:mina86-jabber.org>--ooO--(_)--Ooo--
 
---=-=-=
-Content-Type: application/pgp-signature
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2.0.14 (GNU/Linux)
-
-iEYEARECAAYFAk0Pa+UACgkQUyzLALfG3x4gSQCgigTfNVLK+BRVoJ7atWT12Q2J
-4LwAmwbwmIOOJVqWiTVh2zGpqczjar08
-=0kjH
------END PGP SIGNATURE-----
---=-=-=--
+-- 
++----------------------+
+| Tim Walberg          |
+| 830 Carriage Dr.     |
+| Algonquin, IL 60102  |
+| twalberg@comcast.net |
++----------------------+
