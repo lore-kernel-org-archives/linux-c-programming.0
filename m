@@ -1,65 +1,68 @@
-From: "Reza Hoorfar" <rhoorfar@gmail.com>
-Subject: RE: union to get parts of integer
-Date: Mon, 20 Dec 2010 15:33:06 +0330
-Message-ID: <000601cba03d$e10b1440$a3213cc0$@gmail.com>
+From: Michal Nazarewicz <mina86@tlen.pl>
+Subject: Re: union to get parts of integer
+Date: Mon, 20 Dec 2010 15:44:48 +0100
+Message-ID: <87aak0tsf3.fsf@erwin.mina86.com>
 References: <AANLkTikAB_-kO_cmD5VQRtztx=4V9NDcmU4uWBDE=ON8@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha1; protocol="application/pgp-signature"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:received:received:from:to:references
-         :in-reply-to:subject:date:message-id:mime-version:content-type
-         :content-transfer-encoding:x-mailer:thread-index:content-language;
-        bh=KLhLg8EP85+YU13zvi0Ahlz8pTRHakCz9qAwczk6Wjc=;
-        b=MOoqdLRUblfeueMge2hg20Ob4WZRX+vy/edTmuPWBrJbMt2Uc2nARl0fu01T/JeYVs
-         jVCw7vYFhljFRrHv6fxwNakJgKkjxo6ZymSl4tl3+uY6FuvdBnflZeZuEInGR9lcAhTB
-         q00B06Nqwkt/b3UfijNvqC3EKdRYhj8rhHtfM=
+        h=domainkey-signature:received:received:sender:from:to:cc:subject
+         :in-reply-to:references:user-agent:x-face:face:x-url:x-pgp-fp:x-pgp
+         :date:message-id:mime-version:content-type;
+        bh=NtOBctq6V+tNYh85JrqV0Lvxy5rcVj8sdNEqF26tVRs=;
+        b=Ae2D9n5tZ871VMJ76AdKNlipvCwp/qoBVNOpSu/7/r6xRvpHa14+GyH3anaiQLzcSf
+         9Vrj0b2rvjrE6amIFGK2WyKK4UtYntq6mCwDxJRtYsA1Y2TSI/FWaV3serbhfXKaalgC
+         gbUn8VGxdzcxbPuuW8oabvCqDWPnGoXjdFD7Y=
 In-Reply-To: <AANLkTikAB_-kO_cmD5VQRtztx=4V9NDcmU4uWBDE=ON8@mail.gmail.com>
-Content-Language: en-us
+	(ratheesh k.'s message of "Mon, 20 Dec 2010 16:10:17 +0530")
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+To: ratheesh k <ratheesh.ksz@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-union MyUnion{
-	int myInt;
-	char myChar[sizeof(int)];
-};
+--=-=-=
+Content-Transfer-Encoding: quoted-printable
 
-void main()
-{
-	MyUnion m;
-	m.myInt = 0x01020304;
-	printf("value :%d\n",m.myChar[0]); // -> value : 4
-	printf("value :%d\n",m.myChar[1]); // -> value : 3
-	printf("value :%d\n",m.myChar[2]); // -> value : 2
-	printf("value :%d\n",m.myChar[3]); // -> value : 1
-}
+ratheesh k <ratheesh.ksz@gmail.com> writes:
 
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org
-[mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of ratheesh k
-Sent: Monday, December 20, 2010 2:10 PM
-To: linux-c-programming@vger.kernel.org
-Subject: union to get parts of integer
+> typedef struct {
+> char parts[4];
+> } node ;
+>
+> int i=3D0x12345678
+>
+> ((node *)&i)->parts[0];
+> ((node *)&i)->parts[1];
+> ((node *)&i)->parts[2];
+> ((node *)&i)->parts[3];
+>
+> Is there any mechanism to split into bytes using the power of union ?
 
-typedef struct {
-char parts[4];
-} node ;
+The above should work (assuming of course that sizeof(int) =3D=3D 4).  The
+following should work as well:
 
-int i=0x12345678
+((char *)&i)[0].
 
-((node *)&i)->parts[0];
-((node *)&i)->parts[1];
-((node *)&i)->parts[2];
-((node *)&i)->parts[3];
+However, are you sure that you need this?  Don't you need "(i & 255)",
+"((i >> 8) & 255)", etc. instead?
 
-Is there any mechanism to split into bytes using the power of union ?
+=2D-=20
+Best regards,                                         _     _
+ .o. | Liege of Serenly Enlightened Majesty of      o' \,=3D./ `o
+ ..o | Computer Science,  Michal "mina86" Nazarewicz   (o o)
+ ooo +--<mina86-tlen.pl>--<jid:mina86-jabber.org>--ooO--(_)--Ooo--
 
--Ratheesh
---
-To unsubscribe from this list: send the line "unsubscribe
-linux-c-programming" in the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+--=-=-=
+Content-Type: application/pgp-signature
 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.14 (GNU/Linux)
+
+iEYEARECAAYFAk0Pa+UACgkQUyzLALfG3x4gSQCgigTfNVLK+BRVoJ7atWT12Q2J
+4LwAmwbwmIOOJVqWiTVh2zGpqczjar08
+=0kjH
+-----END PGP SIGNATURE-----
+--=-=-=--
