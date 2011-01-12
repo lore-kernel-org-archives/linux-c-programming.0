@@ -1,29 +1,46 @@
-From: ratheesh k <ratheesh.ksz@gmail.com>
-Subject: printf *%f
-Date: Wed, 12 Jan 2011 13:09:08 +0530
-Message-ID: <AANLkTikSFEK-5m0a1mFKbyFRwA7wNqTkzejbLEv_-=73@mail.gmail.com>
+From: Bert Wesarg <bert.wesarg@googlemail.com>
+Subject: Re: printf *%f
+Date: Wed, 12 Jan 2011 08:46:08 +0100
+Message-ID: <AANLkTi=2DQ+YAC3vGGxfpJDLFusV+5Vkr1oE2AP6o8Tj@mail.gmail.com>
+References: <AANLkTikSFEK-5m0a1mFKbyFRwA7wNqTkzejbLEv_-=73@mail.gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:date:message-id:subject:from:to
-         :content-type;
-        bh=tRMgvwI94SwQ8h+vKkabEYJEuuD1eJrTjYsxxQBLukw=;
-        b=s3clYNmi23LLWgfIHeDrF7ii6Y4kXMBljjqusa5YcH4MOqxnRVVcnKwhs5vLuAF8y2
-         iNNH2PZFByVbwkMHv8MVr/MwH/aTnSemEKsguxuGpe/MSv8Bwg18jkFmCTBoR1yQnAAf
-         IgAvHiJF6kuleWVwf7Hmm54OiOD2GWuUr/DCM=
+        d=googlemail.com; s=gamma;
+        h=domainkey-signature:mime-version:in-reply-to:references:date
+         :message-id:subject:from:to:cc:content-type
+         :content-transfer-encoding;
+        bh=amJsFYazYuPmsdOhD0nV55E+wmlZxXAVRetMdm3d260=;
+        b=GY9/BIp0Ae7T+C/AiJrLIMIH2JQoSuk0K4YEP9tYrJt63nLLsnvb9QXNHYwa7G1jzy
+         bHY+Q9tbYvMercw3bGuRJCbFSXbngKbSv+EP6uH3Oe7fPOAa0X1fPsc67RAhgtkiFh7g
+         tYCnKmMHqSGDt5vZV4VwSWUtOEGuy3cEkPnuA=
+In-Reply-To: <AANLkTikSFEK-5m0a1mFKbyFRwA7wNqTkzejbLEv_-=73@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+To: ratheesh k <ratheesh.ksz@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-double x=45.9876 ;
+On Wed, Jan 12, 2011 at 08:39, ratheesh k <ratheesh.ksz@gmail.com> wrot=
+e:
+> double x=3D45.9876 ;
+>
+> printf("%4.2f" , x); is working fine ... =C2=A0But printf("%*f , 4.2 =
+, x) ;
 
-printf("%4.2f" , x); is working fine ...  But printf("%*f , 4.2 , x) ;
-behaves odd in my  fedora 8 pentium machine. any clue ?
+printf("%*.*f" , 4, 2 , x) ;
 
-Does *  substitute only integers ?
+Bert
 
-
--Ratheesh
+> behaves odd in my =C2=A0fedora 8 pentium machine. any clue ?
+>
+> Does * =C2=A0substitute only integers ?
+>
+>
+> -Ratheesh
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
