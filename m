@@ -1,47 +1,51 @@
-From: "Michal Nazarewicz" <mina86@mina86.com>
+From: Glynn Clements <glynn@gclements.plus.com>
 Subject: Re: Dynamic linking library
-Date: Thu, 20 Jan 2011 15:50:36 +0100
-Message-ID: <op.vpl3imhx3l0zgt@mnazarewicz.zrh.corp.google.com>
+Date: Fri, 21 Jan 2011 01:17:01 +0000
+Message-ID: <19768.56973.483737.705910@cerise.gclements.plus.com>
 References: <AANLkTinrAZgHcpjbdYt53y+wqK4F9OBUH8PtMyxvwXEO@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:sender:content-type:to:subject:references:date
-         :mime-version:content-transfer-encoding:from:organization:message-id
-         :in-reply-to:user-agent;
-        bh=e8fCk3odO1rLMu/fDhRQKUV4ZxEfZwxgyer/EfVYtwM=;
-        b=jwV0no70hy+grd6U8g2oFpXvI34oRTJRiex6i+L/GwcRYQABTIUtx4DzkKiagfaX69
-         zqnM5NSe0h+Z0Zc6e+jB661rsAlaHCsIFNUGQ0wPFyLARJ70ice4/xsVXYS3wmwuqjEy
-         HDqJr5jQtrfB9skRST33Ytr+vA+UwPsFuKGok=
 In-Reply-To: <AANLkTinrAZgHcpjbdYt53y+wqK4F9OBUH8PtMyxvwXEO@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
-To: linux-c-programming@vger.kernel.org, ratheesh k <ratheesh.ksz@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+To: ratheesh k <ratheesh.ksz@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-On Thu, 20 Jan 2011 12:37:25 +0100, ratheesh k <ratheesh.ksz@gmail.com>  
-wrote:
+
+ratheesh k wrote:
 
 > Suppose there are two executable elf . say A, B . And these two are
 > using  libctest.so.
-> When A is executed  libctest.so is loaded into RAM and linear address
-> is  correctly mapped.
->
+> When A is executed  libctest.so is loaded into RAM
+
+No, it is *mapped* into the process' address space (virtual memory). 
+Data is loaded into physical RAM on demand by the kernel.
+
+> and linear address is correctly mapped.
+> 
 > If we execute program B after A ,  will library will be loaded again ?
 
-When A is executed dynamic loader opens the library and then mmap(2)s it
-into virtual address space.
+It will be mapped into B's address space.
 
-When B is executed, from user space (ie. dynamic loader) point of view the
-very same thing happens: dynamic loader opens the library and mmap(2)s it
-into virtual address space.
+> else, how OS know that libctest is already loaded into physical page ?
+> (so it can  map linear address to it )
 
-What happens behind the scene, is that when the libctest.so is opened, file
-system figures out it's inode and then opens file with given inode number.
-The first time this is done, system creates all bunch of structures for
-the file, however, the second time, system sees that a file with given  
-inode
-number is already opened so some data can be shared between the two  
-instances.
+Mapping a file into a process' address space sets up structures within
+the kernel recording the fact that specific pages of the process'
+address space correspond to specific blocks of a specific device.
+
+Initially, the MMU will consider those pages as unmapped, so accessing
+those addresses will cause the CPU to generate an exception (page
+fault). The kernel handles the exception by ensuring that the
+appropriate disk block is loaded into physical RAM, updating the MMU
+so that the virtual memory page is mapped to the appropriate physical
+memory page, then restarting the instruction.
+
+When cached blocks are discarded from physical RAM, any the MMU
+mappings are removed so that a subsequent access will raise an
+exception.
+
+-- 
+Glynn Clements <glynn@gclements.plus.com>
