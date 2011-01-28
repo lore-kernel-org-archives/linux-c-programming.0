@@ -1,35 +1,20 @@
-From: Santosh Sivaraj <ssantosh@fossix.org>
+From: Leon Romanovsky <leon@leon.nu>
 Subject: Re: Any problem ?
-Date: Fri, 28 Jan 2011 17:32:43 +0530
-Message-ID: <4D42B063.8030906@fossix.org>
-References: <AANLkTikRjcxV6+uUr+8_5LHjCMiFf91d00bH7wu7p6CX@mail.gmail.com>
+Date: Fri, 28 Jan 2011 22:46:18 +0200
+Message-ID: <AANLkTinHSY3Jd7Th6zmLZCo0ziwCJrMJuQT78t3Nr1_B@mail.gmail.com>
+References: <AANLkTikRjcxV6+uUr+8_5LHjCMiFf91d00bH7wu7p6CX@mail.gmail.com> <AANLkTimg=+0jUVjyG2Zq7ZqC=A5XbjWfkjoJADmPsULK@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <AANLkTikRjcxV6+uUr+8_5LHjCMiFf91d00bH7wu7p6CX@mail.gmail.com>
+In-Reply-To: <AANLkTimg=+0jUVjyG2Zq7ZqC=A5XbjWfkjoJADmPsULK@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: ratheesh k <ratheesh.ksz@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On 01/28/2011 05:23 PM, ratheesh k wrote:
-> void free_it(char *ptr)
-> {
->   free(ptr);
-> }
->
->
-> int main()
-> {
-> char *str = (char *)malloc(100);
-> strcpy(str, "Ratheesh");
-> free_it(str);
 > str=NULL;
-> return 0;
-> }
-Nothing is wrong.. should work fine.
+In general, you don't need this line.
 
-Santosh
 --
-http://fossix.org
+"Change is inevitable; progress is optional".
