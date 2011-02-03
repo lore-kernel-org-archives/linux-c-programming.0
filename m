@@ -1,36 +1,48 @@
-From: ratheesh k <ratheesh.ksz@gmail.com>
-Subject: dynamic shared library .
-Date: Thu, 3 Feb 2011 20:20:27 +0530
-Message-ID: <AANLkTi=VisvB732h_jzXcDj5_t7b96QAvJuXYiuOvEj8@mail.gmail.com>
+From: "Michal Nazarewicz" <mina86@mina86.com>
+Subject: Re: dynamic shared library .
+Date: Thu, 03 Feb 2011 15:59:44 +0100
+Message-ID: <op.vqb09uit3l0zgt@mnazarewicz.zrh.corp.google.com>
 References: <AANLkTimck7ar6JPzSnNZo_baTz1usHLeUFxkL8GaqriV@mail.gmail.com>
+ <AANLkTi=VisvB732h_jzXcDj5_t7b96QAvJuXYiuOvEj8@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:in-reply-to:references:date
-         :message-id:subject:from:to:content-type:content-transfer-encoding;
-        bh=KzcdKBvXlwrZ6roNKefK9OngDkIvifAcvMnTpWjKzck=;
-        b=c1I8EHVm3GCYzjXKWB4rRwBcCO7ddG8XnUktpZ+IWk+HdFTWVFcPCt5i3wnpN491ML
-         hbeJoUJAdfuR9O86bUw2NO6+raT3b8XKGl5lZU9s5rPQ7gAr0tJssNtQyFUVAivQevhW
-         yOKI5JLhW8VPPIOLnzserLR+hkzVQgTjSPTBE=
-In-Reply-To: <AANLkTimck7ar6JPzSnNZo_baTz1usHLeUFxkL8GaqriV@mail.gmail.com>
+        h=domainkey-signature:sender:content-type:to:subject:references:date
+         :mime-version:content-transfer-encoding:from:organization:message-id
+         :in-reply-to:user-agent;
+        bh=KYZJTvXT23Or6p8NYTBtT+LJ0ncDf8kqjDA1Ju8cW2Y=;
+        b=gB/cb9qIkg1XYl7TUqeqr163nNhrTlec5aqxyQEY8DMKG7DouNa53ay7X8mvtCQP7R
+         I1CYT+53Y4b0B9TKJ1dG4LypSboZlbtgGtFj62YIZexQhM2rx8R0llNK6+YSJxTb88PJ
+         AsRX3aPqSt77bDNqtPQgQXzioemHc25gxGBJ0=
+In-Reply-To: <AANLkTi=VisvB732h_jzXcDj5_t7b96QAvJuXYiuOvEj8@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
+To: linux-c-programming@vger.kernel.org, ratheesh k <ratheesh.ksz@gmail.com>
 
-when=A0 dll is loaded=A0 .
+On Thu, 03 Feb 2011 15:50:27 +0100, ratheesh k <ratheesh.ksz@gmail.com>  
+wrote:
 
-=A0at the start of execution of elf ?
+> when  dll is loaded  .
+>
+>  at the start of execution of elf ?
+>
+>      OR
+>
+>  when the  reference is made into library function or data ?
 
-=A0=A0=A0=A0 OR
+Depends what you mean by "loaded".  At start of execution, dynamic loader
+reads shared object's header files, maps the library to memory accordingly
+and probably does some more magic with symbol resolution, etc. (I'm not
+an expert and what dynamic loader does is not that trivial).
 
-=A0when the=A0 reference is made into library function or data ?
+However, the whole file is not read into memory and instead, needed
+portions are read as code references them.
 
--Ratheesh
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- 
+Best regards,                                       _     _
+.o. | Liege of Serenly Enlightened Majesty of     o' \,=./ `o
+..o | Computer Science,  Michal "mina86" Nazarewicz  (o o)
+ooo +-<email/jid: mnazarewicz@google.com>--------ooO--(_)--Ooo--
