@@ -1,41 +1,36 @@
-From: ratheesh k <ratheesh.ksz@gmail.com>
-Subject: g++ without typecast
-Date: Fri, 11 Mar 2011 17:12:42 +0530
-Message-ID: <AANLkTikM+tApusZWzpcVRXThYGsJdzek1BSA7DBG8yx=@mail.gmail.com>
-References: <AANLkTi=GUjHMhXcWdaMbop+4f5Q9t549dOHECFvUAQtj@mail.gmail.com>
+From: ern0 <ern0plus4@gmail.com>
+Subject: Re: g++ without typecast
+Date: Fri, 11 Mar 2011 13:23:38 +0100
+Message-ID: <4D7A144A.3020902@gmail.com>
+References: <AANLkTi=GUjHMhXcWdaMbop+4f5Q9t549dOHECFvUAQtj@mail.gmail.com> <AANLkTikM+tApusZWzpcVRXThYGsJdzek1BSA7DBG8yx=@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:in-reply-to:references:date
-         :message-id:subject:from:to:content-type:content-transfer-encoding;
-        bh=602bk1sohjJarpLs/KKZAtd7bl0NZSP36n185fuVBFo=;
-        b=aZlIngESqCbHI1qCXQmdgklbhz7QCWG7Zk1AHCWdpAe4O/0t1Sc19z1Ho1LolRcqxe
-         2yHXuQugO/5iKf/3XVO5SP0mcmaf5JWkkx64M/swpmFUBENaZTjiWN3L+O8F+gkIyG2j
-         26wkYv4H8FClGfyWGzjZNkWK9r4Hd+rlTeGK0=
-In-Reply-To: <AANLkTi=GUjHMhXcWdaMbop+4f5Q9t549dOHECFvUAQtj@mail.gmail.com>
+        h=domainkey-signature:message-id:date:from:user-agent:mime-version:to
+         :subject:references:in-reply-to:content-type
+         :content-transfer-encoding;
+        bh=6UUtLW6I0hLCAJXu+jvbre3MZxutNWzgR1y9h6CIrAI=;
+        b=lSAWt2k3t88CmL5jQhkrVffOaiXeld+v2ffrzXUR5YVwoYUj6MGsyCqanOkr+Y6SHo
+         yAgNK6C9nU2kdsE4ECLg9qof0YMN3B+AkIrbIew0x/kUDROtCfdMwLVJ0xQ6hRhp2JUV
+         qjM+HIPvNdY5p5yRhwqDmYdyaY7MKDtLbIxvM=
+In-Reply-To: <AANLkTikM+tApusZWzpcVRXThYGsJdzek1BSA7DBG8yx=@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-This program will compile using gcc. But fails using g++ compiler ( we
-need explicit type casting=A0 here).
+On 03/11/2011 12:42 PM, ratheesh k wrote:
+> Is there any flag or anyother way thru which we could compile this
+> using g++ ( without explicit type cast )
 
-Is there any flag or anyother way thru which we could compile this
-using g++ ( without explicit type cast )
+AFAIK there's no syntax for define pointer constant values in the source 
+code.
 
-#include <stdio.h>
-int main()
-{
-=A0=A0=A0=A0 unsigned int addr=3D0xffff;
-=A0=A0=A0=A0 int *ptr;
-=A0=A0=A0=A0 ptr=3Daddr;
-=A0=A0=A0=A0 return 0;
-}
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Don't afraid casting, it costs nothing. If you wanna use pointer 
+constant values for special meanings, give them a name and #define it, 
+just like NULL (which means "points to no object/struct/etc").
+-- 
+ern0
+dataflow programmer
