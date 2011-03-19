@@ -1,36 +1,88 @@
-From: ern0 <ern0plus4@gmail.com>
-Subject: Re: g++ without typecast
-Date: Fri, 11 Mar 2011 13:23:38 +0100
-Message-ID: <4D7A144A.3020902@gmail.com>
-References: <AANLkTi=GUjHMhXcWdaMbop+4f5Q9t549dOHECFvUAQtj@mail.gmail.com> <AANLkTikM+tApusZWzpcVRXThYGsJdzek1BSA7DBG8yx=@mail.gmail.com>
+From: Hendrik Visage <hvjunk@gmail.com>
+Subject: Re: dynamic shared library .
+Date: Sat, 19 Mar 2011 23:57:07 +0200
+Message-ID: <AANLkTinzu7bW_pBNWWHvQHHDP-Z8qhP=4kQbRCn7p8tY@mail.gmail.com>
+References: <AANLkTimck7ar6JPzSnNZo_baTz1usHLeUFxkL8GaqriV@mail.gmail.com>
+	<AANLkTi=VisvB732h_jzXcDj5_t7b96QAvJuXYiuOvEj8@mail.gmail.com>
+	<op.vqb09uit3l0zgt@mnazarewicz.zrh.corp.google.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:message-id:date:from:user-agent:mime-version:to
-         :subject:references:in-reply-to:content-type
+        h=domainkey-signature:mime-version:in-reply-to:references:date
+         :message-id:subject:from:to:cc:content-type
          :content-transfer-encoding;
-        bh=6UUtLW6I0hLCAJXu+jvbre3MZxutNWzgR1y9h6CIrAI=;
-        b=lSAWt2k3t88CmL5jQhkrVffOaiXeld+v2ffrzXUR5YVwoYUj6MGsyCqanOkr+Y6SHo
-         yAgNK6C9nU2kdsE4ECLg9qof0YMN3B+AkIrbIew0x/kUDROtCfdMwLVJ0xQ6hRhp2JUV
-         qjM+HIPvNdY5p5yRhwqDmYdyaY7MKDtLbIxvM=
-In-Reply-To: <AANLkTikM+tApusZWzpcVRXThYGsJdzek1BSA7DBG8yx=@mail.gmail.com>
+        bh=DnuqNnkn4zTdDzi4svaeWvTDvJyEzxX/gjbkMHpLkNM=;
+        b=rtEQoprMzjRu0JjtwdT6gsiTxb6TOrJcsPaXCKqbjl4O8pV/2mhnPNNPD8VYKMX6xL
+         lfj5/5IZJM7I3O1qZSZI1B0CeHuoC310Fnff3eOgNSxD6LtXc2+GvBY0BTnaqFGK9m1L
+         QPwhUHzcEjJSTeNYtDcjHiWermtYkWu/KJFv0=
+In-Reply-To: <op.vqb09uit3l0zgt@mnazarewicz.zrh.corp.google.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: Michal Nazarewicz <mina86@mina86.com>
+Cc: linux-c-programming@vger.kernel.org, ratheesh k <ratheesh.ksz@gmail.com>
 
-On 03/11/2011 12:42 PM, ratheesh k wrote:
-> Is there any flag or anyother way thru which we could compile this
-> using g++ ( without explicit type cast )
+On Thu, Feb 3, 2011 at 4:59 PM, Michal Nazarewicz <mina86@mina86.com> w=
+rote:
+> On Thu, 03 Feb 2011 15:50:27 +0100, ratheesh k <ratheesh.ksz@gmail.co=
+m>
+> wrote:
+>
+>> when =A0dll is loaded =A0.
+>>
+>> =A0at the start of execution of elf ?
+>>
+>> =A0 =A0 OR
+>>
+>> =A0when the =A0reference is made into library function or data ?
+>
+> Depends what you mean by "loaded". =A0At start of execution, dynamic =
+loader
+> reads shared object's header files, maps the library to memory accord=
+ingly
+> and probably does some more magic with symbol resolution, etc. (I'm n=
+ot
+> an expert and what dynamic loader does is not that trivial).
 
-AFAIK there's no syntax for define pointer constant values in the source 
-code.
+That would be "normal" libraries that at compile time have been
+referenced as needed to be dynamically linked. Ie. those libraries
+that you have called/referenced in the compiled code and that the
+linker have resolved to be in that dynamoc library. You can find that
+list by using "ldd /path/to/<executable>" which would also show you
+where the run time linker found those libraries (based on the ld.so
+configured paths and the LD_LIBRARY_PATH setting)
 
-Don't afraid casting, it costs nothing. If you wanna use pointer 
-constant values for special meanings, give them a name and #define it, 
-just like NULL (which means "points to no object/struct/etc").
--- 
-ern0
-dataflow programmer
+Then the "fun" part are those dynamic executables that is loadedby the
+program "on demand". An example systemwide is the name service stuff
+refered to by the /etc/nsswitch.conf file. Another example is Apache's
+loadable modules like the php, perl modules that is not refered to at
+startup time by the ELF run time loader, but rather loaded as the
+program executes and reads the config files that requests those
+modules to be loaded.
+
+>
+> However, the whole file is not read into memory and instead, needed
+> portions are read as code references them.
+
+Typically the library/dll/.so is mmap(2)ed into the executable address
+space, and only read as that part are referenced.
+
+> --
+> Best regards, =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
+ =A0 =A0 =A0 =A0 =A0 _ =A0 =A0 _
+> .o. | Liege of Serenly Enlightened Majesty of =A0 =A0 o' \,=3D./ `o
+> ..o | Computer Science, =A0Michal "mina86" Nazarewicz =A0(o o)
+> ooo +-<email/jid: mnazarewicz@google.com>--------ooO--(_)--Ooo--
+> --
+> To unsubscribe from this list: send the line "unsubscribe
+> linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
