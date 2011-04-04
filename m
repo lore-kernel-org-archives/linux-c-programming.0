@@ -1,72 +1,58 @@
-From: "Michal Nazarewicz" <mina86@mina86.com>
+From: Hendrik Visage <hvjunk@gmail.com>
 Subject: Re: duplicated modulo
-Date: Fri, 01 Apr 2011 13:20:28 +0200
-Message-ID: <op.vs9a4ecl3l0zgt@mnazarewicz-glaptop>
+Date: Mon, 4 Apr 2011 10:26:05 +0200
+Message-ID: <BANLkTikDWQcXY+5quaRk-Qz9PBxnDdXt0A@mail.gmail.com>
 References: <20110401114113.6e2e91af@absol.kitzblitz>
- <op.vs86ylxn3l0zgt@mnazarewicz-glaptop>
- <20110401121916.34a567da@absol.kitzblitz>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:sender:content-type:to:cc:subject:references
-         :date:mime-version:content-transfer-encoding:from:organization
-         :message-id:in-reply-to:user-agent;
-        bh=6RuinXffxrWOu1VrhBCrECHcFDoeSG3sFUlJM4zTJuQ=;
-        b=J/ONKJR3YXnpAk/U5WveSmZdiSYAXEDALEvxSM5OzwNhVYmhrQCqm5qa61uf4k7Lio
-         2kqq92JsTV6Z3NF3O+vZRgROnbrNSv8Sm0SVKOOtCU2EShAmt//9DXoLPqsDPNI/Ld03
-         qymQargWwLvAthOYiE+keZqnTM8OzdYSUSRAU=
-In-Reply-To: <20110401121916.34a567da@absol.kitzblitz>
+        h=domainkey-signature:mime-version:in-reply-to:references:date
+         :message-id:subject:from:to:cc:content-type
+         :content-transfer-encoding;
+        bh=C5px0uwfSvwbKQsFdSNReWYm1SX93lQs96jGWMcpJ8M=;
+        b=ecWRplg3uSg3bZGXWYyQGyGuwBtMUMiJC3tt/XwBPosWDWcejnnf6i+0Pu64PAbk7f
+         GuSMAOf+NYTDw/1NzmTg0m4HmMZj6SYXqIUgOc4C5bMFNdE6miL0YpXzEEv69O7MZUjW
+         KwxFvxMHi6oB0aLDd3FNqMyIHlGONPkq0q6Ps=
+In-Reply-To: <20110401114113.6e2e91af@absol.kitzblitz>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
+Content-Type: text/plain; charset="iso-8859-1"
 To: Nicolas Kaiser <nikai@nikai.net>
 Cc: linux-c-programming@vger.kernel.org
 
-On Fri, 01 Apr 2011 12:19:16 +0200, Nicolas Kaiser <nikai@nikai.net> wrote:
+On Fri, Apr 1, 2011 at 11:41 AM, Nicolas Kaiser <nikai@nikai.net> wrote=
+:
+> I'm curious: a duplicated modulo operation can't possibly make
+> any difference, can it?
+>
+> diff -u -p ./arch/powerpc/platforms/powermac/nvram.c /tmp/nothing/arc=
+h/powerpc/platforms/powermac/nvram.c
+> --- ./arch/powerpc/platforms/powermac/nvram.c =A0 2011-03-31 09:52:41=
+=2E674292401 +0200
+> +++ /tmp/nothing/arch/powerpc/platforms/powermac/nvram.c
+> @@ -246,7 +246,6 @@ static u32 core99_calc_adler(u8 *buffer)
+> =A0 =A0 =A0 =A0high =3D 0;
+> =A0 =A0 =A0 =A0for (cnt=3D0; cnt<(NVRAM_SIZE-CORE99_ADLER_START); cnt=
+++) {
+> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0if ((cnt % 5000) =3D=3D 0) {
+> - =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 high =A0%=3D 65521UL;
+> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0high %=3D 65521UL;
+> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0}
+> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0low +=3D buffer[cnt];
 
-> * "Michal Nazarewicz" <mina86@mina86.com>:
->> On Fri, 01 Apr 2011 11:41:13 +0200, Nicolas Kaiser wrote:
->> > I'm curious: a duplicated modulo operation can't possibly make
->> > any difference, can it?
->> >
->> > diff -u -p ./arch/powerpc/platforms/powermac/nvram.c
->> > /tmp/nothing/arch/powerpc/platforms/powermac/nvram.c
->> > --- ./arch/powerpc/platforms/powermac/nvram.c	2011-03-31
->> > 09:52:41.674292401 +0200
->> > +++ /tmp/nothing/arch/powerpc/platforms/powermac/nvram.c
->> > @@ -246,7 +246,6 @@ static u32 core99_calc_adler(u8 *buffer)
->> >  	high = 0;
->> >  	for (cnt=0; cnt<(NVRAM_SIZE-CORE99_ADLER_START); cnt++) {
->> >  		if ((cnt % 5000) == 0) {
->> > -			high  %= 65521UL;
->> >  			high %= 65521UL;
->> >  		}
->> >  		low += buffer[cnt];
->>
->> It's not just a module.  It's also an assignment.
->
-> Sure. But I fail to see where between
->
-> a %= b;
-> a %= b;
->
-> and
->
-> a = (a % b) % b;
->
-> and
->
-> a %= b;
->
-> would be a difference?
+The emphasis should be on "shouldn't" not "possibly" ;)
 
-Ah, sorry, you are right.  I should stop responding to mail just
-after waking up.
+As other mentioned, you could have issues with going to different types=
+ etc.
 
--- 
-Best regards,                                         _     _
-.o. | Liege of Serenely Enlightened Majesty of      o' \,=./ `o
-..o | Computer Science,  Michal "mina86" Nazarewicz    (o o)
-ooo +-----<email/xmpp: mnazarewicz@google.com>-----ooO--(_)--Ooo--
+However, the major reason *I* would remove it, is that the division
+operation is an expensive operation, and then you still need to get
+the remainder too and also since it's mostly superfluous thus adding
+bloat.
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
