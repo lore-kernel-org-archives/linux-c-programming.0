@@ -1,34 +1,60 @@
-From: manishbansode@gmail.com
-Subject: pthread_create hangs.
-Date: Thu, 14 Apr 2011 03:36:24 -0400
-Message-ID: <29049303.11302766584588.JavaMail.root@ip-10-131-22-205>
-Reply-To: manishbansode@gmail.com
+From: Mahavir Jain <mjainp@gmail.com>
+Subject: Re: close() on tcp socket.
+Date: Sun, 17 Apr 2011 17:56:15 +0530
+Message-ID: <BANLkTimLKZ-gESGq20Rz+nfVDBKpcxmTew@mail.gmail.com>
+References: <BANLkTimLJ4k1KzmzHkz10JvL9HTyb0y+WQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=domainkey-signature:mime-version:sender:in-reply-to:references:from
+         :date:x-google-sender-auth:message-id:subject:to:cc:content-type
+         :content-transfer-encoding;
+        bh=d9PfgoYtCnKZZIyUKJvN6wlMhAMBcbvWRd1gpCMoG5o=;
+        b=bLiRzieNbqICxIg3S95cTbTDnLiDzDxjSpzah8FcOINpxwO5PxQ93P+a+nnwXNJlvd
+         FrWu0oW5X76sIHfG0arqjAIjV7xk4qxv+iyXQ6zubY+/mdWvlec9WdquYYgOI1dAwwtN
+         NO0OdREg9hjM5w+RUDzbABezJ8mTD2rXxNEyc=
+In-Reply-To: <BANLkTimLJ4k1KzmzHkz10JvL9HTyb0y+WQ@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-To: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+To: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Cc: linux-c-programming@vger.kernel.org
 
-Hi,
+Hi Ratheesh,
 
-Im writing a FactCGI application which creates some threads. I observed that pthread_create call hangs.
-I attached the process using GDB. Here is the backtrace:-
-(gdb) bt
-#0  0x00000032240dfade in __lll_lock_wait_private () from /lib64/libc.so.6
-#1  0x0000003224076a5b in _L_lock_1530 () from /lib64/libc.so.6
-#2  0x000000322406fe32 in arena_get2 () from /lib64/libc.so.6
-#3  0x0000003224074a4b in calloc () from /lib64/libc.so.6
-#4  0x000000322300ff33 in _dl_allocate_tls () from /lib64/ld-linux-x86-64.so.2
-#5  0x0000003224c06eb9 in pthread_create@@GLIBC_2.2.5 () from /lib64/libpthread.so.0
-#6  0x00000000004031ea in main () at ./artemis_pull.c:507
+On Wed, Apr 6, 2011 at 4:30 PM, ratheesh kannoth <ratheesh.ksz@gmail.co=
+m> wrote:
+> connect() system call establishes a connection as shown in below step=
+s.
+>
+> 1. =A0 |client | =A0----------------- syn ---------------> =A0| serve=
+r |
+>
+> 2. =A0|Server| =A0--------------syn+ ack --------------> | client |
+>
+> 3. =A0| Client | -----------------ack --------------------> | Server =
+|
+>
+>
+> But establishing connection , client calls close() system call. Clien=
+t
+> is sending FIN+ ACK to server =A0[ i expected only FIN to be sent fro=
+m
+> client to server ]
+>
 
+Above sequence is correct.
 
-Please give me some pointers.
+See Q2.7 in following link for more details,
+http://www.faqs.org/faqs/unix-faq/socket/
 
--Manish.
-
+--=20
+Thanks,
+Mahavir
 --
-This message was sent on behalf of manishbansode@gmail.com at openSubscriber.com
-http://www.opensubscriber.com/messages/linux-c-programming@vger.kernel.org/topic.html
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
