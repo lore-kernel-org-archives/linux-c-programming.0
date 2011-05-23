@@ -1,66 +1,45 @@
-From: Aniruddha Bhattacharyya <aniruddha.aot@gmail.com>
-Subject: Fwd: message queue for two processes.
-Date: Sat, 14 May 2011 22:00:58 +0530
-Message-ID: <BANLkTimATKw7to=-YWKco0tVuErZpQZEzg@mail.gmail.com>
-References: <BANLkTi=qk90bwxyG-_CKpqpfzz-Y5PMXMQ@mail.gmail.com> <BANLkTimt9L4ZUS2--Cp7D5u+L6V6ZyjcbQ@mail.gmail.com>
+From: Fawad Lateef <fawadlateef@gmail.com>
+Subject: Hi, Needs suggestions for finding and fixing stack/memory corruption
+ when calling a function
+Date: Mon, 23 May 2011 15:41:22 +0100
+Message-ID: <BANLkTimdU05oVtTdOr7TXdrUvc2NJ7KVyQ@mail.gmail.com>
+References: <BANLkTingN-61wOzWKk7iwxFgo0W2YAzUQQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
         h=domainkey-signature:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:content-type:content-transfer-encoding;
-        bh=y1cduvSTD1GwdDz3U3oPzYHdhxUZXdQ2emU5gWPBe3E=;
-        b=fZJqEL1AmVM2/hnL2VgqML7ODiGsCuoo8aiZtZ6b5DXZRzWcvxn85AMjqaS/N5Tei1
-         WmK++pPRWta2WIW7fHYyblikTEnsIN5iSZXR1vqD4GuHexbVGYDSKBH3nd5zdMPGTtvC
-         u3xpgyOd3rcLo0eyrCCFQTs9nacVcBO7oCBUY=
-In-Reply-To: <BANLkTimt9L4ZUS2--Cp7D5u+L6V6ZyjcbQ@mail.gmail.com>
+         :message-id:subject:to:content-type;
+        bh=jJc/82AJC5DhNvZDEKC9k7/uaD4zvxWppCG3b71Qv6k=;
+        b=PIJldcgLaAoJRfovZQK5aIjzSDbUpx+z3OrXF+ju2A+obgyYoM+E7XEWBL9nDtswp7
+         dHB4EYnvow5bjHYyX1qSve2evPL8zQjMRo8e1R6Eyqal5p2HxbH4wPnjKH0QOz/seUEa
+         c1xY+cJTaRh67uPJ6fVCapc79HruuSXOxxhSw=
+In-Reply-To: <BANLkTingN-61wOzWKk7iwxFgo0W2YAzUQQ@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
----------- Forwarded message ----------
-=46rom: Aniruddha Bhattacharyya <aniruddha.aot@gmail.com>
-Date: Sat, May 14, 2011 at 9:51 PM
-Subject: Re: message queue for two processes.
-To: ratheesh kannoth <ratheesh.ksz@gmail.com>,
-linux-c-programming@vger.kernel.org
+Hello,
 
+I need some suggestions about how-to approach, find and fix a memory
+corruption issue which is happening in a C/C++ very complex and large
+code (code evolved over several years). Code is running on AT91SAM9260
+(armv5l architecture; single processor with preemption enabled) and
+completely in Linux user-space.
 
-each MQ has a TYPE variable (long int).
-struct my_MQ{
-long int my_mq_type;
-char data[512];
-};
+The problem is:
 
-You can select a particular message by the TYPE argument in msgget().
+-- We are calling a function which has three integer arguments.
+With-in that function 2nd and 3rd arguments always gets corrupted
+while 1st argument is fine. Just before calling that function printing
+arguments is fine.
 
-Say, for x, type =3D=3D 2 and for y type =3D=3D 3.
+Now it will be good if I can get some suggestions about whats
+happening and how-to look into this problem. I am thinking that there
+is some memory/stack corruption happening somewhere.
 
+Thanks in advance.
 
-
-
-On Sat, May 14, 2011 at 9:10 PM, ratheesh kannoth
-<ratheesh.ksz@gmail.com> wrote:
->
-> There is a server (say A ) and two clients ( say =A0x and y ). These =
-are
-> communicating thru message queue mechansim. =A0They are using same
-> message queue and different id to communicate.
-> i read like =A0-when a message is read , this will be removed from
-> message queue. Then, how can process x can read =A0only its intended
-> messages ?
->
->
-> -Ratheesh
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-- Fawad Lateef
