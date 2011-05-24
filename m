@@ -1,124 +1,118 @@
-From: Mahavir Jain <mjainp@gmail.com>
+From: Fawad Lateef <fawadlateef@gmail.com>
 Subject: Re: Hi, Needs suggestions for finding and fixing stack/memory
  corruption when calling a function
-Date: Tue, 24 May 2011 13:59:59 +0530
-Message-ID: <BANLkTimMU-PEop7yJ+U+RsGzft-Y6L4Wcg@mail.gmail.com>
+Date: Tue, 24 May 2011 10:02:25 +0100
+Message-ID: <BANLkTi=C7H=NK65aT4m0Mw-ecy6v2Kx44A@mail.gmail.com>
 References: <BANLkTingN-61wOzWKk7iwxFgo0W2YAzUQQ@mail.gmail.com>
- <BANLkTimdU05oVtTdOr7TXdrUvc2NJ7KVyQ@mail.gmail.com> <4DDA7321.1040606@udo.edu>
- <BANLkTikRoOuKgXC2KpSNGAQkz1_YdTffWA@mail.gmail.com>
+ <BANLkTimdU05oVtTdOr7TXdrUvc2NJ7KVyQ@mail.gmail.com> <BANLkTimx+=DxYCCqtSKjGWUm63jBAe+iug@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=domainkey-signature:mime-version:sender:in-reply-to:references:from
-         :date:x-google-sender-auth:message-id:subject:to:cc:content-type
-         :content-transfer-encoding;
-        bh=XYSB8QiSGF6hvDuzCNJpsTI31usCRaRbXZ46v6jNHk0=;
-        b=ScDUag7vuTcYE6K/o1ZA/kOQVWrDr2SaSqHKPtE4vso32RNl2Z3xSAmEE0teFVSFUI
-         wgXryGpo3SHDWML7XNfPMk9hOClxNUbrOFTBv61kZ0Rm9Pq4uyqO9OFIDurR1jvdm5Wl
-         7avbOiCLF7Eg011ozdafonBqQko9E5T0uWdrs=
-In-Reply-To: <BANLkTikRoOuKgXC2KpSNGAQkz1_YdTffWA@mail.gmail.com>
+        h=domainkey-signature:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc:content-type:content-transfer-encoding;
+        bh=eD2Jqk5aXrDEDbOHRbq/Jq51zwT2gAy0wdg0r/nJ3IA=;
+        b=AQvDecdJIACdYCa3lKNMT1CFgG3BnfTTCix52Ocb4UhdhIg3WIzBKxng56Gob/yhjf
+         PXSGeVwSbWlb7w4bxXmTeioHJBpsHFKBPUm4Q4RxNSPzKQ0Lu1A4Jr0rboxpPsh6/hGo
+         GM0TkhATVCnW6S4Nx+E44CdORz+faag4kUUFg=
+In-Reply-To: <BANLkTimx+=DxYCCqtSKjGWUm63jBAe+iug@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="iso-8859-1"
-To: Fawad Lateef <fawadlateef@gmail.com>
-Cc: Andrej Gelenberg <andrej.gelenberg@udo.edu>, linux-c-programming@vger.kernel.org
+To: ern0 <ern0@linkbroker.hu>
+Cc: linux-c-programming@vger.kernel.org
 
-On Mon, May 23, 2011 at 8:29 PM, Fawad Lateef <fawadlateef@gmail.com> w=
-rote:
-> Hi Andrej,
->
->
-> On Mon, May 23, 2011 at 3:45 PM, Andrej Gelenberg
-> <andrej.gelenberg@udo.edu> wrote:
->> Hi,
->>
->>
->> heap, stack, buffer overflow? multiple threads? It is bit difficult =
-to
->> suggest something without some code. Have you tried to use gdb or
->> valgrind? (do someone know if valgrind work on arm?)
->>
->
-> Thanks for replying.
->
-> There is _no_ threading only while(1) loop, we have multiple processe=
-s
-> communicating through pipes but this problem is happening only in one
-> process hence I am assuming that something local to that process is
-> corrupting memory.
->
-> Our root-filesystem don't have gdb support and I think valgrind is
-> _not_ supported on arm :(
-
-Try gdb-server that should fit in small root filesystem.
-http://www.delorie.com/gnu/docs/gdb/gdbserver.1.html
-
->
-> Is there any possibility that the problem is related to some compiler
-> optimization or something along that line ? We are using gcc-4.2.0
-> based tool-chain and Linux kernel 2.6.29.
->
-> I can't post the code due to two main reasons: -- Its closed source
-> and its too big and I don't think that anyone wants to look at code
-> with around 20 cpp files and each file has hundreds of lines of code.
->
-> Regards,
->
-> Fawad Lateef
->
->> Regards,
->> Andrej Gelenberg
->>
->> On 05/23/2011 04:41 PM, Fawad Lateef wrote:
->>> Hello,
->>>
->>> I need some suggestions about how-to approach, find and fix a memor=
-y
->>> corruption issue which is happening in a C/C++ very complex and lar=
-ge
->>> code (code evolved over several years). Code is running on AT91SAM9=
-260
->>> (armv5l architecture; single processor with preemption enabled) and
->>> completely in Linux user-space.
->>>
->>> The problem is:
->>>
->>> -- We are calling a function which has three integer arguments.
->>> With-in that function 2nd and 3rd arguments always gets corrupted
->>> while 1st argument is fine. Just before calling that function print=
-ing
->>> arguments is fine.
->>>
->>> Now it will be good if I can get some suggestions about whats
->>> happening and how-to look into this problem. I am thinking that the=
-re
->>> is some memory/stack corruption happening somewhere.
->>>
->>> Thanks in advance.
->>>
->>> -- Fawad Lateef
->>> --
->>> To unsubscribe from this list: send the line "unsubscribe linux-c-p=
-rogramming" in
->>> the body of a message to majordomo@vger.kernel.org
->>> More majordomo info at =A0http://vger.kernel.org/majordomo-info.htm=
-l
->>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+On Tue, May 24, 2011 at 7:08 AM, ern0 <ern0@linkbroker.hu> wrote:
+> Sounds like wrong compilation. Have you recompiled both the caller an=
+d the
+> callee functions? Is the compiling target set correctly (btw ARM inte=
+gers
+> are always put on 32-bit boundaries)? What are the types of the param=
+eters?
+> Try to change its order. Finally, if nothing works, pass them differe=
+nt way,
+> one-by-one (setFirst(), setSecond(), SetThirdAndperform()) or with po=
+inters,
+> I mean foo(int*) instead of foo(int).
 >
 
+Thanks for reply and suggestions. Both functions are part of single
+application and I tried rebuilding all of them again. For now I added
+two more temporary arguments between 1st and 2nd arguments and the
+required arguments getting correct values thats why I am assuming that
+by adding temporary variables we moved the memory corruption from real
+arguments into temporary arguments. After adding these arguments my
+function is behaving correctly so for now this is a work-around _but_
+I want to figure-out its proper fix (as the same sort of issue we
+faced in our cgi based web-pages code some weeks earlier).
+
+Hence I needs suggestion that is this really a memory corruption or
+some compiler issues ? If its a compiler issue then its not a big
+problem but if its memory corruption issue then we have to _fix_ it
+asap.
+
+My compilation arguments are:
+
+* Compilation ----- armv5l-linux-g++ -Wall -Wno-write-strings
+-mcpu=3Darm9 -Os -DARM9_LINUX_GCC -D_GNU_SOURCE -DUNIX -pipe -fPIC -c -=
+o
+xxxxxxxxxxx.o xxxxxxxxxxx.cc
+
+* Linking Shared Library ----- armv5l-linux-g++ -shared -o xxxxxx.so
+
+* Linking Executable ----- armv5l-linux-g++ -Wl,-rpath,/mnt/apps/lib
+-Wall -Wno-write-strings -mcpu=3Darm9 -Os -DARM9_LINUX_GCC -D_GNU_SOURC=
+E
+-DUNIX -pipe -s ..........
 
 
---=20
 Thanks,
-MJ
+
+=46awad Lateef
+
+
+> On Mon, May 23, 2011 at 16:41, Fawad Lateef <fawadlateef@gmail.com> w=
+rote:
+>>
+>> Hello,
+>>
+>> I need some suggestions about how-to approach, find and fix a memory
+>> corruption issue which is happening in a C/C++ very complex and larg=
+e
+>> code (code evolved over several years). Code is running on AT91SAM92=
+60
+>> (armv5l architecture; single processor with preemption enabled) and
+>> completely in Linux user-space.
+>>
+>> The problem is:
+>>
+>> -- We are calling a function which has three integer arguments.
+>> With-in that function 2nd and 3rd arguments always gets corrupted
+>> while 1st argument is fine. Just before calling that function printi=
+ng
+>> arguments is fine.
+>>
+>> Now it will be good if I can get some suggestions about whats
+>> happening and how-to look into this problem. I am thinking that ther=
+e
+>> is some memory/stack corruption happening somewhere.
+>>
+>> Thanks in advance.
+>>
+>> -- Fawad Lateef
+>> --
+>> To unsubscribe from this list: send the line "unsubscribe
+>> linux-c-programming" in
+>> the body of a message to majordomo@vger.kernel.org
+>> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+>
+>
+>
+> --
+> ern0
+> Haben Sie Fragen?
+>
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
