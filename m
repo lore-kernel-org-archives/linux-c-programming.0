@@ -1,10 +1,9 @@
 From: "Michal Nazarewicz" <mina86@mina86.com>
 Subject: Re: macro to print filename
-Date: Wed, 01 Jun 2011 21:08:51 +0200
-Message-ID: <op.vwevg1xb3l0zgt@mnazarewicz-glaptop>
+Date: Wed, 01 Jun 2011 21:11:18 +0200
+Message-ID: <op.vwevk4xc3l0zgt@mnazarewicz-glaptop>
 References: <BANLkTi=TrKOcaQ4QcEHKOsqLaAPxL9f9Kw@mail.gmail.com>
- <op.vweraiul3l0zgt@mnazarewicz-glaptop>
- <BANLkTinEDc3DLbaFezBxL=QQ0Nie83+NAQ@mail.gmail.com>
+ <BANLkTinbg1RRpGFFYhge6D5YxRyGnxmT6w@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
@@ -13,41 +12,37 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=domainkey-signature:sender:content-type:to:cc:subject:references
          :date:mime-version:content-transfer-encoding:from:message-id
          :in-reply-to:user-agent;
-        bh=c8pil8nZ+8XO59nLnCCsGTlDN0BudvMPSsYDa7ktDaY=;
-        b=oMBjH//YJNQIZdLbskA9e3HESCZNYcD3mddr7eYxUrai1eQG5vqYWx2AQXljWxE/PC
-         6HmWC6f7xTeiOZz1Ab2iUgEBSQfjYXU1N0+J8IYzJmKEMjn+Nq6ZcTIBLNblkrar+A6x
-         FIoCdjLkPyFpzENfyzUr//viwfqwvcO953MZY=
-In-Reply-To: <BANLkTinEDc3DLbaFezBxL=QQ0Nie83+NAQ@mail.gmail.com>
+        bh=XO5dcMv7352x5UCXuZOsThhv9IvjDhzGq7ovuPc9xVI=;
+        b=N8TQG0bqHLvns+hzNThudoQVCJzRJcg/9QZSsQzo37GYqZBlMDTz/wttgdmvOk8pvj
+         kyRxV9OWHJzRovoyfw59s3dG4G4jEZtj2s6h6i6EoRgJiOMBp9c6cHBpwqlMkVFmPxIP
+         dtz7wURlJyIiefXStTULFh5abr4prGZ3nQKhk=
+In-Reply-To: <BANLkTinbg1RRpGFFYhge6D5YxRyGnxmT6w@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
-To: Zhongye Jia <jia.zhongye@gmail.com>
+To: ratheesh kannoth <ratheesh.ksz@gmail.com>, Zhongye Jia <jia.zhongye@gmail.com>
 Cc: linux-c-programming@vger.kernel.org
 
-On Wed, 01 Jun 2011 20:45:06 +0200, Zhongye Jia <jia.zhongye@gmail.com>  
+On Wed, 01 Jun 2011 20:08:50 +0200, Zhongye Jia <jia.zhongye@gmail.com>  
 wrote:
-> I do not think this can be done in *compiling* time, neither macro in
-> c nor template in c++, so would you be so kind to offer the solution
-> by using template or just give  some tips? Since I'm not that good at
-> c++ :)
+> #include <stdio.h>
+>
+> int main()
+> {
+>         char filename[] = __FILE__, *basename;
+>         basename = filename + sizeof(filename) - 2;
+>         while( basename+1 != filename && *basename != '/' ) {
+>                 basename--;
+>         }
+>         basename++;
 
-I was thinking along the lines of:
+And you are not using strchr() why?  I know OP said about not using
+string libraries but I don't think he meant that he's fine with
+reimplementing the wheel.
 
-template<unsigned offset>
-struct _filename {
-	static const char *const val = __FILE__[offset] == '/'
-		? __FILE__ + offset + 1
-		: _filename<offset-1>::val;
-};
-
-template<>
-struct _filename<0> {
-	static const char *const val = __FILE__;
-};
-
-static const char *const filename = _filename<sizeof(__FILE__) - 1>;
-
-I'm a bit rusty so I dunno if that'll work in this format.
+>         printf("%s\n%s\n", filename, basename);
+>         return 0;
+> }
 
 -- 
 Best regards,                                         _     _
