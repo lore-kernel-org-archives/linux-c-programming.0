@@ -1,55 +1,37 @@
-From: "Michal Nazarewicz" <mina86@mina86.com>
-Subject: Re: macro to print filename
-Date: Wed, 01 Jun 2011 21:27:33 +0200
-Message-ID: <op.vwewb7lm3l0zgt@mnazarewicz-glaptop>
+From: Libin Yang <lbyang@marvell.com>
+Subject: RE: macro to print filename
+Date: Wed, 1 Jun 2011 19:10:32 -0700
+Message-ID: <A63A0DC671D719488CD1A6CD8BDC16CF19D9D799D5@SC-VEXCH4.marvell.com>
 References: <BANLkTi=TrKOcaQ4QcEHKOsqLaAPxL9f9Kw@mail.gmail.com>
- <BANLkTinbg1RRpGFFYhge6D5YxRyGnxmT6w@mail.gmail.com>
- <op.vwevk4xc3l0zgt@mnazarewicz-glaptop>
- <BANLkTimHdt6psdjPjKAPskBxaycF=-BECw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=domainkey-signature:sender:content-type:to:cc:subject:references
-         :date:mime-version:content-transfer-encoding:from:message-id
-         :in-reply-to:user-agent;
-        bh=lpgRmTMA+N3AvDKxdTPX/V8l0heTCYIcjdNEMhGjCqU=;
-        b=KPPluwk39c65Ft34eZksbgp0OpgAbybrRr0ZcTlAoZzcY/xht4I8hiyyH6D52vU9yV
-         vbsJGW60FxTK+Pox6NXHBSBzn0uZVffpDLLndWf1h3WW+FoSs5buC2u9dgDoCCpCsktS
-         yxmBMzmpAqWAoqEEBbofdzgqm4rdxosrXMEuw=
-In-Reply-To: <BANLkTimHdt6psdjPjKAPskBxaycF=-BECw@mail.gmail.com>
+In-Reply-To: <BANLkTi=TrKOcaQ4QcEHKOsqLaAPxL9f9Kw@mail.gmail.com>
+Content-Language: en-US
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"; delsp="yes"
-To: Aniruddha Bhattacharyya <aniruddha.aot@gmail.com>
-Cc: ratheesh kannoth <ratheesh.ksz@gmail.com>, Zhongye Jia <jia.zhongye@gmail.com>, linux-c-programming@vger.kernel.org
+To: ratheesh kannoth <ratheesh.ksz@gmail.com>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-On Wed, 01 Jun 2011 21:24:59 +0200, Aniruddha Bhattacharyya  
-<aniruddha.aot@gmail.com> wrote:
-> From what I understood, Ratheesh wanted a compile time solution.
->
-> My workaround will be to go for  a Makefile based compilation.
-> 1)  "gcc -E yourfile.c"  will preprocess only. so __FILE__ will be  
-> expanded .
->
-> output file will be yourfile.c (with macro expanded)
->
-> 2) then run your custom tool/bash script to trim the filepath to  
-> filename.
-> use awk tool maybe.
->
-> 3) Do the final compile using Gcc
+man 3 basename
 
-That sounds too complicated.  How about:
+Regards,
+Libin 
 
-foo.o: foo.c
-	gcc -DMY_FILE=$(basename $<) -o $@ $<
-
-(Syntax might be wrong.)
-
--- 
-Best regards,                                         _     _
-.o. | Liege of Serenely Enlightened Majesty of      o' \,=./ `o
-..o | Computer Science,  Michal "mina86" Nazarewicz    (o o)
-ooo +-----<email/xmpp: mnazarewicz@google.com>-----ooO--(_)--Ooo--
+> -----Original Message-----
+> From: linux-c-programming-owner@vger.kernel.org
+> [mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of ratheesh kannoth
+> Sent: Thursday, June 02, 2011 12:08 AM
+> To: linux-c-programming@vger.kernel.org
+> Subject: macro to print filename
+> 
+> __FILE__ macro prints relative path name of the file. I need only
+> filename. How to extract this ?
+> 
+> I dont want to use any string library - since it includes more
+> Processing and needs to store the character array in executable. IS
+> there any method at preprocessing level to do this .
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
