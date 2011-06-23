@@ -1,54 +1,31 @@
-From: Nick Bowler <nbowler@elliptictech.com>
+From: Michael Tokarev <mjt@tls.msk.ru>
 Subject: Re: extra slash in current path
-Date: Thu, 23 Jun 2011 10:27:06 -0400
-Message-ID: <20110623142706.GA13310@elliptictech.com>
-References: <BANLkTi=y1roManmZGMLBXSFbBVqK_KqDZg@mail.gmail.com>
- <20110623153116.404f2a63.taeuber@bbaw.de>
- <BANLkTinOb-4Xm_W2fmzivk6jBJwjeHYKVA@mail.gmail.com>
- <BANLkTimXH8K91cZ69oPRu=wbYt9JgBadfA@mail.gmail.com>
- <BANLkTin9bQ4hzs-odYU-Gxy-f-T+HLLAdQ@mail.gmail.com>
+Date: Thu, 23 Jun 2011 18:31:06 +0400
+Message-ID: <4E034E2A.1010100@msgid.tls.msk.ru>
+References: <BANLkTi=y1roManmZGMLBXSFbBVqK_KqDZg@mail.gmail.com> <20110623153116.404f2a63.taeuber@bbaw.de> <BANLkTinOb-4Xm_W2fmzivk6jBJwjeHYKVA@mail.gmail.com> <BANLkTimXH8K91cZ69oPRu=wbYt9JgBadfA@mail.gmail.com> <BANLkTin9bQ4hzs-odYU-Gxy-f-T+HLLAdQ@mail.gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
 In-Reply-To: <BANLkTin9bQ4hzs-odYU-Gxy-f-T+HLLAdQ@mail.gmail.com>
 Sender: linux-kernel-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 To: yuyichao-mit <yuyichao@mit.edu>
-Cc: richard -rw- weinberger <richard.weinberger@gmail.com>, Lars =?iso-8859-1?Q?T=E4uber?= <taeuber@bbaw.de>, linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
+Cc: richard -rw- weinberger <richard.weinberger@gmail.com>, =?ISO-8859-1?Q?Lars_T=E4uber?= <taeuber@bbaw.de>, linux-kernel@vger.kernel.org, linux-c-programming@vger.kernel.org
 
-On 2011-06-23 10:11 -0400, yuyichao-mit wrote:
-> On Thu, Jun 23, 2011 at 9:54 AM, richard -rw- weinberger
-> > Is this really a kernel issue?
-> > rw@raccoon:~> cd //
-> > rw@raccoon://> pwd
-> > //
-> > rw@raccoon://> ls -l /proc/self/cwd
-> > lrwxrwxrwx 1 rw users 0 23. Jun 15:53 /proc/self/cwd -> /
-> 
-> well, that's true, but this is indeed the retrun value of get_current_dir_name.
+23.06.2011 18:11, yuyichao-mit wrote:
 
-glibc's get_current_dir_name will honour the PWD environment variable in some
-cases, which is where the // actually comes from (i.e., it does not come
-from the kernel).
+>>>> $ cd //
+>>>> $ pwd
+>>>> //
 
-This funny behaviour of cd is actually specified by POSIX (man 1p cd):
+The current directory is cached in $PWD environment
+variable by shell (bash at least).  This variable is
+checked in glibc (getcwd() et al) - if it is set and
+stat($PWD) is the same as stat("."), that value is used.
 
-        8. The curpath value shall then be converted to canonical form
-           as follows, considering each component from beginning to
-           end, in sequence:
-[...]
-            c. An implementation may further simplify curpath by
-               removing any trailing slash characters that are not also
-               leading slashes, replacing multiple non-leading
-               consecutive slashes with a single slash, and replacing
-               three or more leading slashes with a single slash.  If,
-               as a result of this canonicalization, the curpath
-               variable is null, no further steps shall be taken.
+It has nothing to do with kernel, probably the issue
+is in bash which somehow allows double slash for root
+dir (but not triple).
 
-        9. [...] The PWD environment variable shall be set to curpath.
-
-Cheers,
--- 
-Nick Bowler, Elliptic Technologies (http://www.elliptictech.com/)
+/mjt
