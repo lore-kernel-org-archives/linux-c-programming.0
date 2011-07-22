@@ -1,95 +1,144 @@
-From: Akos Marton <makos999@gmail.com>
+From: Vadiraj <vadiraj.cs@gmail.com>
 Subject: Re: time system call expensive?
-Date: Thu, 21 Jul 2011 13:46:17 +0200
-Message-ID: <4E281189.8010904@gmail.com>
-References: <CA+NBAy6499cgdzwGuPk6h+Y3D-DxEHP2HEKjtNAgis7K4RTKig@mail.gmail.com> <op.vyyu34nf3l0zgt@mnazarewicz-glaptop>
+Date: Fri, 22 Jul 2011 10:27:18 +0530
+Message-ID: <CA+NBAy6Lyt-mP05En9kOaUkcUbFoQog1NyHR15bxtyxK4uTc0Q@mail.gmail.com>
+References: <CA+NBAy6499cgdzwGuPk6h+Y3D-DxEHP2HEKjtNAgis7K4RTKig@mail.gmail.com>
+	<op.vyyu34nf3l0zgt@mnazarewicz-glaptop>
+	<4E281189.8010904@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------060107020008070208030404"
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=message-id:disposition-notification-to:date:from:user-agent
-         :mime-version:to:cc:subject:references:in-reply-to
-         :x-enigmail-version:content-type;
-        bh=3GKkmkEZXyPE0JSLefPoRUzD9kBJuzpM10N1dOMW5+8=;
-        b=DkCpCNbG2S3hnngDUFUaRkUom5nn00GaY0W9vS2advObgmkBlzlU1Kpa5jj3l/i2vj
-         /qCmLrgc0wYulYDZsF6hT4ysN/yRIFG9/rxwGWbxq7tpszLbOX7iRRrsimiV5Us0VXIe
-         p9sN961gqRgKbgHZXVgKO4UL0l/NCH02lFJZo=
-In-Reply-To: <op.vyyu34nf3l0zgt@mnazarewicz-glaptop>
+        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
+         :content-type:content-transfer-encoding;
+        bh=hqafqaj7LpVsQqdXhBMgmf2rfz42+MfflXDf1Nn+dx0=;
+        b=EfbUX+/CWfi+Z0kyaJVt8p2KS5x5v5XlRoe5yIzxpQdh+pVyJljb8AGoIVTbeHkRMN
+         6NDUWBXF+fF0puX7ER19U/b4WIjRC8PPbIeYkv3WJ1odoNlYlIehXsPN/GTupU5hPwtQ
+         PGzkUulpZ9mK7Qt7DsTTmJJ8JPye+uahFSFmg=
+In-Reply-To: <4E281189.8010904@gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-To: Michal Nazarewicz <mina86@mina86.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-This is a multi-part message in MIME format.
---------------060107020008070208030404
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Great!! thanks for the tar.
 
-I advice you `man 3 clock`.
-If you want to get much more precision the attached project can help you.
-Does it help?
+I'm not sure if we can time() sys call is quite expensive all time.
 
-Regards,
-mAkos
+Simple code I tried
+
+#include <stdio.h>
+#include <time.h>
 
 
-Michal Nazarewicz wrote:
-> On Thu, 21 Jul 2011 06:41:14 +0200, Vadiraj <vadiraj.cs@gmail.com> wrote:
->> I'm evaluating time consumed by method. I'm using time(NULL) system
->> call to capture time before and after the call to the function.
->> Just wanted to know if this has a considerable performance hit? For
->> all I believe time syscall is quite optimized and should not really be
->> matter of concern.
+int main()
+{
+    int i,k =3D 0;
+    time_t t,j;
+    for(i =3D0 ; i < 100; i++)
+    {
+        usleep(100);
+        //t =3D time(NULL);
+        k++;
+        //j =3D time(NULL);
+    }
+}
+
+Time without the time() calls.
+
+
+time ./time_performance
+
+real	0m2.091s
+user	0m0.000s
+sys	0m0.001s
+
+
+output with time calls.
+
+time ./time_performance
+
+real	0m2.007s
+user	0m0.000s
+sys	0m0.001s
+
+
+Almost same.
+
+timing k++ is not the righ thing but the point is, time as such is not
+so expensive IMHO. I did notice considerable difference when I loop to
+a 100000 times without the usleep().
+
+just k++ in the loop.
+time ./time_performance
+
+real	0m0.003s
+user	0m0.000s
+sys	0m0.003s
+
+
+with time() sys call before and after k++ in the loop.
+time ./time_performance
+
+real	0m0.168s
+user	0m0.026s
+sys	0m0.139s
+
+
+
+
+Cheers,
+Vadi
+
+
+On Thu, Jul 21, 2011 at 5:16 PM, Akos Marton <makos999@gmail.com> wrote=
+:
+> I advice you `man 3 clock`.
+> If you want to get much more precision the attached project can help =
+you.
+> Does it help?
+>
+> Regards,
+> mAkos
+>
+>
+> Michal Nazarewicz wrote:
+>> On Thu, 21 Jul 2011 06:41:14 +0200, Vadiraj <vadiraj.cs@gmail.com> w=
+rote:
+>>> I'm evaluating time consumed by method. I'm using time(NULL) system
+>>> call to capture time before and after the call to the function.
+>>> Just wanted to know if this has a considerable performance hit? For
+>>> all I believe time syscall is quite optimized and should not really=
+ be
+>>> matter of concern.
+>>>
+>>> Please let me know if someone have evaluated time(NULL) system over=
+ head..
+>>>
+>>> Assuming the method I'm evaluating is a frequently called method.
 >>
->> Please let me know if someone have evaluated time(NULL) system over head..
+>> Why do you worry about it? =A0What do you need the time for? =A0If a=
+re
+>> really using time(2) it means that the function you're calling run t=
+ime
+>> is counted in seconds. =A0If that's the case, two call to time(2) ar=
+e
+>> by all means negligible.
 >>
->> Assuming the method I'm evaluating is a frequently called method.
-> 
-> Why do you worry about it?  What do you need the time for?  If are
-> really using time(2) it means that the function you're calling run time
-> is counted in seconds.  If that's the case, two call to time(2) are
-> by all means negligible.
-> 
-> If you need in for benchmark, you would probably do something like:
-> 
-> start = time(NULL)
-> for (vary big number)
->     call function you benchmark
-> end = time(NULL)
-> 
-> In either case, you should check gettimeofday(2).
-> 
-
-
---------------060107020008070208030404
-Content-Type: application/octet-stream;
- name="timing.tar.bz2"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="timing.tar.bz2"
-
-QlpoOTFBWSZTWUXZikUAAW//hMy4AIBef/+ff//e1P/v/2oAAIAIUARe4zsrp2Ns07bsIZFG
-QjSbSbJoTJppo9Q0HqGgyBpoAyA0ANNSFPT0aNU9NJhGagAeoZGIGIBkNNNNDIBIkEEyNApt
-U/VPSfqj/VTyIPKHqMjRoep6gAADyhxkyaNAaNMRkaGIYE0aYgxGgwgAMEkUJ6AKm0wp7U9J
-6poABoyPUBk9QGnqbSaaeoeptOkTQ6OZvrmLbxl+hQlZkA04hCv7F/A5HKKwUgvKC1kvYndY
-FrGC8QmkKAXPhvbaD4/l65IzpAhtMab7u8/Hv91v7TBdT/hUJ0UUgbGUijt7NlLv0z/mZj5R
-6r9HR8XSU9RkMu0twjjpn05KVNBugqnUdAoEwA4BPnBoiV+Nq+uZWfK22q9fdlq5zZwe8GgB
-uIs1IszZ5G2ppcgdHQyhLqVbQEyCPLbsoopHIrl36Ss5i5Io6jj2nNU0rD1AT7E07XaSnVOR
-VS6s6qoWGFkLH32sU8KCCJZnHTu09ZZ5TwkuY9xJzUShDaKAw5ZrDmlETRyeeulI9KSuKxDC
-JbTlb2POrzhXV0vsZyuIvy/zqhcDz2YMJBRcG2kgj36MVI8QcSAJTIBKJRbf8LAjrvlqBR7X
-ID0YGPwSssymcLdwdt+NzKTrHcJtlA+YWIg3HUzgg16/v+PVv5xBAWQTicWIW9HbVY9ZxEqU
-wtIoL2dzgTFSt/oKJMhiwkQW7trsPsreKWJOd982FbihEI0m8lUDC0VgovNQN6KE3QUzOaxe
-n5rleo6IyuIiS+9GkCCmkWGw4GoyfCIQYUPCiBP3+9Bj5ZvyHl4g7QelLj6Lk9cIM2gd5FAM
-Bg1GswqBSTi9uwwJcIR9JQbOrZ+5ZBokuoNIbnk5lNsFsR7g3SIqiISBMRhmxs0lovhU6RdH
-bCCksLi7VMOYijOWB49v3FkKIezKUxatXbxW3gbbZhxFlXzIbhthAUKyVyZBLEgolsgkIjNI
-KVxnj1ni8jcpphYQZ8cEF4wrNNskGp96B1op0bWs+lphFKTy1z88Q7gDVnCozj4EEvZKJaNT
-ocYyvuki56SPvDoxNZvFOVJSYeU4t2kwmMljFRh0WTsHwkvAZZ2PENPN29avxelOrfAnL8+Y
-MjMO6c0jDkVzEuJkrWTRjgEYyeQzofx1azrVsNUllRkDJaWY1PM7ooAV+0lUhUWYVKWUCBrJ
-pA4QWvpKUDcD0sEsgAiEe4zUSVCTLgosnwJSNeK4XXLCuuvkFcTaQrBVIgGSiF4ioTlw7ojG
-SRa7DiGO/XWYXZqDOluNNT4KED4S2+DYLboLHwWSgVjCS6UF7nicsq0gVrmvdXRYVrqomYNG
-zZ6efPoftyG5l8GdvtZWmie2XIg7xOgGSrkLZxPZ8lEBVQO/nAg6ZC37M8ok5Y81NEhYW4Lh
-inp0HF+N1FakZX2zW2eBjaStX0NcklSlGbyV1y0A7dW9b1daWGJLwFLZJawrCPVjqlqdznQD
-+4I2iQf8XckU4UJBF2YpFA==
---------------060107020008070208030404--
+>> If you need in for benchmark, you would probably do something like:
+>>
+>> start =3D time(NULL)
+>> for (vary big number)
+>> =A0 =A0 call function you benchmark
+>> end =3D time(NULL)
+>>
+>> In either case, you should check gettimeofday(2).
+>>
+>
+>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
+amming" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
