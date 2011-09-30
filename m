@@ -1,27 +1,29 @@
-From: Shriramana Sharma <samjnaa@gmail.com>
-Subject: Re: Errors with ->*
-Date: Wed, 3 Aug 2011 09:27:12 +0530
-Message-ID: <CAH-HCWVpN6HJ14QSXZAYioKBaKsRiBqC5Z6DfeJ_8ZRaNBjtsw@mail.gmail.com>
-References: <4E382646.7060903@gmail.com>
+From: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Subject: proc entry getting created in wrong directory?
+Date: Fri, 30 Sep 2011 23:43:38 +0530
+Message-ID: <CAGZFCEFAUqjoD7cPNSzY10cksBkqB20_r0aP5Hw3o1SNSPTKwg@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :content-type;
-        bh=dOQNS5o+flZJn/Q0gDyPyc1akRHH1cGpbJOfgu/Qt3M=;
-        b=IBr4I+7raSxXD5LxFXiK+TiUIUwX051b69lz2q7+zbt4bU6vNFCFEL1LXyYSwxl5bs
-         4B6tsX1771/oQJvmZ9KUaFlHv3amAKv9tu0Q9jc+pLg/KVIr+BSQ6rfiMATDFqBbrQT3
-         g1GW83XhQJnIXvC949MhMubXQRuE6tVZhFGwM=
-In-Reply-To: <4E382646.7060903@gmail.com>
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=l0gUUYF/X1EKQiPgqfUUxeugdlBa+OAxc0UxnhoLZnY=;
+        b=SpGKg59AO3/kc7B5ooOiUdgkBX10Olxlcmmt1u/azOyBCzj6DUGS/C160rdvN/l3WM
+         HckhFPjSZBr9j5s9+BKzckMQhWX5UT8N7OyZPc1HrzYZJ4eX83NIh/BtAbSnQpfg9N3m
+         MjF7anPML+r4S9fZmqc3LLZha0Dr+hocmwpQU=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: linux-modules@vger.kernel.org, linux-c-programming@vger.kernel.org
 
-Thanks all for your replies. I now have a better idea of the things.
-And Glynn's note about comp.lang.c++ is noted.
+<linux 2.6.38 kernel>
 
--- 
-Shriramana Sharma
+  struct file *filp = filp_open("/proc/net/stat", O_RDONLY, 0);
+   proc_dir_entry = PDE(filp->f_path.dentry->d_inode);
+   proc_entry = create_proc_entry( "fortune", 0644, proc_dir_entry );
+
+"fortune" is getting created in /proc dir, why so ?
+
+
+-ratheesh
