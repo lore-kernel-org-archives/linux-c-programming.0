@@ -1,29 +1,32 @@
-From: ratheesh kannoth <ratheesh.ksz@gmail.com>
-Subject: proc entry getting created in wrong directory?
-Date: Fri, 30 Sep 2011 23:43:38 +0530
-Message-ID: <CAGZFCEFAUqjoD7cPNSzY10cksBkqB20_r0aP5Hw3o1SNSPTKwg@mail.gmail.com>
+From: ratheesh kannoth <ratheesh.ksz-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+Subject: virtual -->physical --> virtual address
+Date: Sat, 15 Oct 2011 12:31:08 +0530
+Message-ID: <CAGZFCEHW9Rpk8ZaFbaQPMeA_jOGFnFsnyqXg8QYJs+T+WpxpKw@mail.gmail.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
+Return-path: <linux-modules-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
         h=mime-version:date:message-id:subject:from:to:content-type;
-        bh=l0gUUYF/X1EKQiPgqfUUxeugdlBa+OAxc0UxnhoLZnY=;
-        b=SpGKg59AO3/kc7B5ooOiUdgkBX10Olxlcmmt1u/azOyBCzj6DUGS/C160rdvN/l3WM
-         HckhFPjSZBr9j5s9+BKzckMQhWX5UT8N7OyZPc1HrzYZJ4eX83NIh/BtAbSnQpfg9N3m
-         MjF7anPML+r4S9fZmqc3LLZha0Dr+hocmwpQU=
-Sender: linux-c-programming-owner@vger.kernel.org
+        bh=5HC1b+kZsPIM2SWiNETbT9JuK8luR+ejURr1uGSch9U=;
+        b=BgRbYvPbrLrzi6E6jfnH/uxBshEGZZCS3MMdu0mn+wal69JY2lJjzCncDWDrglLjqH
+         xXGLIHhes9h42gA4/Ipv60wWvO/bN5KVV1723SAhyio0JWUeCvpQpXZQcMGLmkGFJqo+
+         +zTua67vISa31dckOpVq3Lq9L6a3cPS8/O2R0=
+Sender: linux-modules-owner-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-modules@vger.kernel.org, linux-c-programming@vger.kernel.org
+To: linux-newbie <linux-newbie-u79uwXL29TY76Z2rM5mHXA@public.gmane.org>, linux-c-programming-u79uwXL29TY76Z2rM5mHXA@public.gmane.org, linux-modules-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
 
-<linux 2.6.38 kernel>
+{
+virtual_addr1 =  kmalloc(0x20, GFP_USER);
+phy_addr1 = __pa(virtual_addr1 );
+virtual_addr2 =  ioremap(phy_addr1, 0x20 );
 
-  struct file *filp = filp_open("/proc/net/stat", O_RDONLY, 0);
-   proc_dir_entry = PDE(filp->f_path.dentry->d_inode);
-   proc_entry = create_proc_entry( "fortune", 0644, proc_dir_entry );
-
-"fortune" is getting created in /proc dir, why so ?
+}
 
 
--ratheesh
+I noticed that virtual_addr1  is not equal to virtual_addr2.  And if i
+dereference virtual_addr2 ( *virtual_addr2 ),
+kernel crash. What is wrong here ?
+
+-Ratheesh
