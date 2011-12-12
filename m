@@ -1,54 +1,52 @@
-From: Jean-Marc Simohand <jeanmarc.simohand@maxim-ic.com>
+From: Javier Martinez Canillas <martinez.javier@gmail.com>
 Subject: Re: header files missing
-Date: Mon, 12 Dec 2011 15:34:16 +0100
-Message-ID: <4EE610E8.7010001@maxim-ic.com>
+Date: Mon, 12 Dec 2011 15:59:16 +0100
+Message-ID: <CAAwP0s08xMLYrp2X0_4ktx+9apEYz5HfTCpT=fmrwnmcO7iULA@mail.gmail.com>
 References: <CAGZFCEGxdS6Wbye+jy_HCpv-OquSNX6gKFLh3xDK-Fwfn1T3ag@mail.gmail.com>
+ <4EE610E8.7010001@maxim-ic.com> <CAGZFCEFiYf88nhEeYUGmHOJ5TXXgC3F5WOC6xx2CsofE5GEL9Q@mail.gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CAGZFCEGxdS6Wbye+jy_HCpv-OquSNX6gKFLh3xDK-Fwfn1T3ag@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc:content-type:content-transfer-encoding;
+        bh=dm2/y4N2eQ0zSufOpr7nblAfAnNu1Po6kRM8InDiDqE=;
+        b=GPI3qOuWHd5OUY4Xlu8wnyTKEi6paSaG92gTp32itqb9MmAT2i5Tc0FDhbkn4+g30v
+         nWfO2c6HrDgQiIkYd7kJYFBh/U00EuWmAb5P7Sw1oA/EvhFmSIioUZEbXdp1grWLGBxm
+         /75yNY1DxCJy+ukU3JsWEPtkly+kaNxI6aEs0=
+In-Reply-To: <CAGZFCEFiYf88nhEeYUGmHOJ5TXXgC3F5WOC6xx2CsofE5GEL9Q@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"; format="flowed"
+Content-Type: text/plain; charset="utf-8"
 To: ratheesh kannoth <ratheesh.ksz@gmail.com>
-Cc: linux-newbie <linux-newbie@vger.kernel.org>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Cc: Jean-Marc Simohand <jeanmarc.simohand@maxim-ic.com>, linux-newbie <linux-newbie@vger.kernel.org>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-Le 12/12/2011 15:16, ratheesh kannoth a =E9crit :
-> I have a 2.6.18  kernel running on an intel machine. I have  gcc 4.1.=
-2
-> installed on this . There is no header files  like stdio.h on this
-> machine, so i could not compile any program.
+On Mon, Dec 12, 2011 at 3:38 PM, ratheesh kannoth
+<ratheesh.ksz@gmail.com> wrote:
+> On Mon, Dec 12, 2011 at 8:04 PM, Jean-Marc Simohand
+> <jeanmarc.simohand@maxim-ic.com> wrote:
+>>
+>> Hi Ratheesh,
+>> did you install the "build-essential package" ?
+>>
+>> sudo apt-get install build-essential
+>>
 >
-> Where and which should i download for all the C developement header
-> files ?.  i dont apt-get or yum running , i would like to download an=
-d
-> install )
+> =C2=A0i don't have apt-get or yum. its a custom compiled kernel.
 >
-> -Ratheesh
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-newbi=
-e" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> Please read the FAQ at http://www.linux-learn.org/faqs
 
-Hi Ratheesh,
-did you install the "build-essential package" ?
+I think you are mixing concepts here. stdio.h and others are ANSI C
+user-space library headers. These comes with a C library like glibc.
+The kernel has nothing to do about it. Unless you want to compile
+user-space applications that use kernel headers.
 
-sudo apt-get install build-essential
-
+Best regards,
 
 --=20
-Best Regards,
-Jean-Marc Simohand
-Sr. MTS Applications
-Maxim Integrated Products
-ZI Athelia IV - Le Forum, Bat A
-Quartier Roumagoua
-13600 La Ciotat - France
-Phone +33 (0)4.42.98.18.25
-
-
+Javier Mart=C3=ADnez Canillas
+(+34) 682 39 81 69
+Barcelona, Spain
 --
 To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
 amming" in
