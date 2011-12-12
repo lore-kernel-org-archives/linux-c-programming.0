@@ -1,28 +1,51 @@
 From: ratheesh kannoth <ratheesh.ksz@gmail.com>
-Subject: header files missing
-Date: Mon, 12 Dec 2011 19:46:00 +0530
-Message-ID: <CAGZFCEGxdS6Wbye+jy_HCpv-OquSNX6gKFLh3xDK-Fwfn1T3ag@mail.gmail.com>
+Subject: Re: header files missing
+Date: Mon, 12 Dec 2011 20:08:18 +0530
+Message-ID: <CAGZFCEFiYf88nhEeYUGmHOJ5TXXgC3F5WOC6xx2CsofE5GEL9Q@mail.gmail.com>
+References: <CAGZFCEGxdS6Wbye+jy_HCpv-OquSNX6gKFLh3xDK-Fwfn1T3ag@mail.gmail.com>
+	<4EE610E8.7010001@maxim-ic.com>
 Mime-Version: 1.0
-Return-path: <linux-c-programming-owner@vger.kernel.org>
+Return-path: <linux-newbie-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=mime-version:date:message-id:subject:from:to:content-type;
-        bh=V85fRR3k5SR7JDbrN5yOwvV8VsFEQsmhPZRPrUc6mRk=;
-        b=byRvY0DPN+l2enrCWQXS+p/spcjvIT7RlvH6ZFcXnd6gsV8WZwNk1XWeolTU9MSbS4
-         G08oV0wGVbcD+BjqZUp/hUWbAhavuTuOIgeWTagaavjVvsBwIWYuWRSt4CNQWk8fBZ5S
-         c18uW3e4b5gEIpi1FrIPiUY3/OOHa7IdOk3h8=
-Sender: linux-c-programming-owner@vger.kernel.org
+        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
+         :cc:content-type;
+        bh=MTLMxnYuV8q2qVdnQxBttmeMn960wdrH6t3JTdhApFQ=;
+        b=qn1FQzwxu/fkjCllqxQKmwxWanH0UbJ7wm4f9oXeOUpopBhaIZDlRg7RcMWn6J2pe5
+         LmJkND3UCnFiN1awK8IVwnKfx5QwUbV3DYMccdBY9O+1hu5TUcmNt0Ggf+wvfJBpdN7b
+         CIceFep7xEYxhtWKDhWibBvw3wxD1vM/0Wj3Q=
+In-Reply-To: <4EE610E8.7010001@maxim-ic.com>
+Sender: linux-newbie-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-newbie <linux-newbie@vger.kernel.org>, linux-c-programming@vger.kernel.org
+To: Jean-Marc Simohand <jeanmarc.simohand@maxim-ic.com>
+Cc: linux-newbie <linux-newbie@vger.kernel.org>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-I have a 2.6.18  kernel running on an intel machine. I have  gcc 4.1.2
-installed on this . There is no header files  like stdio.h on this
-machine, so i could not compile any program.
+On Mon, Dec 12, 2011 at 8:04 PM, Jean-Marc Simohand
+<jeanmarc.simohand@maxim-ic.com> wrote:
+>
+> Hi Ratheesh,
+> did you install the "build-essential package" ?
+>
+> sudo apt-get install build-essential
+>
 
-Where and which should i download for all the C developement header
-files ?.  i dont apt-get or yum running , i would like to download and
-install )
+ i don't have apt-get or yum. its a custom compiled kernel.
 
--Ratheesh
+> --
+> Best Regards,
+> Jean-Marc Simohand
+> Sr. MTS Applications
+> Maxim Integrated Products
+> ZI Athelia IV - Le Forum, Bat A
+> Quartier Roumagoua
+> 13600 La Ciotat - France
+> Phone +33 (0)4.42.98.18.25
+>
+>
+--
+To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Please read the FAQ at http://www.linux-learn.org/faqs
