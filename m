@@ -1,69 +1,66 @@
-From: Yichao Yu <yyc1992@gmail.com>
-Subject: Re: header files missing
-Date: Wed, 14 Dec 2011 10:20:29 -0500
-Message-ID: <CAMvDr+St9yT=iQh5SAQsd7b=YjX1Q4ErR5OujCwXy1FOrq10Hg@mail.gmail.com>
-References: <CAGZFCEGxdS6Wbye+jy_HCpv-OquSNX6gKFLh3xDK-Fwfn1T3ag@mail.gmail.com>
- <4EE610E8.7010001@maxim-ic.com> <CAGZFCEFiYf88nhEeYUGmHOJ5TXXgC3F5WOC6xx2CsofE5GEL9Q@mail.gmail.com>
+From: viresh kumar <viresh.linux@gmail.com>
+Subject: Query: Declaring arrays as extern
+Date: Thu, 22 Dec 2011 14:34:05 +0530
+Message-ID: <CAOh2x=ktZBLD2KDOxdBGtz0Acqc0RDkA-VrCCCO2Nby8D=2FRg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=gamma;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc:content-type:content-transfer-encoding;
-        bh=mtp7GAaJAT/GkKiKFFGM6bLWD6nXMxKfBE9Q1065BHc=;
-        b=qUt2obKo6WLKAQq6NiYAzxQtL83nij5jG5FAhK//YWkmHwPPP+WQsNoZdOHx/mGzRa
-         nrZIj1qlbOwyk95WYmhp5/VGSjQK+keIufL+D4PEdRRODdKaOmk2Un8UllQOxSqmueAc
-         d1I+093tfGZIf+Tbfg9GM80H5zG88bhMWXzX4=
-In-Reply-To: <CAGZFCEFiYf88nhEeYUGmHOJ5TXXgC3F5WOC6xx2CsofE5GEL9Q@mail.gmail.com>
+        h=mime-version:date:message-id:subject:from:to:cc:content-type;
+        bh=9UGPZG22dqSm7LO80WLMggSvZMm8EdJ4EpCSVRQKBDE=;
+        b=oCI27ArEekUcmOw1OwHRXKGzE3yUqD5yfxEMPsMdT0PtFCfE8YQd3fGNCrWijhCZy1
+         RYBr6jwAC/i8vMZ2IYyu31hOZKIyIjhN522NuIL6Cpm8OCHrUqtlYbBcDpt/bLPOWUWu
+         1LN9gjDkaMg6Xv6YaMuR2/xoojm1evpa33Ea4=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: ratheesh kannoth <ratheesh.ksz@gmail.com>
-Cc: Jean-Marc Simohand <jeanmarc.simohand@maxim-ic.com>, linux-newbie <linux-newbie@vger.kernel.org>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
+Cc: Shiraz HASHIM <shiraz.hashim@st.com>, "pratyush.anand" <pratyush.anand@st.com>, "vipin.kumar" <vipin.kumar@st.com>, Viresh KUMAR <viresh.kumar@st.com>, Vipul Kumar SAMAR <vipulkumar.samar@st.com>, bhavna.yadav@st.com, Deepak SIKRI <deepak.sikri@st.com>, Armando VISCONTI <armando.visconti@st.com>, Bhupesh SHARMA <bhupesh.sharma@st.com>, rajeev <rajeev-dlh.kumar@st.com>, Amit VIRDI <Amit.VIRDI@st.com>
 
-On Mon, Dec 12, 2011 at 9:38 AM, ratheesh kannoth
-<ratheesh.ksz@gmail.com> wrote:
-> On Mon, Dec 12, 2011 at 8:04 PM, Jean-Marc Simohand
-> <jeanmarc.simohand@maxim-ic.com> wrote:
->>
->> Hi Ratheesh,
->> did you install the "build-essential package" ?
->>
->> sudo apt-get install build-essential
->>
->
-> =A0i don't have apt-get or yum. its a custom compiled kernel.
+Hi,
 
-Do you mean u r using LFS system? but in that way you should have
-header files installed along with binaries (if you just ./configure &&
-make && make install)
+I can observing an behavior which i am not able to explain.
 
-Otherwise you should have a package manager (Don't know any "real"
-distro that don't have it.)
+file1.c
 
-Are you sure you don't have the header file or the compiler cannot
-find it? How did you install glibc?
+/* global array */
+int arr[10];
 
->
->> --
->> Best Regards,
->> Jean-Marc Simohand
->> Sr. MTS Applications
->> Maxim Integrated Products
->> ZI Athelia IV - Le Forum, Bat A
->> Quartier Roumagoua
->> 13600 La Ciotat - France
->> Phone +33 (0)4.42.98.18.25
->>
->>
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-pro=
-gramming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at =A0http://vger.kernel.org/majordomo-info.html
+void main()
+{
+    printf("addres of array is %p", arr);
+}
+
+
+file2.c
+extern int arr[];
+
+void main()
+{
+    printf("addres of array is %p", arr);
+}
+
+
+file3.c
+extern int *arr;
+
+
+void main()
+{
+    printf("addres of array is %p", arr);
+}
+
+
+
+
+Now, value printed with file 1 and 2 are same, but extern int *arr
+doesn't work at all. The address shown is just something else.
+
+I know we pass array addresses to routines this way only, but with
+extern it is just not working.
+
+Can somebody please explain it?
+
 --
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+viresh
