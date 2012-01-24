@@ -1,78 +1,26 @@
-From: Alok Singhal <as8ca@virginia.edu>
-Subject: Re: Query: Declaring arrays as extern
-Date: Fri, 23 Dec 2011 10:27:15 -0800
-Message-ID: <CAAjkWR06JQ5AxVmgKnF+AEFiCw-yOxyX22Syf88ywG1Z3Nvg1g@mail.gmail.com>
-References: <CAOh2x=ktZBLD2KDOxdBGtz0Acqc0RDkA-VrCCCO2Nby8D=2FRg@mail.gmail.com>
+From: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Subject: user defined functions
+Date: Tue, 24 Jan 2012 20:21:40 +0530
+Message-ID: <CAGZFCEFFn0ggkciB2XoQXNGFJBs-U-mhaqzRNaCZoYjar8G1qw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CAOh2x=ktZBLD2KDOxdBGtz0Acqc0RDkA-VrCCCO2Nby8D=2FRg@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=gamma;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=XgTtPj2mcKLdo20/YXmH1nPiz6gWcz13YZMllXqiBAE=;
+        b=CS/BJLpflHFA8DgV8/K26h9w3q4m7iQWzX8YnUEBvH945/24vi9NWN8VdVficqyMA5
+         OhEDep8yjGklNA+FJe5bMgdhRJT3mClI+TzVUDjR6q8H5cJH4CAqTNu9KHPh8Ixf5fng
+         ohOonC4cKCdTiucW4diUMcTCOhb8G0Diz813k=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: viresh kumar <viresh.linux@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, Shiraz HASHIM <shiraz.hashim@st.com>, "pratyush.anand" <pratyush.anand@st.com>, "vipin.kumar" <vipin.kumar@st.com>, Viresh KUMAR <viresh.kumar@st.com>, Vipul Kumar SAMAR <vipulkumar.samar@st.com>, bhavna.yadav@st.com, Deepak SIKRI <deepak.sikri@st.com>, Armando VISCONTI <armando.visconti@st.com>, Bhupesh SHARMA <bhupesh.sharma@st.com>, rajeev <rajeev-dlh.kumar@st.com>, Amit VIRDI <Amit.VIRDI@st.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming@vger.kernel.org
 
-On Thu, Dec 22, 2011 at 1:04 AM, viresh kumar <viresh.linux@gmail.com> =
-wrote:
-> Hi,
->
-> file1.c
->
-> /* global array */
-> int arr[10];
->
-> void main()
-> {
-> =A0 =A0printf("addres of array is %p", arr);
-> }
->
->
-> file2.c
-> extern int arr[];
->
-> void main()
-> {
-> =A0 =A0printf("addres of array is %p", arr);
-> }
->
->
-> file3.c
-> extern int *arr;
->
-> void main()
-> {
-> =A0 =A0printf("addres of array is %p", arr);
-> }
->
->
-> Now, value printed with file 1 and 2 are same, but extern int *arr
-> doesn't work at all. The address shown is just something else.
+HI all,
 
-Presumably you are compiling file1.c without the definition of "main"
-in when you compile file2.c and file3.c with it, and with the
-definition of main when you are compiling file1.c as a standalone
-unit.
+I would like to find out all user defined  functions in an elf executable.
 
-This is happening because an array is not a pointer.  In fact, your
-question is so frequently asked, that it is on comp.lang.c FAQ list:
+i compiled my c++ program using  g++  and created the elf executable.
 
-http://c-faq.com/aryptr/aryptr1.html
-
-You might also want to read all the questions and answers in
-http://c-faq.com/aryptr/index.html.
-
-> I know we pass array addresses to routines this way only, but with
-> extern it is just not working.
-
-When you pass an array to a function, the array name is converted to a
-pointer to its first element.  But that is not what is happening in
-your code above: "extern int *arr;" is not the right declaration for
-'arr'.
-
-Also, you should be saying int main(void) instead of void main().
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+-Ratheesh
