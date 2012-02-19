@@ -1,43 +1,43 @@
-From: "Vladimir Murzin" <murzin.v@gmail.com>
+From: Ian Lance Taylor <iant@google.com>
 Subject: Re: c inline assembly
-Date: Sat, 18 Feb 2012 06:26:00 +0000
-Message-ID: <123126874-1329546468-cardhu_decombobulator_blackberry.rim.net-1355742666-@b13.c12.bise7.blackberry>
-Reply-To: murzin.v@gmail.com
+Date: Sat, 18 Feb 2012 21:14:54 -0800
+Message-ID: <mcrk43jwgj5.fsf@dhcp-172-18-216-180.mtv.corp.google.com>
+References: <CAGZFCEEaJ7ZsNAmWCF-nDtsjs70U7fqEVvTXEaCt9Tmk1dcemQ@mail.gmail.com>	<CAGZFCEH_NWJQid+DgOGrDp0nAS6odH2fLamT1k-vWP1ceAiMzQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: base64
-Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=gamma;
-        h=x-rim-org-msg-ref-id:message-id:content-transfer-encoding:reply-to
-         :x-priority:sensitivity:importance:subject:to:from:date:content-type
-         :mime-version;
-        bh=FsPhBmm08Q1GCubM+LPOGXASXog5i370cZKBE3NIoGI=;
-        b=x7mdUh0k1Y0ydu3V8D69pH31pyQ3wDo+eaNgwf/DmkP5tiZIdV6yegaQfOPXig02O1
-         a1lg+Ry9rSbbrEOfJkHrj8IcNiUzoG01MFRu85KfS7TtCweSxelWTkCJ0Am53V534uPo
-         2C/Jjdud7d2GG7kubZ0yc/xkHkI4apS3p6cTg=
-Sender: linux-c-programming-owner@vger.kernel.org
-List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1254"
-To: ratheesh kannoth <ratheesh.ksz@gmail.com>, linux-c-programming-owner@vger.kernel.org, linux-c-programming@vger.kernel.org, gcc-help@gcc.gnu.org
+Content-Transfer-Encoding: quoted-printable
+Return-path: <gcc-help-return-49008-gcc-help=m.gmane.org@gcc.gnu.org>
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed;
+	d=gcc.gnu.org; s=default; x=1330233338; h=Comment:
+	DomainKey-Signature:Received:Received:Received:Received:
+	Received-SPF:Received:Received:Received:Received:From:To:Cc:
+	Subject:References:Date:In-Reply-To:Message-ID:User-Agent:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Mailing-List:
+	Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	List-Help:Sender:Delivered-To; bh=T4hOOiJxaVivUiyvmp2a/WdU5LU=;
+	b=bA3FYnmi8S9W8kKFcsupTpCkeRWEBFCxm7ShETFTvjCFDqLbpe3YzuEeUBmGf2
+	asTxNmVXPXcKCPI9QbEeehV24dtMVJtL1RZN0MRIGMZMsjGrgcmuAPlSgsaMG+kY
+	1PaBWrx7zYhhyHjsHaVrEB0J2k6iFvarBc6kub7BU8BWI=
+In-Reply-To: <CAGZFCEH_NWJQid+DgOGrDp0nAS6odH2fLamT1k-vWP1ceAiMzQ@mail.gmail.com>	(ratheesh kannoth's message of "Sat, 18 Feb 2012 11:31:12 +0530")
+List-Id: <linux-c-programming.vger.kernel.org>
+List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
+List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
+List-Post: <mailto:gcc-help@gcc.gnu.org>
+List-Help: <mailto:gcc-help-help@gcc.gnu.org>
+Sender: gcc-help-owner@gcc.gnu.org
+Content-Type: text/plain; charset="utf-8"
+To: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Cc: linux-c-programming@vger.kernel.org, gcc-help@gcc.gnu.org
 
-SGkhDQoNCldoYXQgaXMgeW91IHF1ZXN0aW9uIG9yIHJlcXVlc3Q/IDstKQ0KDQotLS0tLS1Pcmln
-aW5hbCBNZXNzYWdlLS0tLS0tDQpGcm9tOiByYXRoZWVzaCBrYW5ub3RoDQpTZW5kZXI6IGxpbnV4
-LWMtcHJvZ3JhbW1pbmctb3duZXJAdmdlci5rZXJuZWwub3JnDQpUbzogbGludXgtYy1wcm9ncmFt
-bWluZ0B2Z2VyLmtlcm5lbC5vcmcNClRvOiBnY2MtaGVscEBnY2MuZ251Lm9yZw0KU3ViamVjdDog
-YyBpbmxpbmUgYXNzZW1ibHkNClNlbnQ6IDE4IEZlYiAyMDEyIDEwOjAxDQoNCkkgYW0gdXNpbmcg
-Z2NjIG9uIGEgMzJiaXSgIGludGVsIG1hY2hpbmUuoCBpIGhhdmUgZGVmaW5lZCBhbiBpbmxpbmUg
-ZnVuY3Rpb24uDQoNCg0KVGhpcyBmdW5jdGlvbiBpcyBpbmxpbmUgLqAgd2hhdCBhbGwgcmVnaXN0
-ZXJzIG5lZWRzIHRvIHB1c2hlZCBhbmQNCnBvcGVkIGluIHRoZSBpbmxpbmUgYXNzZW1ibHkgc28g
-dGhhdCB0aGUgZnVuY3Rpb25zIHdvbnQNCmRpc3R1cmIgdGhlIHJlZ2lzdGVycyBpbqAgdGhlIGZ1
-bmN0aW9uICggaW4gd2hpY2ggaXQgaXMgQyBpbmxpbmVkoCApLg0KDQoNCmlubGluZSB1bnNpZ25l
-ZCBsb25nIGhlbGxvKHVuc2lnbmVkIGxvbmcgYSkNCg0Kew0KIGludCBiOw0KIGFzbSAoIm1vdmwg
-JTEsICUlZWF4Ow0KICAgICAgIiBtb3ZsICUxLCAlJWVieDsNCiAgICAgICAibW92bCAgJTEsICUl
-ZWN4Ow0KICAgICAgICJtb3ZsICAlMSwgJSVlc2k7DQogICAgICAgIm1vdmwgICUxLCAlJWVkaTsN
-Cg0KICAgICCgICJtb3ZsICUlZWF4LCAlMDsiDQogICAgICAgOiI9ciIoYikgICAgICAgIC8qIG91
-dHB1dCAqLw0KICAgICAgIDoiciIoYSkgICAgICAgICAvKiBpbnB1dCAqLw0KICk7DQp9DQotLQ0K
-VG8gdW5zdWJzY3JpYmUgZnJvbSB0aGlzIGxpc3Q6IHNlbmQgdGhlIGxpbmUgInVuc3Vic2NyaWJl
-IGxpbnV4LWMtcHJvZ3JhbW1pbmciIGluDQp0aGUgYm9keSBvZiBhIG1lc3NhZ2UgdG8gbWFqb3Jk
-b21vQHZnZXIua2VybmVsLm9yZw0KTW9yZSBtYWpvcmRvbW8gaW5mbyBhdCAgaHR0cDovL3ZnZXIu
-a2VybmVsLm9yZy9tYWpvcmRvbW8taW5mby5odG1sDQoNCkJlc3Qgd2lzaGVzLA0KVmxhZGltaXIg
-TXVyemlu
+ratheesh kannoth <ratheesh.ksz@gmail.com> writes:
 
+> This function is inline .=C2=A0 what all registers needs to pushed and
+> poped in the inline assembly so that the functions wont
+> disturb the registers in=C2=A0 the function ( in which it is C inlined=C2=
+=A0 ).
+
+Your asm statement should list the registers that it clobbers.
+
+One i386 you normally can not clobber %ebp.  When compiling with
+-fpic/-fPIC you normally can not clobber %ebx.
+
+Ian
