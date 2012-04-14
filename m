@@ -1,88 +1,87 @@
-From: Glynn Clements <glynn@gclements.plus.com>
+From: Celelibi <celelibi@gmail.com>
 Subject: Re: close socket and TCP RST
-Date: Fri, 13 Apr 2012 08:32:21 +0100
-Message-ID: <20359.54917.165693.172256@cerise.gclements.plus.com>
+Date: Sat, 14 Apr 2012 17:37:06 +0200
+Message-ID: <CAJR2zJ-Rw+nU4CjearErxwVWwDDXrkv_zf34YaSPfnMjF+u7yw@mail.gmail.com>
 References: <CAJR2zJ9EQ5D-0U_6Yrzmv5nJkv7BBhiOuGLXcgF=c-K7qxsO5Q@mail.gmail.com>
 	<20357.34865.112925.808959@cerise.gclements.plus.com>
 	<CAJR2zJ8rYPjR_+Nw_NSBBZgmKr95ekX0mt093aq89Bs59p8oYA@mail.gmail.com>
+	<20359.54917.165693.172256@cerise.gclements.plus.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CAJR2zJ8rYPjR_+Nw_NSBBZgmKr95ekX0mt093aq89Bs59p8oYA@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
+         :cc:content-type;
+        bh=87RJMQG+LkSwxiyoPDnxH5HkIMW5y7nkcd0DkO404OY=;
+        b=fVFIvocZQ5/xpAQ1JEGSQS5FKI4/E26VPYDLoa3C4vNUq9QwGoFZqUa894iVK6j5r5
+         kWBtWpQF2p+/S+tuI2ExOWTiae/P65U8Gq4ml4kdJSK+gOhFj7XjxDSzkQq25vSlaF/t
+         eEpyqQgtDRHy4m1Oi9Fzx3Ky+O/S9Dq8nCSr2QbKCHaiNDX71eRIj3xI2GiiEW3+BzU9
+         WGd9LuaMQWaiELOvPtdw4mdaYFuMTSSvfnKNknr0Op00+1CtCOgRBLuR81sCr1fEToir
+         BrQNtqv0EdmQotNRlDdcF5scLmZTQPbcU0CbiBEVIawg/DBPSJyJM60jPoDY5DnUPYjT
+         1lJA==
+In-Reply-To: <20359.54917.165693.172256@cerise.gclements.plus.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Celelibi <celelibi@gmail.com>
+Content-Transfer-Encoding: 7bit
+To: Glynn Clements <glynn@gclements.plus.com>
 Cc: linux-c-programming@vger.kernel.org
 
+2012/4/13, Glynn Clements <glynn@gclements.plus.com>:
+> Sending outstanding data then sending the RST afterwards is
+> potentially problematic as the receiver may not be able or willing to
+> read the data until its own data has been ACK'd, which would result in
+> deadlock.
 
-Celelibi wrote:
+Could you tell me more about that?
+I can't see a case which would be problematic.
+Moreover shutdown(SHUT_WR) can actually send the outstanding data.
 
-> However, when I look at the TCP's RFC 793 (a.k.a STD7):
-> http://www.rfc-editor.org/rfc/std/std7.txt
-> Section 3.5 "Closing a Connection" says:
-> "A TCP will reliably deliver all buffers SENT before the connection was CLOSED"
-> 
-> And RFC 1122 ("host requirement"): http://www.rfc-editor.org/rfc/rfc1122.txt
-> Section 4.2.2.13 "Closing a Connection" says:
-> "If such a host issues a CLOSE call while received data is still
-> pending in TCP, or if new data is received after CLOSE is called, its
-> TCP SHOULD send a RST to show that data was lost."
-> 
-> IMO both are not incompatible and should be done. But I may have
-> missed something somewhere.
+>> The client send "QUIT;\n", the server read 'Q', 'U', 'I', 'T', ';',
+>> process "QUIT", send to the client Something that say "Ok, I quit" and
+>> close() the connection.
+>> However, a "\n" is still in the receive buffer of the server! That
+>> makes the server RST the connection ASAP and discard the messages that
+>> were not sent yet... Namely the "Ok, I quit" message which was delayed
+>> because of Nagle's algorithm or whatever.
+>> Annoying isn't it?
+>
+> If the server sends a response to the quit command, the client should
+> read the response then close() the socket. Provided that the server's
+> response is well-formed, there shouldn't be a problem.
 
-First, the RFC's "close" doesn't necessarily equate to the Unix
-close() call.
+The client is ok. As soon as it receive "Ok, I quit" from the server,
+it close the connection. Although the server should also work with
+basic clients like netcat or telnet, which won't close the connection
+by themselves. Then the server just has to send its last message and
+close the connection. That's the protocol we expect:
+The server read the command "QUIT;", send its last message saying it's
+going to close the connection, and close the connection. The client is
+quite passive in the termination process, it read the response to the
+"QUIT;" and wait for the connection to be closed (its read should
+return -1).
 
-The host can't send outstanding data after a RST has been sent (if it
-did, the receiver would just reply with an RST rather than an ACK, it
-the sender definitely shouldn't send data after an RST has been
-received).
+The problem is on the server side. Because of the unread "\n" (after
+the "QUIT;"), "Ok, I quit" is never sent.
 
-Sending outstanding data then sending the RST afterwards is
-potentially problematic as the receiver may not be able or willing to
-read the data until its own data has been ACK'd, which would result in
-deadlock.
 
-> > With a request-response protocol, either the requestor sends a "quit"
-> > command resulting in the responder closing the connection, or the
-> > requestor will just close the connection instead of issuing a request.
-> > In the latter case, it will either perform a half-close or just wait
-> > until any outstanding response has been received and perform a
-> > full-close.
-> 
-> Well, this is close to the original protocol. It was a kind of SQL
-> server. Every command is terminated by a semi-colon while every "\n"
-> are treated as spaces.
-> 
-> The client send "QUIT;\n", the server read 'Q', 'U', 'I', 'T', ';',
-> process "QUIT", send to the client Something that say "Ok, I quit" and
-> close() the connection.
-> However, a "\n" is still in the receive buffer of the server! That
-> makes the server RST the connection ASAP and discard the messages that
-> were not sent yet... Namely the "Ok, I quit" message which was delayed
-> because of Nagle's algorithm or whatever.
-> Annoying isn't it?
+> Alternatively, using SHUT_WR with SO_LINGER allows the sender to
+> ensure that any data is sent before closing the read side, so even if
+> the connection does end in a RST, sent data won't be lost.
+>
+> However, this may be a moot point, as a connection terminated by RST
+> may result in close() indicating an error. For some protocols, that
+> will cause any "transaction" to be aborted; e.g. for POP3, any
+> messages marked for deletion by the DELE command should only be
+> deleted if the connection is terminated normally.
 
-If the server sends a response to the quit command, the client should
-read the response then close() the socket. Provided that the server's
-response is well-formed, there shouldn't be a problem.
+That's not a problem since that was a student project. (I'm a teaching
+assistant and wrote a test script for their server.) But that's still
+worth noticing that the way a connection terminate can be meaningful.
 
-Ultimately, if neither side can be relied upon to strictly adhere to
-the protocol, then at least one side must perform a half-close, and
-each side must wait for EOF before closing the read side of the
-connnection.
+BTW, now I understand better what happen and why it happen, don't you
+think this behavior should be documented somewhere? Should I report a
+bug for the man 7 tcp?
 
-Alternatively, using SHUT_WR with SO_LINGER allows the sender to
-ensure that any data is sent before closing the read side, so even if
-the connection does end in a RST, sent data won't be lost.
 
-However, this may be a moot point, as a connection terminated by RST
-may result in close() indicating an error. For some protocols, that
-will cause any "transaction" to be aborted; e.g. for POP3, any
-messages marked for deletion by the DELE command should only be
-deleted if the connection is terminated normally.
-
--- 
-Glynn Clements <glynn@gclements.plus.com>
+Celelibi
