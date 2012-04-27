@@ -1,137 +1,196 @@
-From: Glynn Clements <glynn@gclements.plus.com>
-Subject: Re: close socket and TCP RST
-Date: Mon, 16 Apr 2012 21:43:47 +0100
-Message-ID: <20364.33923.402871.136736@cerise.gclements.plus.com>
-References: <CAJR2zJ9EQ5D-0U_6Yrzmv5nJkv7BBhiOuGLXcgF=c-K7qxsO5Q@mail.gmail.com>
-	<20357.34865.112925.808959@cerise.gclements.plus.com>
-	<CAJR2zJ8rYPjR_+Nw_NSBBZgmKr95ekX0mt093aq89Bs59p8oYA@mail.gmail.com>
-	<20359.54917.165693.172256@cerise.gclements.plus.com>
-	<CAJR2zJ-Rw+nU4CjearErxwVWwDDXrkv_zf34YaSPfnMjF+u7yw@mail.gmail.com>
-	<20361.41504.306777.154694@cerise.gclements.plus.com>
-	<CAJR2zJ9pbXXdbXAcbQLa+rjutrzphe9UOYndJkooXK+SRZi9fg@mail.gmail.com>
+From: Himalay <himalay1995@gmail.com>
+Subject: error: dereferencing pointer to incomplete type and ICMP undeclared
+Date: Fri, 27 Apr 2012 06:43:30 +0000 (UTC)
+Message-ID: <loom.20120427T083712-887@post.gmane.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <CAJR2zJ9pbXXdbXAcbQLa+rjutrzphe9UOYndJkooXK+SRZi9fg@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
-To: Celelibi <celelibi@gmail.com>
-Cc: linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
+
+I am using CYGWIN gcc compiler on Windows XP Prof. OS. I am getting following 
+errors. I have defined __USE_BSD in ip_icmp.h.
+Anyone please help me in solving errors.
+
+recv_v4.c: In function `recv_v4':
+recv_v4.c:38: error: dereferencing pointer to incomplete type
+recv_v4.c:38: error: `ICMP_TIMXCEED' undeclared (first use in this function)
+recv_v4.c:38: error: (Each undeclared identifier is reported only once
+recv_v4.c:38: error: for each function it appears in.)
+recv_v4.c:39: error: dereferencing pointer to incomplete type
+recv_v4.c:39: error: `ICMP_TIMXCEED_INTRANS' undeclared (first use in this 
+function)
+recv_v4.c:51: error: dereferencing pointer to incomplete type
+recv_v4.c:51: error: `ICMP_UNREACH' undeclared (first use in this function)
+recv_v4.c:61: error: dereferencing pointer to incomplete type
+recv_v4.c:61: error: `ICMP_UNREACH_PORT' undeclared (first use in this function)
+recv_v4.c:64: error: dereferencing pointer to incomplete type
+recv_v4.c:69: error: dereferencing pointer to incomplete type
+recv_v4.c:69: error: dereferencing pointer to incomplete type
+
+Following is the code:
+
+trace.h:
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/errno.h>
+#include <sys/time.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <netinet/in_systm.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
+#include <netinet/udp.h>
+#include <unistd.h>
+#include <stdio.h>
 
 
-Celelibi wrote:
+#ifdef	HAVE_SOCKADDR_DL_STRUCT
+#include	<net/if_dl.h>
+#endif
 
-> I can't see why it is important that the remote end is single
-> threaded or not.
 
-If it's single-threaded, it won't read data until it has finished
-writing.
+#define	BUFSIZE		1500
 
-> The data are ACK'd as soon as the kernel get them.
+struct rec {					/* format of outgoing UDP data 
+*/
+  u_short	rec_seq;			/* sequence number */
+  u_short	rec_ttl;			/* TTL packet left with */
+  struct timeval	rec_tv;		/* time packet left */
+};
 
-Only if there's space in the receive buffer. Otherwise, the kernel
-will ACK the last byte which was stored and report a receive window of
-zero. The sender will not attempt to send more data until the receive
-window opens.
+			/* globals */
+char	 recvbuf[BUFSIZE];
+char	 sendbuf[BUFSIZE];
 
-> The remote kernel won't try to send the data over the network if the
-> window size has reached 0, but it can still receive data as long as
-> its own receive window has not reached 0.
-> That means, if the remote application is brusting with send(), it will
-> fill the server's receive window (since the server do not want to read
-> any data after a "QUIT;"), then it will fill it's own outgoing buffer
-> and then the send()/write() will become blocking.
-> And if, unfortunately, the first command from the send() burst
-> generated a lot of data send by the server to the client, the client's
-> receive window may be 0 too and server's kernel ougoing buffer may be
-> full too. And here is the deadlock.
+int		 datalen;			/* # bytes of data following 
+ICMP header */
+char	*host;
+u_short	 sport, dport;
+int		 nsent;				/* add 1 for each sendto() */
+pid_t	 pid;				/* our PID */
+int		 probe, nprobes;
+int		 sendfd, recvfd;	/* send on UDP sock, read on raw ICMP 
+sock */
+int		 ttl, max_ttl;
+int		 verbose;
 
-Yes.
+			/* function prototypes */
+const char	*icmpcode_v4(int);
+const char	*icmpcode_v6(int);
+int		 recv_v4(int, struct timeval *);
+int		 recv_v6(int, struct timeval *);
+void	 sig_alrm(int);
+void	 traceloop(void);
+void	 tv_sub(struct timeval *, struct timeval *);
 
-> But actually this kind of deadlock car occur everytime (and is quite
-> common when dealing with pipes).
+struct proto {
+  const char	*(*icmpcode)(int);
+  int	 (*recv)(int, struct timeval *);
+  struct sockaddr  *sasend;	/* sockaddr{} for send, from getaddrinfo */
+  struct sockaddr  *sarecv;	/* sockaddr{} for receiving */
+  struct sockaddr  *salast;	/* last sockaddr{} for receiving */
+  struct sockaddr  *sabind;	/* sockaddr{} for binding source port */
+  socklen_t   		salen;	/* length of sockaddr{}s */
+  int			icmpproto;	/* IPPROTO_xxx value for ICMP */
+  int	   ttllevel;		/* setsockopt() level to set TTL */
+  int	   ttloptname;		/* setsockopt() name to set TTL */
+} *pr;
 
-In this case, the problem is that the application may have terminated,
-leaving the kernel to clean up the mess. If the kernel is going to
-send a RST anyhow, it's debatable whether there's any benefit in going
-to significant effort to send outstanding data which the receiver may
-just ignore.
+#ifdef	IPV6
 
-> But, well, I admit that a RST means here "protocol error" and should
-> imply a whole session rollback if possible.
-> And trying to send more data before the RST when the current remote
-> window size is 0 would either delay the RST (which would not be RFC
-> compliant) or "break the window".
-> But this is quite a corner case.
-> It may send together with the RST as much data as the window permit
-> and do not expect any ACK (as the connection has been reset).
+#include	<netinet/ip6.h>
+#include	<netinet/icmp6.h>
 
-That would require a separate path, and is essentially pointless. If
-it's not going to wait for an ACK (and retransmit if necessary),
-there's not much point sending the data in the first place. If a
-single dropped packet means that the data is permanently lost, it may
-as well just discard it and save itself some trouble.
+#endif
 
-> > If you want to get by without either side performing a half-close, one
-> > side must adhere strictly to the protocol, the other side must perform
-> > the initial close.
-> >
-> > If neither side can be relied upon to follow protocol exactly, you
-> > must use a half-close (as mentioned previously, rsh works like this as
-> > there isn't any "protocol" to follow; it's just free-form text in each
-> > direction).
-> 
-> Ok, I understand that my protocol wasn't strict enough on the exact
-> amount of data to be sent. I mean, the existence of that trailing \n
-> should be specified.
-> Ok, let's say that the protocol say that the "QUIT;" can be followed
-> by one "\n". Even in that case, I'm forced to use a half-close
-> connection?
 
-If the newline is optional and the receiver performs the initial
-close, then at least one side needs to perform a half-close. Either:
 
-1. The client sends "QUIT;\n...", the server sends a response and
-performs a half-close, the client reads the response and EOF and calls
-close(), the server reads the EOF and calls close(). Or:
+recv_v4.c:
+#include	"trace.h"
 
-2. The client sends "QUIT;\n...", the server sends the response, the
-client performs a half-close, the server reads the EOF and calls
-close(), the client reads the EOF and calls close().
+/*
+ * Return: -3 on timeout
+ *		   -2 on ICMP time exceeded in transit (caller keeps going)
+ *		   -1 on ICMP port unreachable (caller is done)
+ *		 >= 0 return value is some other ICMP unreachable code
+ */
 
-If the client can be relied upon to send an exact termination
-sequence, then the server can call close() as soon as it has read that
-sequence, and the client can call close() once it has read EOF from
-the server. EOF is always a reliable terminator; nothing else will be
-received after that, so calling close() won't cause a RST.
+int recv_v4(int seq, struct timeval *tv)
+{
+	int				hlen1, hlen2, icmplen;
+	socklen_t		len;
+	ssize_t			n;
+	struct ip		*ip, *hip;
+	struct icmp		*icmp;
+	struct udphdr	*udp;
 
-> > What it really boils down to is that "receiving" data on a TCP socket
-> > which has been closed for reading will result in a RST; that much is
-> > in the RFCs, I believe. The practical consequence of that fact at the
-> > application layer is more appropriate in a tutorial or article.
-> 
-> The fact that outstanding data is discarded too is quite surprising
-> (even if it can makes sens after all).
+	alarm(3);
+	for ( ; ; ) {
+		len = pr->salen;
+		n = recvfrom(recvfd, recvbuf, sizeof(recvbuf), 0, pr->sarecv, 
+&len);
+		if (n < 0) {
+			if (errno == EINTR)
+				return(-3);		/* alarm expired */
+			else
+				err_sys("recvfrom error");
+		}
+		gettimeofday(tv, NULL);		/* get time of packet arrival */
 
-Not really. RST indicates abnormal termination. Once it has been sent,
-the kernel can (almost) completely forget that the connection ever
-existed. Not only will unsent data be discarded, but so will
-unacknowledged sent data. Any subsequent packets will be met with
-another RST as they don't correspond to a "known" connection.
+		ip = (struct ip *) recvbuf;	/* start of IP header */
+		hlen1 = ip->ip_hl << 2;		/* length of IP header */
+	
+		icmp = (struct icmp *) (recvbuf + hlen1); /* start of ICMP 
+header */
+		if ( (icmplen = n - hlen1) < 8)
+			err_quit("icmplen (%d) < 8", icmplen);
+	
+		if (icmp->icmp_type == ICMP_TIMXCEED &&
+			icmp->icmp_code == ICMP_TIMXCEED_INTRANS) {
+			if (icmplen < 8 + 20 + 8)
+				err_quit("icmplen (%d) < 8 + 20 + 8", icmplen);
 
-> And still looks to me more like an implementation choice than a real
-> consequence of a RFC.
+			hip = (struct ip *) (recvbuf + hlen1 + 8);
+			hlen2 = hip->ip_hl << 2;
+			udp = (struct udphdr *) (recvbuf + hlen1 + 8 + hlen2);
+ 			if (hip->ip_p == IPPROTO_UDP &&
+				udp->uh_sport == htons(sport) &&
+				udp->uh_dport == htons(dport + seq))
+				return(-2);		/* we hit an 
+intermediate router */
 
-The very existence of SHUT_RD is an implementation choice, not just
-its behaviour. The TCP protocol itself necessitates a mechanism to
-terminate transmission, and each direction can be terminated
-independently.
+		} else if (icmp->icmp_type == ICMP_UNREACH) {
+			if (icmplen < 8 + 20 + 8)
+				err_quit("icmplen (%d) < 8 + 20 + 8", icmplen);
 
-While it would be possible to implement an API where close() peformed
-a half-close (SHUT_WR) with no "offical" mechanism for the SHUT_RD
-case, the kernel still has to deal with an application which exit()s
-or crashes.
+			hip = (struct ip *) (recvbuf + hlen1 + 8);
+			hlen2 = hip->ip_hl << 2;
+			udp = (struct udphdr *) (recvbuf + hlen1 + 8 + hlen2);
+ 			if (hip->ip_p == IPPROTO_UDP &&
+				udp->uh_sport == htons(sport) &&
+				udp->uh_dport == htons(dport + seq)) {
+				if (icmp->icmp_code == ICMP_UNREACH_PORT)
+					return(-1);	/* have reached 
+destination */
+				else
+					return(icmp->icmp_code);	/* 0, 
+1, 2, ... */
+			}
+		} else if (verbose) {
+			printf(" (from %s: type = %d, code = %d)\n",
+					Sock_ntop_host(pr->sarecv, pr->salen),
+					icmp->icmp_type, icmp->icmp_code);
+		}
+		/* Some other ICMP error, recvfrom() again */
+	}
+}
 
--- 
-Glynn Clements <glynn@gclements.plus.com>
+
+
+
+
+
+
