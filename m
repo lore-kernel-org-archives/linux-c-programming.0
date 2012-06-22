@@ -1,34 +1,34 @@
-From: Srinivasa T N <seenutn@linux.vnet.ibm.com>
-Subject: Re: Is it helpful for a compiler to optimize?
-Date: Mon, 04 Jun 2012 19:39:07 +0530
-Message-ID: <4FCCC183.1030005@linux.vnet.ibm.com>
-References: <jqf0o8$cj4$1@dough.gmane.org> <jqf201$j23$1@dough.gmane.org>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: nanosleep over multiple processes
+Date: Fri, 22 Jun 2012 12:07:03 +0700
+Message-ID: <CAA6iF_7rzg8o0C5kbNgcRYmgj=t+0As-YQzP7Ddbmaz6yMAqLA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <jqf201$j23$1@dough.gmane.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=ShaiHir+pjdXNkqLSuF5YbQ05pvbz5DuMk0uSxk5iF0=;
+        b=eJazxcrN5DgkdfsMnXjOZudPgo7SFmW0zgnyjQtD5JN7JRQjC4OFY6Tc49NSC0IwKN
+         LKTE5LwdZScgrthIllzRYfq3FA0rTpTqeqlTyDJdPwnChBMRIGhUl5fQFKbMqoqj0EmV
+         yxHPITUkoSZzxXLuvKUQlJqQtX4jhq+E4ol5ewdz78d1e9KpzgT+7kvWhC5uet2W9EzG
+         TPEJKdlyEAYHsoOj2f9dnkAVy7NDjG7pqw8sBh+BQBWAeTAwax4PfUsXlHLoMu+/O/Bw
+         ykV38WALIRD8kOZZ/i8Oi5aWpwnQgYHf7RUcAYXH4IBA3xa+ZtDY83MlNLSQXK/YKaCG
+         eKbA==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Krzysztof <kj@limes.com.pl>
-Cc: linux-c-programming@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Why don't you generate the assembly code for both the versions with -s 
-and -O<lvl>?
+Hi All,
 
-Regards,
-Seenu.
+In nanosecond precision, if I have multiple processes run nanosleep(),
+how possbile they will get the same struct timespec value? both the
+tv_sec and tv_nsec value. Of course the tv_sec (second) is most
+possible, but how about the tv_nsec (nanosecond)?
 
-On 06/03/2012 12:29 PM, Krzysztof wrote:
-> On 06/03/2012 08:38 AM, Krzysztof wrote:
->>
->> void afun(struct st *stp)
->> {
->>     int liv=stp->iv++;
->>
->>     printf("%d\n",liv);
->> }
->>
-> Should be: int liv=++stp->iv; of course for equivalence.
->
+I wan't to create a simple stupid unique id or something like that,
+but with without too much effort. The unique id will be tv_sec +
+tv_nsec.
 
+Cheers!
