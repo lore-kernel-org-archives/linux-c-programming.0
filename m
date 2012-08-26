@@ -1,29 +1,35 @@
-From: Phil Sutter <phil@nwl.cc>
-Subject: Re: chage command source code
-Date: Fri, 24 Aug 2012 14:41:12 +0200
-Message-ID: <20120824124112.GC16743@orbit.nwl.cc>
-References: <CAGZFCEEWj0DvWaqPcQM+Sb+9nm0zL4Vd76Cz5=GNmeEhb-1GtQ@mail.gmail.com>
+From: ratheesh kannoth <ratheesh.ksz@gmail.com>
+Subject: "reboot" detection ...
+Date: Sun, 26 Aug 2012 15:34:03 +0530
+Message-ID: <CAGZFCEFLx9nu4Dcm2iX5bTC+R5GcF63Kp+TW4XUvg8EcGoM5PQ@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-newbie-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <CAGZFCEEWj0DvWaqPcQM+Sb+9nm0zL4Vd76Cz5=GNmeEhb-1GtQ@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=UQbtSFAuIcr9hoOpi+y5JxIB3BgVYcR9NR1hLj83VOI=;
+        b=yNIHSji4CZ2TASX8n7ZzZQBt7xyY2oXCh9uOfwt8f14KrjvbU6x1jOrEvosqFz/UW7
+         iy0upUfX4u92y9/C/gybuq7azV2nWzOavjq9SlPhpxt0lxSj3gEbYOlVKwIvIlE3WocW
+         ejYAT07voSnG50iCU+SaKQY0Fe3Icd5fQzNyFn7qfrnhM4A05VjFTzuZaHjprW0pL+DR
+         FrPShzhuHntp1MXvWJdd2rHYmJqwj393BTKsB9/Z+5HfkVMONhoiWsplEbseabW1LtmH
+         SsasEDf0w+0XNxbAclYx6W914SyzRSfg8zLbZ0mCB5iXnMs6pUrhIFTTSezJO5MwGNoz
+         2zgw==
 Sender: linux-newbie-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: ratheesh kannoth <ratheesh.ksz@gmail.com>
-Cc: linux-c-programming@vger.kernel.org, linux-newbie <linux-newbie@vger.kernel.org>, puri_gaurav@yahoo.com
+To: linux-c-programming@vger.kernel.org, linux-newbie <linux-newbie@vger.kernel.org>
 
-On Fri, Aug 24, 2012 at 05:09:28PM +0530, ratheesh kannoth wrote:
-> Hi,
-> 
-> I found command "chage" in linux. But i would like to from  where can
-> i download the source code  of the command ?
+Hi,
 
-On Gentoo, it's part of the sys-apps/shadow package. Tarball can be
-downloaded here: http://pkg-shadow.alioth.debian.org/releases/
+Is there any way to find that the machine is rebooting.  ?
 
-HTH, Phil
+Say,  i issued  a "reboot" command in one of the Konsole shell. Is
+there any way to detect this trigger in kernel space or in userspace ?
+Any clue is really appreciated .
+
+Thanks,
+Ratheesh
 --
 To unsubscribe from this list: send the line "unsubscribe linux-newbie" in
 the body of a message to majordomo@vger.kernel.org
