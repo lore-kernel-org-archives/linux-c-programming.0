@@ -1,43 +1,51 @@
-From: Shawn <citypw@gmail.com>
-Subject: Introduction to exploit for newbie
-Date: Fri, 14 Sep 2012 16:42:25 +0800
-Message-ID: <CABniQZNGUY-ZPx=vs5yDn07Ak1k8dw8sPeWHArqWT1VY0QLu9Q@mail.gmail.com>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: Pointer to a char
+Date: Tue, 18 Sep 2012 16:29:32 +0700
+Message-ID: <CAA6iF_7=j6J+wOyYcQgwvSO1dG92kVNcJcYXFY7BiiRZ4d0UKQ@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
         h=mime-version:date:message-id:subject:from:to:content-type;
-        bh=kLrt1niDkqCUNRviavn2hyBMFoj6ZvvtRxEqS8tu22M=;
-        b=uacUc7gzCfjESxlHtn/JBC6DkZRDy02Zb4652O0XSOBohBihqns3EJ+u5rGpODfIHI
-         9BlfOWxUHQPLgTSl0YmewNOk41TX4P3bgbD7wtbvJZS/JLSrW9/Hs/dc4RSXZdHZk4ZU
-         SZ+GnM70c3G2lEjn8GbZYXY2jtMNwy21hIRXuBXiUoUG9ztXvLs1XIxA/Jam+JfKRQch
-         ToJhARHqEISL+T9dXdPvg5rM99LkahyvNHMf4eYZO0ulOdFx/8qWp/mYVZaKDyMbqbCA
-         os7aBIe5GMri/u9+SGw8b/fsX5cpdfFvzEXAEqEZci+v5KZnzUDguOMV/dL/+FHJjIBT
-         Y/CA==
+        bh=+aP/NWLKLGa1NgH0xdWpeQ4bTNSKdYUXqg7WLPLMnyw=;
+        b=wOo98UT2V01zPdVEUUueelbDqWDI/8qR1N7+Y4lMx4NUVek2I8Noogck9UpR3mjJy/
+         +5zvzs04lpXQXebLdilpkvukuYWKfpujzb0KiylhmriF1h4W7/B6c1VpLMbvXXZJbo8f
+         5vaIo0PphtDRQk2AAfx8U3zQlDoUGerxLyjmJw9/6j/WaUFK0cMaN6Lbe9qhCHbhe/fv
+         PlMIRYuc6h1MFjzw8fmp2UUmVWfmUoI1D1X+qFPXNuOkufRngeRdMyWbUlCzQ2lF1wRS
+         MFCDcqeYOBl6v4BLWdj/U18P7A2XPDPaMt2WEC3GKQg7lM2D/S9HIOU/jEgKBbH16EVa
+         9HVw==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-hey guys,
+Hi, having coding in C for 3 years but I'm still not clear with this one.
+Consider this code.
 
-I gave a free speech about basic exploit and crackme 101 on GNU/Linux
-at Beijing GNU/Linux User Group earlier this week. The slide[1] and
-video demo[2] were all uploaded. You guys might have interesting about
-it.
+...
+char *p;
+unsigned int i = 0xcccccccc;
+unsigned int j;
 
-[1] slide
-http://hfg-resources.googlecode.com/files/blug-exp.pdf
+p = (char *)  &i;
+printf("%.2x %.2x %.2x %.2x\n", *p, p[1], p[2], p[3]);
 
-[2] demo
-http://hfg-resources.googlecode.com/files/blug-exp-demo.avi
+memcpy(&j, p, sizeof(unsigned int));
+printf("%x\n", j);
+...
+
+Output:
+
+ffffffcc ffffffcc ffffffcc ffffffcc
+0xcccccccc
 
 
--- 
-GNU powered it...
-GPL protect it...
-God blessing it...
+My questions are:
 
-regards
-Shawn
+1. Why it prints "ffffffcc ffffffcc ffffffcc ffffffcc"? (if p is
+unsigned char* then it will print correctly "cc cc cc cc")
+2. Why pointer to char p copied to j correctly, why not every member
+in p overflow? since it is a signed char.
+
+Regards.
