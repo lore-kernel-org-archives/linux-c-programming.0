@@ -1,23 +1,12 @@
-From: Leon Shaw <shaw.leon@gmail.com>
+From: Jon Mayo <jon@rm-f.net>
 Subject: Re: Pointer to a char
-Date: Wed, 19 Sep 2012 16:47:55 +0800
-Message-ID: <CABAhCOTPLJWTwb=Oqnhpz3D8zoW+aAnCYd6quTXYPXhA2beOKQ@mail.gmail.com>
+Date: Wed, 19 Sep 2012 11:09:49 -0700
+Message-ID: <CADWT_cOZYtdm1c4H8TVAn4YYaDaHNp0tPwVh=FCFDN1bjUs9Cw@mail.gmail.com>
 References: <CAA6iF_7=j6J+wOyYcQgwvSO1dG92kVNcJcYXFY7BiiRZ4d0UKQ@mail.gmail.com>
 	<CADWT_cNu9u0Ni9aP0f3YBu6drLavU+ZY+kncG5Ae-BmcOEqk0g@mail.gmail.com>
 	<CAA6iF_4qvxTyJi5Ex8hhURjttv94oVHrNxVzNXUWEEE0GHdcZA@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20120113;
-        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
-         :cc:content-type;
-        bh=6C32WE4eBTJRiNgBdmjvKia+X3+/khOLtMvauF91JZk=;
-        b=rjivG149YQX6nxedFFITH2AvnwA2vfboqdu7WIqFKvoF7lw+KMXHx0w5JFZXC/J9il
-         7RA6zeLXzNcTgRIbJELzgt6+ZeJQN18oZqgm2dMH23t/Iu0LmU/GK8/VD1OjAA9YCAAP
-         4cQa/iiQ9UcZ+E39wBi6wUlkb5zq9NPHTWVfx+IPJzX5QiL6NzA/zYtXljlGaGWmeTVi
-         0MUhocD42+Fx7hu7AZgGcWLOac4wlwm5+TGcvPLNT9Rxj+0CXZJ4bU5/vD7TAJNDcuwN
-         7dtS7obWnoCEEGgZlWogAAMhffouKkJn8lUPZmf2VVc4oNi0qmYpTbLQ7/69QPsKoetS
-         +oFg==
 In-Reply-To: <CAA6iF_4qvxTyJi5Ex8hhURjttv94oVHrNxVzNXUWEEE0GHdcZA@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
@@ -26,7 +15,7 @@ Content-Transfer-Encoding: 7bit
 To: Randi Botse <nightdecoder@gmail.com>
 Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-On Wed, Sep 19, 2012 at 3:59 PM, Randi Botse <nightdecoder@gmail.com> wrote:
+On Wed, Sep 19, 2012 at 12:59 AM, Randi Botse <nightdecoder@gmail.com> wrote:
 > Hi Phil, Jon
 >
 > Thanks, now I'm clear with this, assignment doesn't care with type modifier.
@@ -39,12 +28,6 @@ On Wed, Sep 19, 2012 at 3:59 PM, Randi Botse <nightdecoder@gmail.com> wrote:
 > Both has the same value depending on how them interpreted (is this
 > assumption correct?)
 >
-
-According to C99, when applying integer conversion, "if the new type
-is signed and the value cannot be represented in it, either the result
-is implementation-defined or an implementation-defined signal is
-raised". But most implementation keeps the same memory representation.
-
 > Because,
 >
 > printf("%u", i) will be different to printf("%i", i)
@@ -52,6 +35,30 @@ raised". But most implementation keeps the same memory representation.
 > printf("%u", i) wlll be same as printf("%u", j)
 >
 >
+
+most architectures will work that way. some are a little nutty, but
+standard C allows for implementation defined behavior when you
+interpret a data type the wrong way. (it gets pretty specific about
+signed versus unsigned representations)
+
+I will readily admit that years of FORTH programming has warped my
+mind and I no longer worry too much about signed int and unsigned int.
+I tend to think more in terms of how big a data type is. The 'union'
+keyword is especially useful for dealing with different ways to
+interpret the same sized piece of memory.
+
+float is often the same size as int. so this potentially works on some
+platforms:
+
+float f = 1;
+int i = *(int*)&f;
+printf("%u", i);
+
+it would print some weird number that shows you how dramatic an
+internal representation can differ if you manage to interpret it
+incorrectly. (this trick is often used to dump float values in
+hexidecimal "%x" for debugging purposes)
+
 > Actually why asking this because I often see a pointer to a char* cast
 >
 > Let me show you with this example.
@@ -70,6 +77,23 @@ raised". But most implementation keeps the same memory representation.
 >
 > int process_data(char *buffer, size_t len);
 >
+
+I would have made process_data take a void * instead, so people
+wouldn't have to hack around C's simple type checking with casts.
+
+casting struct a_data* to char* doesn't change the value of the
+pointer. if you ignore compiler warnings it will work without the
+cast.
+
+now inside process_data, the char* type is useful, because the pointer
+math will use sizeof(char) [which is always 1] for calculating
+offsets. while your sizeof(struct a_data) will be around 14 bytes.
+Some people don't like to use void* here, because the compiler will
+not like pointer math done on a void* as sizeof(void) doesn't make
+sense. Old compilers hacked around this by treating it as 1. New
+compilers will prefer that you cast or load the void* into a char*
+(which is how i usually implement these sorts of functions)
+
 > Then if we cast for example a pointer to a_data struct to a char* as follow:
 >
 > struct a_data a;
@@ -81,21 +105,43 @@ raised". But most implementation keeps the same memory representation.
 > overflow)
 >
 
-Actually, whether char is signed or unsigned is
-implementation-defined, though, normally, it is signed. SCHAR_MAX+1 ~
-UCHAR_MAX can be mapped to SCHAR_MIN ~ -1.
-For a pointer that denotes a memory region, what type it points to
-doesn't cause much problem as long as you don't simply dereference it.
-In such cases, void * might be less confusing.
+casting to a pointer won't alter the data. it just changes how you
+would interpreter the data when dereferencing it. if process_data
+doesn't dereference, then there is probably not a problem.
 
-Regards,
-Leon
-
+(also char can be signed or unsigned. in gcc you could use something
+like -funsigned-char to override the default setting. which can
+potentially break a lot of assumptions in your system and library
+headers)
 
 > I think process_data() should be declared with
 >
 > int process_data(unsigned char *buffer, size_t len)
 >
+
+you should use:
+signed char *  - if you need signed
+unsigned char * - if you need unsigned
+char * - if you don't care either way. as long as the pointer points
+to something char-sized.
+void * - if you don't even care about what type it points to. (maybe a struct)
+
+note- this rule is different than signed/unsigned int. int is always signed.
+
+I use char* when dealing with strings, because I won't be using them
+in situations where negative values could be a problem. but one
+terrible issue you can run into is a simple function like this:
+
+int isupper(char c)
+{
+const int upper_table[256] = { ... }; /* UCHAR_MAX is more appropriate here. */
+return upper_table[c]; /* oops what if c is negative, that would be a
+terrible array index. */
+/* we would actually want to cast c to unsigned char, or at least
+check x >= 0 && x < upper_table_len */
+}
+
+
 > this declaration in seem correct and work for me.
 >
 > However, now I'm conceptually understand why this works.
