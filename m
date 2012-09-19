@@ -1,70 +1,60 @@
-From: Duan Fugang-B38611 <B38611@freescale.com>
-Subject: RE: Pointer to a char
-Date: Tue, 18 Sep 2012 10:33:01 +0000
-Message-ID: <9848F2DB572E5649BA045B288BE08FBEF5BD81@039-SN2MPN1-021.039d.mgd.msft.net>
+From: Jon Mayo <jon@rm-f.net>
+Subject: Re: Pointer to a char
+Date: Tue, 18 Sep 2012 18:04:02 -0700
+Message-ID: <CADWT_cNu9u0Ni9aP0f3YBu6drLavU+ZY+kncG5Ae-BmcOEqk0g@mail.gmail.com>
 References: <CAA6iF_7=j6J+wOyYcQgwvSO1dG92kVNcJcYXFY7BiiRZ4d0UKQ@mail.gmail.com>
- <20120918102956.GA14000@orbit.nwl.cc>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <20120918102956.GA14000@orbit.nwl.cc>
-Content-Language: en-US
+In-Reply-To: <CAA6iF_7=j6J+wOyYcQgwvSO1dG92kVNcJcYXFY7BiiRZ4d0UKQ@mail.gmail.com>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-To: Phil Sutter <phil@nwl.cc>, Randi Botse <nightdecoder@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Randi Botse <nightdecoder@gmail.com>
 Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
 
-Thanks, Phil,
-
-It is great for the detail explain.
-
-
-Best Regards,
-Andy
-
------Original Message-----
-From: linux-c-programming-owner@vger.kernel.org [mailto:linux-c-programming-owner@vger.kernel.org] On Behalf Of Phil Sutter
-Sent: Tuesday, September 18, 2012 6:30 PM
-To: Randi Botse
-Cc: linux-c-programming
-Subject: Re: Pointer to a char
-
-Hi,
-
-On Tue, Sep 18, 2012 at 04:29:32PM +0700, Randi Botse wrote:
+On Tue, Sep 18, 2012 at 2:29 AM, Randi Botse <nightdecoder@gmail.com> wrote:
+> Hi, having coding in C for 3 years but I'm still not clear with this one.
+> Consider this code.
+>
 > ...
 > char *p;
 > unsigned int i = 0xcccccccc;
 > unsigned int j;
-> 
+>
 > p = (char *)  &i;
 > printf("%.2x %.2x %.2x %.2x\n", *p, p[1], p[2], p[3]);
-> 
+>
+
+printf (and other var arg functions) don't take char, short or float.
+they take int or double and a few other types.
+those [signed] chars are going to get sign extended when they are
+converted to signed int. (0xcc = -52 )
+
 > memcpy(&j, p, sizeof(unsigned int));
+
+the data at i, pointed to by p has not changed, so this memcpy works.
+The only thing that is weird is how you interpreted the data (in your
+printf above).
+
 > printf("%x\n", j);
 > ...
-> 
+>
 > Output:
-> 
+>
 > ffffffcc ffffffcc ffffffcc ffffffcc
 > 0xcccccccc
-> 
-> 
+>
+>
 > My questions are:
-> 
-> 1. Why it prints "ffffffcc ffffffcc ffffffcc ffffffcc"? (if p is 
+>
+> 1. Why it prints "ffffffcc ffffffcc ffffffcc ffffffcc"? (if p is
 > unsigned char* then it will print correctly "cc cc cc cc")
-
-This is because of the two's complement in which singed absolute values are stored internally. Since %x is a conversion of an integer, signed extension of the passed char happens, which in two's complement means that the leading bit is replicated to fill the upper bits. (0xC is 1100 in binary).
-
-> 2. Why pointer to char p copied to j correctly, why not every member 
+> 2. Why pointer to char p copied to j correctly, why not every member
 > in p overflow? since it is a signed char.
-
-I am not quite sure about what the question is here (maybe caused by the lack of verbs in your sentence). Keep in mind that memcpy() only copies the memory, irrespective of the pointer type passed. Also, sizeof(unsigned int) == sizeof(int).
-
-HTH, Phil
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in the body of a message to majordomo@vger.kernel.org More majordomo info at  http://vger.kernel.org/majordomo-info.html
-
-
+>
+> Regards.
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
