@@ -1,53 +1,23 @@
-From: Ole Bjorn Hessen <obh@telenor.net>
-Subject: Re: strace -p <pid> EPERM after root process changed uid/gid to non-root user
-Date: Mon, 08 Oct 2012 12:43:02 +0200
-Message-ID: <v5y5jhxmef.fsf@shell02.nsc.no>
-References: <v5626yi0v3.fsf@shell02.nsc.no>
+From: Pietro Paolini <P.Paolini@ext.adbglobal.com>
+Subject: use getifaddrs()
+Date: Thu, 11 Oct 2012 08:44:39 +0000
+Message-ID: <56AB56EAD87AF24C803FB693654D7A89C87CA3@adbbexch01.adbitaly.com>
 Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <v5626yi0v3.fsf@shell02.nsc.no>
+Content-Language: en-US
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: linux-c-programming@vger.kernel.org
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
+Hello,
 
+I'm not sure about the mailing list I should ask this.
+I am rewrite a C program in order to make it portable between differents arch and I am a bit confused regarding byte order.
 
-Hi,
+I am getting the list of my interfaces using the getifaddr() functions and it seems return me a list of interfaces with their IP addresses in network byte order instead of host byte order.
+It is a regular behavior or I am wrong and confused ?
 
-I got an email from Celelibi pointing me in the right direction
-(thanks!).
-
-It seems like that it is neccessary to use prctl(PR_SET_DUMPABLE, 1) to
-let strace -p to work. The dumpable flag is cleared in some setuid
-situations.
-
-Linux requires that real uid of strace process matches all of real uid,
-effective uid and saved uid and the real gid must match the real gid,
-effective gid and saved gid. And the dumpable flag must be set.
-
-
---
-
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/prctl.h>
-
-#define UID 9
-#define GID 13
-int main(int argc, char **argv) {
-    setresgid(GID, GID, GID);
-    setresuid(UID, UID, UID);
-    prctl(PR_SET_DUMPABLE, 1);
-    while (1) {
-        sleep(1);
-        write(1, "hello\n", 6);
-    }
- return 1;
-}
-
-
-Kind regards
-Ole Bjorn Hessen.
-Telenor
+Many thanks,
+Pietro
