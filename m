@@ -1,41 +1,51 @@
-From: Lorenzo Beretta <lory.fulgi@infinito.it>
-Subject: Re: use getifaddrs()
-Date: Thu, 11 Oct 2012 19:16:26 +0200
-Message-ID: <k56ut9$ns9$1@ger.gmane.org>
-References: <56AB56EAD87AF24C803FB693654D7A89C87CA3@adbbexch01.adbitaly.com>
+From: Randi Botse <nightdecoder@gmail.com>
+Subject: UDP message boundary
+Date: Mon, 15 Oct 2012 11:50:50 +0700
+Message-ID: <CAA6iF_7Hmu4c2FyGFRUw12QxK=t_tMvyu_xhMUjFGe7fCTxw5Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <56AB56EAD87AF24C803FB693654D7A89C87CA3@adbbexch01.adbitaly.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=SOoHeA9zJwuzFX3mmyOl/FOfInpQsHzfjFS/Gsswi6o=;
+        b=c5kgbmy9deyDoANsSQuN9gIj+73ykwxvsVFVi5Rfnd41wBuTi6K2Io3g+1ZoLYm+0t
+         SRXOxoE4oOLtiNSIvnVftNF94oFe0db6Payc5B0kidy8ET8kqao/ATTyWpM247+9tf6o
+         Pebfh6xOoFHE2O1XFMSzAut+N3deC71T50hbQjLuKfigeHdwVQFBag6aUmAeOFTndPCX
+         z51TUlAoSMWC5v01UR1eGIXtIeyqvXs7QJCQ1GbIXx0H6WsAR6F2PwLt/MeYmzWesuzc
+         rgJJEVFSOWrVB88TENsfjYTuaoldYOIFAvYYOqit7JCaSCWpNJSuSGvwqPHw7SiFDG7/
+         Z4Fw==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: linux-c-programming@vger.kernel.org
 
-On 11/10/2012 10:44, Pietro Paolini wrote:
-> Hello,
->
-> I'm not sure about the mailing list I should ask this.
-> I am rewrite a C program in order to make it portable between differents arch and I am a bit confused regarding byte order.
->
-> I am getting the list of my interfaces using the getifaddr() functions and it seems return me a list of interfaces with their IP addresses in network byte order instead of host byte order.
-> It is a regular behavior or I am wrong and confused ?
->
-> Many thanks,
-> Pietro
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-c-programming" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
+Hi All
 
-Regular -- I'm not sure about getifaddrs, but most (all?) socket 
-functions do the same, so sometimes (as in this case it sems) it's just 
-assumed to be the default.
-In general you can just check the manpage:
-1. from your system -- "man getifaddrs"
-2. from the posix std online
-3. from www.freebsd.org -- its manpages section actually lets you look 
-at manpages from a *lot* of unices (*BSD, linux, solaris, ...), it's 
-very very handy
+When using TCP socket, I loop send() or recv() until ALL the data has
+been transmitted (or error, disconnect, etc.), because TCP socket
+packet is transmitted in stream nature, maybe a byte, bytes or all
+bytes in one transfer.
 
+The UDP socket preserve message boundary which TCP socket doesn't.
+Does this means single call to sendto() will processed by single call
+recvfrom()?, and how about packet that exceeds UDP data MAX size?.
+
+So in code, do I need to loop sendto() or recvfrom() to transmit the data?.
+
+Example codes is:
+
+char packet[100];
+size_t nbytes = 0;
+int ret;
+
+while (nbytes < sizeof(packet)) {
+    ret = recvfrom(socket, packet + nbytes, addr, 0,  sizeof(packet) - nbytes);
+    if (ret <= 0) {
+        /* deal with recvfrom() error */
+    }
+    nbytes += ret
+}
+
+
+Thanks
