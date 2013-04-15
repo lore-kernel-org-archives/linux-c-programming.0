@@ -1,49 +1,45 @@
-From: Nicholas Mc Guire <der.herr@hofr.at>
-Subject: Re: Sending and receiving packets from multiple lines
-Date: Sun, 24 Mar 2013 11:58:10 +0100
-Message-ID: <20130324105810.GA19857@opentech.at>
-References: <CAA6iF_6gtyZb12X7rfm2ckZ08Ff=oRT4_=s86ZFTT-1mzNp3AA@mail.gmail.com> <CAJR2zJ9JTLp3w3amqhRpC7dVZDDszWF7pVTmu1AWaK4TmqzwxQ@mail.gmail.com>
+From: Romain Geissler <romain.geissler@gmail.com>
+Subject: mq_timedreceive on multiple queues
+Date: Mon, 15 Apr 2013 09:48:05 +0200
+Message-ID: <CAF+LTefWbDyLPukDFei7o9LdOjoHrF6=ud5Oyk=P5epPgdz_rg@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <CAJR2zJ9JTLp3w3amqhRpC7dVZDDszWF7pVTmu1AWaK4TmqzwxQ@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:x-received:date:message-id:subject:from:to
+         :content-type;
+        bh=uVUfXLuXCpHcQD3rE1xHVWqHHQ/ODaKgMJkHFxGKwi8=;
+        b=LGMqGpqiBELT+NQidUbAXR9C7wN48eBv03PsrOStzG8FiPREekEbddGMJUR8Da4+Ry
+         8HZBPRACsJcz0R7xWg5scXV3EOX38l2jzNTBn1ENMkxKCHAz+qbXdI5nZy6J27fDd5yt
+         ZETdidmMEPgo6ojmX9txc7M23cyI3LVQQN1kmgwrzbcHGqSN8/mxdXjJBjfH19CdzIek
+         woSQD3o8BYEJkqCA2nXSCCzYeJk3OHS4Dq9I6uOuQg6XbHxZDEKyGtleYOd1Ft/QZz06
+         UAsiCYuECW1iZW7oAAan8/g0snlLtx3UXFRkxStfsVx4j79oeIMNKgyjTeJj0BUawLz5
+         4Jew==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Celelibi <celelibi@gmail.com>
-Cc: Randi Botse <nightdecoder@gmail.com>, linux-c-programming@vger.kernel.org
+To: linux-c-programming@vger.kernel.org
 
-On Sat, 23 Mar 2013, Celelibi wrote:
+Hi,
 
-> Hello,
-> 
-> TCP should reorder packet fragments.
-> If you're using UDP or a custom protocol over IP, you have absolutemy
-> no guarantee about the delivery of packets.
-> 
-> 2013/3/23, Randi Botse <nightdecoder@gmail.com>:
-> > Hi All,
-> >
-> > My network implements interface bonding, aggregate several lines into
-> > one logical line to achieve higher connection throughput and
-> > redundancy.
-> > I'm writing a network application in Linux that basically send packets
-> > to another host outside. I got problem with packet ordering on
-> > destination host, for example. packet1 from line1 should arrived
-> > earlier than packet3 from line3, etc. I want them to be delivered in
-> > correct order. Is this possible? if yes, what is the better way for
-> > doing this?.
-> >
-you can implement that your self of course but it probably would be better
-to use channel bonding to do that and then send all the data over the bond
-device and let the kernel take care of ordering issues - handling all the
-corener cases of losing single lines, notably temporarily is a pain in the but.
+I am currently facing an issue when reading in a set of several posix
+queues (let's say 2 different mqueues) from several processes. I
+currently use epoll_wait to wait for an incoming message on either
+queue on all listening processes, then mq_timedreceive to retrieve it
+from the queue.
 
-Also with the use of bondign devices you get all the benifits of clean 
-firewall and traffic control handling at kernel level - I doubt it is resonable
-to handle this over multiple distinct lines in a meaningful way (with finite
-effort that is...)
+This is an issue when the number of reader process grows, as if I send
+only one message on a queue, all processes are awaken when epoll_wait
+returns, and all processes try to fetch the message. I would like to
+fix this and wake up only one process when listening to several
+queues, removing the useless user/kernel space switchs for the other
+listening processes.
 
-thx
-hofrat
+Is there any way to run a mq_receive/mq_timedreceive on several
+queues, that would wake up only one process? Something more or less
+like epoll, but that also fetches a message from the readable queues
+before returning.
+
+Thanks,
+Romain
