@@ -1,43 +1,38 @@
-From: Benjamin Siegmund <benjamin.siegmund@student.hpi.uni-potsdam.de>
-Subject: Help improving the future of debugging
-Date: Mon, 25 Aug 2014 17:30:44 +0200
-Message-ID: <CADkk7MNgMPWAGpJ3OmjOoE7fydV+-evm3NO=Hk9=CHNyADOmHQ@mail.gmail.com>
+From: Daniel Hilst Selli <danielhilst@gmail.com>
+Subject: Show application performance/errors from pseudo file
+Date: Thu, 16 Oct 2014 16:50:04 -0300
+Message-ID: <5440216C.3010207@gmail.com>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
-        h=mime-version:sender:date:message-id:subject:from:to:content-type;
-        bh=eQcmfi4yar0/BVTisIbCesX5d0XjfDfSsSslE/XMzLk=;
-        b=SNXVFpCUWwNuafD9HuR/vhDMZQp2VyW3dS3CiNTRB5HRkLI4ZO3ta6CbSY0KQ5PA5R
-         /r4PYmM98v82UTC1kZNlIEVSfXlVO9WfB2l+K3AE10DhEv6uHegXDQAHqtHAbEXKPEob
-         NUj9Y1U1GUQEyo3f35+eu2QIHBhRnoRImfWdcxIAU1W1C0woGZp6v5g5mh1539kD1lEg
-         L85xrdMQHkLmNlYU4Fzx8yGxs3p44lx76jL2sPp9KJY9/eAvKeZdrwhImJvBNlhSMqjS
-         v/08470GCyxFOUXN8pnz3uo24QjJNkIx9pvTIYAXBWyvyBJvHho+054Qp4VoK05Gw8N+
-         yHtg==
+        h=message-id:date:from:user-agent:mime-version:to:subject
+         :content-type:content-transfer-encoding;
+        bh=gYQ077BPWD9OBgBSKu0RVSa+88BUmFhFO6syVPzijEI=;
+        b=XFTzgYGvIO8CNskZks0EgZnk577z5K+H47KLVfiyv3LLTyhScZnpeWDRSuQjWSPzan
+         1a7CoiCLw32HrDeWLhNl+AdYVfnNdwgw8L/A7aPXOWyBByb0fp2jMwodizWktx93emqF
+         IEbcss9OXXeX3+ck1UODeIvGEZvFxJ1fK28x9NNy7vfhBCBRCBg1jVso6TN0Kt6c1K5W
+         lS68bi7AUxOgsHHgcx3c/En8qVGXAlPOZbTal4ORutBGIx6xK3RBnPKXxAS3Fz3E/fJB
+         OF8suto1axB7uIEaV2nfxx5psDoprOBhqR0sQfMUGFn9sEQvdipS5FreWYAJ6tNMef7v
+         SO+A==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
 To: linux-c-programming@vger.kernel.org
 
-Dear C Developers,
+I'm writing a new application and would be nice to have a pseudo file showing its status, just the way that procfs does with kernel.
+I'm looking for sugestions, I want to `cat' files contents and have something similar to /proc/meminfo
 
-since 1974 researchers and software developers try to ease software
-debugging. Over the last years, they created many new tools and
-formalized methods. We are interested if these advancements have
-reached professional software developers and how they influenced their
-approach. To find this out, we are conducting an Online Survey for
-Software Developers. From the results we expect new insights into
-debugging practice that help us to suggest new directions for future
-research. So if you are a software developer or know any software
-developers, you can really help us.  The survey is, of course, fully
-anonymous and will take about 15 minutes to fill out. Feel free to
-redistribute this message to anyone who you think might be interested.
-The survey can be reached at:
+First I think using named pipes, but, AFAIK, pipes would retain data writed until someone read it, what I thought is a kind of read
+hook that only show data when asked for. Here are a few requisites,
 
+- Don't retain data
+- Don't generate disk I/O
+- Vanish when application stops
+- Work with a simple cat or something similar..
 
-http://www.uni-potsdam.de/skopie-up/index.php/689349
+With that in mind I think about using unix domain sockets.. it seems to fit all requisites, for
+the fourth requisite I could use netcat, that is almost cat,
 
-
-Thank you for your interest,
-Benjamin Siegmund
+Cheers
