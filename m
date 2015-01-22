@@ -1,7 +1,7 @@
 From: Hubert CHAUMETTE <hubert.chaumette@wanadoo.fr>
 Subject: Re: sizeof *data, when data isn't initalized, is that right?
-Date: Thu, 22 Jan 2015 19:39:47 +0100
-Message-ID: <54C143F3.7020704@wanadoo.fr>
+Date: Thu, 22 Jan 2015 19:38:44 +0100
+Message-ID: <54C143B4.4070104@wanadoo.fr>
 References: <54C13F4A.2020404@gmail.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: QUOTED-PRINTABLE
