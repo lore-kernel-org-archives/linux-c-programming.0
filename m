@@ -1,71 +1,50 @@
 From: "Daniel." <danielhilst@gmail.com>
-Subject: Re: [EXTERNAL] Is defined() macro portable or GNU only?
-Date: Thu, 1 Oct 2015 10:11:30 -0300
-Message-ID: <CAF3SDA4B=sKK_smuRspwQY6D19XWAgCRn89qWt-vW71y51TBdQ@mail.gmail.com>
-References: <CAF3SDA7TQOz9Vzk+iVzLn2SgxW22R-jARjJ+yzvYkSYXnzzM+A@mail.gmail.com>
-	<D231AF64.FCEF%mlcurry@sandia.gov>
+Subject: Does __attribute__((__packed__)) aplies to types or variables?
+Date: Wed, 21 Oct 2015 15:56:29 -0200
+Message-ID: <CAF3SDA6FP6=uqs-37_iTH0Qf2hS5Eh5ONVUVcZqEtc3AQ69cfA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
-        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
-         :cc:content-type:content-transfer-encoding;
-        bh=OTng2DJQJfrEFBsoGQylPzVo89IKaGrQxB/rxM0zbhY=;
-        b=lUU09vHYdDL7/wPiKq+M+ADRo/oXwINHVjZveMtNEkW0knXbNc4TVIIp6d0atcIMDa
-         OeD0iZSuZ7/Rm/IE9IV2Wm6TmCdfpGjbm0i56QQ2/OZ/GlQG/60CuNZbRhAiRsq1JAsF
-         NL2hmu8sFQvZvcHqzfOQpfeoUWIofazkqFnCabJCmZo05MLhj1bKrQNpsOTSI46UDRBv
-         RSnxUSavsoZgGWZIGkgAoZm0ktW1GJsrZs6Tv/HCufMuuB8tYl/+PqHXk7PVtBM2sMhc
-         ufkL5Rc3NpdhS1voKyxhR2c0ObqtI3KqzgGHXqvjo8zPMTqW0GzPP/YQFzWopBWF1uAr
-         Poew==
-In-Reply-To: <D231AF64.FCEF%mlcurry@sandia.gov>
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=oDd1NRpFWSg6/O3a13M3Ogm3bwIlmj+IOXenaoJqo9I=;
+        b=vUgCTX8Vs/3wnJDcsTdl8eZlBVkuJxpbMGkbFILiKEJ2UaVXOsYU7Nt1Fj1qV9uhpK
+         r1mU7+gTThRcfAnffMgGFtK2GQ+gD+ryoYhQOYSlLJCqa4odiAhbF9LxdtHKDWyqlhCn
+         g24VBl0X/xSC3eKtr83lW9fQkt9SBLcVb5Wus6PAWe9aJhTvyD1QnPY9kh+nZFCMjLXI
+         xD9yzM4tpNn3DStC1QQY9eBvy6XF7X/mmZvM/psRusZiRg1wo5KKirxqUwLbCQ+b08mp
+         cJvYNyIyIe+s8FNrq15x9TOjSJmZ30DkacZeYjUup41afLCmmD7fO0BLfsys3xk7ZM49
+         Xg6A==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-To: "Curry, Matthew Leon" <mlcurry@sandia.gov>
-Cc: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-Thank you Matthew!
+Suppose that I have a declaration:
+
+struct __attribute__((__packed__)) foo {
+  char ch;
+  int number;
+};
+
+Will be any variable of this type be packed?
+
+The real world thing is: I have a code that come up from 8bit world,
+with a lot of lots of chained structures that are transferred throght
+some radio frequence module, I need be sure that all this structs have
+no padding so that they can be transferred as they are to radio. To
+achieve this I've
+putted __attribute__((__packed__)) to every struct and inner struct
+that are sended through RF,
+but I read at some StackOverflow post that packed attribute aplies to
+variables not to types,
+so I came here ask to experts. Is that true?
+
+At gcc manual I found Type Attributes and Variable attributes, so I'm
+assuming both exists how differentiate from one to another?
 
 Regards,
-- dhs
 
-2015-09-30 18:27 GMT-03:00 Curry, Matthew Leon <mlcurry@sandia.gov>:
-> It=C2=B9s part of ANSI C, and is described in K&R.
->
-> Matthew
->
-> On 9/30/15, 1:25 PM, "linux-c-programming-owner@vger.kernel.org on be=
-half
-> of Daniel." <linux-c-programming-owner@vger.kernel.org on behalf of
-> danielhilst@gmail.com> wrote:
->
->>Hi all,
->>
->>I used to check definitions with #ifdef, but in cases where
->>multiple macros are checked I use #if defined(foo) && defined(bar).
->>Is this defined() check portable/standard? Or is some kind of
->>extension added by GCC?
->>
->>Regards,
->>- dhs
->>--
->>"Do or do not. There is no try"
->>  Yoda Master
->>--
->>To unsubscribe from this list: send the line "unsubscribe
->>linux-c-programming" in
->>the body of a message to majordomo@vger.kernel.org
->>More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
-
-
-
---=20
+-- 
 "Do or do not. There is no try"
   Yoda Master
---
-To unsubscribe from this list: send the line "unsubscribe linux-c-progr=
-amming" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
