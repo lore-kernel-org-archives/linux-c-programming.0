@@ -1,82 +1,64 @@
 From: "Daniel." <danielhilst@gmail.com>
-Subject: Re: How to check if char pointer is a constant!?
-Date: Fri, 8 Jul 2016 11:01:02 -0300
-Message-ID: <CAF3SDA55SWjDTU7ugw5eREirooR1VisrqSFx5mAejpeg1tpXGQ@mail.gmail.com>
-References: <CAF3SDA6G32Kub4rK5BSmx7TkWoXnGWW2ESyHnM_+3t-naVPDww@mail.gmail.com>
- <20160707202621.GP620@orbyte.nwl.cc> <CAF3SDA5-L--FOXe-AzaRf7QE0Qx+XAuLeWNnFN-96smSEYJ7GA@mail.gmail.com>
- <20160708125931.GQ620@orbyte.nwl.cc>
+Subject: Hiding inter-library dependencies.
+Date: Tue, 16 Aug 2016 11:14:16 -0300
+Message-ID: <CAF3SDA7nNWNCrfY3MT8PfU6kU7E8JjLnPXcohJL896_o3hGWcQ@mail.gmail.com>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to;
-        bh=yHXT9D1nfVRleCz9gYNCGJH5G2VFoV7X8XYjipRrzrw=;
-        b=mhSJ8Tv3tYoRYS5wT9x838yPZiFtCTchVBmzKpG7Q3ZNF16VKMlyseu6hEzwtHIBCO
-         imM7XSj+rYWVLrJ43wpS1MxP5+HKjHBmrqOdKQJ/6pMUv9BwOzqKiwEgcvI1sTl4t/NL
-         a70hx4263Ld/iDDiykSICwnTVaOIUrrf9m3re0kCDNdyWhTDr0yFHPVIogk7uWQhTkId
-         vjLXeTAoQIB/yc2OnR8I2sphj6vQ5+LGwSV+hy5GUXpVE5+zr/MnQgz8cPIYXjbNtXmH
-         aPlMhWf2McnEqY9tJ25sI1jL4ntId/H0ZSxU3eMbNeD4WcXISGlDDthZk9DloKho+MGm
-         afvQ==
-In-Reply-To: <20160708125931.GQ620@orbyte.nwl.cc>
+        h=mime-version:from:date:message-id:subject:to;
+        bh=VV5ygzfcb/qz/1DTnlb4KQHr3+FBPr0tACUfg6mZ+e4=;
+        b=ryP3sfKo7G0sEcw5XxIH6UV9z/OznalaXRc0YP72DJW2o88qB2/kc5e9bbpxDeWeiK
+         DxhBHCv+MkeXE3qZstl/Xef0oJsYFg/dV0VuAtVmzWfysjOoM9lZl5Q+FsT6Bf5AmOlF
+         mTfbw/u6R15gIWaQVCb0JoxdL3TmEtMRTFuY5ZzHLMyaSr0GsURR9Oy4f48tXKMTtLNO
+         I9vVtlIWwcgwwCqdKLvXt4sfBezO8zNXvYS8rPll1BGO86Xre4I59S1wLCq8kBCiQO9C
+         3AjzRAhxLZU2yTH1KUElzi3r22O2Mv1/qSIOExT9q8/gpPHBHV1msV1Zv+XIwXgVqQF1
+         XUsw==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Phil Sutter <phil@nwl.cc>, "Daniel." <danielhilst@gmail.com>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-Hi Phil,
+Hi everybody!
 
-Yes I could use strduped strings to avoid this case but at this point
-I just want to
-have sure that if I do that mistake in future (trying to change a
-const str *) the compiler at
-last warns me about it :). In the real case this function is called
-with a buffer from a readed
-file so that it's first parameter aways point to valid lvalue data,
-but I (or other) may change the code
-in future and try to call it with string constants, I would like to
-prevent my self from doing
-that and if it happen have a better clue of what happen. Your anwser
-apply just as I expected.
+Suppose that I have 3 shared files,
+and two target machines M1 and M2.
+
+libA.so, libB.so and libC.so.
+
+libB.so is linked against libA.so only when compiled
+to M1, but not in M2.
+
+libC.so is aways linked against libB.so
+
+So we have:
+
+M1: libA.so <- libB.so <- libC.so <- executable.
+M2:                   libB.so <- libC.so <-executable
+
+I want to hide libA.so need while linking libB,
+so that libC has not to pass -lA to linker depending
+on machine. And to
+hide libB and libA while linking to libC, so that
+the user need to pass only -lC. Is that possible?
+
+For example, linking in M1 would be:
+cc -fPIC -shared -o libA.so libA.c
+cc -fPIC -shared -o libB.so libB.c -lA
+cc -fPIC -shared -o libC.so libC.c -lB (no need to -lA is the point here)
+cc -o executable executable.c -lC (no need to -lB -lA is the point here)
+
+And for M2 would be:
+cc -fPIC -shared -o libB.so libB.c
+cc -fPIC -shared -o libC.so -lB
+cc -o executable executable.c -lC
+
+In both cases (machines) the compilation of executable and libC
+is done by the same command line.
+
 
 Cheers,
-
-2016-07-08 9:59 GMT-03:00 Phil Sutter <phil@nwl.cc>:
-> On Fri, Jul 08, 2016 at 09:33:03AM -0300, Daniel. wrote:
->> Hi all thanks for the reply.
->>
->> I think I wasn't clear. Here is a working example: http://codepad.org/0SUG6IcQ
->>
->> The function get_pair_from_string() should I) remove trailing spcaes, II) return
->> the address for key and value using it's last parameters. The problem is that
->> since I modify the first parameter calling with strings constants generates a
->> segmentation fault. This is because strings constans aren't modifiable. I wan't
->> to have better hints when this happen than just "SEGSEGV". I think that the
->> -Wwrite-strings is what I was looking for :D, thanks Phil!!!
->
-> Glad I could help.
->
->> John, I'll be in production, but not at this time. Luckly, that
->> function is file scoped
->> so I don't have to bother that much. Still I like to avoid the crypt
->> "SEGSEGV" error
->> message as much as possible. Usually I assert for NULL pointers and give a nice
->> error message but this case is trickier. I'll take Phil advice and use
->> -Wwrite-strings
->
-> Calling 'SIGSEGV' an error message is a slight underestimation. Actually
-> your program simply crashes. The gcc warning to activate will just help
-> to keep your code sane, not improve run-time behaviour.
->
-> If you want to modify strings no matter whether they are constant or
-> not, strdup() them into a local variable and work with that. Especially
-> since it's just for parsing as your example shows. Just keep in mind
-> that you will have to free the duplicated string at some point,
-> otherwise you will have a memory leak (which at some point will lead to
-> an equally cryptic message as your segfault did).
->
-> Cheers, Phil
-
 
 
 -- 
