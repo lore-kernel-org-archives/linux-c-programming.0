@@ -1,49 +1,32 @@
-From: "Daniel." <danielhilst@gmail.com>
-Subject: Chaining signals
-Date: Tue, 6 Sep 2016 15:35:06 -0300
-Message-ID: <CAF3SDA5U-JgzWPMww=yNjXkPeaLOvrTSr8HjchyZdj-LFqdreg@mail.gmail.com>
+From: =?UTF-8?Q?Marcin_G=c5=82ogowski?= <marcin.glogowski@interia.pl>
+Subject: How to disable application run
+Date: Tue, 4 Oct 2016 11:51:20 +0200
+Message-ID: <88e789ba-91be-e2ac-3bf4-f771052be870@interia.pl>
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20120113;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=9Q6fnL13ialbft3x+UG3y1650lNKf8u55cmvzJOPamQ=;
-        b=B2xyD5Q6sH7jlrGb/Ode/0su8WZHzfLSqCj2m1Uw9CrVpx8cmM4IDl1aHJImTJ2hRF
-         WtLhoMeTqCMF6SwFyuUO++JAYO1T3xBXXfTAtMHXrOfaCJ6gCUEDBIrwJz540exIdfRU
-         LtiKwCD1MGqraN2wFMuQe6qE2Q/7q50x569wq8voO4tqWe1GDF8ueW1Pv0gPa9yvpNzR
-         WNdiWD/rjUnz6UneqjMLMtbRBmJJz1a9s64uN49dmlYZzasEJ/MZOMw6XP8hWX946Ecc
-         RJfbDf0xZawgLivzD5qqbvmph+cBWa/zP8k15ZyjeMacK0t3oaXp4wiOl6cWNjKjSblc
-         wJLw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=interia.pl;
+        s=biztos; t=1475574682;
+        bh=rnFKfJ/CLNCitFIxeGoauZxpqnf1pun8kvkOYPi/oZA=;
+        h=X-Interia-R:X-Interia-R-IP:X-Interia-R-Helo:To:From:Subject:
+         Message-ID:Date:User-Agent:MIME-Version:Content-Type:
+         Content-Transfer-Encoding:X-Interia-Antivirus;
+        b=uvZHrKp+BWJlNs1aFwmCh8u2/ysUlYM/9NAVVUkphaCKhSICVmQC8Z4x7oKF3fDQ8
+         D04g3L5TQYxwjlmqnPXXFgGByZBIS+h14lK+RkknqyJSIFi5lPZQ1palmxmDrp7YCQ
+         dbaSBsIgSBZew/4LNnCCoQYqF7/m7ILtZ8MVv4WE=
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"; format="flowed"
+To: linux-c-programming@vger.kernel.org
 
-Hi everybody.
-
-I'm dealing with a library that may be used by JNI/Java code. That
-library setup some signals. The problem is that the JVM set some
-signals too.
-
-If the JVM signal handlers are setted before my, I want to be sure
-that they are called after my handler. I'm using sigaction() function,
-passing a static struct sigaction to the third parameter and in my
-handler I call oldsigaction.sa_sigaction(1th, 2th, 3th) where 1th 2th
-and 3th are the parameters that my handler received? Is that right!?
-Is that safe? Here is some sample code:
-
-PS: Doesn't take the backtrace stuff too serious, remember is just an
-example, focus on sigaction calling.
-
-http://pastebin.com/ejmYM4T6
-
-The other option is, if my handler is setted after JVM's handler, so
-that I need to be sure that JVM will chain its signals to me. I'm
-willing to use libjsig.so as said here:
-http://www.oracle.com/technetwork/java/javase/signals-139944.html
-
-
--- 
-"Do or do not. There is no try"
-  Yoda Master
+Hello guys,
+I have to create Linux based solution to prevent running applications 
+from the blacklist.
+How can I achieve this? Which part of the Linux kernel is needed to 
+achieve this?
+I think it would be nice to create block device which will store black 
+and white list, but I have no idea what part
+of the kernel is responsible for this functionality.
+It is not possible to kill the application after run - I have to find 
+nicer solution.
+Thank you much, regards CiN
