@@ -1,82 +1,87 @@
-From: Carsten Peter Rasmussen <mail@cprasmussen.dk>
+From: Celelibi <celelibi@gmail.com>
 Subject: Re: Where to start C-programming open source?
-Date: Sat, 4 Mar 2017 10:42:08 +0100
-Message-ID: <d1155cda-f074-7e84-fd01-981e39ed6885@cprasmussen.dk>
+Date: Thu, 9 Mar 2017 01:39:07 +0100
+Message-ID: <CAJR2zJ9=i_o7sNVAeSwxEts9B=G3PjX=BsPpidVvbOUZbO+-Rw@mail.gmail.com>
 References: <ba6df9f8-661a-e935-2e81-c998fe4a4aa6@cprasmussen.dk>
- <CADWT_cPQRtoGc2zF-CDqX5HQvZvQARbi2FDgBdtGwdoTBhGy-Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gnusys.onmicrosoft.com; s=selector1-gnusys-dk;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=wzUS9LNACaXAcM9syxPaC9QStIoUrhVXX9FNrE+sa8Q=;
- b=eG/BmKGSLrDXTi4bF2+RJGfem3MwaKbbNMPyf1SbVEH1QNuFnMUVbDnlPfEBLh0eOOVn3wDzMvTBmH1hCkIWNqeaCzPocZyFC39glC2eATtgW3IV8VgvCUS+p2Lx5UZivv9PeMijp112c9a+Z9adTsCO8mQv2D5eTa+jeG3R3ao=
-In-Reply-To: <CADWT_cPQRtoGc2zF-CDqX5HQvZvQARbi2FDgBdtGwdoTBhGy-Q@mail.gmail.com>
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=5pQDFySden4hLRhTE+rRgYTxysKLiHA70k8MicSN5tY=;
+        b=PtUpSCedRl2uxsHKe1pZrOvThsnhcEeCiJP/TfFyuoRxl2Zg+AaGbPAxebwoJaalKd
+         dCmqRMeHTtW+u+sjp+0dwuBw4+9anMWARTfXscUfpqH5QJ6lF0i335qIohvKVVH4uysH
+         qV6R7Q4M7HaLQ8B/KSYRwiykHCPxO/8mnv+V/zji1mHqNykDjMLk7rWH/aUTcXGr8Kse
+         3i7rihMnZ+2MrkxTN4Uk2OsoAJhvSGDNtMsg8tnsYK2seBONaDvNbfHVwWhhpS9CQOjz
+         h2VzkQNJYYRRQ5NvI8dVXmEYNNXAzxebg41lOIjEvwCQq6IVIhPzx5ku5v3vDwQZ0SKm
+         b/Qw==
+In-Reply-To: <ba6df9f8-661a-e935-2e81-c998fe4a4aa6@cprasmussen.dk>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"; format="flowed"
-To: Jon Mayo <jon.mayo@gmail.com>
-Cc: linux-c-programming <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+To: Carsten Peter Rasmussen <mail@cprasmussen.dk>
+Cc: linux-c-programming@vger.kernel.org
 
-Thanks for the replies!
-Both the Fuzix and xv6 projects look like a lot of fun, think I'll start 
-there. The problem with for instance Samba is that it feels like jumping 
-on a high speed train because the project is so old and well maintained.
+2017-03-03 17:05 UTC+01:00, Carsten Peter Rasmussen <mail@cprasmussen.dk>:
+> Hi C-programming list
+>
+> It's awfully quite here, I wonder if I'm even in the right place!?
+> I have been a programmer for many year, and dabbled in many different
+> development areas, but I really want for participate in a open source
+> project by developing C. I have looked over a number of mailing lists
+> like Git, Samba, Vim etc. And every time I think "Wow, these guys are
+> really smart, this is out of my league" - so how does one start?
+>
+> Any comments and advice on getting started in OS with C is greatly
+> appreciated.
+>
+> - Carsten
 
-Den 03-03-2017 kl. 20:48 skrev Jon Mayo:
-> Find a project that you use every day that you think you could improve
-> or has a bug that you are able to reproduce. Go to the project and fix
-> one of their bugs, submit the patch, and you're in.
->
-> If you want to do OS dev, there are lots of sites for that. osdev.org
-> has lots of tutorials and guides on their wiki. Writing an OS from
-> scratch can be a good way to improve your skills, but it takes a lot
-> of work before the OS is substantial enough to be of any use. Most OS
-> projects are learning projects that are abandoned after the creator
-> has gotten what they wanted out of the experience.
->
-> Finding an OS project and seeing if you can get it up and running and
-> maybe add to it can be rewarding. Linux of course is one that can be
-> fun. But there are others like Prex (a real-time OS), xv6 (a minimal
-> unix kernel for learning & experimentation, very good docs), Fuzix (a
-> unix-like for really low-end CPUs without MMUs, including 8-bit
-> systems), and there are hundreds of other possibilities.
->
-> For me, writing something for xv6, like a VGA driver, or porting xv6
-> to Raspberry Pi seems like fun.
->
-> For totally gonzo sort of projects, something more challenging would
-> be to port Fuzix to a new piece of hardware. Dragonball68K(Palm IIIx/V
-> & Alphasmart Dana) could use some love for example.
->
-> (ps - sorry, I accidentally sent this out in HTML mode, resending a
-> cleaned up version for plaintext)
->
-> On Fri, Mar 3, 2017 at 8:05 AM, Carsten Peter Rasmussen
-> <mail@cprasmussen.dk> wrote:
->> Hi C-programming list
->>
->> It's awfully quite here, I wonder if I'm even in the right place!?
->> I have been a programmer for many year, and dabbled in many different
->> development areas, but I really want for participate in a open source
->> project by developing C. I have looked over a number of mailing lists like
->> Git, Samba, Vim etc. And every time I think "Wow, these guys are really
->> smart, this is out of my league" - so how does one start?
->>
->> Any comments and advice on getting started in OS with C is greatly
->> appreciated.
->>
->> - Carsten
->> --
->> To unsubscribe from this list: send the line "unsubscribe
->> linux-c-programming" in
->> the body of a message to majordomo@vger.kernel.org
->> More majordomo info at  http://vger.kernel.org/majordomo-info.html
->
->
->
+It indeed is quiet. But there are still some readers. :)
 
--- 
-KH
-Carsten
+I'll give an answer with a more top-down approach.
+
+C is not the simplest language to use. It's a bit low level, so you
+have to think about a lot details in addition to your main high-level
+goal. (It's not as bad as C++ though.) You have for instance to always
+keep in mind what variable is a struct, a pointer or an integer so
+that you can use it correctly.
+
+If you come from higher level languages, I'd advice against starting C
+with OS development. OS dev is hard and mistakes can be a real hell to
+track. Believe me, even when you have qemu + gdb, you'll miss the
+times when you had a "segmentation fault" instead of a still running
+program, you'll miss the time when the hard-to-get-right portions of
+code were hidden inside syscalls.
+
+Even if you're interested in low level stuff, I still think you should
+first follow the rules, then understand the rules, to finally break
+the rules.
+So I'd say to start with a toy project, just to get used to the
+syntax, like a tic-tac-toe for two players, and replace one of them
+with a brut-force AI. Nothing fancy.
+Then start playing with the facilities provided by the kernel, like
+files (open, seek, read, write, close), processes (fork, execve,
+shared memory), signals, memory allocation (mmap, malloc/sbrk), pipes,
+sockets, threads.
+In the meantime you can try to contribute more-or-less small stuff to
+projects you use. You should make an habit of reporting the bugs you
+find in the software you use if you're not doing it already. And when
+it's not too complex for you, you could go all the way to propose a
+patch. I learned a lot by reading other people's code.
+And when you're pretty ok with those, you can finally take a leap of
+faith into OS dev. But OS dev isn't only about rolling your own
+kernel. You can contribute to existing kernel/OS projects or
+contribute to side projects like bootloaders.
+
+An answer wouldn't be complete if it didn't mention things like
+arduino (or other boards) where you can write some code to drive the
+hardware. Much like a kernel, except that the driven hardware is
+usually pretty simple, and you usually don't provide high-level
+abstractions like processes or file descriptors. That's the other end
+of the spectrum.
+
+
+Celelibi
