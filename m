@@ -1,100 +1,75 @@
-From: Trevor Woerner <twoerner@gmail.com>
+From: Mahavir Jain <mahavir.coep@gmail.com>
 Subject: Re: Where to start C-programming open source?
-Date: Fri, 10 Mar 2017 20:30:27 -0500
-Message-ID: <CAHUNapQQ7tZFxsQabxZTnL98u+Lw8Bi1mYg_zoYzxkbiXLiBeA@mail.gmail.com>
+Date: Wed, 15 Mar 2017 17:53:25 +0530
+Message-ID: <CAA4mPKCUF_G5ChTAn2ytndBLxiv0R5TC9DcGoXxgMCNtf1b0vw@mail.gmail.com>
 References: <ba6df9f8-661a-e935-2e81-c998fe4a4aa6@cprasmussen.dk>
- <CAHUNapQzbCtJySWco1R+2FUutuBPFO2i2h9BtYn9ktNgBrQ9OQ@mail.gmail.com>
- <0d56ba3f-3880-2793-28b5-70ac13920d29@cprasmussen.dk> <CAHUNapQyZPT1M6+dpYVURMqWxSz_5RLtEpbE8YgWv34SrghaiA@mail.gmail.com>
- <CAGp4Jm74GO4bGa6rz8_GLECPEf5swSAKd7NdmxAbv2nXLc8gaA@mail.gmail.com>
+ <CAHUNapQzbCtJySWco1R+2FUutuBPFO2i2h9BtYn9ktNgBrQ9OQ@mail.gmail.com> <0d56ba3f-3880-2793-28b5-70ac13920d29@cprasmussen.dk>
 Mime-Version: 1.0
 Return-path: <linux-c-programming-owner@vger.kernel.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:in-reply-to:references:from:date:message-id:subject:to
          :cc;
-        bh=SvPIVzKMQhBj6IyeLRozP4piAkeNvVlsZCbYnadcxzw=;
-        b=InzfjKptz2qriN/0jKJS14KAs+b3+RjP02sqV9pK+/jFRpQ7LFDuB9HDj8MHNwvyj2
-         gbkZXijphIPwapEHwLPOIlTWwtonNYANYWE7WucTsSS7C5bePBHz0BKXM4942FwW6zzB
-         ZpKhVtyLLEeg6rI98pmpelIBYqeQpLvSR5OiW+DXhYxyrpWknTYK993mWxjU5IX3UJoy
-         LN55M1v2vFBTRZtr9eS740f3YMUO/YvXLkmpSChPjXoenyTIDe+x0FOtGbijumV4rjrc
-         McOX+g7acybjJTMEWRfvwRWrgdbqWSHYn3iGSqBDzewdKUaCxlDzZlYrCF2nbZ1CX/3x
-         Aizw==
-In-Reply-To: <CAGp4Jm74GO4bGa6rz8_GLECPEf5swSAKd7NdmxAbv2nXLc8gaA@mail.gmail.com>
+        bh=021vIQp9hKE0UhMIBEyRcWz+ZlGU1myLgJkQDr0vXSQ=;
+        b=SVUw30Bt0uzJKcDU44DzYFAE5G8HoqL4hux97XVdCogFzBf87GXzsJp1LZCOgA7xQO
+         HmOaqV6dsWMNtHEx7tsLALnMaGy4XE3E/DMeoepjRiAriRKzgA08oRYjm5kvTV7ctdPy
+         7dE4RVY3xcz1ae/ib1pQIhQAL9rI1y+F4vau2zxvJl86+d2iyI7uBDTP1uQJSv1vWyx+
+         TlcgRF5UOiAZhpTA3t0A6gZAXMgjohKP/tvGFiXgZoBBzFfnr+I1M17kbp+OUd2SeeFw
+         3MMZOwqfizw9iHlslqWDuB0qiGUmxrfle9/mUqSXpA7GIH45QAUm+gLgOvSXBIfUdmnh
+         adsw==
+In-Reply-To: <0d56ba3f-3880-2793-28b5-70ac13920d29@cprasmussen.dk>
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-To: Dmitrii Galantsev <fenixxxzzzz@gmail.com>
-Cc: Carsten Peter Rasmussen <mail@cprasmussen.dk>, "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+To: Carsten Peter Rasmussen <mail@cprasmussen.dk>
+Cc: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
 
-On Fri, Mar 10, 2017 at 10:31 AM, Dmitrii Galantsev
-<fenixxxzzzz@gmail.com> wrote:
-> On January 20 all queues for the challenge were empty.
-> The grading scripts were improved as well so you can go through the
-> challenge a bit faster than earlier.
-> Here are the stats from the semi-regular update email on January 20 2017:
+On Fri, Mar 10, 2017 at 3:00 PM, Carsten Peter Rasmussen
+<mail@cprasmussen.dk> wrote:
 >
-> Task Number    People    Queue Length
-> -------------------------------------
->   Finished        137
->         20         45              0
->         19         24              0
->         18         25              0
->         17         13              0
->         16         58              0
->         15         14              0
->         14         14              0
->         13          7              0
->         12         11              0
->         11         66              0
->         10        112              0
->         09        283              0
->         08         48              0
->         07         68              0
->         06        374              0
->         05       1140              0
->         04        757              0
->         03        471              0
->         02       1211              0
->         01       1781              0
-> -------------------------------------
-> Active:          6659
-> Duplicates:        14
-> Removed:        11540
-> ---------------------
-> Total:          18199
+> Den 10-03-2017 kl. 01:23 skrev Trevor Woerner:
+>>
+>> On Fri, Mar 3, 2017 at 11:05 AM, Carsten Peter Rasmussen
+>> <mail@cprasmussen.dk> wrote:
+>>>
+>>> Any comments and advice on getting started in OS with C is greatly
+>>> appreciated.
+>>
 
-Here are the stats I received 3 days ago:
+[Resending in plain text mode]
 
--------------------------------------
-Task Number    People    Queue Length
--------------------------------------
-  Finished        146
-        20         51              1
-        19         21              0
-        18         28             11
-        17         11              0
-        16         66              1
-        15         15              2
-        14         18              4
-        13          7              1
-        12         17              4
-        11         76              5
-        10        129              0
-        09        269             12
-        08         72             32
-        07         66              2
-        06        371             26
-        05       1165             14
-        04        765             21
-        03        472              5
-        02       1181              1
-        01       1743             25
--------------------------------------
-Active:          6689            167
-Duplicates:         0
-Removed:        12148
----------------------
-Total:          18837
+I was looking for similar resources earlier, mostly for learning
+purpose, I could gather following information,
 
-ymmv :-)
+For minimal and baremetal OS development on x86,
+http://www.osdever.net/bkerndev/Docs/gettingstarted.htm
+
+For little advanced OS development which includes paging and
+multitasking support (but in crude way),
+https://web.archive.org/web/20160311205056/http://www.jamesmolloy.co.uk/index.html
+
+Above has some known issues (beware and good to chase),
+http://wiki.osdev.org/James_Molloy's_Known_Bugs
+
+Xv6 (as already suggested) is rather more comprehensive with very good
+documentation,
+https://pdos.csail.mit.edu/6.828/2016/xv6.html
+
+>>
+>> http://eudyptula-challenge.org/
+>
+> Looks interesting, is it still working? I just send a plain-text email, but
+> no reply.
+>
+
+This is also good starting point, but requires good patience, I
+dropped from 6th stage as responses were extremely slow.
+
+I could get to below with above references (basic but functional),
+https://github.com/mahavirj/tinyos
+
+Best luck!
+
+Thanks,
+Mahavir
