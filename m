@@ -1,39 +1,43 @@
-From: Jonathan Haws <Jonathan.Haws@sdl.usu.edu>
-Subject: POSIX Message Queue Priority Scheduling
-Date: Tue, 31 Oct 2017 15:32:58 +0000
-Message-ID: <1509463978.9813.3.camel@sdl.usu.edu>
-Reply-To: Jonathan Haws <Jonathan.Haws@sdl.usu.edu>
+From: Muni Sekhar <munisekharrms@gmail.com>
+Subject: big number(around 100 digits) arithmetic
+Date: Thu, 13 Feb 2020 22:38:44 +0530
+Message-ID: <CAHhAz+iDUgjBq8vWsf-dPHwbojMwFB8CKORraT84vS3LcBrt0A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-Content-Language: en-US
-Content-ID: <1671DA666DA4EE41B89EF5FE467E1113@sdl.usu.edu>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=+PXn3ZGoTHRAQgmcHgDpsYfEh0kLXykuMdln03N63kk=;
+        b=j7sv/IAKZLSDmj0wlMPD5cPf7Rz0tRPGVxkdBHudbOEibpp+IIu/In0r9t7c8vfg37
+         8d1WWXxHtahZJCryuZ0QhsP8T7MiQEfxvUYw0jv55vsz4JTobSQ4lfY7XFI7mvo/2hPJ
+         EOp3bgvRODj/g2QOxobMrvwz5s9NN4KoXS0YEHx3Pn9EQVxNJT413fj5RNOg+OXLwKH+
+         LQeYXwhMnLo/ZZEqLiObupdXrrKPntfmtdgo20o7S0KmSyXdJhnkHKThTfMj8FXFcrpT
+         AjSk8ZqI3/hRLgbAeTIbNP/6q5I+F+voPFm7uhSmAldHKCEFvouIULfQB8uyhGbX1yMZ
+         3Akg==
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
-Content-Type: text/plain; charset="windows-1254"
-To: "linux-c-programming@vger.kernel.org" <linux-c-programming@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+To: linux-c-programming@vger.kernel.org
 
-Q2FuIHNvbWVvbmUgZXhwbGFpbiB0byBtZSBob3cgbWVzc2FnZSBxdWV1ZXMgaGFuZGxlIHdha2lu
-ZyBtdWx0aXBsZQ0KdGhyZWFkcyBibG9ja2VkIG9uIGEgc2luZ2xlIG1lc3NhZ2UgcXVldWU/DQoN
-Ck15IHNpdHVhdGlvbiBpcyBJIGhhdmUgbXVsdGlwbGUgd3JpdGVycyBibG9ja2luZyBvbiBhIGZ1
-bGwgbWVzc2FnZQ0KcXVldWUsIGVhY2ggcG9zdGluZyBtZXNzYWdlcyB3aXRoIHByaW9yaXR5IGVx
-dWFsIHRvIHRoZSB0aHJlYWQNCnByaW9yaXR5LsKgwqBJIHdhbnQgdG8gbWFrZSBzdXJlIHRoZXkg
-d2FrZSBhbmQgcG9zdCBpbiBwcmlvcml0eSBvcmRlciwNCmhvd2V2ZXIgbXkgYXBwbGljYXRpb24g
-aXMgYmVoYXZpbmcgYXMgaWYgdGhleSBhcmUgd2FraW5nIGluIEZJRk8gb3JkZXINCihpLmUuIHRo
-ZSBvcmRlciBpbiB3aGljaCB0aGV5IGJsb2NrZWQpLsKgwqBFYWNoIGJsb2NraW5nIHRocmVhZCBp
-cw0Kc2NoZWR1bGVkIHdpdGggdGhlIFNDSEVEX0ZJRk8gcG9saWN5IHdpdGggYSBkaWZmZXJlbnQg
-cHJpb3JpdHkgd2l0aA0Kc3lzdGVtIGxldmVsIHNjb3BlLg0KDQpJJ3ZlIHNlYXJjaGVkIHRoZSBJ
-bnRlcm5ldCBoaWdoIGFuZCBsb3cgZm9yIHNvbWV0aGluZyBkZXNjcmliaW5nIGhvdw0KdGhpcyBz
-aG91bGQgd29yayBhbmQgYWxsIEkgY2FuIGZpbmQgaXMgUE9TSVggbWFuIHBhZ2VzIGRlc2NyaWJp
-bmcgdGhhdA0KbXVsdGlwbGUgYmxvY2tlcnMgd2FrZSBpbiBwcmlvcml0eSBvcmRlciAqKmlmIFBy
-aW9yaXR5IFNjaGVkdWxpbmcgaXMNCnN1cHBvcnRlZCoqLsKgwqBTaW5jZSB0aGUga2VybmVsIHNj
-aGVkdWxlciBpcyBhIHByaW9yaXR5IHNjaGVkdWxlciBJDQp3b3VsZCB0aGluayB0aGF0IHRoZSB0
-aHJlYWRzIHdvdWxkIHdha2UgaW4gcHJpb3JpdHkgb3JkZXIgYW5kIHBvc3QgdG8NCnRoZSBxdWV1
-ZSwgaG93ZXZlciB0aGF0IGRvZXNuJ3QgYXBwZWFyIHRvIGJlIHRoZSBjYXNlLsKgwqBJJ20gc3Vy
-ZSBJJ20NCmp1c3QgbWlzc2luZyBzb21lIHN1YnRsZSBkZXRhaWwgYW5kIHdhcyBob3BpbmcgdGhl
-IGV4cGVydHMgaGVyZSBvbg0KdGhpcyBsaXN0IGNhbiBoZWxwIHNoaW5lIHNvbWUgbGlnaHQgb24g
-d2hhdCBJJ20gc2VlaW5nLCBzaW5jZSBpdHMgYXQNCnRoZSBrZXJuZWwgbGV2ZWwgdGhhdCB0aGVz
-ZSB0aHJlYWRzIGFyZSBtYWRlIHJlYWR5IHRvIHJ1bi4NCg0KSSBoYXZlIGEgc21hbGwgdGVzdCBh
-cHBsaWNhdGlvbiB0aGF0IEkgY2FuIHBvc3QgaGVyZSBpZiBuZWNlc3NhcnkuwqDCoElmDQp0aGlz
-IGlzbid0IHRoZSByaWdodCBwbGFjZSB0byBhc2sgdGhpcywgYnkgYWxsIG1lYW5zIGxldCBtZSBr
-bm93IGFuZA0KZGlyZWN0IG1lIHRvIHRoZSByaWdodCBmb3J1bS4NCg0KVGhhbmtzIQ0KSm9u
+[ Please keep me in CC as I'm not subscribed to the list]
+
+HI all,
+
+I=E2=80=99m looking for a =E2=80=9CC=E2=80=9D program for big number(around=
+ 100 digits)
+arithmetic i.e.
+mltiplication\addition\division\subtraction\exponentiation and
+modulus, etc.
+
+Basically I want to use it for =E2=80=98Extended Euclidean Algorithm=E2=80=
+=99 and
+public-key encryption with the RSA algorithm which typically requires
+larger integers and it will not fit into C data types. Can someone
+point me the to the either source code or logical explanation on how
+to handle big number arithmetic?
+
+--=20
+Thanks,
+Sekhar
