@@ -1,23 +1,20 @@
 From: Yuri Edward <yuri6037@yuristudio.net>
 Subject: Re: Issue with fcntl FD_CLOEXEC and execve
-Date: Sun, 21 Jun 2020 20:46:02 +0200
-Message-ID: <d60e6a03-ca66-bc27-b92c-fe935da0d26f@yuristudio.net>
-References: <000801d64679$d347bf10$79d73d30$@yuristudio.net>
- <87mu4yp6rt.fsf@mid.deneb.enyo.de>
+Date: Sun, 21 Jun 2020 21:03:38 +0200
+Message-ID: <2ab68fab-9c2f-cec9-ff0c-7ecad15a9625@yuristudio.net>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="------------79032C16541ECF094E5CD8FB"
+ boundary="------------0B1CF4E425C762858B084DE5"
 Return-path: <linux-c-programming-owner@vger.kernel.org>
-In-Reply-To: <87mu4yp6rt.fsf@mid.deneb.enyo.de>
 Content-Language: en-US
 Sender: linux-c-programming-owner@vger.kernel.org
 List-ID: <linux-c-programming.vger.kernel.org>
 To: linux-c-programming@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------79032C16541ECF094E5CD8FB
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+--------------0B1CF4E425C762858B084DE5
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: 8bit
 
 [Please keep me in CC as I'm not subscribed to the mailing list]
 
@@ -72,29 +69,34 @@ Yuri Edward
 
 
 On 6/20/20 8:53 AM, Florian Weimer wrote:
-> * postmaster:
->
->> The pipe works fine and the process can correctly transmit data back to the
->> master. The only issue appears when trying to run input pump based
->> applications like cat, grep, etc. When running these applications the pipe
->> write end which is marked FC_CLOEXEC should be closed when execve is
->> triggered, however it is not, but execve still succeeded.
->> When the target process to execve is not an input pump (uname, ls, .) no
->> issue occurs and the pipe is correctly closed when execve is triggered and
->> succeeds.
->>
->> That is a problem as my master process expects the blocking read to return
->> with either cause of pipe file descriptor closed or some data written. In
->> this case when the target process is an input pump the master process never
->> gets notified of file descriptor closed and by extension locks forever.
-> Do you have a minimal but complete example that shows the problem?
->
-> You cannot really make standard input a CLOEXEC descriptor.  If you do
-> not want subprocesses to use the original standard input, you need to
-> replace the descriptor with /dev/null before the execve call (but
-> already in the subprocess).
+* postmaster:
 
---------------79032C16541ECF094E5CD8FB
+> The pipe works fine and the process can correctly transmit data back 
+> to the
+> master. The only issue appears when trying to run input pump based
+> applications like cat, grep, etc. When running these applications the 
+> pipe
+> write end which is marked FC_CLOEXEC should be closed when execve is
+> triggered, however it is not, but execve still succeeded.
+> When the target process to execve is not an input pump (uname, ls, .) no
+> issue occurs and the pipe is correctly closed when execve is triggered 
+> and
+> succeeds.
+>
+> That is a problem as my master process expects the blocking read to 
+> return
+> with either cause of pipe file descriptor closed or some data written. In
+> this case when the target process is an input pump the master process 
+> never
+> gets notified of file descriptor closed and by extension locks forever.
+Do you have a minimal but complete example that shows the problem?
+
+You cannot really make standard input a CLOEXEC descriptor.  If you do
+not want subprocesses to use the original standard input, you need to
+replace the descriptor with /dev/null before the execve call (but
+already in the subprocess).
+
+--------------0B1CF4E425C762858B084DE5
 Content-Type: text/x-csrc; charset=UTF-8;
  name="main.c"
 Content-Transfer-Encoding: 7bit
@@ -252,4 +254,4 @@ int main()
     }
 }
 
---------------79032C16541ECF094E5CD8FB--
+--------------0B1CF4E425C762858B084DE5--
